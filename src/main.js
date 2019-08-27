@@ -51,7 +51,7 @@ const app = new Vue({
   created: async function () {
     const that = this;
     const repos = [
-      'bioimage-io/bioimage-model-zoo'
+      'bioimage-io/models'
     ]
     that.models = []
     for (let repo of repos) {
