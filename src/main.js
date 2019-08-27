@@ -27,6 +27,12 @@ function getThumbnail(url, tsize) {
 
 }
 
+function randId() {
+  return Math.random()
+    .toString(36)
+    .substr(2, 10);
+}
+
 const app = new Vue({
   el: '#app',
   data: {
@@ -77,7 +83,7 @@ const app = new Vue({
         model.allLabels.push(model.license);
       }
       if (model.tags) {
-        model.allLabels.concat(model.tags);
+        model.allLabels = model.allLabels.concat(model.tags);
       }
       if (model.cover) {
         if (typeof model.cover === 'string') {
@@ -127,7 +133,7 @@ const app = new Vue({
       this.$forceUpdate();
     },
     async download(model) {
-      let filename = model.source_url.split('/').pop()
+      let filename = model.name + '_' + randId() + '.model.html'
       const response = await fetch(model.source_url)
       const model_source = await response.text();
       var blob = new Blob([model_source], {type: "text/plain;charset=utf-8"});

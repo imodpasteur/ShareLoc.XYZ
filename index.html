@@ -120,8 +120,18 @@
                     {{ model.authors ? 'by ' + etAl(model.authors) : '' }}
                   </span>
                   <div class="mdl-grid">
+                    <div v-if="model.tags">
+                      <i class="material-icons" :id="id + 'labelTag'">label</i>
+                      <div class="mdl-tooltip" :data-mdl-for="id + 'labelTag'">
+                        Tags
+                      </div>
+                      <span v-for="tag in model.tags">
+                        <a class="label" @click="addRemoveToFilters(tag)"
+                          v-bind:class="{ active: checkActive(tag) }">{{ tag }}</a>
+                      </span>
+                    </div>
                     <div v-if="model.labels">
-                      <i class="material-icons" :id="id + 'labelIcon'">label</i>
+                      <i class="material-icons" :id="id + 'label'">bookmark_border</i>
                       <div class="mdl-tooltip" :data-mdl-for="id + 'labelIcon'">
                         Labels
                       </div>
@@ -140,6 +150,7 @@
                           v-bind:class="{ active: checkActive(model.license) }">{{ model.license }}</a>
                       </span>
                     </div>
+                    
                   </div>
                 </div>
                 <div class="mdl-card__actions mdl-card--border mdl-card--bottom">
