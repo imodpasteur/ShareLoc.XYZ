@@ -19,9 +19,10 @@
   <script defer src="/assets/material.min.js"></script>
   <link rel="stylesheet" href="/src/style.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
   <script src="/assets/purify.min.js"></script>
   <script type="module">
-    import { parseComponent } from '/assets/pluginParser.js'
+    import { parseComponent } from '/assets/modelParser.js'
     window.parseComponent = parseComponent;
   </script>
 </head>
@@ -51,13 +52,12 @@
               <div class="illustration"></div>
             </div>
             <div class="mdl-cell--6-col mdl-cel" style="padding: 0 2rem">
-              <h3>Deep Learning Made Easy!</h3>
-              <h5> # Plugins: {{getPluginsCount()}}
-                <a id="add-plugin" href="https://github.com/oeway/bioimage-model-zoo" target="_blank"
+              <h5> # Models: {{getModelsCount()}}
+                <a id="add-model" href="https://github.com/oeway/bioimage-model-zoo" target="_blank"
                   class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
                   <i class="material-icons">add</i>
-                  <div class="mdl-tooltip" data-mdl-for="add-plugin">
-                    Add your plugin to the repository by sending us a Pull Request on Github.
+                  <div class="mdl-tooltip" data-mdl-for="add-model">
+                    Add your model to the repository by sending us a Pull Request on Github.
                   </div>
                 </a></h5>
 
@@ -83,11 +83,11 @@
 
 
           <ul class="mdl-grid">
-            <li class="mdl-cell mdl-cell--4-col" v-for="(plugin, id) in filteredPlugins">
+            <li class="mdl-cell mdl-cell--4-col" v-for="(model, id) in filteredModels">
               <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                <div class="background" :style="{backgroundImage: 'url(' + plugin.thumbnail + ')'}">
+                <div class="background" :style="{backgroundImage: 'url(' + model.thumbnail + ')'}">
                   <div class="mdl-card__menu">
-                    <a :href="plugin.url" target="_blank" :id="id + 'repo'" v-if="plugin.url">
+                    <a :href="model.url" target="_blank" :id="id + 'repo'" v-if="model.url">
                       <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                         <i class="material-icons">code</i>
                       </button>
@@ -96,79 +96,69 @@
                       source code
                     </div>
 
-                    <a :href="plugin.install_url" :id="id + 'www'" v-if="plugin.install_url">
+                    <a @click="download(model)" :id="id + 'www'" v-if="model.url">
                       <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                         <i class="material-icons">cloud_download</i>
                       </button>
                     </a>
                     <div class="mdl-tooltip" :data-mdl-for="id + 'www'">
-                      Install {{plugin.name}}
+                      Install {{model.name}}
                     </div>
 
-                    <a @click="share(plugin)" :id="id + 'share'">
+                    <a @click="share(model)" :id="id + 'share'">
                       <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                         <i class="material-icons">share</i>
                       </button>
                     </a>
                     <div class="mdl-tooltip" :data-mdl-for="id + 'share'">
-                      Share {{plugin.name}}
+                      Share {{model.name}}
                     </div>
                   </div>
                 </div>
                 <div class="mdl-card__supporting-text">
                   <span class="authors">
-                    {{ plugin.authors ? 'by ' + etAl(plugin.authors) : '' }}
+                    {{ model.authors ? 'by ' + etAl(model.authors) : '' }}
                   </span>
                   <div class="mdl-grid">
-                    <div v-if="plugin.labels">
+                    <div v-if="model.labels">
                       <i class="material-icons" :id="id + 'labelIcon'">label</i>
                       <div class="mdl-tooltip" :data-mdl-for="id + 'labelIcon'">
                         Labels
                       </div>
-                      <span v-for="label in plugin.labels">
+                      <span v-for="label in model.labels">
                         <a class="label" @click="addRemoveToFilters(label)"
                           v-bind:class="{ active: checkActive(label) }">{{ label }}</a>
                       </span>
                     </div>
-                    <div v-if="plugin.license">
+                    <div v-if="model.license">
                       <i class="material-icons" :id="id + 'labelLicense'">copyright</i>
                       <div class="mdl-tooltip" :data-mdl-for="id + 'labelLicense'">
                         License
                       </div>
                       <span>
-                        <a class="label" @click="addRemoveToFilters(plugin.license)"
-                          v-bind:class="{ active: checkActive(plugin.license) }">{{ plugin.license }}</a>
-                      </span>
-                    </div>
-                    <div v-if="plugin.type">
-                      <i class="material-icons" :id="id + 'labelType'">bookmark_border</i>
-                      <div class="mdl-tooltip" :data-mdl-for="id + 'labelType'">
-                        Type
-                      </div>
-                      <span>
-                        <a class="label" @click="addRemoveToFilters(plugin.type)"
-                          v-bind:class="{ active: checkActive(plugin.type) }">{{ plugin.type }}</a>
+                        <a class="label" @click="addRemoveToFilters(model.license)"
+                          v-bind:class="{ active: checkActive(model.license) }">{{ model.license }}</a>
                       </span>
                     </div>
                   </div>
                 </div>
                 <div class="mdl-card__actions mdl-card--border mdl-card--bottom">
                   <h3 class="mdl-card__title-text">
-                    <a @click="showInfo(plugin)" style="color: #ffffff">
-                      <i v-if="plugin.icon" class="material-icons">{{plugin.icon}}</i>
+                    <a @click="showInfo(model)" style="color: #ffffff">
+                      <i v-if="model.icon" class="material-icons">{{model.icon}}</i>
                       <i v-else class="material-icons">extension</i>
                       {{
-                  plugin.type === "native-python"
-                    ? plugin.name + " 🚀"
-                    : plugin.type === "web-python" ||
-                      plugin.type === "web-python-window"
-                    ? plugin.name + " 🐍"
-                    : plugin.name
+                  model.type === "native-python"
+                    ? model.name + " 🚀"
+                    : model.type === "web-python" ||
+                      model.type === "web-python-window"
+                    ? model.name + " 🐍"
+                    : model.name
                 }}
                     </a>
                   </h3>
-                  <span v-if="plugin.description"> {{ plugin.description.slice(0, 100) }}</span><br>
-                  <!-- <span class="mdl-chip__text">{{plugin.repo}}</span></div> -->
+                  <span v-if="model.description"> {{ model.description.slice(0, 100) }}</span><br>
+                  <!-- <span class="mdl-chip__text">{{model.repo}}</span></div> -->
 
                 </div>
             </li>
@@ -194,52 +184,50 @@
 
     </div>
 
-    <dialog class="mdl-dialog" ref="plugin_info_dialog"
-      :style="selected_plugin.cover_image || selected_plugin.docs?'height: 80%; ': 'height: 400px;'">
+    <dialog class="mdl-dialog" ref="model_info_dialog"
+      :style="selected_model.cover_image || selected_model.docs?'height: 80%; ': 'height: 400px;'">
       <h4 class="mdl-dialog__title">
-        <i v-if="selected_plugin.icon" class="material-icons">{{selected_plugin.icon}}</i>
+        <i v-if="selected_model.icon" class="material-icons">{{selected_model.icon}}</i>
         <i v-else class="material-icons">extension</i>
         {{
-              selected_plugin.type === "native-python"
-                ? selected_plugin.name + " 🚀"
-                : selected_plugin.type === "web-python" ||
-                selected_plugin.type === "web-python-window"
-                ? selected_plugin.name + " 🐍"
-                : selected_plugin.name
+              selected_model.type === "native-python"
+                ? selected_model.name + " 🚀"
+                : selected_model.type === "web-python" ||
+                selected_model.type === "web-python-window"
+                ? selected_model.name + " 🐍"
+                : selected_model.name
             }}</h4>
       <div class="mdl-dialog__content">
 
         <p>
-          <a class="label" :href="selected_plugin.url" target="_blank">source code</a>
+          <a class="label" :href="selected_model.url" target="_blank">source code</a>
           <span class="label">
-            v{{selected_plugin.version}}
+            v{{selected_model.version}}
           </span>
-          <span v-for="label in selected_plugin.allLabels" class="label">
+          <span v-for="label in selected_model.allLabels" class="label">
             {{label}}
           </span>
         </p>
         <p>
           <span class="mdl-chip">
-            <span class="mdl-chip__text">{{selected_plugin.repo}}:{{selected_plugin.name}}</span>
+            <span class="mdl-chip__text">{{selected_model.repo}}:{{selected_model.name}}</span>
           </span>
         </p>
         <p>
-          {{selected_plugin.description}}
+          {{selected_model.description}}
         </p>
         <img style="width: 100%; max-width: 100%; max-height: calc(100% - 64px);"
-          :src="selected_plugin.cover_image"></img>
+          :src="selected_model.cover_image"></img>
 
-        <div v-if="selected_plugin.docs === '@loading...'" class="mdl-spinner mdl-js-spinner is-active"></div>
-        <div v-else-if="selected_plugin.docs" v-html="selected_plugin.docs"></div>
-        <!-- <pre><code class="html" v-html="selected_plugin.source_code"></code></pre> -->
+        <div v-if="selected_model.docs === '@loading...'" class="mdl-spinner mdl-js-spinner is-active"></div>
+        <div v-else-if="selected_model.docs" v-html="selected_model.docs"></div>
+        <!-- <pre><code class="html" v-html="selected_model.source_code"></code></pre> -->
 
       </div>
 
       <div class="mdl-dialog__actions">
         <button type="button" class="mdl-button" @click="closeInfo()">Close</button>
-        <button type="button" class="mdl-button" v-if="selected_plugin.type!=='native-python'"
-          @click="run(selected_plugin)">Run</button>
-        <button type="button" class="mdl-button mdl-button--primary" @click="install(selected_plugin)">Install</button>
+        <button type="button" class="mdl-button mdl-button--primary" @click="download(selected_model)">Download</button>
       </div>
     </dialog>
 

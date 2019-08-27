@@ -30,19 +30,19 @@ function getThumbnail(url, tsize) {
 const app = new Vue({
   el: '#app',
   data: {
-    plugins: [],
+    models: [],
     allLabels: [],
     filters: [],
-    selected_plugin: {}
+    selected_model: {}
   },
   computed: {
-    filteredPlugins: function () {
-      const covered = this.plugins.filter((plugin) => plugin.cover_image);
-      const plugins = covered.concat(this.plugins.filter((plugin) => !plugin.cover_image))
+    filteredModels: function () {
+      const covered = this.models.filter((model) => model.cover_image);
+      const models = covered.concat(this.models.filter((model) => !model.cover_image))
 
-      return plugins.filter((plugin) =>
+      return models.filter((model) =>
         this.filters.every((label) =>
-          plugin.allLabels.includes(label)
+          model.allLabels.includes(label)
         )
       );
 
@@ -51,60 +51,51 @@ const app = new Vue({
   created: async function () {
     const that = this;
     const repos = [
-      'oeway/bioimage-model-zoo'
+      'bioimage-io/bioimage-model-zoo'
     ]
-    that.plugins = []
+    that.models = []
     for (let repo of repos) {
       try {
-        const repository_url = `https://raw.githubusercontent.com/${repo}/master/manifest.json`
+        const repository_url = `https://raw.githubusercontent.com/${repo}/master/manifest.model.json`
         const response = await fetch(repository_url)
         const repo_manifest = JSON.parse(await response.text());
-        const plugins = repo_manifest.plugins;
-        for (let plugin of plugins) {
-          plugin.repo = repo;
-          plugin.url = `https://github.com/${repo}/tree/master/${plugin.uri}`;
-          plugin.install_url = `/#/app?plugin=${repo}:${plugin.name}`;
-          plugin.run_url = `/lite?plugin=${repo}:${plugin.name}`;
-          plugin.source_url = `https://raw.githubusercontent.com/${repo}/master/${plugin.uri}`;
+        const models = repo_manifest.models;
+        for (let model of models) {
+          model.repo = repo;
+          model.url = `https://github.com/${repo}/tree/master/${model.uri}`;
+          model.model_uri = `${repo}:${model.name}`;
+          model.source_url = `https://raw.githubusercontent.com/${repo}/master/${model.uri}`;
         }
-        that.plugins = that.plugins.concat(plugins);
+        that.models = that.models.concat(models);
       } catch (e) {
         console.error(e)
       }
     }
-    that.plugins.forEach((plugin) => {
-      plugin.allLabels = plugin.labels || [];
-      if (!!plugin.license) {
-        plugin.allLabels.push(plugin.license);
+    that.models.forEach((model) => {
+      model.allLabels = model.labels || [];
+      if (!!model.license) {
+        model.allLabels.push(model.license);
       }
-      if (typeof plugin.type === 'string') {
-        plugin.allLabels.push(plugin.type);
-      } else if (typeof plugin.type === 'object') {
-        plugin.allLabels.concat(Object.values(plugin.type));
+      if (model.tags) {
+        model.allLabels.concat(model.tags);
       }
-      if (!!plugin.repo) {
-        plugin.allLabels.push(plugin.repo);
-      }
-      if (plugin.tags) {
-        plugin.allLabels.concat(plugin.tags);
-      }
-      if (plugin.cover) {
-        if (typeof plugin.cover === 'string') {
-          plugin.cover_image = plugin.cover
-        } else if (Array.isArray(plugin.cover)) {
-          plugin.cover_image = plugin.cover[0]
+      if (model.cover) {
+        if (typeof model.cover === 'string') {
+          model.cover_image = model.cover
+        } else if (Array.isArray(model.cover)) {
+          model.cover_image = model.cover[0]
         }
-        plugin.thumbnail = plugin.cover_image;
-        // getThumbnail(plugin.cover_image, 500).then((thumbnail) => {
-        //   plugin.thumbnail = thumbnail;
+        model.thumbnail = model.cover_image;
+        // getThumbnail(model.cover_image, 500).then((thumbnail) => {
+        //   model.thumbnail = thumbnail;
         //   that.$forceUpdate();
         // })
       } else {
-        plugin.cover_image = ''
+        model.cover_image = ''
       }
     });
-    that.plugins.forEach((plugin) => {
-      plugin.allLabels.forEach((label) => {
+    that.models.forEach((model) => {
+      model.allLabels.forEach((label) => {
         if (that.allLabels.indexOf(label) === -1) {
           that.allLabels.push(label);
         }
@@ -113,44 +104,45 @@ const app = new Vue({
     that.allLabels.sort((a, b) =>
       a.toLowerCase() < b.toLowerCase() ? -1 : 1
     );
-    if (!this.$refs.plugin_info_dialog.showModal) {
-      dialogPolyfill.registerDialog(this.$refs.plugin_info_dialog);
+    if (!this.$refs.model_info_dialog.showModal) {
+      dialogPolyfill.registerDialog(this.$refs.model_info_dialog);
     }
   },
   methods: {
-    async getDocs(plugin) {
-      if (plugin.docs) return;
-      plugin.docs = '@loading...';
+    async getDocs(model) {
+      if (model.docs) return;
+      model.docs = '@loading...';
       this.$forceUpdate();
-      const response = await fetch(plugin.source_url)
+      const response = await fetch(model.source_url)
       const source_code = await response.text();
-      const pluginComp = window.parseComponent(source_code);
-      const raw_docs = pluginComp.docs && pluginComp.docs[0] && pluginComp.docs[0].content;
+      const modelComp = window.parseComponent(source_code);
+      const raw_docs = modelComp.docs && modelComp.docs[0] && modelComp.docs[0].content;
       if (raw_docs && window.marked && window.DOMPurify) {
-        plugin.docs = window.DOMPurify.sanitize(window.marked(raw_docs))
-        plugin.source_code = source_code;
+        model.docs = window.DOMPurify.sanitize(window.marked(raw_docs))
+        model.source_code = source_code;
       } else {
-        plugin.docs = null;
-        plugin.source_code = null;
+        model.docs = null;
+        model.source_code = null;
       }
       this.$forceUpdate();
     },
-    run(plugin) {
-      window.open(plugin.run_url, '_blank');
+    async download(model) {
+      let filename = model.source_url.split('/').pop()
+      const response = await fetch(model.source_url)
+      const model_source = await response.text();
+      var blob = new Blob([model_source], {type: "text/plain;charset=utf-8"});
+      saveAs(blob, filename);
     },
-    install(plugin) {
-      window.open(plugin.install_url, '_blank');
+    share(model) {
+      prompt('Please copy and paste following URL for sharing:', 'https://bioimage.io/?model=' + model.model_uri)
     },
-    share(plugin) {
-      prompt('Please copy and paste following URL for sharing:', 'https://imjoy.io' + plugin.install_url)
-    },
-    showInfo(plugin) {
-      this.selected_plugin = plugin;
-      this.$refs.plugin_info_dialog.showModal();
-      this.getDocs(plugin)
+    showInfo(model) {
+      this.selected_model = model;
+      this.$refs.model_info_dialog.showModal();
+      this.getDocs(model)
     },
     closeInfo() {
-      this.$refs.plugin_info_dialog.close();
+      this.$refs.model_info_dialog.close();
     },
     etAl(authors) {
       if (!authors) {
@@ -177,13 +169,13 @@ const app = new Vue({
       this.filters = [];
     },
     getLabelCount(label) {
-      return this.filteredPlugins
-        .filter((plugins) => plugins.allLabels.includes(label))
+      return this.filteredModels
+        .filter((models) => models.allLabels.includes(label))
         .length;
 
     },
-    getPluginsCount() {
-      return this.filteredPlugins.length
+    getModelsCount() {
+      return this.filteredModels.length
     }
   }
 });

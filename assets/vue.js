@@ -5082,8 +5082,8 @@
 
   function initUse (Vue) {
     Vue.use = function (plugin) {
-      var installedPlugins = (this._installedPlugins || (this._installedPlugins = []));
-      if (installedPlugins.indexOf(plugin) > -1) {
+      var installedModels = (this._installedModels || (this._installedModels = []));
+      if (installedModels.indexOf(plugin) > -1) {
         return this
       }
 
@@ -5095,7 +5095,7 @@
       } else if (typeof plugin === 'function') {
         plugin.apply(null, args);
       }
-      installedPlugins.push(plugin);
+      installedModels.push(plugin);
       return this
     };
   }

@@ -1,7 +1,7 @@
 <docs lang="markdown">
 # Unet Model
 
-A generic plugin for image-to-image translation with A-net.
+A generic model for image-to-image translation with A-net.
 
 ## Usage
 
@@ -38,13 +38,13 @@ In the above folder structure, `train/valid/test` are three folders, `sample1`..
 For the naming, you have to use `train`/`valid`/`test` as the top level folder name, but the sample name can be choose freely.
 You can also choose different channel names (e.g. `DAPI`, `C5`), but you need to make it consistent accross all the sample folder.
 
-These channel names will be used as an identifier for the plugin to recognize them, you will be asked to specify them when you `set working directory`.
+These channel names will be used as an identifier for the model to recognize them, you will be asked to specify them when you `set working directory`.
 
 ### Set working directory and parameters
 
 If you have the samples pepared the next step is to `set working directory` to the root folder of your samples.
 
-And you will be asked to specify the identifiers for your plugin.
+And you will be asked to specify the identifiers for your model.
 
 The following parameter can be configured:
     * input identifiers and output identifiers: a string which specifies the naming pattern of each input and output channels, for example, the above folder structure contains `channelA.png`, `channelB.png` and `channelC.png`,
@@ -62,7 +62,7 @@ The training will relying on two folders named `train` and `valid`, you need to 
 You can specify a training name, which will be used a prefix for saving models and logs.
 Choose the `epochs`, `step per epoch` and `batch size` you want to train.
 
-Then you can start training by click on the plugin menu.
+Then you can start training by click on the model menu.
 
 If the training is done, you will get your model located in the `working directory`, the folder will be called `__model__`.
 
@@ -73,7 +73,7 @@ Or you can load the trained model for testing new images.
 ## Testing/Inferencing
 Place your files with all the input channels in a folder `test` and you will be able to run prediction on them.
 
-By clicking `test` in the plugin menu, you will start the prediction.
+By clicking `test` in the model menu, you will start the prediction.
 
 Once done, the result will be saved automatically into the testing folder.
 </docs>
