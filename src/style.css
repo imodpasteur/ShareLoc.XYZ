@@ -158,7 +158,7 @@ ul>li {
 }
 
 .mdl-card__menu:first-child {
-    padding-left: 10px;
+    padding-left: 2px;
 }
 
 .mdl-card__actions {
@@ -383,4 +383,10 @@ footer {
 
 .mdl-mini-footer {
     background-color: #42424214;
+}
+
+.app-icons {
+    transform: translate(-10px,-10px)!important;
+    line-height: 20px!important;
+    width: 20px!important;
 }
