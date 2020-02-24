@@ -82,9 +82,15 @@
           <ul class="mdl-grid">
             <li class="mdl-cell mdl-cell--4-col" v-for="(model, id) in filteredModels">
               <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                <div class="background" :style="{backgroundImage: 'url(' + model.thumbnail + ')'}">
+                <div class="background" :style="{backgroundImage: 'url(' + model.cover_image + ')'}">
                   <div class="mdl-card__menu">
-                    <a :href="model.url" target="_blank" :id="id + 'repo'" v-if="model.url">
+                    
+                    <a v-for="app in model.applications" :id="id + app">
+                      <img width="20" style="padding-right:15px;" :src="'assets/icons/'+app+'-icon.png'">
+                      </img>
+                    </a>
+
+                    <a :href="model.root_url+'/'+model.config_url" target="_blank" :id="id + 'repo'" v-if="model.config_url">
                       <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                         <i class="material-icons">code</i>
                       </button>
@@ -92,8 +98,8 @@
                     <div class="mdl-tooltip" :data-mdl-for="id + 'repo'">
                       source code
                     </div>
-
-                    <a @click="download(model)" :id="id + 'www'" v-if="model.url">
+                    
+                    <a :href="model.download_url" :id="id + 'www'" v-if="model.download_url">
                       <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                         <i class="material-icons">cloud_download</i>
                       </button>
@@ -155,14 +161,7 @@
                     <a @click="showInfo(model)" style="color: #ffffff">
                       <i v-if="model.icon" class="material-icons">{{model.icon}}</i>
                       <i v-else class="material-icons">extension</i>
-                      {{
-                  model.type === "native-python"
-                    ? model.name + " 🚀"
-                    : model.type === "web-python" ||
-                      model.type === "web-python-window"
-                    ? model.name + " 🐍"
-                    : model.name
-                }}
+                      {{model.name.slice(0,30)}}
                     </a>
                   </h3>
                   <span v-if="model.description"> {{ model.description.slice(0, 100) }}</span><br>
@@ -193,14 +192,7 @@
       <h4 class="mdl-dialog__title">
         <i v-if="selected_model.icon" class="material-icons">{{selected_model.icon}}</i>
         <i v-else class="material-icons">extension</i>
-        {{
-              selected_model.type === "native-python"
-                ? selected_model.name + " 🚀"
-                : selected_model.type === "web-python" ||
-                selected_model.type === "web-python-window"
-                ? selected_model.name + " 🐍"
-                : selected_model.name
-            }}</h4>
+        {{selected_model.name}}</h4>
       <div class="mdl-dialog__content">
 
         <p>

@@ -157,6 +157,10 @@ ul>li {
     border-radius: 2rem;
 }
 
+.mdl-card__menu:first-child {
+    padding-left: 10px;
+}
+
 .mdl-card__actions {
     background: rgba(0, 0, 0, 0.5);
     font-size: 14px;

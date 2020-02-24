@@ -68,9 +68,9 @@ const app = new Vue({
         const models = repo_manifest.models;
         for (let model of models) {
           model.repo = repo;
-          model.url = `https://github.com/${repo}/tree/master/${model.uri}`;
+          model.url = model.url;
           model.model_uri = `${repo}:${model.name}`;
-          model.source_url = `https://raw.githubusercontent.com/${repo}/master/${model.uri}`;
+          model.source_url = model.url;
         }
         that.models = that.models.concat(models);
       } catch (e) {
@@ -85,17 +85,8 @@ const app = new Vue({
       if (model.tags) {
         model.allLabels = model.allLabels.concat(model.tags);
       }
-      if (model.cover) {
-        if (typeof model.cover === 'string') {
-          model.cover_image = model.cover
-        } else if (Array.isArray(model.cover)) {
-          model.cover_image = model.cover[0]
-        }
-        model.thumbnail = model.cover_image;
-        // getThumbnail(model.cover_image, 500).then((thumbnail) => {
-        //   model.thumbnail = thumbnail;
-        //   that.$forceUpdate();
-        // })
+      if (model.covers) {
+        model.cover_image = model.covers[0]
       } else {
         model.cover_image = ''
       }
@@ -115,6 +106,16 @@ const app = new Vue({
     }
   },
   methods: {
+    etAl: (authors) => {
+      authors = authors.map((author)=>{
+        return author.split(';')[0]
+      })
+      if (authors.length < 3) {
+        return authors.join(", ");
+      } else {
+        return authors.slice(0, 3).join(", ") + " et al.";
+      }
+    },
     async getDocs(model) {
       if (model.docs) return;
       model.docs = '@loading...';
@@ -149,16 +150,6 @@ const app = new Vue({
     },
     closeInfo() {
       this.$refs.model_info_dialog.close();
-    },
-    etAl(authors) {
-      if (!authors) {
-        return ''
-      }
-      if (authors.length < 3) {
-        return authors.join(", ");
-      } else {
-        return authors.slice(0, 3).join(", ") + " et al.";
-      }
     },
     addRemoveToFilters(label) {
       if (this.filters.indexOf(label) === -1) {
