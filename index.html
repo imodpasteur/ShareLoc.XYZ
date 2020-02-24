@@ -30,7 +30,7 @@
 <body>
   <div id="app">
     <!-- Always shows a header, even in smaller screens. -->
-
+    <div v-show="loading" class="mdl-spinner mdl-js-spinner is-active"></div>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
@@ -42,6 +42,28 @@
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
           <!-- Navigation. We hide it in small screens. -->
+
+          <template v-for="w in windows">
+            <span class="mdl-chip mdl-chip--contact mdl-chip--deletable" :key="w.name" @click="selectWindow(w)">
+              <!-- <img class="mdl-chip__contact" src="/templates/dashboard/images/user.jpg"></img> -->
+              <span class="mdl-chip__text">{{' ' + w.name}}</span>
+              <a href="#" @click="removeWindow(w)" class="mdl-chip__action"><i class="material-icons">cancel</i></a>
+            </span>
+          </template>
+
+          <!-- Right aligned menu below button -->
+          <button v-if="plugins" id="demo-menu-lower-right"
+          style="color: #448aff;"
+          class="mdl-button mdl-js-button">
+          <i class="material-icons">extension</i> Apps
+          </button>
+
+          <ul v-if="plugins" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+          for="demo-menu-lower-right" id="plugin-menu">
+            <li class="mdl-menu__item" v-for="p in plugins" :key="p.name" @click="runPlugin(p)">
+              {{p.name}}
+            </li>
+          </ul>
         </div>
       </header>
       <main class="mdl-layout__content">
@@ -93,15 +115,15 @@
                       source code
                     </div>
                     
-                    <template v-for="app in model.applications">
-                      <a  :id="id + app" :key="id + app">
-                        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                          <img class="material-icons app-icons" :src="'assets/icons/'+app+'-icon.png'">
+                    <template v-for="app_key in model.applications">
+                      <a  :id="id + app_key" :key="id + app_key" v-if="apps[app_key]">
+                        <button @click="runModelApp(app_key, model)" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                          <img class="material-icons app-icons" :src="'assets/icons/'+app_key+'-icon.png'">
                           </img>
                         </button>
                       </a>
-                      <div class="mdl-tooltip" :data-mdl-for="id + app + 'tooltip'">
-                        model application: {{app}}
+                      <div class="mdl-tooltip" :data-mdl-for="id + app_key + 'tooltip'" v-if="apps[app_key]">
+                        model application: {{app_key}}
                       </div>
                     </template>
 
@@ -192,7 +214,24 @@
       </main>
 
     </div>
-
+    <dialog class="mdl-dialog fullscreen-dialog" ref="window_dialog">
+      <div class="mdl-dialog__title" v-if="dialog_window">
+        <i v-if="selected_model.icon" class="material-icons">{{dialog_window.icon}}</i>
+        <i v-else class="material-icons">extension</i>
+        {{dialog_window.name}}
+      </div>
+      <div style="top: 0px; position: absolute; right:0px;">
+        <button type="button" class="mdl-button close" @click="closeDialog()"><i class="material-icons">clear</i></button>
+      </div>
+      <div class="mdl-dialog__content plugin-iframe-container">
+        <div class="whiteboard" id="whiteboard">
+          <template v-for="w in windows">
+            <div :id="w.iframe_container" class="plugin-iframe"></div>
+          </template>
+           
+        </div>
+      </div>
+    </dialog>
     <dialog class="mdl-dialog" ref="model_info_dialog"
       :style="selected_model.cover_image || selected_model.docs?'height: 80%; ': 'height: 400px;'">
       <h4 class="mdl-dialog__title">
@@ -236,6 +275,7 @@
     <!--app end-->
   </div>
   <script src="/src/main.js"></script>
+  <script src="https://imjoy.io/imjoy-lib.min.js"></script>
 
 </body>
 

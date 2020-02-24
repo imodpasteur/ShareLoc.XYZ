@@ -33,13 +33,27 @@ function randId() {
     .substr(2, 10);
 }
 
+function getUrlParameter(name) {
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+  var results = regex.exec(location.search);
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
 const app = new Vue({
   el: '#app',
   data: {
     models: [],
+    apps_source: [],
+    apps: {},
     allLabels: [],
     filters: [],
-    selected_model: {}
+    selected_model: {},
+    windows: [],
+    imjoy: null,
+    dialog_window: null,
+    plugins: [],
+    loading: false
   },
   computed: {
     filteredModels: function () {
@@ -73,6 +87,7 @@ const app = new Vue({
           model.source_url = model.url;
         }
         that.models = that.models.concat(models);
+        that.apps_source = repo_manifest.applications;
       } catch (e) {
         console.error(e)
       }
@@ -101,9 +116,19 @@ const app = new Vue({
     that.allLabels.sort((a, b) =>
       a.toLowerCase() < b.toLowerCase() ? -1 : 1
     );
+    
     if (!this.$refs.model_info_dialog.showModal) {
       dialogPolyfill.registerDialog(this.$refs.model_info_dialog);
     }
+
+    if (!this.$refs.window_dialog.showModal) {
+      dialogPolyfill.registerDialog(this.$refs.window_dialog);
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      this.loadImJoy();
+    })
+
   },
   methods: {
     etAl: (authors) => {
@@ -173,6 +198,130 @@ const app = new Vue({
     },
     getModelsCount() {
       return this.filteredModels.length
+    },
+    addWindow(w){
+      this.dialog_window = w;
+      this.$refs.window_dialog.showModal();
+      this.selectWindow(w)
+    },
+    removeWindow(w){
+      w.close()
+    },
+    selectWindow(w){
+      
+    },
+    closeDialog(){
+      this.$refs.window_dialog.close()
+      this.dialog_window.close()
+      this.dialog_window = null
+    },
+    loadImJoy(){
+      var imjoy_api = {
+        showMessage(plugin, info, duration){
+            console.log(info)
+        },
+        showProgress(plugin, progress){
+            if (progress < 1) progress =  progress * 100;
+            document.getElementById('progress').value = progress
+        },
+        showDialog(_plugin, config) {
+            return new Promise((resolve, reject) => {
+                if (config.ui) {
+                  this.$refs.window_dialog.showModal();
+                  const joy_config = {
+                      container:  document.getElementById('window-dialog-container'),
+                      init: config.ui || "", //"{id:'localizationWorkflow', type:'ops'} " + // a list of ops
+                      data: config.data, // || Joy.loadFromURL(),
+                      modules: config.modules || ["instructions", "math"],
+                      onexecute: config.onexecute,
+                      onupdate: config.onupdate,
+                  };
+                  try {
+                      new imjoyLib.Joy(joy_config);
+                  } catch (e) {
+                      console.error("error occured when loading the workflow", e);
+                      joy_config.data = "";
+                      new imjoyLib.Joy(joy_config);
+                      throw e;
+                  }
+          
+              } else if (config.type) {
+                  this.$refs.window_dialog.showModal();
+                  config.window_container = "window-dialog-container";
+                  config.standalone = true;
+                  if (config.type.startsWith("imjoy/")) {
+                      config.render = wconfig => {
+                      };
+                  }
+                  setTimeout(() => {
+                      imjoy.pm.createWindow(null, config)
+                      .then(api => {
+                          const _close = api.close;
+                          api.close = async () => {
+                              await _close();
+                              closeDialog();
+                          };
+                          resolve(api);
+                      })
+                      .catch(reject);
+                  }, 0);
+              } else {
+                  alert("Unsupported dialog type.");
+              }
+            });
+        },
+      }
+
+      const imjoy = new imjoyLib.ImJoy({
+          imjoy_api: imjoy_api,
+          show_message_callback: console.log,
+          add_window_callback: async (w)=>{
+              this.addWindow(w)
+          },
+          update_ui_callback: ()=>{}
+      })
+      const workspace = getUrlParameter('workspace') || getUrlParameter('w');
+      const engine = getUrlParameter('engine') || getUrlParameter('e');
+
+      imjoy.start({workspace: workspace}).then(async ()=>{
+          this.windows = imjoy.wm.windows
+          console.log('ImJoy started: ', imjoy)
+          if (engine) {
+
+          }
+          this.loading = true;
+          for(let k in this.apps_source){
+            try{
+              const p = await imjoy.pm.reloadPluginRecursively({uri: this.apps_source[k]})
+              this.apps[k] = p
+            }
+            catch(e){
+              console.error(e)
+            }
+          }
+          this.loading = false;
+
+          let model = getUrlParameter('model');
+          let app = getUrlParameter('app');
+          if(model && app){
+            console.log('loading model with app', model, app)
+          }
+      })
+      .catch((e)=>{
+          console.error(e)
+          alert('Error: '+ e)
+      })
+
+      imjoy.event_bus.on("plugin_loaded", (plugin) => {
+        this.plugins.push(plugin)
+      })
+      this.imjoy = imjoy;
+    },
+    async runPlugin(p){
+      await p.api.run(this.models)
+    },
+    async runModelApp(app_key, model){
+      await this.apps[app_key].api.run(model)
     }
   }
 });
