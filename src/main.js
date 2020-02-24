@@ -63,7 +63,7 @@ const app = new Vue({
     for (let repo of repos) {
       try {
         const repository_url = `https://raw.githubusercontent.com/${repo}/master/manifest.model.json`
-        const response = await fetch(repository_url)
+        const response = await fetch(repository_url + '?' + randId())
         const repo_manifest = JSON.parse(await response.text());
         const models = repo_manifest.models;
         for (let model of models) {
