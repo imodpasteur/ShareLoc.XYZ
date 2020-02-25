@@ -376,10 +376,12 @@ footer {
 }
 
 .site-title {
+    padding-top: 10px;
     height: 60px;
     font-size: 2.5rem;
     color: #448aff;
     line-height: 50px;
+    font-weight: 550;
 }
 
 .mdl-mini-footer {
@@ -461,4 +463,6 @@ footer {
 
 .mdl-button {
     text-transform: none;
+    font-size: 18px;
+    font-weight: 500;
 }
