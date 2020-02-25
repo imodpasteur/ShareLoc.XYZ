@@ -52,8 +52,11 @@ const app = new Vue({
     windows: [],
     imjoy: null,
     dialog_window: null,
-    plugins: [],
-    loading: false
+    loading: false,
+    lastModified: null,
+    local_file: null,
+    watch_timer: null,
+    snack_message: null
   },
   computed: {
     filteredModels: function () {
@@ -126,9 +129,15 @@ const app = new Vue({
       dialogPolyfill.registerDialog(this.$refs.window_dialog);
     }
 
-    document.addEventListener('DOMContentLoaded', (event) => {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", ()=>{
+        console.log('Loading ImJoy...')
+        this.loadImJoy();
+      });
+    } else {  // `DOMContentLoaded` already fired
+      console.log('Loading ImJoy...')
       this.loadImJoy();
-    })
+    }
 
   },
   methods: {
@@ -141,6 +150,16 @@ const app = new Vue({
       } else {
         return authors.slice(0, 3).join(", ") + " et al.";
       }
+    },
+    showMessage(message, duration){
+      duration = duration || 5000;
+      const data = {
+        message: message,
+        actionHandler: function(event) {},
+        actionText: 'Close',
+        timeout: duration
+      };
+      this.$refs.message_snackbar.MaterialSnackbar.showSnackbar(data);
     },
     async getDocs(model) {
       if (model.docs) return;
@@ -202,6 +221,7 @@ const app = new Vue({
     },
     addWindow(w){
       this.dialog_window = w;
+      if(!this.$refs.window_dialog.open)
       this.$refs.window_dialog.showModal();
       this.selectWindow(w)
     },
@@ -217,18 +237,22 @@ const app = new Vue({
       this.dialog_window = null
     },
     loadImJoy(){
+      const me = this;
       var imjoy_api = {
         showMessage(plugin, info, duration){
-            console.log(info)
+            me.showMessage(info, duration)
+        },
+        alert(plugin, msg){
+            alert(msg)
         },
         showProgress(plugin, progress){
             if (progress < 1) progress =  progress * 100;
-            document.getElementById('progress').value = progress
+            me.$refs.progressbar.setProgress(progress);
         },
         showDialog(_plugin, config) {
             return new Promise((resolve, reject) => {
                 if (config.ui) {
-                  this.$refs.window_dialog.showModal();
+                  me.$refs.window_dialog.showModal();
                   const joy_config = {
                       container:  document.getElementById('window-dialog-container'),
                       init: config.ui || "", //"{id:'localizationWorkflow', type:'ops'} " + // a list of ops
@@ -247,7 +271,7 @@ const app = new Vue({
                   }
           
               } else if (config.type) {
-                  this.$refs.window_dialog.showModal();
+                  me.$refs.window_dialog.showModal();
                   config.window_container = "window-dialog-container";
                   config.standalone = true;
                   if (config.type.startsWith("imjoy/")) {
@@ -301,6 +325,7 @@ const app = new Vue({
             }
           }
           this.loading = false;
+          this.$forceUpdate()
 
           let model = getUrlParameter('model');
           let app = getUrlParameter('app');
@@ -314,15 +339,77 @@ const app = new Vue({
       })
 
       imjoy.event_bus.on("plugin_loaded", (plugin) => {
-        this.plugins.push(plugin)
+
       })
       this.imjoy = imjoy;
+      console.log('ImJoy loaded successfully.')
     },
     async runAllModels(plugin){
       await plugin.api.run(this.models)
     },
     async runModel(plugin, model){
       await plugin.api.run(model)
-    }
+    },
+    fileSelected(){
+      this.lastModified = null;
+      if (!this.$refs.file_select.files) return;
+      this.local_file = this.$refs.file_select.files[0];
+      this.lastModified = "old";
+      this.showMessage('Loading App...');
+      this.watch_timer = setInterval(() => {
+        this.$forceUpdate();
+        this.loadCodeFromFile(this.local_file);
+      }, 1000);
+      this.loadCodeFromFile(this.local_file);
+    },
+    loadCodeFromFile(file) {
+      file = file || this.local_file;
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async () => {
+        this.local_file = file;
+        try {
+          const code = reader.result;
+          if (
+            this.lastModified != file.lastModified
+          ) {
+            this.lastModified = file.lastModified;
+            const config = this.imjoy.pm.parsePluginCode(code);
+            config.dependencies = config.dependencies || [];
+            try {
+              for (let i = 0; i < config.dependencies.length; i++) {
+                await this.imjoy.pm.reloadPluginRecursively(
+                  {
+                    uri: config.dependencies[i]
+                  }
+                );
+              }
+              const plugin = await this.imjoy.pm.reloadPlugin(config)
+              console.log(plugin)
+              this.apps[plugin.name] = plugin;
+              this.showMessage(`Plugin ${plugin.name} loaded successfully.`)
+              this.$forceUpdate()
+              console.log(`Plugin ${plugin.name} loaded successfully.`)
+            } catch (error) {
+              this.showMessage(`Failed to load dependencies for ${config.name}: ${error}`);
+            }
+          }
+        } catch (e) {
+          console.error(e)
+          this.showMessage(`Failed to load plugin: ${error}`);
+        }
+      };
+      reader.onerror = e => {
+        console.error(e);
+        this.showMessage(`Failed to load plugin: ${e}`);
+        if (this.watch_timer) {
+          clearInterval(this.watch_timer);
+        }
+        this.watch_file = false;
+        this.$forceUpdate();
+      };
+      reader.readAsText(file);
+    },
   }
 });

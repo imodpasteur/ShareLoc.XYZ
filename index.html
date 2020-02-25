@@ -30,8 +30,9 @@
 <body>
   <div id="app">
     <!-- Always shows a header, even in smaller screens. -->
-    <div v-show="loading" class="mdl-spinner mdl-js-spinner is-active"></div>
+    
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      
       <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
           <!-- <a class="site-button mdl-button site-title" href="/">
@@ -52,20 +53,34 @@
           </template>
 
           <!-- Right aligned menu below button -->
-          <button v-if="apps" id="demo-menu-lower-right"
+          <button v-show="imjoy" id="demo-menu-lower-right"
           style="color: #448aff;"
           class="mdl-button mdl-js-button">
           <i class="material-icons">extension</i> Apps
           </button>
 
-          <ul v-if="apps" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+          <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
           for="demo-menu-lower-right" id="plugin-menu">
-            <li class="mdl-menu__item" v-for="(app, k) in apps" :key="app.name" @click="runAllModels(app)">
-              {{app.name}}
+            <li class="mdl-menu__item mdl-button mdl-js-button" v-for="(app, k) in apps" :key="app.name" @click="runAllModels(app)">
+              <i class="material-icons">extension</i> {{app.name}}
+            </li>
+            <li class="mdl-menu__item mdl-button mdl-js-button" @click="$refs.file_select.click();">
+       
+                <i class="material-icons">add</i> Load Local App
+        
+              <input
+                style="display:none;"
+                type="file"
+                @change="fileSelected"
+                ref="file_select"
+                multiple
+              />
             </li>
           </ul>
         </div>
       </header>
+      <div ref="progressbar" class="mdl-progress mdl-js-progress"></div>
+      <div v-show="loading" class="floating mdl-spinner mdl-js-spinner is-active"></div>
       <main class="mdl-layout__content">
         <div class="page-content">
           <!-- Your content goes here -->
@@ -271,6 +286,11 @@
         <button type="button" class="mdl-button mdl-button--primary" @click="download(selected_model)">Download</button>
       </div>
     </dialog>
+
+    <div ref="message_snackbar" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text">{{snack_message}}</div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
 
     <!--app end-->
   </div>
