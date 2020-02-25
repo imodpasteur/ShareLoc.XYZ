@@ -283,7 +283,7 @@
 
       <div class="mdl-dialog__actions">
         <button type="button" class="mdl-button" @click="closeInfo()">Close</button>
-        <button type="button" class="mdl-button mdl-button--primary" @click="download(selected_model)">Download</button>
+        <a class="mdl-button mdl-button--primary" :href="selected_model.download_url">Download</a>
       </div>
     </dialog>
 
