@@ -52,16 +52,16 @@
           </template>
 
           <!-- Right aligned menu below button -->
-          <button v-if="plugins" id="demo-menu-lower-right"
+          <button v-if="apps" id="demo-menu-lower-right"
           style="color: #448aff;"
           class="mdl-button mdl-js-button">
           <i class="material-icons">extension</i> Apps
           </button>
 
-          <ul v-if="plugins" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+          <ul v-if="apps" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
           for="demo-menu-lower-right" id="plugin-menu">
-            <li class="mdl-menu__item" v-for="p in plugins" :key="p.name" @click="runPlugin(p)">
-              {{p.name}}
+            <li class="mdl-menu__item" v-for="(app, k) in apps" :key="app.name" @click="runAllModels(app)">
+              {{app.name}}
             </li>
           </ul>
         </div>
@@ -117,7 +117,7 @@
                     
                     <template v-for="app_key in model.applications">
                       <a  :id="id + app_key" :key="id + app_key" v-if="apps[app_key]">
-                        <button @click="runModelApp(app_key, model)" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                        <button @click="runModel(apps[app_key], model)" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                           <img class="material-icons app-icons" :src="'assets/icons/'+app_key+'-icon.png'">
                           </img>
                         </button>
@@ -214,7 +214,7 @@
       </main>
 
     </div>
-    <dialog class="mdl-dialog fullscreen-dialog" ref="window_dialog">
+    <dialog class="mdl-dialog" ref="window_dialog">
       <div class="mdl-dialog__title" v-if="dialog_window">
         <i v-if="selected_model.icon" class="material-icons">{{dialog_window.icon}}</i>
         <i v-else class="material-icons">extension</i>

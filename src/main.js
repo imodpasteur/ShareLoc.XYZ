@@ -76,7 +76,8 @@ const app = new Vue({
     that.models = []
     for (let repo of repos) {
       try {
-        const repository_url = `https://raw.githubusercontent.com/${repo}/master/manifest.model.json`
+
+        const repository_url = location.hostname === 'bioimage.io'?`https://raw.githubusercontent.com/${repo}/master/manifest.model.json`: `/manifest.model.json`
         const response = await fetch(repository_url + '?' + randId())
         const repo_manifest = JSON.parse(await response.text());
         const models = repo_manifest.models;
@@ -317,11 +318,11 @@ const app = new Vue({
       })
       this.imjoy = imjoy;
     },
-    async runPlugin(p){
-      await p.api.run(this.models)
+    async runAllModels(plugin){
+      await plugin.api.run(this.models)
     },
-    async runModelApp(app_key, model){
-      await this.apps[app_key].api.run(model)
+    async runModel(plugin, model){
+      await plugin.api.run(model)
     }
   }
 });
