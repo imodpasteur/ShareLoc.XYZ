@@ -98,6 +98,8 @@ const app = new Vue({
         model.url = model.url;
         model.model_uri = `${repo}:${model.name}`;
         model.source_url = model.url;
+        if(!model.config_url.startsWith('http'))
+        model.config_url = model.root_url+'/'+model.config_url
       }
       that.models = that.models.concat(models);
       that.apps_source = repo_manifest.applications;

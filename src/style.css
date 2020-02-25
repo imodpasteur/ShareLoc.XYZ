@@ -458,3 +458,7 @@ footer {
     top: calc(5% - 1.5rem) !important;
     z-index: 999;
 }
+
+.mdl-button {
+    text-transform: none;
+}

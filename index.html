@@ -52,7 +52,7 @@
           <button v-show="imjoy" id="demo-menu-lower-right"
           style="color: #448aff;"
           class="mdl-button mdl-js-button">
-          <i class="material-icons">extension</i> Apps
+          <i class="material-icons">extension</i> BioEngine Apps
           </button>
 
           <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
@@ -117,7 +117,7 @@
               <div class="demo-card-wide mdl-card mdl-shadow--2dp">
                 <div class="background" :style="{backgroundImage: 'url(' + model.cover_image + ')'}">
                   <div class="mdl-card__menu">
-                    <a :href="model.root_url+'/'+model.config_url" target="_blank" :id="id + 'repo'" v-if="model.config_url">
+                    <a :href="model.config_url" target="_blank" :id="id + 'repo'" v-if="model.config_url">
                       <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                         <i class="material-icons">code</i>
                       </button>
@@ -133,7 +133,7 @@
                           </img>
                         </button>
                       </a>
-                      <div class="mdl-tooltip" :data-mdl-for="id + app_key + 'tooltip'" v-if="apps[app_key]">
+                      <div class="mdl-tooltip"  :key="id + app_key + 'tooltip'" :data-mdl-for="id + app_key" v-if="apps[app_key]">
                         model application: {{app_key}}
                       </div>
                     </template>
