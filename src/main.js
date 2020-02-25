@@ -56,7 +56,8 @@ const app = new Vue({
     lastModified: null,
     local_file: null,
     watch_timer: null,
-    snack_message: null
+    snack_message: null,
+    snackbar: null
   },
   computed: {
     filteredModels: function () {
@@ -72,6 +73,7 @@ const app = new Vue({
     }
   },
   created: async function () {
+    
     const that = this;
     that.models = []
     try {
@@ -142,14 +144,18 @@ const app = new Vue({
         console.log('Loading ImJoy...')
         that.loadImJoy();
         that.showModelInfo();
+        this.snackbar = new window.PatchedMaterialSnackbar(this.$refs.message_snackbar)
       });
     } else {  // `DOMContentLoaded` already fired
       console.log('Loading ImJoy...')
       that.loadImJoy();
       that.showModelInfo();
+      this.snackbar = new window.PatchedMaterialSnackbar(this.$refs.message_snackbar)
     }
-  
 
+  },
+  mounted(){
+    
   },
   methods: {
     showModelInfo(){
@@ -177,7 +183,10 @@ const app = new Vue({
         actionText: 'Close',
         timeout: duration
       };
-      this.$refs.message_snackbar.MaterialSnackbar.showSnackbar(data);
+      this.snackbar.hideSnackbar();
+      setTimeout(()=>{
+        this.snackbar.showSnackbar(data);
+      }, 30)
     },
     async getDocs(model) {
       if (model.docs) return;
