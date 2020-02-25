@@ -73,29 +73,37 @@ const app = new Vue({
   },
   created: async function () {
     const that = this;
-    const repos = [
-      'bioimage-io/models'
-    ]
     that.models = []
-    for (let repo of repos) {
-      try {
-
-        const repository_url = location.hostname === 'bioimage.io'?`https://raw.githubusercontent.com/${repo}/master/manifest.model.json`: `/manifest.model.json`
-        const response = await fetch(repository_url + '?' + randId())
-        const repo_manifest = JSON.parse(await response.text());
-        const models = repo_manifest.models;
-        for (let model of models) {
-          model.repo = repo;
-          model.url = model.url;
-          model.model_uri = `${repo}:${model.name}`;
-          model.source_url = model.url;
+    try {
+      let repo = 'bioimage-io/models'
+      const query_repo = getUrlParameter('repo')
+      let repository_url = `https://raw.githubusercontent.com/bioimage-io/models/master/manifest.model.json`
+      if(query_repo){
+        if(query_repo.startsWith('http') || query_repo.startsWith('/')){
+          repository_url = query_repo;
         }
-        that.models = that.models.concat(models);
-        that.apps_source = repo_manifest.applications;
-      } catch (e) {
-        console.error(e)
+        else{
+          repository_url = `https://raw.githubusercontent.com/${query_repo}/master/manifest.model.json`
+        }
+        repo = query_repo;
       }
+      
+      const response = await fetch(repository_url + '?' + randId())
+      const repo_manifest = JSON.parse(await response.text());
+      const models = repo_manifest.models;
+      for (let model of models) {
+        model.repo = repo;
+        model.url = model.url;
+        model.model_uri = `${repo}:${model.name}`;
+        model.source_url = model.url;
+      }
+      that.models = that.models.concat(models);
+      that.apps_source = repo_manifest.applications;
+    } catch (e) {
+      console.error(e)
+      alert(`Failed to fetch manifest file from the repo: ${e}.`)
     }
+    
     that.models.forEach((model) => {
       model.allLabels = model.labels || [];
       if (!!model.license) {
@@ -121,26 +129,36 @@ const app = new Vue({
       a.toLowerCase() < b.toLowerCase() ? -1 : 1
     );
     
-    if (!this.$refs.model_info_dialog.showModal) {
-      dialogPolyfill.registerDialog(this.$refs.model_info_dialog);
+    if (!that.$refs.model_info_dialog.showModal) {
+      dialogPolyfill.registerDialog(that.$refs.model_info_dialog);
     }
 
-    if (!this.$refs.window_dialog.showModal) {
-      dialogPolyfill.registerDialog(this.$refs.window_dialog);
+    if (!that.$refs.window_dialog.showModal) {
+      dialogPolyfill.registerDialog(that.$refs.window_dialog);
     }
 
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", ()=>{
         console.log('Loading ImJoy...')
-        this.loadImJoy();
+        that.loadImJoy();
+        that.showModelInfo();
       });
     } else {  // `DOMContentLoaded` already fired
       console.log('Loading ImJoy...')
-      this.loadImJoy();
+      that.loadImJoy();
+      that.showModelInfo();
     }
+  
 
   },
   methods: {
+    showModelInfo(){
+      const selected_model = getUrlParameter('model');
+      if(selected_model){
+        const m = this.models.filter(model=>model.name===selected_model)[0]
+        if(m) this.showInfo(m)
+      }
+    },
     etAl: (authors) => {
       authors = authors.map((author)=>{
         return author.split(';')[0]
@@ -165,10 +183,8 @@ const app = new Vue({
       if (model.docs) return;
       model.docs = '@loading...';
       this.$forceUpdate();
-      const response = await fetch(model.source_url)
-      const source_code = await response.text();
-      const modelComp = window.parseComponent(source_code);
-      const raw_docs = modelComp.docs && modelComp.docs[0] && modelComp.docs[0].content;
+      const response = await fetch(model.root_url+'/'+model.documentation+'?'+randId())
+      const raw_docs = await response.text();
       if (raw_docs && window.marked && window.DOMPurify) {
         model.docs = window.DOMPurify.sanitize(window.marked(raw_docs))
         model.source_code = source_code;
@@ -177,13 +193,6 @@ const app = new Vue({
         model.source_code = null;
       }
       this.$forceUpdate();
-    },
-    async download(model) {
-      let filename = model.name + '_' + randId() + '.model.html'
-      const response = await fetch(model.source_url)
-      const model_source = await response.text();
-      var blob = new Blob([model_source], {type: "text/plain;charset=utf-8"});
-      saveAs(blob, filename);
     },
     share(model) {
       prompt('Please copy and paste following URL for sharing:', 'https://bioimage.io/?model=' + model.model_uri)
@@ -327,11 +336,7 @@ const app = new Vue({
           this.loading = false;
           this.$forceUpdate()
 
-          let model = getUrlParameter('model');
-          let app = getUrlParameter('app');
-          if(model && app){
-            console.log('loading model with app', model, app)
-          }
+          
       })
       .catch((e)=>{
           console.error(e)
