@@ -18,6 +18,7 @@
 
 
 body {
+    font-size: 18px;
     background: rgba(245, 245, 245, 0.1);
 }
 
@@ -50,7 +51,7 @@ a {
     /*margin-right: .5rem;*/
     text-decoration: none;
     cursor: pointer;
-    color: #448aff;
+    color: #3b3f49;
 }
 
 a:hover {
@@ -62,8 +63,8 @@ ul>li {
 }
 
 .label {
-    color: #448aff !important;
-    border: 1px solid #448aff !important;
+    color: #3b3f49 !important;
+    border: 1px solid #3b3f49 !important;
 }
 
 .mdl-layout__container {
@@ -248,7 +249,7 @@ ul>li {
     font-weight: bold;
     display: inline-block;
     background: rgba(255, 255, 255, 0.8);
-    border: 1px solid #448aff;
+    border: 1px solid #3b3f49;
     color: rgb(255, 64, 129);
     padding: 0.15rem .75rem;
     border-radius: 1rem;
@@ -260,13 +261,13 @@ ul>li {
 
 .label:hover {
     color: white !important;
-    background: #448aff !important;
+    background: #3b3f49 !important;
     text-decoration: none;
 }
 
 .label.active {
     color: white;
-    background: #448aff;
+    background: #3b3f49;
     text-decoration: none;
 }
 
@@ -291,14 +292,12 @@ footer {
 }
 
 .mdl-layout__header-row {
-    height: 56px;
     padding: 3px 16px 3px 10px;
     margin-top: 3px;
 }
 
 @media screen and (max-width: 1024px) {
     .mdl-layout__header-row {
-        height: 56px;
         padding: 3px 16px 3px 10px;
     }
 }
@@ -309,8 +308,8 @@ footer {
         font-size: 30px;
     }
     .site-title {
-        height: 45px !important;
-        font-size: 2.1rem !important;
+        height: 45px;
+        font-size: 2.0rem;
     }
 }
 
@@ -318,8 +317,8 @@ footer {
 
 @media screen and (max-width: 505px) {
     .site-title {
-        height: 45px !important;
-        font-size: 1.5rem !important;
+        height: 45px!important;
+        font-size: 1.5rem!important;
     }
 
     .mdl-layout-title {
@@ -376,12 +375,11 @@ footer {
 }
 
 .site-title {
-    padding-top: 10px;
-    height: 60px;
     font-size: 2.5rem;
-    color: #448aff;
+    height: 60px;
+    color: #3b3f49;
     line-height: 50px;
-    font-weight: 550;
+    font-weight: 500;
 }
 
 .mdl-mini-footer {
@@ -444,7 +442,7 @@ footer {
 }
 
 .mdl-dialog__title {
-    background-color: #448aff;
+    background-color: #3b3f49;
     color: white;
     font-size: 1.5rem;
     height: 32px;
@@ -466,4 +464,19 @@ footer {
     text-transform: none;
     font-size: 18px;
     font-weight: 500;
+}
+
+@media screen and (max-width: 580px) {
+    .hide-small {
+        display: none;
+    }
+}
+
+.mdl-layout__header{
+    max-height: 56px;
+    min-height: 50px;
+}
+
+.primary-color{
+    color:#3b3f49!important;
 }
