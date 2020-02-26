@@ -342,6 +342,7 @@ const app = new Vue({
 
           }
           this.loading = true;
+          await imjoy.pm.reloadInternalPlugins()
           for(let k in this.apps_source){
             try{
               const p = await imjoy.pm.reloadPluginRecursively({uri: this.apps_source[k]})
