@@ -61,7 +61,10 @@
           <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
           for="demo-menu-lower-right" id="plugin-menu">
             <li class="mdl-menu__item mdl-button mdl-js-button" v-for="(app, k) in apps" :key="app.name" @click="runAllModels(app)">
-              <i class="material-icons">extension</i> {{app.name}}
+              <i class="material-icons" v-if="!app.config.icon">extension</i>
+              <img v-else-if="app.config.icon.startsWith('http')" class="material-icons app-icons" :src="app.config.icon" />
+              <i class="material-icons" v-else>{{app.config.icon}}</i>
+              {{app.name}}
             </li>
             <li class="mdl-menu__item mdl-button mdl-js-button" @click="$refs.file_select.click();">
        
@@ -137,8 +140,9 @@
                     <template v-for="app_key in model.applications">
                       <a  :id="id + app_key" :key="id + app_key" v-if="apps[app_key]">
                         <button @click="runModel(apps[app_key], model)" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                          <img class="material-icons app-icons" :src="'assets/icons/'+app_key+'-icon.png'">
-                          </img>
+                          <i class="material-icons" v-if="!apps[app_key].config.icon">extension</i>
+                          <img v-else-if="apps[app_key].config.icon.startsWith('http')" class="material-icons app-icons" :src="apps[app_key].config.icon" />
+                          <i class="material-icons" v-else>{{apps[app_key].config.icon}}</i>
                         </button>
                       </a>
                       <div class="mdl-tooltip"  :key="id + app_key + 'tooltip'" :data-mdl-for="id + app_key" v-if="apps[app_key]">

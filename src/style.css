@@ -387,9 +387,7 @@ footer {
 }
 
 .app-icons {
-    transform: translate(-10px,-10px)!important;
-    line-height: 20px!important;
-    width: 20px!important;
+    width: 22px!important;
 }
 
 .floating {

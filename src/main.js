@@ -264,11 +264,11 @@ const app = new Vue({
     loadImJoy(){
       const me = this;
       var imjoy_api = {
+        showStatus(plugin, info){
+            me.showMessage(info)
+        },
         showMessage(plugin, info, duration){
             me.showMessage(info, duration)
-        },
-        alert(plugin, msg){
-            alert(msg)
         },
         showProgress(plugin, progress){
             if (progress < 1) progress =  progress * 100;
