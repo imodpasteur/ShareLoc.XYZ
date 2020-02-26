@@ -247,11 +247,14 @@ const app = new Vue({
       this.selected_window = w;
     },
     async removeWindow(w){
+      w.closing = true;
       await w.close()
       this.show_models = true;
       this.selected_window = null;
+      this.$forceUpdate()
     },
     selectWindow(w){
+      if(w.closing) return
       this.selected_window = w;
       this.show_models = false;
     },
@@ -287,11 +290,11 @@ const app = new Vue({
                       onupdate: config.onupdate,
                   };
                   try {
-                      new imjoyLib.Joy(joy_config);
+                      new imjoyCore.Joy(joy_config);
                   } catch (e) {
                       console.error("error occured when loading the workflow", e);
                       joy_config.data = "";
-                      new imjoyLib.Joy(joy_config);
+                      new imjoyCore.Joy(joy_config);
                       throw e;
                   }
           
@@ -324,13 +327,14 @@ const app = new Vue({
         },
       }
 
-      const imjoy = new imjoyLib.ImJoy({
+      const imjoy = new imjoyCore.ImJoy({
           imjoy_api: imjoy_api,
           show_message_callback: console.log,
           add_window_callback: async (w)=>{
               this.addWindow(w)
           },
-          update_ui_callback: ()=>{}
+          update_ui_callback: ()=>{},
+          jailed_asset_url: 'https://imjoy.io/static/jailed'
       })
       const workspace = getUrlParameter('workspace') || getUrlParameter('w');
       const engine = getUrlParameter('engine') || getUrlParameter('e');
