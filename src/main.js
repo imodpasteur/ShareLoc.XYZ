@@ -369,6 +369,11 @@ const app = new Vue({
       imjoy.event_bus.on("plugin_loaded", (plugin) => {
 
       })
+
+      imjoy.event_bus.on("imjoy_ready", () => {
+
+      })
+      
       imjoy.event_bus.on("close_window", (w) => {
         if(w.window_container !== "window-dialog-container"){
           this.show_models = true;

@@ -52,13 +52,13 @@
           </template>
 
           <!-- Right aligned menu below button -->
-          <button v-show="imjoy" id="demo-menu-lower-right"
+          <button v-show="imjoy && apps" id="demo-menu-lower-right"
           class="mdl-button mdl-js-button primary-color">
           <i class="material-icons">extension</i>
           <span class="hide-small">BioEngine Apps</span>
           </button>
 
-          <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+          <ul v-show="imjoy" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
           for="demo-menu-lower-right" id="plugin-menu">
             <li class="mdl-menu__item mdl-button mdl-js-button" v-for="(app, k) in apps" :key="app.name" @click="runAllModels(app)">
               <i class="material-icons" v-if="!app.config.icon">extension</i>
