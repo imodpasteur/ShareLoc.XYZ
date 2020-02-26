@@ -35,13 +35,16 @@
             BioImage Model Zoo
           </a> -->
           <!-- Title -->
-          <span class="site-title">BioImage Model Zoo</span>
+          <span class="site-title" style="cursor: pointer;" @click="show_models=true">BioImage Model Zoo</span>
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
           <!-- Navigation. We hide it in small screens. -->
-
+          <span v-if="windows && windows.length>0" style="cursor: pointer;" class="mdl-chip mdl-chip--contact mdl-chip--deletable" href="#" @click="show_models=true">
+            <!-- <img class="mdl-chip__contact" src="/templates/dashboard/images/user.jpg"></img> -->
+            <span style="font-weight: 800;" class="mdl-chip__text">Models</span>
+          </span>
           <template v-for="w in windows">
-            <span class="mdl-chip mdl-chip--contact mdl-chip--deletable" :key="w.name" @click="selectWindow(w)">
+            <span style="cursor: pointer;" class="mdl-chip mdl-chip--contact mdl-chip--deletable" :key="w.name" @click="selectWindow(w)">
               <!-- <img class="mdl-chip__contact" src="/templates/dashboard/images/user.jpg"></img> -->
               <span class="mdl-chip__text">{{' ' + w.name}}</span>
               <a href="#" @click="removeWindow(w)" class="mdl-chip__action"><i class="material-icons">cancel</i></a>
@@ -76,11 +79,16 @@
         </div>
       </header>
       <div ref="progressbar" class="mdl-progress mdl-js-progress"></div>
-      <div v-show="loading" class="floating mdl-spinner mdl-js-spinner is-active"></div>
       <main class="mdl-layout__content">
-        <div class="page-content">
+        <div v-show="loading" class="floating mdl-spinner mdl-js-spinner is-active"></div>
+        <div  class="page-content">
           <!-- Your content goes here -->
-          <div class="mdl-grid">
+          <div v-show="!show_models" class="mdl-grid whiteboard" id="whiteboard">
+            <template v-for="w in windows">
+              <div :id="w.iframe_container" v-show="selected_window === w" class="plugin-iframe"></div>
+            </template>
+          </div>
+          <div v-if="show_models" class="mdl-grid">
             <div class="mdl-cell--6-col mdl-cel" style="padding: 0 2rem">
               <h5> # Models: {{getModelsCount()}}
                 <a id="add-model" href="https://github.com/bioimage-io/models#how-to-contribute-new-models" target="_blank"
@@ -112,7 +120,7 @@
           </div>
 
 
-          <ul class="mdl-grid">
+          <ul v-if="show_models" class="mdl-grid">
             <li class="mdl-cell mdl-cell--4-col" v-for="(model, id) in filteredModels">
               <div class="demo-card-wide mdl-card mdl-shadow--2dp">
                 <div class="background" :style="{backgroundImage: 'url(' + model.cover_image + ')'}">
@@ -230,17 +238,13 @@
         <i v-if="selected_model.icon" class="material-icons">{{dialog_window.icon}}</i>
         <i v-else class="material-icons">extension</i>
         {{dialog_window.name}}
-      </div>
-      <div style="top: 0px; position: absolute; right:0px;">
-        <button type="button" class="mdl-button close" @click="closeDialog()"><i class="material-icons">clear</i></button>
-      </div>
-      <div class="mdl-dialog__content plugin-iframe-container">
-        <div class="whiteboard" id="whiteboard">
-          <template v-for="w in windows">
-            <div :id="w.iframe_container" class="plugin-iframe"></div>
-          </template>
-           
+        <div style="top: 0px; position: absolute; right:0px;">
+          <button type="button" class="mdl-button close" @click="closeDialog()"><i class="material-icons">clear</i></button>
         </div>
+      </div>
+      
+      <div class="mdl-dialog__content plugin-iframe-container">
+        <div id="window-dialog-container" class="plugin-iframe"></div>
       </div>
     </dialog>
     <dialog class="mdl-dialog" ref="model_info_dialog"
@@ -291,7 +295,7 @@
     <!--app end-->
   </div>
   <script src="/src/main.js"></script>
-  <script src="https://imjoy.io/imjoy-lib.min.js"></script>
+  <script src="https://imjoy.io/imjoy-lib.js"></script>
   <script src="/assets/snackbar.js"></script>
 </body>
 

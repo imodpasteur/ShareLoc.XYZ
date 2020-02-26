@@ -57,7 +57,9 @@ const app = new Vue({
     local_file: null,
     watch_timer: null,
     snack_message: null,
-    snackbar: null
+    snackbar: null,
+    show_models: true,
+    selected_window: null
   },
   computed: {
     filteredModels: function () {
@@ -240,21 +242,21 @@ const app = new Vue({
       return this.filteredModels.length
     },
     addWindow(w){
-      this.dialog_window = w;
-      if(!this.$refs.window_dialog.open)
-      this.$refs.window_dialog.showModal();
       this.selectWindow(w)
+      this.show_models = false;
+      this.selected_window = w;
     },
-    removeWindow(w){
-      w.close()
+    async removeWindow(w){
+      await w.close()
+      this.show_models = true;
+      this.selected_window = null;
     },
     selectWindow(w){
-      
+      this.selected_window = w;
+      this.show_models = false;
     },
     closeDialog(){
       this.$refs.window_dialog.close()
-      this.dialog_window.close()
-      this.dialog_window = null
     },
     loadImJoy(){
       const me = this;
@@ -271,7 +273,10 @@ const app = new Vue({
         },
         showDialog(_plugin, config) {
             return new Promise((resolve, reject) => {
+                me.dialog_window = config;
+                me.$forceUpdate()
                 if (config.ui) {
+                  if(!me.$refs.window_dialog.open)
                   me.$refs.window_dialog.showModal();
                   const joy_config = {
                       container:  document.getElementById('window-dialog-container'),
@@ -291,6 +296,7 @@ const app = new Vue({
                   }
           
               } else if (config.type) {
+                  if(!me.$refs.window_dialog.open)
                   me.$refs.window_dialog.showModal();
                   config.window_container = "window-dialog-container";
                   config.standalone = true;
@@ -301,10 +307,11 @@ const app = new Vue({
                   setTimeout(() => {
                       imjoy.pm.createWindow(null, config)
                       .then(api => {
+                          
                           const _close = api.close;
                           api.close = async () => {
                               await _close();
-                              closeDialog();
+                              me.closeDialog();
                           };
                           resolve(api);
                       })
@@ -357,6 +364,12 @@ const app = new Vue({
       imjoy.event_bus.on("plugin_loaded", (plugin) => {
 
       })
+      imjoy.event_bus.on("close_window", (w) => {
+        if(w.window_container !== "window-dialog-container"){
+          this.show_models = true;
+          this.$forceUpdate()
+        }
+      })
       this.imjoy = imjoy;
       console.log('ImJoy loaded successfully.')
     },
@@ -404,9 +417,9 @@ const app = new Vue({
               const plugin = await this.imjoy.pm.reloadPlugin(config)
               console.log(plugin)
               this.apps[plugin.name] = plugin;
-              this.showMessage(`Plugin ${plugin.name} loaded successfully.`)
+              this.showMessage(`Plugin "${plugin.name}" loaded successfully.`)
               this.$forceUpdate()
-              console.log(`Plugin ${plugin.name} loaded successfully.`)
+              console.log(`Plugin "${plugin.name}" loaded successfully.`)
             } catch (error) {
               this.showMessage(`Failed to load dependencies for ${config.name}: ${error}`);
             }

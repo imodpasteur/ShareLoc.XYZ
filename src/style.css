@@ -403,11 +403,12 @@ footer {
 
 .plugin-iframe {
     width: 100%;
-    height: 100%;
+    height: 90vh;
     margin: 0px;
     padding: 0px;
     flex-grow: 1;
     border: none;
+    max-height: 1024px;
 }
 
 .plugin-iframe-container {
