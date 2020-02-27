@@ -495,3 +495,7 @@ footer {
 .primary-color{
     color:#3b3f49!important;
 }
+
+.material-icons {
+    vertical-align: middle;
+}

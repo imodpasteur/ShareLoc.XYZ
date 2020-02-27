@@ -358,14 +358,8 @@ const app = new Vue({
             try{
               const p = await imjoy.pm.reloadPluginRecursively({uri: this.apps_source[k]})
               if(p.type !== 'window'){
-                if(!p.api.runOneModel && !p.api.runManyModels){
-                  console.error(`${p.name}" has neither "runOneModel" nor "runManyModels":`, p.api)
-                  alert(`"${p.name}" is not a valid BioEngine App, it should define "runOneModel" and/or "runManyModels".`)
-                  continue;
-                }
-                if(!p.api.testModel){
-                  console.warn(`Please define a testModel function for "${p.name}".`)
-                }
+                if(!this.validateBioEngineApp(p.name, p.api))
+                continue
               }
               this.apps[k] = p
             }
@@ -401,22 +395,46 @@ const app = new Vue({
       console.log('ImJoy loaded successfully.')
     },
     async runManyModels(plugin){
-      if(plugin.type === 'window'){
-        const w = await plugin.api.run()
-        await w.runManyModels(this.models)
+      try{
+        this.loading = true;
+        if(plugin.type === 'window'){
+          const w = await plugin.api.run()
+          if(!this.validateBioEngineApp(plugin.name, w)){
+            w.runManyModels = w.run;
+          }
+          await w.runManyModels(this.models)
+        }
+        else{
+          plugin.api.runManyModels(this.models)
+        }
       }
-      else{
-        plugin.api.runManyModels(this.models)
+      catch(e){
+        this.showMessage(e)
+        console.error(e)
+      }
+      finally{
+        this.loading = false;
       }
       
     },
     async runOneModel(plugin, model){
-      if(plugin.type === 'window'){
-        const w = await plugin.api.run()
-        await w.runOneModel(model)
+      try{
+        this.loading = true;
+        if(plugin.type === 'window'){
+          const w = await plugin.api.run()
+          this.validateBioEngineApp(plugin.name, w)
+          await w.runOneModel(model)
+        }
+        else{
+          plugin.api.runOneModel(model)
+        }
       }
-      else{
-        plugin.api.runOneModel(model)
+      catch(e){
+        this.showMessage(e)
+        console.error(e)
+      }
+      finally{
+        this.loading = false;
       }
     },
     fileSelected(){
@@ -430,6 +448,17 @@ const app = new Vue({
         this.loadCodeFromFile(this.local_file);
       }, 1000);
       this.loadCodeFromFile(this.local_file);
+    },
+    validateBioEngineApp(name, api){
+      if(!api.runOneModel && !api.runManyModels){
+        console.error(`${name}" has neither "runOneModel" nor "runManyModels":`, api)
+        alert(`"${name}" is not a valid BioEngine App, it should define "runOneModel" and/or "runManyModels".`)
+        return false
+      }
+      if(!api.testModel){
+        console.warn(`Please define a testModel function for "${name}".`)
+      }
+      return true
     },
     loadCodeFromFile(file) {
       file = file || this.local_file;
@@ -447,6 +476,7 @@ const app = new Vue({
             const config = this.imjoy.pm.parsePluginCode(code);
             config.dependencies = config.dependencies || [];
             try {
+              this.loading = true;
               for (let i = 0; i < config.dependencies.length; i++) {
                 await this.imjoy.pm.reloadPluginRecursively(
                   {
@@ -456,12 +486,18 @@ const app = new Vue({
               }
               const plugin = await this.imjoy.pm.reloadPlugin(config)
               console.log(plugin)
+              if(plugin.type !== 'window'){
+                this.validateBioEngineApp(plugin.name, plugin.api)
+              }
               this.apps[plugin.name] = plugin;
               this.showMessage(`Plugin "${plugin.name}" loaded successfully.`)
               this.$forceUpdate()
               console.log(`Plugin "${plugin.name}" loaded successfully.`)
             } catch (error) {
               this.showMessage(`Failed to load dependencies for ${config.name}: ${error}`);
+            }
+            finally{
+              this.loading = false;
             }
           }
         } catch (e) {
