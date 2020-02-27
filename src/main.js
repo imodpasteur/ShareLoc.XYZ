@@ -120,8 +120,12 @@ const app = new Vue({
       }
       if (model.covers) {
         // resolve relative path to the cover image
-        if(!model.covers[0].startsWith('http'))
-        model.cover_image = model.root_url+'/'+model.covers[0]
+        if(!model.covers[0].startsWith('http')){
+          model.cover_image = model.root_url+'/'+model.covers[0]
+        }
+        else{
+          model.cover_image = model.covers[0]
+        }
         // TODO: show all the cover images
       } else {
         model.cover_image = ''
