@@ -118,7 +118,7 @@ const app = new Vue({
       if (model.tags) {
         model.allLabels = model.allLabels.concat(model.tags);
       }
-      if (model.covers) {
+      if (model.covers && model.covers.length>0) {
         // resolve relative path to the cover image
         if(!model.covers[0].startsWith('http')){
           model.cover_image = model.root_url+'/'+model.covers[0]
