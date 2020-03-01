@@ -353,7 +353,8 @@ const app = new Vue({
 
           }
           this.loading = true;
-          await imjoy.pm.reloadInternalPlugins()
+          await imjoy.pm.reloadPluginRecursively({uri: 'https://raw.githubusercontent.com/imjoy-team/jupyter-engine-manager/bioengine/docs/Jupyter-Engine-Manager.imjoy.html'})
+          // await imjoy.pm.reloadInternalPlugins()
           for(let k in this.apps_source){
             try{
               const p = await imjoy.pm.reloadPluginRecursively({uri: this.apps_source[k]})
