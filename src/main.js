@@ -118,13 +118,17 @@ const app = new Vue({
       if (model.tags) {
         model.allLabels = model.allLabels.concat(model.tags);
       }
+      debugger
       if (model.covers && model.covers.length>0) {
         // resolve relative path to the cover image
         if(!model.covers[0].startsWith('http')){
-          model.cover_image = model.root_url+'/'+model.covers[0]
+          model.cover_image = encodeURI(model.root_url+'/'+model.covers[0])
         }
         else{
-          model.cover_image = model.covers[0]
+          model.cover_image = encodeURI(model.covers[0])
+        }
+        if(model.cover_image.includes('(') || model.cover_image.includes(')')){
+          console.error('cover image file name cannot contain brackets.')
         }
         // TODO: show all the cover images
       } else {
