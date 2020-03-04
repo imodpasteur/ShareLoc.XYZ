@@ -118,7 +118,6 @@ const app = new Vue({
       if (model.tags) {
         model.allLabels = model.allLabels.concat(model.tags);
       }
-      debugger
       if (model.covers && model.covers.length>0) {
         // resolve relative path to the cover image
         if(!model.covers[0].startsWith('http')){
@@ -207,16 +206,22 @@ const app = new Vue({
       if (model.docs) return;
       model.docs = '@loading...';
       this.$forceUpdate();
-      const response = await fetch(model.root_url+'/'+model.documentation+'?'+randId())
-      const raw_docs = await response.text();
-      if (raw_docs && window.marked && window.DOMPurify) {
-        model.docs = window.DOMPurify.sanitize(window.marked(raw_docs))
-        model.source_code = source_code;
-      } else {
-        model.docs = null;
-        model.source_code = null;
+      try{
+        const response = await fetch(model.root_url+'/'+model.documentation+'?'+randId())
+        const raw_docs = await response.text();
+        if (raw_docs && window.marked && window.DOMPurify) {
+          model.docs = window.DOMPurify.sanitize(window.marked(raw_docs))
+        } else {
+          model.docs = null;
+        }
+        this.$forceUpdate();
       }
-      this.$forceUpdate();
+      catch(e){
+        model.docs = '';
+        this.$forceUpdate();
+      }
+      
+      
     },
     share(model) {
       prompt('Please copy and paste following URL for sharing:', 'https://bioimage.io/?model=' + model.model_uri)
