@@ -208,23 +208,27 @@ const app = new Vue({
       this.$forceUpdate();
       try{
         const response = await fetch(model.root_url+'/'+model.documentation+'?'+randId())
-        const raw_docs = await response.text();
-        if (raw_docs && window.marked && window.DOMPurify) {
-          model.docs = window.DOMPurify.sanitize(window.marked(raw_docs))
-        } else {
+        if(response.status == 200){
+          const raw_docs = await response.text();
+          if (raw_docs && window.marked && window.DOMPurify) {
+            model.docs = window.DOMPurify.sanitize(window.marked(raw_docs))
+          } else {
+            model.docs = null;
+          }
+        }
+        else{
           model.docs = null;
         }
+        
         this.$forceUpdate();
       }
       catch(e){
         model.docs = '';
         this.$forceUpdate();
       }
-      
-      
     },
     share(model) {
-      prompt('Please copy and paste following URL for sharing:', 'https://bioimage.io/?model=' + model.model_uri)
+      prompt('Please copy and paste following URL for sharing:', 'https://bioimage.io?model=' + encodeURI(model.name))
     },
     showInfo(model) {
       this.selected_model = model;
