@@ -381,7 +381,6 @@ function normalizeItem(self, item) {
       ext: Object.keys(item.weights).length,
       ext_type: "is-primary",
       run() {
-        console.log(item.weights);
         self.showResourceItemInfo(item, "weights");
       }
     });
@@ -392,7 +391,7 @@ function normalizeItem(self, item) {
       ext: Object.keys(item.files).length,
       ext_type: "is-primary",
       run() {
-        console.log(item.files);
+        self.showResourceItemInfo(item, "files");
       }
     });
   }
@@ -799,7 +798,7 @@ export default {
   margin: 10px;
   text-align: center;
   cursor: pointer;
-  font-size: 1.3em;
+  font-size: 1.1em;
   color: #006fcb;
 }
 .item-lists:hover {
