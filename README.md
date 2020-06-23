@@ -1,2 +1,15 @@
-# bioimage-model-zoo
-A model zoo for bioimage analysis
+# BioImage.IO
+
+An AI model repository for bioimage analysis.
+
+## BioEngine API
+
+### Models
+
+
+### Validator
+
+
+## License
+
+MIT
