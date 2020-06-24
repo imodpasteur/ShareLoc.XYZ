@@ -134,20 +134,22 @@
     <br />
 
     <footer class="footer">
-      <div class="columns is-multiline">
+      <div class="columns is-moible is-centered" v-if="siteConfig.footer">
         <div
-          v-if="siteConfig.footer_github"
-          class="column is-4-desktop is-3-widescreen is-half-tablet"
+          v-for="item in siteConfig.footer"
+          :key="item.label"
+          class="column is-one-quarter"
+          style="text-align: center"
         >
-          <a :href="siteConfig.footer_github.url" target="_blank">
-            <img
-              src="/static/img/github.svg"
-              style="width: 36px; height:36px;margin-right:3px; margin-bottom:-8px;"
-            /><span style="font-size:1.3rem;">{{
-              siteConfig.footer_github.label
-            }}</span></a
-          >
+          <b-tooltip :label="item.tooltip" position="is-top"
+            ><a :href="item.url" target="_blank">
+              <img :src="item.logo" style="height: 55px;" />
+            </a>
+          </b-tooltip>
         </div>
+      </div>
+      <div style="text-align: center" v-if="siteConfig.footnote">
+        <p>{{ siteConfig.footnote }}</p>
       </div>
     </footer>
     <modal
