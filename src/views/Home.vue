@@ -393,11 +393,11 @@ function normalizeItem(self, item) {
       show_on_hover: true
     });
 
-  item.badges = [];
+  item.badges = item.badges || [];
   if (item.weights) {
     item.badges.unshift({
-      body: "weights",
-      body_type: "is-dark",
+      label: "weights",
+      label_type: "is-dark",
       ext: Object.keys(item.weights).length,
       ext_type: "is-primary",
       run() {
@@ -407,7 +407,7 @@ function normalizeItem(self, item) {
   }
   if (item.files) {
     item.badges.unshift({
-      body: "files",
+      label: "files",
       ext: Object.keys(item.files).length,
       ext_type: "is-primary",
       run() {
@@ -417,14 +417,14 @@ function normalizeItem(self, item) {
   }
   if (item.license) {
     item.badges.unshift({
-      body: "license",
+      label: "license",
       ext: item.license,
       ext_type: "is-info"
     });
   }
   if (item.type === "model" && item.co2) {
     item.badges.unshift({
-      body: "CO2",
+      label: "CO2",
       ext: item.co2,
       ext_type: "is-success",
       run() {
