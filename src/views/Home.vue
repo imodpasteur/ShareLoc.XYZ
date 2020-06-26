@@ -143,7 +143,12 @@
         >
           <b-tooltip :label="item.tooltip" position="is-top"
             ><a :href="item.url" target="_blank">
-              <img :src="item.logo" style="height: 55px;" />
+              <figure>
+                <img :src="item.logo" style="max-height: 55px;" />
+                <figcaption class="hide-on-small-screen">
+                  {{ item.label }}
+                </figcaption>
+              </figure>
             </a>
           </b-tooltip>
         </div>
@@ -937,6 +942,9 @@ export default {
 .dialog-title {
   font-size: 1.4rem;
 }
+.hide-on-small-screen {
+  display: block;
+}
 @media screen and (max-width: 768px) {
   .dialog-title {
     font-size: 1.1rem;
@@ -958,6 +966,9 @@ export default {
   }
   .explore-btn {
     font-size: 1.1rem !important;
+  }
+  .hide-on-small-screen {
+    display: none;
   }
 }
 
