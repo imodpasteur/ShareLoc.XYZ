@@ -1,7 +1,9 @@
 <template>
   <div class="resource-item-info">
-    <badges :badges="resourceItem.badges"></badges>
-
+    <section style="margin-bottom:10px;">
+      <badges :badges="resourceItem.badges"></badges>
+      <app-icons :apps="resourceItem.apps"></app-icons>
+    </section>
     <b-carousel
       style="max-width: 1024px;"
       v-if="resourceItem.cover_images && resourceItem.cover_images.length > 0"
@@ -123,6 +125,7 @@
 import "../../node_modules/github-markdown-css/github-markdown.css";
 import "../../node_modules/highlight.js/styles/github.css";
 import Badges from "./Badges";
+import AppIcons from "./AppIcons";
 import siteConfig from "../../site.config.json";
 import marked from "marked";
 import DOMPurify from "dompurify";
@@ -138,7 +141,8 @@ export default {
     }
   },
   components: {
-    badges: Badges
+    badges: Badges,
+    "app-icons": AppIcons
   },
   data() {
     return {
