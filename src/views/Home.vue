@@ -3,8 +3,15 @@
     <!-- Navigation bar -->
     <nav class="navbar is-link is-fixed-top">
       <div class="navbar-brand">
-        <span class="site-icon"> {{ siteConfig.site_icon }}</span>
-        <span class="site-title"> {{ siteConfig.site_name }}</span>
+        <span class="site-icon" @click="goHome()" style="cursor: pointer;">
+          {{ siteConfig.site_icon }}</span
+        >
+        <span class="site-title" @click="goHome()" style="cursor: pointer;">
+          {{ siteConfig.site_name }}
+        </span>
+        <span v-if="selectedPartner" class="site-title hide-on-small-screen"
+          >| {{ selectedPartner.name }}</span
+        >
         <div
           class="navbar-burger burger"
           :class="{ 'is-active': showMenu }"
@@ -50,7 +57,43 @@
     <!-- Header -->
     <section class="hero is-link is-fullheight is-fullheight-with-navbar">
       <div class="hero-body">
-        <div class="container">
+        <img
+          class="background-img"
+          v-if="selectedPartner"
+          :src="selectedPartner.background_image"
+        />
+        <img class="background-img" v-else :src="siteConfig.background_image" />
+        <partners
+          v-if="siteConfig.partners"
+          style="position: absolute;bottom: 0px;"
+          :partners="siteConfig.partners"
+          @switchPartner="switchPartner"
+        ></partners>
+
+        <div class="container" v-if="selectedPartner">
+          <h1 class="title is-1">
+            {{ selectedPartner.splash_title }}
+          </h1>
+          <h2 class="subtitle is-3">
+            {{ selectedPartner.splash_subtitle }}
+          </h2>
+          <ul class="feature-list" v-if="selectedPartner.splash_feature_list">
+            <li
+              v-for="feature in selectedPartner.splash_feature_list"
+              :key="feature"
+            >
+              - {{ feature }}
+            </li>
+          </ul>
+          <br />
+          <b-button rounded style="text-transform:none;" @click="enter">
+            <span class="explore-btn">{{
+              selectedPartner.explore_button_text
+            }}</span></b-button
+          >
+        </div>
+
+        <div class="container" v-else>
           <h1 class="title is-1">
             {{ siteConfig.splash_title }}
           </h1>
@@ -72,12 +115,17 @@
             }}</span></b-button
           >
         </div>
-        <img class="background-img" :src="siteConfig.background_image" />
       </div>
     </section>
     <br />
+
+    <br />
     <span ref="search_anchor"></span>
-    <div class="container" style="text-align:center;">
+    <div
+      class="container"
+      v-if="resourceCategories.length > 1"
+      style="text-align:center;"
+    >
       <div
         class="item-lists is-link"
         style="width:30px; margin-left: -16px;"
@@ -96,7 +144,7 @@
           updateQueryTags();
         "
         :class="{ active: currentList === list }"
-        v-for="list in siteConfig.item_lists"
+        v-for="list in resourceCategories"
         :key="list.name"
       >
         {{ list.name }}
@@ -295,6 +343,7 @@ import Vue from "vue";
 import ResourceItemSelector from "@/components/ResourceItemSelector.vue";
 import ResourceItemList from "@/components/ResourceItemList.vue";
 import ResourceItemInfo from "@/components/ResourceItemInfo.vue";
+import Partners from "@/components/Partners.vue";
 import About from "@/views/About.vue";
 import siteConfig from "../../site.config.json";
 import {
@@ -447,10 +496,12 @@ export default {
     "resource-item-list": ResourceItemList,
     "resource-item-selector": ResourceItemSelector,
     "resource-item-info": ResourceItemInfo,
+    partners: Partners,
     about: About
   },
   data() {
     return {
+      initialized: false,
       searchTags: null,
       isTouchDevice: isTouchDevice,
       siteConfig: siteConfig,
@@ -475,7 +526,8 @@ export default {
       infoDialogTitle: "",
       currentList: null,
       displayMode: "card",
-      currentTags: []
+      currentTags: [],
+      selectedPartner: null
     };
   },
   created: async function() {
@@ -588,6 +640,13 @@ export default {
     }
   },
   computed: {
+    resourceCategories: function() {
+      if (this.selectedPartner)
+        return this.siteConfig.resource_categories.filter(list =>
+          this.selectedPartner.resource_types.includes(list.type)
+        );
+      else return this.siteConfig.resource_categories;
+    },
     fullLabelList: function() {
       const fullLabelList = [];
       if (this.resourceItems) {
@@ -613,7 +672,7 @@ export default {
         return this.currentList && this.currentList.tag_categories;
       } else {
         let combined = {};
-        for (let list of siteConfig.item_lists) {
+        for (let list of this.resourceCategories) {
           combined = Object.assign(combined, list.tag_categories);
         }
         return combined;
@@ -625,7 +684,7 @@ export default {
     window.dispatchEvent(new Event("resize"));
 
     // select models as default
-    for (let list of siteConfig.item_lists) {
+    for (let list of this.resourceCategories) {
       if (list.type === "model") {
         this.currentList = list;
         break;
@@ -636,23 +695,40 @@ export default {
     window.removeEventListener("resize", this.updateSize);
   },
   methods: {
+    goHome() {
+      this.selectedPartner = null;
+      this.searchTags = [];
+      const query = Object.assign({}, this.$route.query);
+      delete query.partner;
+      delete query.tags;
+      this.$router.replace({ query: query }).catch(() => {});
+    },
+    switchPartner(partner) {
+      this.selectedPartner = partner;
+      this.searchTags = this.selectedPartner.tags;
+      const query = Object.assign({}, this.$route.query);
+      query.partner = partner.id;
+      query.tags = partner.tags;
+      this.$router.replace({ query: query });
+    },
     updateQueryTags(newTags) {
       if (newTags) {
         if (newTags.length > 0) {
           this.currentTags = newTags;
         } else {
           this.currentTags = null;
+          if (this.initialized) {
+            this.selectedPartner = null;
+          } else {
+            this.initialized = true;
+          }
         }
       }
 
       const query = Object.assign({}, this.$route.query);
       if (this.currentList) {
         // remove the default type in the query if that's the only query
-        if (
-          this.currentList.type === "model" &&
-          query.type &&
-          Object.keys(query).length <= 1
-        )
+        if (this.currentList.type === "model" && Object.keys(query).length <= 1)
           delete query.type;
         else {
           query.type = this.currentList.type;
@@ -665,6 +741,10 @@ export default {
         query.tags = this.currentTags.join(",");
       } else {
         delete query.tags;
+      }
+
+      if (!this.selectedPartner) {
+        delete query.partner;
       }
       this.$router.replace({ query: query }).catch(() => {});
     },
@@ -781,11 +861,30 @@ export default {
       if (this.$route.query.type) {
         if (this.$route.query.type === "all") this.currentList = null;
         else
-          this.currentList = this.siteConfig.item_lists.filter(
+          this.currentList = this.resourceCategories.filter(
             item => item.type === this.$route.query.type
           )[0];
 
         hasQuery = true;
+      }
+
+      if (this.$route.query.partner) {
+        if (this.siteConfig.partners) {
+          this.selectedPartner = this.siteConfig.partners.filter(
+            p => p.id === this.$route.query.partner
+          )[0];
+          if (this.selectedPartner) {
+            if (!this.searchTags) {
+              this.searchTags = this.selectedPartner.tags;
+            } else {
+              this.searchTags = this.searchTags.concat(
+                this.selectedPartner.tags
+              );
+            }
+
+            hasQuery = false;
+          }
+        }
       }
       if (hasQuery) {
         this.enter();
@@ -911,17 +1010,17 @@ export default {
 }
 .background-img {
   position: absolute;
-  bottom: 0px;
+  bottom: 184px;
   right: 0px;
-  opacity: 0.9;
+  opacity: 0.8;
   width: 60%;
   transition: 0.9s ease;
-  max-height: 50%;
+  max-height: 30%;
   max-width: 100%;
   object-fit: contain;
 }
 .hero:hover .background-img {
-  width: 65%;
+  width: 45%;
   transition: 0.4s ease;
 }
 .feature-list {
@@ -942,9 +1041,12 @@ export default {
 .dialog-title {
   font-size: 1.4rem;
 }
-.hide-on-small-screen {
-  display: block;
+@media screen and (max-width: 500px) {
+  .feature-list {
+    font-size: 1em;
+  }
 }
+
 @media screen and (max-width: 768px) {
   .dialog-title {
     font-size: 1.1rem;
@@ -952,6 +1054,7 @@ export default {
   .site-title {
     font-size: 2em !important;
   }
+
   .site-icon {
     font-size: 2.3em;
   }
