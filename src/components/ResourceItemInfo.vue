@@ -1,8 +1,8 @@
 <template>
   <div class="resource-item-info">
     <section style="margin-bottom:10px;">
-      <badges :badges="resourceItem.badges"></badges>
       <app-icons :apps="resourceItem.apps"></app-icons>
+      &nbsp;&nbsp;<badges :badges="resourceItem.badges"></badges>
     </section>
     <b-carousel
       style="max-width: 1024px;"
