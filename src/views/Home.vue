@@ -326,8 +326,7 @@
         @join="showJoinDialog"
       ></about>
       <div
-        class="container"
-        style="padding: 20px;"
+        class="markdown-container"
         v-else-if="showInfoDialogMode === 'markdown'"
       >
         <markdown :url="infoMarkdownUrl"></markdown>
@@ -445,7 +444,9 @@ function normalizeItem(self, item) {
       name: "Source",
       icon: "code-tags",
       show_on_hover: true,
-      url: item.source
+      run() {
+        self.showSource(item);
+      }
     });
   if (item.download_url)
     item.apps.unshift({
@@ -826,6 +827,13 @@ export default {
       query.show = "contribute";
       this.$router.replace({ query: query }).catch(() => {});
     },
+    showSource(item) {
+      this.infoDialogTitle = "Source: " + item.name;
+      this.infoMarkdownUrl = item.source;
+      this.showInfoDialogMode = "markdown";
+      if (this.screenWidth < 700) this.infoDialogFullscreen = true;
+      this.$modal.show("info-dialog");
+    },
     showResourceItemInfo(mInfo, focus) {
       this.showInfoDialogMode = "model";
       mInfo._focus = focus;
@@ -1139,6 +1147,13 @@ export default {
 .card:hover .hover-show {
   opacity: 1;
   transition: 0.3s ease;
+}
+
+.markdown-container {
+  padding: 20px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  height: calc(100% - 40px);
 }
 
 html,
