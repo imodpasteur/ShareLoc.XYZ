@@ -1,7 +1,9 @@
 <template>
   <div class="container partners">
     <h2>Community Partners</h2>
-    <br />
+    <button class="button is-small join-btn" @click="$emit('join')">
+      +Join
+    </button>
     <b-carousel-list
       v-model="selectedPartnerIndex"
       :data="partners"
@@ -48,12 +50,19 @@ export default {
 };
 </script>
 <style scoped>
+.join-btn {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
 .partners > h2 {
-  margin-top: 10px;
-  font-size: 1.7rem;
+  margin-top: 2px;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  color: #407ae6;
 }
 .partners {
-  background-color: #313131d9;
+  background-color: #fdfdfdfd;
   text-align: center;
   width: 100vw;
   max-width: 100vw;
@@ -65,9 +74,10 @@ export default {
   margin-left: 0px;
 }
 .partner-logo {
-  height: 100px;
+  height: 80px;
   max-height: 100px;
   width: auto;
+  margin-bottom: 10px;
 }
 
 @media screen and (max-width: 500px) {
@@ -79,7 +89,7 @@ export default {
   }
 }
 
-@media screen and (max-height: 600px) {
+@media screen and (max-height: 500px) {
   .partners {
     height: 100px;
   }
@@ -89,5 +99,8 @@ export default {
   .partners > h2 {
     display: none;
   }
+}
+.carousel-list.has-shadow {
+  box-shadow: unset !important;
 }
 </style>
