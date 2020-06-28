@@ -12,7 +12,7 @@ Please follow the following steps:
  1. Add your models to the `src/manifest.bioimage.io.yaml` file
  1. Run `python src/compile_model_manifest.py` to generate a new `manifest.model.json` with your models
  1. Commit your changes and push to your Github repo.
- 1. You can preview it constructing an URL which makes BioImage.io render the page with the manifest file in your repo. The URL format is: `https://bioimage.io?repo=YOUR_GITHUB_USER_NAME/YOUR_GITHUB_REPO`, for example: https://bioimage.io?repo=oeway/models will point to the model manifest hosted on https://github.com/oeway/models. You can also add commit hash tag, branch name or tag after that, for example: https://bioimage.io?repo=oeway/models/06a9ffac88.
+ 1. You can preview it constructing an URL which makes BioImage.io render the page with the manifest file in your repo. The URL format is: `https://bioimage.io/#/?repo=YOUR_GITHUB_USER_NAME/YOUR_GITHUB_REPO`, for example: https://bioimage.io/#/?repo=oeway/models will point to the model manifest hosted on https://github.com/oeway/models. You can also add commit hash tag, branch name or tag after that, for example: https://bioimage.io/#/?repo=oeway/models/06a9ffac88.
  1. If you are satisfied with the result above, you can send us a [Pull Request](https://github.com/bioimage-io/models/pulls), and we will review it before it get merged.
 
  Note: once your PR get merged to the repo, the CI script will automatically compile the `manifest.bioimage.io.yaml` file, again, so please don't edit the genearted `manifest.model.json` file manually.
@@ -64,4 +64,4 @@ Here are the steps:
  1. Once the BioEngine App is ready, you can then push it to your Github repo and get a `raw` URL for the file.
  1. Define a key in the `applications` section in `src/manifest.bioimage.io.yaml`, and set the value as the `raw` URL to the BioEngine app file.
  1. For all the models which your app can digest, you can add your app key to the `applications` field of the model.
- 1. The procedure later are the same as contributing models, you can basically: run `python src/compile_model_manifest.py` to generate a new `manifest.model.json`, commit and push to your Github repo, preview it on BioImage.io with `https://bioimage.io?repo=YOUR_GITHUB_USER_NAME/YOUR_GITHUB_REPO` and optionally send us a Pull Request.
+ 1. The procedure later are the same as contributing models, you can basically: run `python src/compile_model_manifest.py` to generate a new `manifest.model.json`, commit and push to your Github repo, preview it on BioImage.io with `https://bioimage.io/#/?repo=YOUR_GITHUB_USER_NAME/YOUR_GITHUB_REPO` and optionally send us a Pull Request.
