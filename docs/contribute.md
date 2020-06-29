@@ -4,7 +4,7 @@ You are welcome to submit your **models**, **datasest**, **applicaitons** and Ju
 
 To add an resource item to BioImage.IO, you need to provide a set of basic information about the resouce, including name, description, authors etc. and we will generate a resource card to display in the website.
 
-Practically, you will need to provide a [`Resource Description File`](./resource-description-file.md) stored on a public website such as Github/Gist/Gitlab, and submit the link to BioImage.IO via [Pull Requests](https://github.com/bioimage-io/bioimage-io-models/pulls).
+Practically, you will need to provide a [`Resource Description File`](https://github.com/bioimage-io/bioimage.io/blob/master/docs/resource-description-file.md) stored on a public website such as Github/Gist/Gitlab, and submit the link to BioImage.IO via [Pull Requests](https://github.com/bioimage-io/bioimage-io-models/pulls).
 
 ## How to contribute new models?
 
