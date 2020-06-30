@@ -75,7 +75,6 @@ export default {
     },
     url: function(newUrl) {
       if (!newUrl) return;
-
       this.showDocsUrl(newUrl);
     }
   },
