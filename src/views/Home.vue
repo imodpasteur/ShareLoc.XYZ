@@ -592,6 +592,10 @@ export default {
 
       const response = await fetch(manifest_url + "?" + randId());
       const repo_manifest = JSON.parse(await response.text());
+      if (repo_manifest.collections && this.siteConfig.partners)
+        this.siteConfig.partners = this.siteConfig.partners.concat(
+          repo_manifest.collections
+        );
       const resourceItems = repo_manifest.resources;
       for (let item of resourceItems) {
         item.repo = repo;
