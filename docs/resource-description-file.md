@@ -21,7 +21,7 @@ The common fields for all the resource description files are:
 | icon | optional | an icon for the resource  |
 | license | optional | the license name for the resource, e.g.: `MIT`  |
 | covers | optional | a list of url to the cover images (aspect ratio width/height=2/1)  |
-| doc | optional | url to the documentation in markdown format  |
+| documentation | optional | url to the documentation in markdown format  |
 | tags | optional | a list of tags  |
 | git_repo | optional | url to the git repo  |
 | badges | optional | a list of badges|
