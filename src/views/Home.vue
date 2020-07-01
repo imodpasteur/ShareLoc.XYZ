@@ -419,7 +419,9 @@ function normalizeItem(self, item) {
         encodeURI(concatAndResolveUrl(item.root_url, cover))
       );
     } else {
-      item.cover_images.push(encodeURI(cover));
+      if (cover.includes(" ")) {
+        item.cover_images.push(encodeURI(cover));
+      } else item.cover_images.push(cover);
     }
   }
 
