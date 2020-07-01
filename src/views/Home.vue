@@ -891,8 +891,6 @@ export default {
       this.showInfoDialogMode = "model";
       mInfo._focus = focus;
       this.selectedResourceItem = mInfo;
-      // set title for utteranc
-      window.document.title = mInfo.name;
       this.infoDialogTitle = this.selectedResourceItem.name;
       if (this.screenWidth < 700) this.infoDialogFullscreen = true;
       this.$modal.show("info-dialog");
