@@ -88,6 +88,10 @@ export default {
   margin-right: 0px;
   margin-left: 0px;
 }
+.carousel-list {
+  padding-left: 30px;
+  padding-right: 30px;
+}
 .partner-logo {
   height: 80px;
   max-height: 100px;
@@ -101,6 +105,10 @@ export default {
   }
   .partners > h2 {
     font-size: 1.2rem;
+  }
+  .carousel-list {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 
