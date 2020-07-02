@@ -602,7 +602,7 @@ export default {
       for (let item of resourceItems) {
         item.repo = repo;
         normalizeItem(this, item);
-        if (!item.source.startsWith("http"))
+        if (item.source && !item.source.startsWith("http"))
           item.source = concatAndResolveUrl(item.root_url, item.source);
       }
       this.resourceItems = resourceItems;
