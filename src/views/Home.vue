@@ -594,10 +594,21 @@ export default {
 
       const response = await fetch(manifest_url + "?" + randId());
       const repo_manifest = JSON.parse(await response.text());
-      if (repo_manifest.collections && this.siteConfig.partners)
-        this.siteConfig.partners = this.siteConfig.partners.concat(
-          repo_manifest.collections
-        );
+      if (repo_manifest.collections && this.siteConfig.partners) {
+        for (let c of repo_manifest.collections) {
+          const duplicates = this.siteConfig.partners.filter(
+            p => p.id === c.id
+          );
+          duplicates.forEach(p => {
+            this.siteConfig.partners.splice(
+              this.siteConfig.partners.indexOf(p),
+              1
+            );
+          });
+          this.siteConfig.partners.push(c);
+        }
+      }
+
       const resourceItems = repo_manifest.resources;
       for (let item of resourceItems) {
         item.repo = repo;
