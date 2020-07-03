@@ -4,7 +4,7 @@
       <div class="columns is-multiline" v-if="displayMode === 'card'">
         <div
           v-for="item in allItems"
-          :key="item.name"
+          :key="item.id"
           class="column is-4-desktop is-3-widescreen is-half-tablet"
         >
           <resource-item-card
