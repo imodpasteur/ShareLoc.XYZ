@@ -17,7 +17,7 @@ To prepare such a manifest file, follow the example [here](https://github.com/bi
 Make a request in the comment box below (if you don't see a comment box in the bottom of this page, click [here](https://github.com/bioimage-io/bioimage-io-models/issues/27)):
 1. describe your project
 2. include the url to your project repo and the manifest file
-3. It is recommended to activate CI tests for your repo, and add one of the BioImage.IO admin team as collabrator to your repo in case we need to make changes to the manifest file
-s
+3. It is recommended to activate CI tests for your repo, and add one of the BioImage.IO admin team as collabrator to your repo in case we need to make changes to the manifest file.
+
 The admin team will discuss and decide whether we should include your project.
 
