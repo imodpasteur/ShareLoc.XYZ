@@ -1,6 +1,13 @@
 # Building BioEngine Apps
 
-We use BioEngine, a tailored version of [ImJoy](https://imjoy.io) to run these applications. Therefore, you can basically run ImJoy plugins with the BioEngine specific api. By default it loads also a [Jupyter Engine](https://github.com/imjoy-team/jupyter-engine-manager) which uses free computational resources on MyBinder.org, so you can also run small models in Python. 
+We use BioEngine, a tailored version of [ImJoy](https://imjoy.io) to run these applications. Therefore, you can basically run ImJoy plugins with the BioEngine specific api. 
+
+Depending on different types of application, for web application, please refer to [here](https://github.com/imjoy-team/imjoy-core#use-your-web-application-inside-imjoy) for integrating the `imjoy-rpc` with your web app. Once done you can simply set `source` in the [`Resource Description File`](https://github.com/bioimage-io/bioimage.io/blob/master/docs/resource-description-file.md) to your web app url.
+
+
+For Jupyter notebooks and other types, you will need to build a new ImJoy plugin.
+
+By default it loads also a [Jupyter Engine](https://github.com/imjoy-team/jupyter-engine-manager) which uses free computational resources on MyBinder.org, so you can also run small models in Python. 
 
 Since BioEngine is designed for running model specific ImJoy plugins, it needs to define either `runOneModel()` and/or `runManyModels()` function in the plugin api. Plus, you need also a `testModel` function which will be used to run tests in a CI environment. For example, the following python plugin would treat as a qualified BioEngine App:
 
