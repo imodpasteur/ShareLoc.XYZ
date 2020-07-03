@@ -672,12 +672,13 @@ export default {
                   const linked = resourceItems.filter(
                     item => item.id === link_key
                   );
+                  const self = this;
                   for (let lit of linked) {
                     apps.unshift({
                       name: lit.name,
                       icon: lit.icon,
                       run() {
-                        this.showResourceItemInfo(lit);
+                        self.showResourceItemInfo(lit);
                       }
                     });
                   }
