@@ -1,31 +1,23 @@
 # Join as a community partner
 
 By joining BioImage.IO as a community partner, you will be able to:
+ - manage your own model repository
  - show your logo in BioImage.IO
  - associate the logo with predefined tags and content types
  - customize your splash screen with a short description, highlighted features and background image
  - generate url that bring the user directly to the filtered items.
 
 ## How to join as a community partner?
-First, you will need to prepare a json object to hold some information for rendering your software or project in BioImage.IO. Please adapt the following example with your own content:
+It works by placing a manifest file (`manifest.bioimage.io.yaml`) under your project repository, and BioImage.IO will pull the content of your manifest to generate the items in BioImage.IO.
 
-```json
-{
-  "id": "deepimagej",
-  "name": "deepImageJ",
-  "tags": ["deepimagej"],
-  "logo": "https://deepimagej.github.io/deepimagej/images/deepimagej_logo.png",
-  "icon": "https://deepimagej.github.io/deepimagej/images/deepimagej_logo.png",
-  "splash_title": "deepImageJ",
-  "splash_subtitle": "A user-friendly plugin to run deep learning models in ImageJ",
-  "splash_feature_list": [
-    "support models in tensorflow SavedModel format",
-    "support running models from macro"
-  ],
-  "explore_button_text": "Start Exploring",
-  "background_image": "static/img/zoo-background.svg",
-  "resource_types": ["model", "notebook"]
-}
-```
-Paste the JSON string into the comment box below (if you don't see a comment box in the bottom of this page, click [here](https://github.com/bioimage-io/bioimage-io-models/issues/27)). The admin team will discuss and decide whether we should include your project.
+![bioimage-io-community-partners](https://raw.githubusercontent.com/bioimage-io/bioimage.io/master/docs/bioimage-io-community-partners.png)
+
+To prepare such a manifest file, follow the example [here](https://github.com/bioimage-io/bioimage-io-models/blob/master/src/manifest.bioimage.io.yaml).
+
+Make a request in the comment box below (if you don't see a comment box in the bottom of this page, click [here](https://github.com/bioimage-io/bioimage-io-models/issues/27)):
+1. describe your project
+2. include the url to your project repo and the manifest file
+3. It is recommended to activate CI tests for your repo, and add one of the BioImage.IO admin team as collabrator to your repo in case we need to make changes to the manifest file
+s
+The admin team will discuss and decide whether we should include your project.
 
