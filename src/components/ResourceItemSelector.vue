@@ -151,6 +151,10 @@ export default {
       this.applySearch(this.selectedTags);
     },
     searchTags: function(newTags) {
+      if (!newTags) {
+        this.selectedTags = [];
+        return;
+      }
       const is_same =
         newTags &&
         newTags.length == this.selectedTags.length &&
