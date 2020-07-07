@@ -482,7 +482,7 @@ function normalizeItem(self, item) {
   if (item.git_repo)
     item.apps.unshift({
       name: "Git Repository",
-      icon: "github-circle",
+      icon: "github",
       url: item.git_repo,
       show_on_hover: true
     });
