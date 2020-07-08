@@ -784,7 +784,6 @@ export default {
     },
     switchPartner(partner) {
       this.selectedPartner = partner;
-      this.searchTags = this.selectedPartner.tags;
       this.selectedCategory = null; // select all
       if (this.selectedPartner.default_type) {
         for (let list of this.resourceCategories) {
@@ -794,6 +793,9 @@ export default {
           }
         }
       }
+      this.$nextTick(() => {
+        this.searchTags = this.selectedPartner.tags;
+      });
       const query = Object.assign({}, this.$route.query);
       query.partner = partner.id;
       query.tags = partner.tags;
