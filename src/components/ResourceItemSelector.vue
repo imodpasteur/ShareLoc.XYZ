@@ -246,9 +246,9 @@ export default {
                   item.authors.some(author =>
                     author.toLowerCase().includes(label)
                   )) ||
-                (item.applications &&
-                  item.applications.some(author =>
-                    author.toLowerCase().includes(label)
+                (item.apps &&
+                  item.apps.some(
+                    app => app.name && app.name.toLowerCase().includes(label)
                   ))
               );
             };
