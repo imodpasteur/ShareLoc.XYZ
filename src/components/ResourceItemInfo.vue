@@ -67,7 +67,8 @@
       <h3 v-if="formatedCitation" id="citation">How to cite</h3>
       <ul v-if="formatedCitation" class="citation">
         <li v-for="c in formatedCitation" :key="c.text">
-          {{ c.text }} <a :href="c.url" target="_blank">[{{ c.url_text }}]</a>
+          {{ c.text }}
+          <a v-if="c.url" :href="c.url" target="_blank">[{{ c.url_text }}]</a>
         </li>
       </ul>
     </div>
@@ -128,18 +129,24 @@ export default {
       }
       const citations = [];
       for (let c of cites) {
-        let url = c.url;
-        let url_text = "link";
-        if (c.doi) {
-          if (c.doi.startsWith("http")) url = c.doi;
-          else url = "https://doi.org/" + c.doi;
-          url_text = "doi";
+        if (typeof c === "string") {
+          citations.push({
+            text: c
+          });
+        } else {
+          let url = c.url;
+          let url_text = "link";
+          if (c.doi) {
+            if (c.doi.startsWith("http")) url = c.doi;
+            else url = "https://doi.org/" + c.doi;
+            url_text = "doi";
+          }
+          citations.push({
+            text: c.text,
+            url,
+            url_text
+          });
         }
-        citations.push({
-          text: c.text,
-          url,
-          url_text
-        });
       }
       return citations;
     }

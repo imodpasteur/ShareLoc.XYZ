@@ -64,11 +64,10 @@
         />
         <img class="background-img" v-else :src="siteConfig.background_image" />
         <partners
-          v-if="siteConfig.partners && siteConfig.join_partners_url"
+          v-if="partners"
           style="position: absolute;bottom: 0px;"
-          :partners="siteConfig.partners"
+          :partners="partners"
           @switchPartner="switchPartner"
-          @join="showJoinDialog"
         ></partners>
 
         <div class="container" v-if="selectedPartner">
@@ -477,7 +476,7 @@ function normalizeItem(self, item) {
     }
   });
 
-  if (item.source && item.type === "application")
+  if (item.source && item.source.startsWith("http"))
     item.apps.unshift({
       name: "Source",
       icon: "code-tags",
@@ -671,8 +670,8 @@ export default {
       for (let item of resourceItems) {
         item.repo = repo;
         normalizeItem(this, item);
-        if (item.source && !item.source.startsWith("http"))
-          item.source = concatAndResolveUrl(item.root_url, item.source);
+        // if (item.source && !item.source.startsWith("http"))
+        //   item.source = concatAndResolveUrl(item.root_url, item.source);
       }
 
       const tp = this.selectedCategory && this.selectedCategory.type;
@@ -726,6 +725,15 @@ export default {
     }
   },
   computed: {
+    partners: function() {
+      return this.siteConfig.partners.concat([
+        {
+          isJoinButton: true,
+          name: "Join BioImage.IO",
+          icon: "/static/img/plus-sign.png"
+        }
+      ]);
+    },
     resourceCategories: function() {
       if (this.selectedPartner)
         return this.siteConfig.resource_categories.filter(list =>
@@ -790,6 +798,10 @@ export default {
       this.$router.push({ query: query }).catch(() => {});
     },
     switchPartner(partner) {
+      if (partner.isJoinButton) {
+        this.showJoinDialog();
+        return;
+      }
       this.selectedPartner = partner;
       this.selectedCategory = null; // select all
       if (this.selectedPartner.default_type) {
@@ -801,7 +813,7 @@ export default {
         }
       }
       this.$nextTick(() => {
-        this.searchTags = this.selectedPartner.tags;
+        this.searchTags = this.selectedPartner && this.selectedPartner.tags;
       });
       const query = Object.assign({}, this.$route.query);
       query.partner = partner.id;
@@ -921,15 +933,27 @@ export default {
       this.$router.replace({ query: query }).catch(() => {});
     },
     showSource(item) {
-      if (item.source.endsWith(".yaml") || item.source.endsWith(".yml")) {
+      if (
+        item.source.endsWith(".yaml") ||
+        item.source.endsWith(".yml") ||
+        item.source.endsWith(".imjoy.html")
+      ) {
         this.infoDialogTitle = "Source: " + item.name;
         this.infoMarkdownUrl = item.source;
         this.infoCommentBoxTitle = item.name;
         this.showInfoDialogMode = "markdown";
         if (this.screenWidth < 700) this.infoDialogFullscreen = true;
         this.$modal.show("info-dialog");
-      } else {
+      } else if (item.source.startsWith("http")) {
         window.open(item.source);
+      } else {
+        this.$buefy.dialog.alert({
+          title: "Source: " + item.name,
+          hasIcon: true,
+          icon: "code-tags",
+          message: item.source,
+          confirmText: "OK"
+        });
       }
     },
     showResourceItemInfo(mInfo, focus) {
@@ -1086,6 +1110,14 @@ export default {
 </script>
 
 <style>
+.modal-card-title {
+  font-size: 1.1rem;
+  line-height: 1;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
 .navbar-item,
 .navbar-link {
   font-size: 1.5rem;
