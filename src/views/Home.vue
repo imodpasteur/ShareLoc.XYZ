@@ -735,13 +735,16 @@ export default {
   },
   computed: {
     partners: function() {
-      return this.siteConfig.partners.concat([
-        {
-          isJoinButton: true,
-          name: "Join Community Partners",
-          icon: "/static/img/plus-sign.png"
-        }
-      ]);
+      return (
+        this.siteConfig.partners &&
+        this.siteConfig.partners.concat([
+          {
+            isJoinButton: true,
+            name: "Join Community Partners",
+            icon: "/static/img/plus-sign.png"
+          }
+        ])
+      );
     },
     resourceCategories: function() {
       if (this.selectedPartner)
