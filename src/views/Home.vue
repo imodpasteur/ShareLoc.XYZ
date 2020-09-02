@@ -242,32 +242,34 @@
         :class="{ 'drag-handle': !isTouchDevice }"
         class="dialog-header"
       >
+        <div style="position: absolute; left:2px; margin-top: -1px;">
+          <button
+            @click="closeDialogWindow(selectedDialogWindow)"
+            class="noselect dialog-control-button"
+            style="background:#ff0000c4;"
+          >
+            x
+          </button>
+          <button
+            v-if="screenWidth > 700"
+            @click="minimizeDialogWindow()"
+            class="noselect dialog-control-button"
+            style="background:#00cdff61;"
+          >
+            -
+          </button>
+          <button
+            v-if="screenWidth > 700"
+            @click="maximizeDialogWindow()"
+            class="noselect dialog-control-button"
+            style="background:#00cdff61;"
+          >
+            {{ dialogWindowConfig.fullscreen ? "=" : "+" }}
+          </button>
+        </div>
         <span class="noselect dialog-title">
           {{ selectedDialogWindow.name }}</span
         >
-        <button
-          @click="closeDialogWindow(selectedDialogWindow)"
-          class="noselect dialog-control-button"
-          style="background:#ff0000c4;left:2px;"
-        >
-          x
-        </button>
-        <button
-          v-if="screenWidth > 700"
-          @click="minimizeDialogWindow()"
-          class="noselect dialog-control-button"
-          style="background:#00cdff61;left:40px;"
-        >
-          -
-        </button>
-        <button
-          v-if="screenWidth > 700"
-          @click="maximizeDialogWindow()"
-          class="noselect dialog-control-button"
-          style="background:#00cdff61;left:80px;"
-        >
-          {{ dialogWindowConfig.fullscreen ? "=" : "+" }}
-        </button>
 
         <b-dropdown
           aria-role="list"
@@ -322,22 +324,24 @@
         :class="{ 'drag-handle': !isTouchDevice }"
         class="dialog-header"
       >
+        <div style="position: absolute; left:2px; margin-top: -1px;">
+          <button
+            @click="closeInfoWindow()"
+            class="noselect dialog-control-button"
+            style="background:#ff0000c4;"
+          >
+            x
+          </button>
+          <button
+            v-if="screenWidth > 700"
+            @click="maximizeInfoWindow()"
+            class="noselect dialog-control-button"
+            style="background:#00cdff61;"
+          >
+            {{ infoDialogFullscreen ? "=" : "+" }}
+          </button>
+        </div>
         <span class="noselect dialog-title"> {{ infoDialogTitle }}</span>
-        <button
-          @click="closeInfoWindow()"
-          class="noselect dialog-control-button"
-          style="background:#ff0000c4;left:2px;"
-        >
-          x
-        </button>
-        <button
-          v-if="screenWidth > 700"
-          @click="maximizeInfoWindow()"
-          class="noselect dialog-control-button"
-          style="background:#00cdff61;left:40px;"
-        >
-          {{ infoDialogFullscreen ? "=" : "+" }}
-        </button>
       </div>
       <about
         v-if="showInfoDialogMode === 'about'"
@@ -1216,7 +1220,7 @@ export default {
   padding-bottom: 7px;
   border: 0px;
   font-size: 2rem;
-  position: absolute;
+  position: relative;
   color: white;
   top: 2px;
   font-family: "Lucida Console", Monaco, monospace;
