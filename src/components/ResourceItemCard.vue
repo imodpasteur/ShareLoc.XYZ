@@ -1,6 +1,6 @@
 <template>
   <div class="resource-item-card">
-    <div class="card is-shady">
+    <div class="card is-shady" :style="{ 'box-shadow': boxShadow }">
       <div class="card-image">
         <b-carousel
           v-if="
@@ -44,12 +44,7 @@
               style="border-radius: 50%;background: #167cf0b8;"
               :src="'/static/anonymousAnimals/' + icon.src + '.png'"
             />
-            <b-icon
-              v-else
-              style="height:22px;"
-              :icon="icon.src"
-              size="is-small"
-            />
+            <b-icon v-else class="item-icon" :icon="icon.src" />
             <span>{{ resourceItem.name }}</span>
           </h4>
           <div class="buttons floating-buttons">
@@ -82,6 +77,12 @@
 import Badges from "./Badges";
 import AppIcons from "./AppIcons";
 import { anonymousAnimals } from "../utils";
+import siteConfig from "../../site.config.json";
+
+const colorMap = {};
+for (let it of siteConfig.resource_categories) {
+  colorMap[it.type] = it.outline_color;
+}
 
 const isTouchDevice = (function() {
   try {
@@ -110,6 +111,10 @@ export default {
     "app-icons": AppIcons
   },
   computed: {
+    boxShadow: function() {
+      const color = colorMap[this.resourceItem.type] || "rgba(0,0,0,.2)";
+      return `0 3px 1px -2px ${color}, 0 2px 2px 0 ${color}, 0 1px 5px 0 rgba(0,0,0,.12)`;
+    },
     icon: function() {
       if (this.resourceItem.icon) {
         if (this.resourceItem.icon.startsWith("http")) {
