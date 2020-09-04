@@ -193,6 +193,11 @@ export default {
       } catch (e) {
         resourceItem.docs = null;
         this.$forceUpdate();
+      } finally {
+        this.maxDocsLetters = this.resourceItem.docs
+          .split("\n")
+          .slice(0, 5)
+          .join("\n").length;
       }
     }
   }
