@@ -84,7 +84,7 @@ export async function setupBioEngine(
   closeDialog,
   updateStatus
 ) {
-  const imjoyCore = await window.loadImJoyCore({ version: "0.13.19" });
+  const imjoyCore = await window.loadImJoyCore();
 
   var imjoy_api = {
     showStatus(plugin, info) {
