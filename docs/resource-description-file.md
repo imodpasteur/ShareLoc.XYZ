@@ -24,7 +24,6 @@ The common fields for all the resource description files are:
 | authors | optional | the full list of author names  |
 | badges | optional | a list of badges|
 | cite | optional | how to cite the resource |
-
 | documentation | optional | url to the documentation in markdown format  |
 | icon | optional | an icon for the resource  |
 | links | optional | a list of linked resources, an id to other resources|
