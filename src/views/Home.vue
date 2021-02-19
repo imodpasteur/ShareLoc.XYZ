@@ -550,22 +550,6 @@ function normalizeItem(self, item) {
 
   item.badges = item.badges || [];
   item.attachments = item.attachments || {};
-
-  if (item.error && item.error.spec) {
-    item.badges.unshift({
-      label: "Error",
-      label_type: "is-danger",
-      ext: Object.keys(item.error.spec).length,
-      ext_type: "is-dark",
-      run() {
-        alert(
-          "Model Specification Errors: \n" +
-            JSON.stringify(item.error.spec, null, "  ")
-        );
-      }
-    });
-  }
-
   const linkedItems = self.resourceItems.filter(
     m => m.links && m.links.includes(item.id)
   );
@@ -604,6 +588,32 @@ function normalizeItem(self, item) {
         );
       }
     });
+  }
+  if (item.error) {
+    if (item.error.spec) {
+      item.badges.unshift({
+        label: "spec",
+        label_type: "is-dark",
+        ext: "failing",
+        ext_type: "is-danger",
+        run() {
+          alert(
+            "This model failed the specification checks, here are the errors: \n" +
+              JSON.stringify(item.error.spec, null, "  ")
+          );
+        }
+      });
+    } else {
+      item.badges.unshift({
+        label: "spec",
+        label_type: "is-dark",
+        ext: "passing",
+        ext_type: "is-success",
+        run() {
+          alert("🎉 This model passed the specification checks!");
+        }
+      });
+    }
   }
 }
 
