@@ -30,10 +30,6 @@
         class="navbar-menu"
       >
         <div class="navbar-end">
-          <a class="navbar-item" href="/docs">
-            <b-icon icon="playlist-check"></b-icon>
-            <span>Documentation</span>
-          </a>
           <a
             class="navbar-item"
             target="_blank"
@@ -632,12 +628,18 @@ export default {
     };
   },
   mounted: async function() {
+    this.$buefy.dialog.alert({
+      title: "Site under construction",
+      message:
+        "Please note that this site is under construction, some features are current missing.",
+      confirmText: "OK"
+    });
     window.addEventListener("resize", this.updateSize);
     window.dispatchEvent(new Event("resize"));
 
     // select models as default
     for (let list of this.resourceCategories) {
-      if (list.type === "model") {
+      if (list.type === "dataset") {
         this.selectedCategory = list;
         break;
       }
