@@ -45,10 +45,10 @@
         >...show all.</a
       >
     </p>
-    <attachments
+    <!-- <attachments
       :attachments="resourceItem.attachments"
       :focusTarget="resourceItem._focus"
-    ></attachments>
+    ></attachments> -->
     <div class="markdown-body">
       <markdown
         v-if="resourceItem.docs"
@@ -80,7 +80,7 @@
 import siteConfig from "../../site.config.json";
 import Badges from "@/components/Badges.vue";
 import AppIcons from "@/components/AppIcons.vue";
-import Attachments from "@/components/Attachments.vue";
+// import Attachments from "@/components/Attachments.vue";
 import Markdown from "@/components/Markdown.vue";
 import CommentBox from "@/components/CommentBox.vue";
 import { randId, concatAndResolveUrl } from "../utils";
@@ -96,7 +96,7 @@ export default {
   components: {
     markdown: Markdown,
     badges: Badges,
-    attachments: Attachments,
+    // attachments: Attachments,
     "app-icons": AppIcons,
     "comment-box": CommentBox
   },

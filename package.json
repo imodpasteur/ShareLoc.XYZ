@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@mdi/font": "^5.3.45",
+    "axios": "^0.21.1",
     "buefy": "^0.8.0",
     "core-js": "^3.6.5",
     "dompurify": "^2.0.11",
@@ -24,6 +25,7 @@
     "register-service-worker": "^1.7.1",
     "sortablejs": "^1.10.2",
     "vue": "^2.6.11",
+    "vue-form-json": "^3.3.0",
     "vue-js-modal": "github:imjoy-team/vue-js-modal#2.0.0-rc.3g",
     "vue-router": "^3.2.0",
     "vue-swatches": "^2.1.0",

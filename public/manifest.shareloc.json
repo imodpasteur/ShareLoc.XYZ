@@ -1,0 +1,428 @@
+{
+    "id": "shareloc",
+    "name": "ShareLoc.XYZ",
+    "tags": [],
+    "logo": "\ud83d\udd2c",
+    "icon": "\ud83d\udd2c",
+    "splash_title": "ShareLoc.XYZ",
+    "splash_subtitle": "A platform for sharing single molecule localization microscopy data",
+    "splash_feature_list": [],
+    "resource_types": [
+        "dataset"
+    ],
+    "default_type": "dataset",
+    "url_root": "https://raw.githubusercontent.com/imodpasteur/shareLoc.xyz/master",
+    "resources": [
+        {
+            "id": "smlm-viewer",
+            "type": "application",
+            "source": "https://shareloc.xyz/SMLM-Viewer.imjoy.html",
+            "icon": "extension",
+            "name": "SMLM-Viewer",
+            "version": "0.0.1",
+            "api_version": "0.1.8",
+            "description": "SMLM Viewer",
+            "requirements": [],
+            "dependencies": [],
+            "env": "",
+            "tags": [],
+            "documentation": "",
+            "covers": [],
+            "badges": [],
+            "authors": []
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/015e2deb4d27c612ef356b7c512b0cff/015e2deb4d27c612ef356b7c512b0cff.smlm",
+            "id": "015e2deb4d27c612ef356b7c512b0cff",
+            "name": "015e2deb4d27c612ef356b7c512b0cff.smlm",
+            "description": "",
+            "hash": "015e2deb4d27c612ef356b7c512b0cff",
+            "tags": [],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": ""
+            },
+            "attachments": {
+                "files": [
+                    "Snap_Snapshot#0_ROI1.jpeg"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/015e2deb4d27c612ef356b7c512b0cff/thumbnail.png"
+            ],
+            "links": [
+                "smlm-viewer"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/059917b48293e1b1597ea258094fe259/059917b48293e1b1597ea258094fe259.smlm",
+            "id": "059917b48293e1b1597ea258094fe259",
+            "name": "059917b48293e1b1597ea258094fe259.smlm",
+            "description": "Microtubules from stained REF52 with DMA1 antibody",
+            "hash": "059917b48293e1b1597ea258094fe259",
+            "tags": [
+                "REF52",
+                "alpha tubulin",
+                "storm",
+                "microtubules",
+                "alexa fluor 647"
+            ],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": ""
+            },
+            "attachments": {
+                "files": [
+                    "200729_REF52_tubulinalpha_MT_005.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/059917b48293e1b1597ea258094fe259/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/09f2a17abf2efba64c0332be02b46433/09f2a17abf2efba64c0332be02b46433.smlm",
+            "id": "09f2a17abf2efba64c0332be02b46433",
+            "name": "09f2a17abf2efba64c0332be02b46433.smlm",
+            "description": "TSA-treatment",
+            "hash": "09f2a17abf2efba64c0332be02b46433",
+            "tags": [],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": ""
+            },
+            "attachments": {
+                "files": [
+                    "fig3_c2.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/09f2a17abf2efba64c0332be02b46433/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/0a5a7780cac28a5817c50d966807f500/0a5a7780cac28a5817c50d966807f500.smlm",
+            "id": "0a5a7780cac28a5817c50d966807f500",
+            "name": "0a5a7780cac28a5817c50d966807f500.smlm",
+            "description": "Microtubules labelled with AF647 in NIH3T3 cells",
+            "hash": "0a5a7780cac28a5817c50d966807f500",
+            "tags": [
+                "Microtubules",
+                "STORM",
+                "Alexa Fluor 647",
+                "NIH3T3"
+            ],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": "Pakorn Kanchanawong, National University of Singapore"
+            },
+            "attachments": {
+                "files": [
+                    "20150506_MT_2.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/0a5a7780cac28a5817c50d966807f500/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/0c2af8d7c1272f4c62771d0bbc4d5866/0c2af8d7c1272f4c62771d0bbc4d5866.smlm",
+            "id": "0c2af8d7c1272f4c62771d0bbc4d5866",
+            "name": "0c2af8d7c1272f4c62771d0bbc4d5866.smlm",
+            "description": "M-phase",
+            "hash": "0c2af8d7c1272f4c62771d0bbc4d5866",
+            "tags": [],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": ""
+            },
+            "attachments": {
+                "files": [
+                    "fig3_b4.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/0c2af8d7c1272f4c62771d0bbc4d5866/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1478c81b8bbcdc846f6fc1ed84d7d9dd/1478c81b8bbcdc846f6fc1ed84d7d9dd.smlm",
+            "id": "1478c81b8bbcdc846f6fc1ed84d7d9dd",
+            "name": "1478c81b8bbcdc846f6fc1ed84d7d9dd.smlm",
+            "description": "TSA-treatment",
+            "hash": "1478c81b8bbcdc846f6fc1ed84d7d9dd",
+            "tags": [],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": ""
+            },
+            "attachments": {
+                "files": [
+                    "fig3_c3-.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1478c81b8bbcdc846f6fc1ed84d7d9dd/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1810a36a969cf5282c4445ec8950017f/1810a36a969cf5282c4445ec8950017f.smlm",
+            "id": "1810a36a969cf5282c4445ec8950017f",
+            "name": "1810a36a969cf5282c4445ec8950017f.smlm",
+            "description": "ATP-depletion",
+            "hash": "1810a36a969cf5282c4445ec8950017f",
+            "tags": [],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": ""
+            },
+            "attachments": {
+                "files": [
+                    "fig3_d4.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1810a36a969cf5282c4445ec8950017f/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/18d9f378563de8564b221ca598aeee93/18d9f378563de8564b221ca598aeee93.smlm",
+            "id": "18d9f378563de8564b221ca598aeee93",
+            "name": "18d9f378563de8564b221ca598aeee93.smlm",
+            "description": "",
+            "hash": "18d9f378563de8564b221ca598aeee93",
+            "tags": [],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": ""
+            },
+            "attachments": {
+                "files": [
+                    "CoordTable_SAFE360_3D_ASTIGMATISM_cropROI_UncertaintyFiltered.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/18d9f378563de8564b221ca598aeee93/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1a7f4a71aff55977f356151ffd41e76e/1a7f4a71aff55977f356151ffd41e76e.smlm",
+            "id": "1a7f4a71aff55977f356151ffd41e76e",
+            "name": "1a7f4a71aff55977f356151ffd41e76e.smlm",
+            "description": "microtubules (DMA1) in MDCK cells labelled with alexa fluor 647",
+            "hash": "1a7f4a71aff55977f356151ffd41e76e",
+            "tags": [
+                "microtubules",
+                "alexa fluor 647",
+                "storm",
+                "mdck",
+                "alpha tubulin"
+            ],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": "Samuel Barnett, National University of Singapore"
+            },
+            "attachments": {
+                "files": [
+                    "200730_MDCK_MT_003.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1a7f4a71aff55977f356151ffd41e76e/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1f819f0097eaa9a3916b9c413fb44dad/1f819f0097eaa9a3916b9c413fb44dad.smlm",
+            "id": "1f819f0097eaa9a3916b9c413fb44dad",
+            "name": "1f819f0097eaa9a3916b9c413fb44dad.smlm",
+            "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
+            "hash": "1f819f0097eaa9a3916b9c413fb44dad",
+            "tags": [
+                "microbtubules",
+                "alexa fluor 647",
+                "storm",
+                "alpha tubulin",
+                "ref52"
+            ],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": "Samuel Barnett, National University of Singapore"
+            },
+            "attachments": {
+                "files": [
+                    "200730_REF52_MT_006.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1f819f0097eaa9a3916b9c413fb44dad/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/22d97bd241f21f27b1bee29666a622c5/22d97bd241f21f27b1bee29666a622c5.smlm",
+            "id": "22d97bd241f21f27b1bee29666a622c5",
+            "name": "22d97bd241f21f27b1bee29666a622c5.smlm",
+            "description": "dSTORM of central canal of Xenopus nuclear pore complex",
+            "hash": "22d97bd241f21f27b1bee29666a622c5",
+            "tags": [
+                "dSTORM",
+                "WGA",
+                "A647",
+                "nuclear_pore"
+            ],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": ""
+            },
+            "attachments": {
+                "files": [
+                    "1 WGA A647.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/22d97bd241f21f27b1bee29666a622c5/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/23ba67dd0b091f44f7621f19f885b23d/23ba67dd0b091f44f7621f19f885b23d.smlm",
+            "id": "23ba67dd0b091f44f7621f19f885b23d",
+            "name": "23ba67dd0b091f44f7621f19f885b23d.smlm",
+            "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
+            "hash": "23ba67dd0b091f44f7621f19f885b23d",
+            "tags": [
+                "microtubules",
+                "alexa fluor 647",
+                "ref52",
+                "alpha tubulin",
+                "storm"
+            ],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": "Samuel Barnett, National University of Singapore"
+            },
+            "attachments": {
+                "files": [
+                    "200730_REF52_MT_004.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/23ba67dd0b091f44f7621f19f885b23d/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/25253a6a297bb96e8e78c21bafa193e5/25253a6a297bb96e8e78c21bafa193e5.smlm",
+            "id": "25253a6a297bb96e8e78c21bafa193e5",
+            "name": "25253a6a297bb96e8e78c21bafa193e5.smlm",
+            "description": "Microtubules labelled with AF647 in NIH3T3 cells",
+            "hash": "25253a6a297bb96e8e78c21bafa193e5",
+            "tags": [
+                "microtubules",
+                "alexa fluor 647",
+                "NIH3T3",
+                "STORM"
+            ],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": "Pakorn Kanchanawong, National University of Singapore"
+            },
+            "attachments": {
+                "files": [
+                    "20150506_MT_5.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/25253a6a297bb96e8e78c21bafa193e5/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/2a6927678ac1869f0a5898aaf40cc5e7/2a6927678ac1869f0a5898aaf40cc5e7.smlm",
+            "id": "2a6927678ac1869f0a5898aaf40cc5e7",
+            "name": "2a6927678ac1869f0a5898aaf40cc5e7.smlm",
+            "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
+            "hash": "2a6927678ac1869f0a5898aaf40cc5e7",
+            "tags": [
+                "microtubules",
+                "alexa fluor 647",
+                "storm",
+                "alpha tubulin",
+                "REF52"
+            ],
+            "license": "CC BY 4.0",
+            "cite": {
+                "text": "Samuel Barnett, National University of Singapore"
+            },
+            "attachments": {
+                "files": [
+                    "200729_REF52_tubulinalpha_MT_010.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/2a6927678ac1869f0a5898aaf40cc5e7/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/2ef45b60988e370cf80dfe994524245b/2ef45b60988e370cf80dfe994524245b.smlm",
+            "id": "2ef45b60988e370cf80dfe994524245b",
+            "name": "2ef45b60988e370cf80dfe994524245b.smlm",
+            "description": "",
+            "hash": "2ef45b60988e370cf80dfe994524245b",
+            "tags": [
+                "dSTORM",
+                "microtubules",
+                "Alexa647"
+            ],
+            "license": "CC BY-NC 4.0",
+            "cite": {
+                "text": "Markus Sauer, University of Wuerzburg"
+            },
+            "attachments": {
+                "files": [
+                    "2016_01_17_Tubulin-AF647_4.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/2ef45b60988e370cf80dfe994524245b/thumbnail.png"
+            ]
+        },
+        {
+            "type": "dataset",
+            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/365fce33420e5b790ad80bb7486396f7/365fce33420e5b790ad80bb7486396f7.smlm",
+            "id": "365fce33420e5b790ad80bb7486396f7",
+            "name": "365fce33420e5b790ad80bb7486396f7.smlm",
+            "description": "dSTORM of a Cos-7 cell stained with phalloidin Alexa647",
+            "hash": "365fce33420e5b790ad80bb7486396f7",
+            "tags": [
+                "dSTORM",
+                "actin",
+                "phalloidin",
+                "Alexa647"
+            ],
+            "license": "CC BY-NC 4.0",
+            "cite": {
+                "text": "Markus Sauer, University of Wuerzburg"
+            },
+            "attachments": {
+                "files": [
+                    "cos7_phalloidin-647_1-2.bin"
+                ]
+            },
+            "covers": [
+                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/365fce33420e5b790ad80bb7486396f7/thumbnail.png"
+            ]
+        }
+    ]
+}

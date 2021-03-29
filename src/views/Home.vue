@@ -30,26 +30,18 @@
         class="navbar-menu"
       >
         <div class="navbar-end">
-          <a class="navbar-item" href="https://bioimage.io/docs">
+          <a class="navbar-item" href="/docs">
             <b-icon icon="playlist-check"></b-icon>
             <span>Documentation</span>
           </a>
-          <!-- <a
-            class="navbar-item"
-            v-if="siteConfig.subscribe_url"
-            @click="showSubscribeDialog"
-          >
-            <b-icon icon="playlist-check"></b-icon>
-            <span>Subscribe</span>
-          </a> -->
           <a
             class="navbar-item"
             target="_blank"
             v-if="siteConfig.contribute_url"
-            @click="showContributeDialog"
+            @click="showUploadDialog"
           >
             <b-icon icon="plus"></b-icon>
-            <span>Contribute</span>
+            <span>Upload</span>
           </a>
           <a class="navbar-item" @click="showAboutDialog">
             <b-icon icon="information-outline"></b-icon>
@@ -61,7 +53,7 @@
     <!-- Header -->
     <section
       class="hero is-link is-fullheight is-fullheight-with-navbar"
-      style="max-height: 1024px!important;height:100%;min-height:680px;"
+      style="max-height: 1024px!important;height:100%;min-height:380px;"
     >
       <div class="hero-body" style="position: relative;">
         <img
@@ -70,12 +62,6 @@
           :src="selectedPartner.background_image"
         />
         <img class="background-img" v-else :src="siteConfig.background_image" />
-        <partners
-          v-if="partners"
-          style="position: absolute;bottom: 0px;"
-          :partners="partners"
-          @switchPartner="switchPartner"
-        ></partners>
 
         <div class="container" v-if="selectedPartner">
           <h1 class="title is-1">
@@ -139,43 +125,6 @@
     </section>
     <br />
     <span ref="search_anchor"></span>
-    <div
-      class="container"
-      v-if="resourceCategories.length > 1"
-      style="text-align:center;"
-    >
-      <b-tooltip label="List all items" position="is-bottom">
-        <div
-          class="item-lists is-link"
-          style="width:30px; margin-left: -16px;border-bottom-color: gray;"
-          @click="
-            selectedCategory = null;
-            updateQueryTags();
-          "
-          :class="{ active: !selectedCategory }"
-        >
-          All
-        </div>
-      </b-tooltip>
-      <b-tooltip
-        v-for="list in resourceCategories"
-        :key="list.name"
-        :label="list.description"
-        position="is-bottom"
-      >
-        <div
-          class="item-lists is-link"
-          @click="
-            selectedCategory = list;
-            updateQueryTags();
-          "
-          :style="{ 'border-bottom-color': list.outline_color }"
-          :class="{ active: selectedCategory === list }"
-        >
-          {{ list.name }}
-        </div>
-      </b-tooltip>
-    </div>
     <resource-item-selector
       @selection-changed="updateResourceItemList"
       :allItems="resourceItems"
@@ -355,9 +304,15 @@
       </div>
       <about
         v-if="showInfoDialogMode === 'about'"
-        @contribute="showContributeDialog"
+        @contribute="showUploadDialog"
         @join="showJoinDialog"
       ></about>
+      <div v-else-if="showInfoDialogMode === 'upload'">
+        <zenodo-deposition-form :site-config="siteConfig" :deposition-id="null"></zenodo-deposition-form>
+      </div>
+      <div v-else-if="showInfoDialogMode === 'edit'">
+        <zenodo-deposition-form :site-config="siteConfig" :deposition-id="currentDepositionId"></zenodo-deposition-form>
+      </div>
       <div
         class="markdown-container"
         v-else-if="showInfoDialogMode === 'markdown'"
@@ -402,8 +357,8 @@
 import ResourceItemSelector from "@/components/ResourceItemSelector.vue";
 import ResourceItemList from "@/components/ResourceItemList.vue";
 import ResourceItemInfo from "@/components/ResourceItemInfo.vue";
+import ZenodoDepositionForm from "@/components/ZenodoDepositionForm.vue";
 import Attachments from "@/components/Attachments.vue";
-import Partners from "@/components/Partners.vue";
 import CommentBox from "@/components/CommentBox.vue";
 import About from "@/views/About.vue";
 import Markdown from "@/components/Markdown.vue";
@@ -551,7 +506,6 @@ function normalizeItem(self, item) {
       }
     }
   }
-
   item.badges = item.badges || [];
   item.attachments = item.attachments || {};
   const linkedItems = self.resourceItems.filter(
@@ -563,15 +517,17 @@ function normalizeItem(self, item) {
   }
 
   for (let att_name of Object.keys(item.attachments)) {
-    item.badges.unshift({
-      label: att_name,
-      label_type: "is-dark",
-      ext: Object.keys(item.attachments[att_name]).length,
-      ext_type: "is-primary",
-      run() {
-        self.showAttachmentsDialog(item, att_name);
-      }
-    });
+    if (Array.isArray(item.attachments[att_name]) && att_name !== "files") {
+      item.badges.unshift({
+        label: att_name,
+        label_type: "is-dark",
+        ext: item.attachments[att_name].length,
+        ext_type: "is-primary",
+        run() {
+          self.showAttachmentsDialog(item, att_name);
+        }
+      });
+    }
   }
 
   if (item.license) {
@@ -628,10 +584,10 @@ export default {
     "resource-item-selector": ResourceItemSelector,
     "resource-item-info": ResourceItemInfo,
     "comment-box": CommentBox,
+    "zenodo-deposition-form": ZenodoDepositionForm,
     attachments: Attachments,
     markdown: Markdown,
-    partners: Partners,
-    about: About
+    about: About,
   },
   data() {
     return {
@@ -665,7 +621,8 @@ export default {
       selectedCategory: null,
       displayMode: "card",
       currentTags: [],
-      selectedPartner: null
+      selectedPartner: null,
+      currentDepositionId: null
     };
   },
   mounted: async function() {
@@ -978,24 +935,24 @@ export default {
       query.show = "about";
       this.$router.replace({ query: query }).catch(() => {});
     },
-    showSubscribeDialog() {
-      this.showInfoDialogMode = "subscribe";
-      this.infoDialogTitle = "Subscribe to News and Updates";
+    showUploadDialog() {
+      this.infoDialogTitle = `Uploading data to ${this.siteConfig.site_name}`;
+      this.showInfoDialogMode = "upload";
+      this.currentDepositionId = null
       if (this.screenWidth < 700) this.infoDialogFullscreen = true;
       this.$modal.show("info-dialog");
       const query = Object.assign({}, this.$route.query);
-      query.show = "subscribe";
+      query.show = "upload";
       this.$router.replace({ query: query }).catch(() => {});
     },
-    showContributeDialog() {
-      this.infoDialogTitle = `Contribute to ${this.siteConfig.site_name}`;
-      this.infoCommentBoxTitle = this.infoDialogTitle;
-      this.infoMarkdownUrl = this.siteConfig.contribute_url;
-      this.showInfoDialogMode = "markdown";
+    showEditDialog() {
+      this.infoDialogTitle = `Updating metadata`;
+      this.showInfoDialogMode = "edit";
+      // this.currentDepositionId = null
       if (this.screenWidth < 700) this.infoDialogFullscreen = true;
       this.$modal.show("info-dialog");
       const query = Object.assign({}, this.$route.query);
-      query.show = "contribute";
+      query.show = "edit";
       this.$router.replace({ query: query }).catch(() => {});
     },
     showAboutPartner(partner) {
@@ -1109,8 +1066,8 @@ export default {
       if (this.$route.query.show) {
         if (this.$route.query.show === "about") {
           this.showAboutDialog();
-        } else if (this.$route.query.show === "contribute") {
-          this.showContributeDialog();
+        } else if (this.$route.query.show === "upload") {
+          this.showUploadDialog();
         } else if (this.$route.query.show === "join") {
           this.showJoinDialog();
         }
@@ -1232,7 +1189,7 @@ export default {
 }
 
 .b-tooltip.is-primary:after {
-  background: #2196f3 !important;
+  background: #3273dc !important;
   color: white;
 }
 .card-image {
@@ -1246,7 +1203,7 @@ export default {
   height: 40px;
   font-size: 1.4rem;
   cursor: move;
-  background-color: #2196f3;
+  background-color: #3273dc;
   color: white;
   text-align: center;
   line-height: 40px;

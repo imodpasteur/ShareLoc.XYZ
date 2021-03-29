@@ -45,7 +45,7 @@
               :src="'/static/anonymousAnimals/' + icon.src + '.png'"
             />
             <b-icon v-else class="item-icon" :icon="icon.src" />
-            <span>{{ resourceItem.name }}</span>
+            <span>{{ resourceItem.name.slice(0, 16) }}</span>
           </h4>
           <div class="buttons floating-buttons">
             <app-icons
@@ -179,7 +179,7 @@ export default {
   font-size: 1.2em;
   font-weight: 400;
   cursor: pointer;
-  color: #2196f3;
+  color: #3273dc;
 }
 .authors {
   font-size: 0.9em;
