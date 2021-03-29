@@ -308,10 +308,16 @@
         @join="showJoinDialog"
       ></about>
       <div v-else-if="showInfoDialogMode === 'upload'">
-        <zenodo-deposition-form :site-config="siteConfig" :deposition-id="null"></zenodo-deposition-form>
+        <zenodo-deposition-form
+          :site-config="siteConfig"
+          :deposition-id="null"
+        ></zenodo-deposition-form>
       </div>
       <div v-else-if="showInfoDialogMode === 'edit'">
-        <zenodo-deposition-form :site-config="siteConfig" :deposition-id="currentDepositionId"></zenodo-deposition-form>
+        <zenodo-deposition-form
+          :site-config="siteConfig"
+          :deposition-id="currentDepositionId"
+        ></zenodo-deposition-form>
       </div>
       <div
         class="markdown-container"
@@ -587,7 +593,7 @@ export default {
     "zenodo-deposition-form": ZenodoDepositionForm,
     attachments: Attachments,
     markdown: Markdown,
-    about: About,
+    about: About
   },
   data() {
     return {
@@ -938,7 +944,7 @@ export default {
     showUploadDialog() {
       this.infoDialogTitle = `Uploading data to ${this.siteConfig.site_name}`;
       this.showInfoDialogMode = "upload";
-      this.currentDepositionId = null
+      this.currentDepositionId = null;
       if (this.screenWidth < 700) this.infoDialogFullscreen = true;
       this.$modal.show("info-dialog");
       const query = Object.assign({}, this.$route.query);

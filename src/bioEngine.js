@@ -216,7 +216,7 @@ export async function loadPlugins(imjoy, appSources) {
     uri:
       "https://imjoy-team.github.io/jupyter-engine-manager/Jupyter-Engine-Manager.imjoy.html"
   });
- 
+
   const apps = {};
   // await imjoy.pm.reloadInternalPlugins()
   for (let ap of appSources) {
