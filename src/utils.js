@@ -1,7 +1,204 @@
+import axios from "axios";
+
 export function randId() {
   return Math.random()
     .toString(36)
     .substr(2, 10);
+}
+export class ZenodoClient {
+  constructor(clientId, useSandbox) {
+    this.clientId = clientId;
+    this.callbackUrl = encodeURIComponent("https://imjoy.io/login-helper");
+    this.credential = null;
+    if (useSandbox === undefined) useSandbox = true;
+    this.useSandbox = useSandbox;
+  }
+  login() {
+    return new Promise((resolve, reject) => {
+      const loginWindow = window.open(
+        `https://${
+          this.useSandbox ? "sandbox." : ""
+        }zenodo.org/oauth/authorize?scope=deposit%3Awrite+deposit%3Aactions&state=CHANGEME&redirect_uri=${
+          this.callbackUrl
+        }&response_type=token&client_id=${this.clientId}`,
+        "Login"
+      );
+      const timer = setTimeout(() => {
+        loginWindow.close();
+        // make sure we closed the window
+        setTimeout(() => {
+          reject(event.data.error);
+        }, 1);
+      }, 20000);
+      const handleLogin = event => {
+        // run only once
+        window.removeEventListener("message", handleLogin);
+        if (loginWindow === event.source) {
+          loginWindow.close();
+          clearTimeout(timer);
+          if (event.data.error) {
+            // make sure we closed the window
+            setTimeout(() => {
+              reject(event.data.error);
+            }, 1);
+            return;
+          }
+          console.log("Successfully logged in", event.data);
+          this.credential = event.data;
+          resolve(event.data);
+        }
+      };
+      window.addEventListener("message", handleLogin, false);
+    });
+  }
+
+  async createDeposition() {
+    let response = await fetch(
+      `https://${
+        this.useSandbox ? "sandbox." : ""
+      }zenodo.org/api/deposit/depositions?access_token=${
+        this.credential.access_token
+      }`
+    );
+    console.log(await response.json());
+    const headers = { "Content-Type": "application/json" };
+    // create an empty deposition
+    response = await fetch(
+      `https://${
+        this.useSandbox ? "sandbox." : ""
+      }zenodo.org/api/deposit/depositions?access_token=${
+        this.credential.access_token
+      }`,
+      { method: "POST", body: JSON.stringify({}), headers }
+    );
+    const depositionInfo = await response.json();
+    return depositionInfo;
+  }
+
+  async retrieve(depositionInfo) {
+    const depositionId =
+      typeof depositionInfo === "string" ? depositionInfo : depositionInfo.id;
+    const response = await fetch(
+      `https://${
+        this.useSandbox ? "sandbox." : ""
+      }zenodo.org/api/deposit/depositions/${depositionId}?access_token=${
+        this.credential.access_token
+      }`,
+      { method: "GET" }
+    );
+    return await response.json();
+  }
+
+  async edit(depositionInfo) {
+    const depositionId =
+      typeof depositionInfo === "string" ? depositionInfo : depositionInfo.id;
+    const headers = { "Content-Type": "application/json" };
+    const response = await fetch(
+      `https://${
+        this.useSandbox ? "sandbox." : ""
+      }zenodo.org/api/deposit/depositions/${depositionId}/actions/edit?access_token=${
+        this.credential.access_token
+      }`,
+      { method: "POST", body: JSON.stringify({}), headers }
+    );
+    return await response.json();
+  }
+
+  async discard(depositionInfo) {
+    const depositionId =
+      typeof depositionInfo === "string" ? depositionInfo : depositionInfo.id;
+    const headers = { "Content-Type": "application/json" };
+    const response = await fetch(
+      `https://${
+        this.useSandbox ? "sandbox." : ""
+      }zenodo.org/api/deposit/depositions/${depositionId}/actions/discard?access_token=${
+        this.credential.access_token
+      }`,
+      { method: "POST", body: JSON.stringify({}), headers }
+    );
+    return await response.json();
+  }
+
+  async createNewVersion(depositionInfo) {
+    const depositionId =
+      typeof depositionInfo === "string" ? depositionInfo : depositionInfo.id;
+    const headers = { "Content-Type": "application/json" };
+    const response = await fetch(
+      `https://${
+        this.useSandbox ? "sandbox." : ""
+      }zenodo.org/api/deposit/depositions/${depositionId}/actions/newversion?access_token=${
+        this.credential.access_token
+      }`,
+      { method: "POST", body: JSON.stringify({}), headers }
+    );
+    return await response.json();
+  }
+
+  async updateMetadata(depositionInfo, metadata) {
+    const depositionId =
+      typeof depositionInfo === "string" ? depositionInfo : depositionInfo.id;
+    const headers = { "Content-Type": "application/json" };
+    const response = await fetch(
+      `https://${
+        this.useSandbox ? "sandbox." : ""
+      }zenodo.org/api/deposit/depositions/${depositionId}?access_token=${
+        this.credential.access_token
+      }`,
+      { method: "PUT", body: JSON.stringify({ metadata }), headers }
+    );
+    return await response.json();
+  }
+
+  async uploadFile(depositionInfo, file, progressCallback) {
+    const bucketUrl = depositionInfo.links.bucket;
+    const fileName = file.name;
+    const url = `${bucketUrl}/${fileName}?access_token=${this.credential.access_token}`;
+    if (typeof axios === "undefined") {
+      if (progressCallback) progressCallback(0);
+      const response = await fetch(url, {
+        method: "PUT",
+        body: file
+      });
+      if (progressCallback) progressCallback(file.size);
+      return await response.json();
+    } else {
+      const options = {
+        headers: { "Content-Type": file.type },
+        onUploadProgress: progressEvent => {
+          if (progressCallback) progressCallback(progressEvent.loaded);
+          else {
+            const progress = Math.round(
+              ((1.0 * progressEvent.loaded) / file.size) * 100.0
+            );
+            console.log(
+              "uploading annotation, size: " +
+                Math.round(progressEvent.loaded / 1000000) +
+                "MB, " +
+                progress +
+                "% uploaded."
+            );
+          }
+        }
+      };
+      const response = await axios.put(url, file, options);
+      return response.data;
+    }
+  }
+
+  async publish(depositionInfo) {
+    const depositionId =
+      typeof depositionInfo === "string" ? depositionInfo : depositionInfo.id;
+    const headers = { "Content-Type": "application/json" };
+    const response = await fetch(
+      `https://${
+        this.useSandbox ? "sandbox." : ""
+      }zenodo.org/api/deposit/depositions/${depositionId}/actions/publish?access_token=${
+        this.credential.access_token
+      }`,
+      { method: "POST", body: JSON.stringify({}), headers }
+    );
+    return await response.json();
+  }
 }
 
 export const anonymousAnimals = [

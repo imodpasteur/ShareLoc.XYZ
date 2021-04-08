@@ -60,12 +60,23 @@
                 : ""
             }}
           </span>
+
           <p class="resource-item-description" v-if="resourceItem.description">
             {{
               resourceItem.description.slice(0, 100) +
                 (resourceItem.description.length > 100 ? "..." : "")
             }}
           </p>
+          <span style="margin-top:3px;display: block;">
+            <span v-for="t in resourceItem.tags" :key="t">
+              <b-tag
+                style="cursor: pointer;"
+                rounded
+                @click.native="selectTag(t)"
+                >{{ t }}</b-tag
+              >
+            </span>
+          </span>
           <badges class="badges" :badges="resourceItem.badges"></badges>
         </div>
       </div>
@@ -155,6 +166,9 @@ export default {
     },
     showResourceItemInfo() {
       this.$emit("show-info", this.resourceItem);
+    },
+    selectTag(tag) {
+      this.$emit("select-tag", tag);
     }
   }
 };

@@ -12,6 +12,7 @@
         >
           <resource-item-card
             @show-info="showResourceItemInfo"
+            @select-tag="$emit('select-tag', $event)"
             :resourceItem="item"
           ></resource-item-card>
         </div>

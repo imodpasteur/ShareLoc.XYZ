@@ -147,6 +147,7 @@
     </div>
     <br />
     <resource-item-list
+      @select-tag="selectTag"
       @show-resource-item-info="showResourceItemInfo"
       v-if="selectedItems"
       :allItems="selectedItems"
@@ -518,6 +519,17 @@ function normalizeItem(self, item) {
     else item.attachments[it.type] = [it];
   }
 
+  if (item.size) {
+    item.badges.unshift({
+      label: "size",
+      label_type: "is-dark",
+      ext:
+        item.size > 1000000
+          ? Math.round(item.size / 1000000) + "MB"
+          : Math.round(item.size / 1000) + "kB",
+      ext_type: "is-primary"
+    });
+  }
   for (let att_name of Object.keys(item.attachments)) {
     if (Array.isArray(item.attachments[att_name]) && att_name !== "files") {
       item.badges.unshift({
@@ -1010,6 +1022,10 @@ export default {
         });
       }
     },
+    selectTag(tag) {
+      this.searchTags = [tag];
+      this.$forceUpdate();
+    },
     showResourceItemInfo(mInfo, focus) {
       this.showInfoDialogMode = "model";
       mInfo._focus = focus;
@@ -1067,6 +1083,7 @@ export default {
       if (models.length <= 0) {
         this.showMessage("No item found.");
       }
+      console.log("====>", models);
       this.selectedItems = models;
     },
     updateViewByUrlQuery() {
