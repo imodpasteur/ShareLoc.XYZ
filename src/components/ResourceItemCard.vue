@@ -45,7 +45,10 @@
               :src="'/static/anonymousAnimals/' + icon.src + '.png'"
             />
             <b-icon v-else class="item-icon" :icon="icon.src" />
-            <span>{{ resourceItem.name.slice(0, 16) }}</span>
+            <span>{{
+              resourceItem.name.slice(0, 30) +
+                (resourceItem.name.length > 30 ? "..." : "")
+            }}</span>
           </h4>
           <div class="buttons floating-buttons">
             <app-icons
