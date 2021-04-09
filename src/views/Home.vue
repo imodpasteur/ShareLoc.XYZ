@@ -310,6 +310,19 @@
           :deposition-id="null"
         ></zenodo-deposition-form>
       </div>
+
+      <iframe
+        v-else-if="showInfoDialogMode === 'viewer'"
+        style="padding-bottom: 64px;width: 100%;
+    height: 100%;"
+        :src="viewerUrl"
+        width="640"
+        height="852"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
+        >Loading…</iframe
+      >
       <div v-else-if="showInfoDialogMode === 'edit'">
         <zenodo-deposition-form
           :site-config="siteConfig"
@@ -629,6 +642,7 @@ export default {
       infoDialogFullscreen: false,
       screenWidth: 1000,
       showInfoDialogMode: null,
+      viewerUrl: null,
       infoDialogTitle: "",
       infoMarkdownUrl: null,
       infoCommentBoxTitle: null,
@@ -1027,11 +1041,12 @@ export default {
       this.$forceUpdate();
     },
     showResourceItemInfo(mInfo, focus) {
-      this.showInfoDialogMode = "model";
+      this.showInfoDialogMode = "viewer";
       mInfo._focus = focus;
       this.selectedResourceItem = mInfo;
       this.infoDialogTitle = this.selectedResourceItem.name;
-      if (this.screenWidth < 700) this.infoDialogFullscreen = true;
+      this.viewerUrl = `https://viewer.shareloc.xyz/#/?file=${mInfo.download_url}`;
+      this.infoDialogFullscreen = true;
       this.$modal.show("info-dialog");
       if (mInfo.id) {
         const query = Object.assign({}, this.$route.query);
@@ -1083,7 +1098,6 @@ export default {
       if (models.length <= 0) {
         this.showMessage("No item found.");
       }
-      console.log("====>", models);
       this.selectedItems = models;
     },
     updateViewByUrlQuery() {
