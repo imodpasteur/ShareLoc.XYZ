@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/CNAME"
   },
   {
-    "revision": "9db7f580073fc5dd0f07e984bc0bc3df",
+    "revision": "d2982a58ab603f1ccff5107832967f0a",
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {

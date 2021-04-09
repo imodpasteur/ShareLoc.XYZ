@@ -43,7 +43,7 @@ class ImJoyPlugin {
     }
 
     async run(ctx) {
-        ctx.data.download_url = 'https://imjoy-s3.pasteur.fr/imod-data-pasteur/059917b48293e1b1597ea258094fe259/059917b48293e1b1597ea258094fe259.smlm'
+        ctx.data.download_url = 'https://imjoy-s3.pasteur.fr/imod-data-pasteur/059917b48293e1b1597ea258094fe259/data.smlm'
         const file = await fetchFile(ctx.data.download_url, console.log, api.showProgress)
         // const p = await api.getPlugin("SMLM File IO")
         const p = await api.getPlugin('https://raw.githubusercontent.com/imjoy-team/imjoy-plugins/master/repository/smlmFileIO.imjoy.html')
