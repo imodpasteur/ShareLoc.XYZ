@@ -11,3 +11,6 @@ A platform for sharing localization data.
 
 ShareLoc platform relies on the [SMLM file format](https://github.com/imodpasteur/smlm-file-format), which makes the visualization and sharing more affordable.
 
+
+## Annotation Examples
+ [TODO]
