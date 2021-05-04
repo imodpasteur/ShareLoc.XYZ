@@ -84,11 +84,12 @@
       "description": "List datasets",
       "outline_color": "rgb(36 0 236)",
       "tag_categories": {
-        "modality": ["PALM", "STORM", "DNA-PAINT"],
+        "modality": ["PALM", "STORM", "DNA-PAINT", "PAINT"],
         "structure": [
           "microtubule",
           "nuclear pore",
-          "actin"
+          "actin",
+          "DNA"
         ],
         "fluorophore (red)": [
           "Alexa 555",
