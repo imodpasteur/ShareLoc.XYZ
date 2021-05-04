@@ -87,7 +87,13 @@
         "modality": ["PALM", "STORM", "DNA-PAINT"],
         "structure": [
           "microtubule",
-          "nuclear pore"
+          "nuclear pore",
+          "actin"
+        ]
+        "fluorophore (red)": [
+          "Alexa 555",
+          "mEos2",
+          "mApple"
         ]
       }
     }
