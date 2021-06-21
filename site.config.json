@@ -143,7 +143,7 @@
           "secondary antibody",
           "HaloTag",
           "SNAP-tag",
-          "Tetracysteine Tag "     
+          "Tetracysteine Tag"     
         ],
         "Target protein":[
           "NUP133",
@@ -171,7 +171,8 @@
           "SMAP",
           "SMOIphot",
           "ZOLA-3D",
-          "Picasso"
+          "Picasso",
+          "QuickPALM"
         ],
         "buffer":[
           "GluOx",
