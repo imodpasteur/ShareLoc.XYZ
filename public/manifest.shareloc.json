@@ -155,7 +155,7 @@
             "hash": "0809c64060133878c89c9285e7525d46",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:48:08.907171",
@@ -177,7 +177,7 @@
             "hash": "5bd2ddd657a6a156debe44cd0e24f25f",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:51:16.969614",
@@ -199,7 +199,7 @@
             "hash": "1962da75758f9ed25128e916d63464e4",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:54:37.585753",
@@ -221,7 +221,7 @@
             "hash": "d8574f7760a25fa979bcaecd5cb24166",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:59:29.144987",
@@ -243,7 +243,7 @@
             "hash": "1445ef6401f5c2a907b8c06e27e7e76a",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:00:55.994846",
@@ -265,7 +265,7 @@
             "hash": "5b86dd2fb8dd1a7812706644adcc08ec",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:02:16.793363",
@@ -287,7 +287,7 @@
             "hash": "fa20310565e71a288e2267741e78c075",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:03:04.366268",
@@ -309,7 +309,7 @@
             "hash": "25ac748ac74a6982941f37a80afcc6d3",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:04:08.671422",
@@ -330,7 +330,7 @@
             "description": "",
             "hash": "f21d95759bbcbe18693520bad1759d4a",
             "tags": [
-                "3d",
+                "3D",
                 "astigmatism",
                 "A647",
                 "ZOLA",
@@ -445,7 +445,7 @@
             "hash": "8490d963d4296904a0db84c3d5993137",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-03-08T14:45:34.300701",
@@ -930,7 +930,7 @@
             "tags": [
                 "dSTORM",
                 "actin",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-11-29T15:52:30.203468",
@@ -1001,7 +1001,7 @@
                 "dSTORM",
                 "3D Biplane",
                 "microtubules",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-12-03T09:56:07.025655",
@@ -1023,7 +1023,7 @@
             "hash": "ebecd054c0311723d3b43b76a4b01938",
             "tags": [
                 "nuclear pore",
-                "Alexa647",
+                "Alexa-647",
                 "dSTORM"
             ],
             "license": "CC BY 4.0",
@@ -1046,8 +1046,9 @@
             "hash": "cc4b9e6c6fe27b03a5eb2502b9e094b9",
             "tags": [
                 "dSTORM",
-                "Alexa532",
-                "microtubules"
+                "Alexa-532",
+                "microtubules", 
+                "COS7"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-12-03T10:30:37.569958",
@@ -1070,7 +1071,7 @@
             "tags": [
                 "dSTORM",
                 "microtubules",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:10:56.491732",
@@ -1093,7 +1094,7 @@
             "tags": [
                 "dSTORM",
                 "microtubules",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:24:15.207736",
@@ -1116,7 +1117,7 @@
             "tags": [
                 "dSTORM",
                 "microtubules",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:27:22.310725",
@@ -1139,7 +1140,7 @@
             "tags": [
                 "dSTORM",
                 "microtubules",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:30:55.644953",
@@ -1163,7 +1164,7 @@
                 "dSTORM",
                 "actin",
                 "phalloidin",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-05T16:22:37.197370",
@@ -1187,7 +1188,7 @@
                 "dSTORM",
                 "actin",
                 "phalloidin",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-05T16:26:58.011794",
@@ -1301,7 +1302,7 @@
                 "gp210",
                 "nuclear pore",
                 "dSTORM",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T09:49:20.912381",
@@ -1325,7 +1326,7 @@
                 "dSTORM",
                 "nuclear pore",
                 "gp210",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T13:54:39.748577",
@@ -1349,7 +1350,7 @@
                 "dSTORM",
                 "nuclear pore",
                 "gp210",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T14:35:48.141079",
@@ -1397,7 +1398,7 @@
                 "dSTORM",
                 "nuclear pore",
                 "gp210",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T15:00:09.011918",
@@ -1420,7 +1421,7 @@
             "tags": [
                 "dSTORM",
                 "WGA",
-                "Alexa532",
+                "Alexa-532",
                 "nuclear pore"
             ],
             "license": "CC BY-NC 4.0",
@@ -1444,7 +1445,7 @@
             "tags": [
                 "dSTORM",
                 "nuclear pore",
-                "Alexa647",
+                "Alexa-647",
                 "gp210"
             ],
             "license": "CC BY-NC 4.0",
@@ -2663,7 +2664,7 @@
             "tags": [
                 "Microtubules",
                 "STORM",
-                "Alexa Fluor 647",
+                "Alexa-647",
                 "NIH3T3"
             ],
             "license": "CC BY 4.0",
@@ -2759,7 +2760,7 @@
                 "Microtubules",
                 "NIH3T3",
                 "STORM",
-                "Alexa Fluor 647"
+                "Alexa-647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-14T03:39:36.292272",
