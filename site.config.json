@@ -115,6 +115,7 @@
         ],
         "fluorophore": [
           "Alexa-647",
+          "Alexa-532",
           "Cy5",
           "Phalloidin-647",
           "CF680",
