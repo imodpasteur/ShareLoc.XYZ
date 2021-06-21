@@ -87,12 +87,16 @@
         "modality": [
           "PALM", 
           "STORM", 
+          "dSTORM", 
           "DNA-PAINT", 
           "PAINT"
         ],
         "cell line": [
           "U2OS", 
           "U373", 
+          "COS7",
+          "Hela",
+          "NIH3T3",
           "yeast", 
           "E-coli",
           "Listeria", 
@@ -109,16 +113,14 @@
           "neuronal axon",
           "vimentin"
         ],
-        "Far-red fluorophore": [
+        "fluorophore": [
           "Alexa-647",
           "Cy5",
           "Phalloidin-647",
           "CF680",
           "HMSiR",
           "JF-646",
-          "PA-JF646"
-        ],
-        "Red fluorophore": [
+          "PA-JF646",
           "Alexa-555",
           "mEos2",
           "mApple",
@@ -128,14 +130,20 @@
           "PA-mCherry",
           "JF-568",
           "PA-JF568",
-          "Nile Red"
-        ],
-        "Green fluorophore": [
+          "Nile Red",     
           "PA-GFP",
-          "Dronpa"
+          "Dronpa",
+          "Atto-488"
         ],
         "Labeling strategy":[
-          
+          "transient transfection",
+          "stable knock-in",
+          "endogenous labeling CRISPR",
+          "primary antibody",
+          "secondary antibody",
+          "HaloTag",
+          "SNAP-tag",
+          "Tetracysteine Tag "     
         ],
         "Target protein":[
           "NUP133",
@@ -165,17 +173,16 @@
           "ZOLA-3D",
           "Picasso"
         ],
-        "home-made buffer":[
+        "buffer":[
           "GluOx",
           "catalase",
-          "MEA"
-        ],
-        "commercial buffer":[
+          "MEA",
           "Abbelight Safe Reagent",
           "Idylle Everspark"
         ],
         "fixation":[
-          "PFA",
+          "4%PFA",
+          "1%PFA",
           "PFA+Gluta",
           "Glyoxal",
           "methanol"
