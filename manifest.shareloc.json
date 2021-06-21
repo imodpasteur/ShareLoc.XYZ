@@ -38,13 +38,14 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/04cb0d658f351d47446b351dca89ef4c/data.smlm",
             "id": "04cb0d658f351d47446b351dca89ef4c",
             "name": "s4b-c1-7pos-30k-20ms_1_MMStack_Pos0_1_min",
-            "description": "Microtubules labeled with Alexa 647 in U373 cells.",
+            "description": "2D STORM imaging of microtubules labeled with Alexa 647 in U373 cells.",
             "hash": "04cb0d658f351d47446b351dca89ef4c",
             "tags": [
-                "alexa647",
+                "Alexa-647",
                 "microtubule",
                 "STORM",
-                "U373"
+                "U373",
+                "2D"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-01-31T00:17:42.049511",
@@ -62,10 +63,10 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1cdcc96c6666bede255331b39bbc5a1b/data.smlm",
             "id": "1cdcc96c6666bede255331b39bbc5a1b",
             "name": "s1-c2-storm-wo-COT_1_min",
-            "description": "",
+            "description": "2D SMLM imaging of microtubules labeled with Alexa 647.",
             "hash": "1cdcc96c6666bede255331b39bbc5a1b",
             "tags": [
-                "alexa647",
+                "Alexa-647",
                 "microtubule"
             ],
             "license": "CC BY 4.0",
@@ -84,10 +85,12 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/768e0f720f4343daa6781445fb93eea8/data.smlm",
             "id": "768e0f720f4343daa6781445fb93eea8",
             "name": "2017-03-29-sp-tub-brb80-s1-c3-5-dstorm-buf_min",
-            "description": "",
+            "description": "2D dSTORM imaging of microtubules.",
             "hash": "768e0f720f4343daa6781445fb93eea8",
             "tags": [
-                "microtubule"
+                "dSTORM",
+                "microtubule",
+                "2D"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-01-31T07:57:59.935434",
@@ -124,11 +127,13 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/94106847488a2e145b5e062ed0addbb2/data.smlm",
             "id": "94106847488a2e145b5e062ed0addbb2",
             "name": "s1-c2-fixed-TOM22-642-30ms_1_MMStack_Pos0",
-            "description": "Mitochondria image used for figure 6b",
+            "description": "Mitochondrial protein TOM22 in COS7 cells, using secondary antibody immunolabeling strategy. Used for figure 6b, Ouyang et al., Nat. Biotechnol. 2018",
             "hash": "94106847488a2e145b5e062ed0addbb2",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22",
+                "COS7", 
+                "4%PFA"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:28:12.229980",
