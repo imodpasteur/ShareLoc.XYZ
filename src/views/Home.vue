@@ -181,6 +181,8 @@
     </footer>
     <modal
       name="window-modal-dialog"
+      @opened="preventPageScroll"
+      @closed="restorePageScroll"
       :resizable="!dialogWindowConfig.fullscreen"
       :width="dialogWindowConfig.width"
       :height="dialogWindowConfig.height"
@@ -265,6 +267,8 @@
     </modal>
     <modal
       name="info-dialog"
+      @opened="preventPageScroll"
+      @closed="restorePageScroll"
       :resizable="true"
       :minWidth="200"
       :minHeight="150"
@@ -304,13 +308,11 @@
         @contribute="showUploadDialog"
         @join="showJoinDialog"
       ></about>
-      <div v-else-if="showInfoDialogMode === 'upload'">
-        <zenodo-deposition-form
-          :site-config="siteConfig"
-          :deposition-id="null"
-        ></zenodo-deposition-form>
-      </div>
-
+      <upload
+        v-else-if="showInfoDialogMode === 'upload'"
+        :site-config="siteConfig"
+        :deposition-id="null"
+      ></upload>
       <iframe
         v-else-if="showInfoDialogMode === 'viewer'"
         style="padding-bottom: 64px;width: 100%;
@@ -324,10 +326,10 @@
         >Loading…</iframe
       >
       <div v-else-if="showInfoDialogMode === 'edit'">
-        <zenodo-deposition-form
+        <upload
           :site-config="siteConfig"
           :deposition-id="currentDepositionId"
-        ></zenodo-deposition-form>
+        ></upload>
       </div>
       <div
         class="markdown-container"
@@ -370,10 +372,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import ResourceItemSelector from "@/components/ResourceItemSelector.vue";
 import ResourceItemList from "@/components/ResourceItemList.vue";
 import ResourceItemInfo from "@/components/ResourceItemInfo.vue";
-import ZenodoDepositionForm from "@/components/ZenodoDepositionForm.vue";
+import Upload from "@/components/Upload.vue";
 import Attachments from "@/components/Attachments.vue";
 import CommentBox from "@/components/CommentBox.vue";
 import About from "@/views/About.vue";
@@ -611,7 +614,7 @@ export default {
     "resource-item-selector": ResourceItemSelector,
     "resource-item-info": ResourceItemInfo,
     "comment-box": CommentBox,
-    "zenodo-deposition-form": ZenodoDepositionForm,
+    upload: Upload,
     attachments: Attachments,
     markdown: Markdown,
     about: About
@@ -654,12 +657,12 @@ export default {
     };
   },
   mounted: async function() {
-    this.$buefy.dialog.alert({
-      title: "Site under construction",
-      message:
-        "Please note that this site is under construction, some features are current missing.",
-      confirmText: "OK"
-    });
+    // this.$buefy.dialog.alert({
+    //   title: "Site under construction",
+    //   message:
+    //     "Please note that this site is under construction, some features are current missing.",
+    //   confirmText: "OK"
+    // });
     window.addEventListener("resize", this.updateSize);
     window.dispatchEvent(new Event("resize"));
 
@@ -826,7 +829,13 @@ export default {
         }
         return combined;
       }
-    }
+    },
+    ...mapState({
+      allApps: state => state.allApps,
+      zenodoClient: state => state.zenodoClient,
+      siteConfig: state => state.siteConfig,
+      resourceItems: state => state.resourceItems
+    })
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.updateSize);
@@ -862,6 +871,14 @@ export default {
       query.partner = partner.id;
       query.tags = partner.tags;
       this.$router.replace({ query: query }).catch(() => {});
+    },
+    preventPageScroll() {
+      document.getElementsByTagName("html")[0].style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    },
+    restorePageScroll() {
+      document.getElementsByTagName("html")[0].style.overflow = "auto";
+      document.body.style.overflow = "auto";
     },
     showJoinDialog() {
       this.infoDialogTitle = `Join ${this.siteConfig.site_name} as a community partner`;
@@ -1387,5 +1404,8 @@ export default {
 html,
 body {
   overflow-x: hidden;
+}
+form {
+  max-width: 100%;
 }
 </style>
