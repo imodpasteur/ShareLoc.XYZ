@@ -95,6 +95,8 @@
           "U2OS", 
           "U373", 
           "COS7",
+          "REF52",
+          "MDCK",
           "Hela",
           "NIH3T3",
           "yeast", 
