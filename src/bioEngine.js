@@ -1,3 +1,5 @@
+import { store } from "./store";
+
 export async function setupBioEngine() {
   window
     .loadImJoyBasicApp({
@@ -19,6 +21,8 @@ export async function setupBioEngine() {
     .then(async app => {
       // get the api object from the root plugin
       const api = app.imjoy.api;
+      window.imjoy = app.imjoy;
+      store.commit("setImJoy", app.imjoy);
       app.$on("window-size-pos-changing", changing => {
         const iframes = document.querySelectorAll(".reveal iframe");
         for (let iframe of iframes) {

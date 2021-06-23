@@ -8,6 +8,7 @@ import { store } from "./store";
 import "./bulmaswatch.min.css";
 import vmodal from "vue-js-modal";
 import "@mdi/font/css/materialdesignicons.css";
+import { setupBioEngine } from "./bioEngine";
 
 import { extend, ValidationProvider } from "vee-validate";
 import * as rules from "vee-validate/dist/rules";
@@ -30,5 +31,8 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   render: h => h(App),
-  store
+  store,
+  created() {
+    setupBioEngine();
+  }
 }).$mount("#app");

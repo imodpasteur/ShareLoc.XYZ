@@ -357,7 +357,7 @@ h6 {
   font-weight: 400;
 }
 ul {
-  list-style: disc;
+  list-style: none;
 }
 button,
 input,
@@ -441,6 +441,7 @@ body {
   font-size: 1em;
   line-height: 1.5;
   color: #4a4a4a;
+  background: white;
 }
 a {
   color: #002e52;

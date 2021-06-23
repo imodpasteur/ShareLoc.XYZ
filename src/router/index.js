@@ -2,6 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import ResourceItemList from "../components/ResourceItemList.vue";
+import Upload from "../components/Upload.vue";
+import Dataset from "../views/Dataset.vue";
 
 Vue.use(VueRouter);
 
@@ -12,9 +14,9 @@ const routes = [
     component: Home
   },
   {
-    path: "/r/:resourceId+",
-    name: "Home",
-    component: Home,
+    path: "/dataset/:resourceId+",
+    name: "Dataset",
+    component: Dataset,
     props: true
   },
   {
@@ -22,6 +24,11 @@ const routes = [
     name: "Package",
     component: Home,
     props: true
+  },
+  {
+    path: "/upload",
+    name: "Upload",
+    component: Upload
   },
   {
     path: "/app",

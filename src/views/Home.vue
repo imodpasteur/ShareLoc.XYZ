@@ -1,53 +1,5 @@
 <template>
   <div class="home">
-    <!-- Navigation bar -->
-    <nav class="navbar is-link is-fixed-top">
-      <div class="navbar-brand">
-        <span class="site-icon" @click="goHome()" style="cursor: pointer;">
-          {{ siteConfig.site_icon }}</span
-        >
-        <span class="site-title" @click="goHome()" style="cursor: pointer;">
-          {{ siteConfig.site_name }}
-        </span>
-        <span v-if="selectedPartner" class="site-title hide-on-small-screen"
-          >| {{ selectedPartner.name }}</span
-        >
-        <div
-          class="navbar-burger burger"
-          :class="{ 'is-active': showMenu }"
-          data-target="navbarExampleTransparentExample"
-          @click="showMenu = !showMenu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-
-      <div
-        id="navbarExampleTransparentExample"
-        :class="{ 'is-active': showMenu }"
-        class="navbar-menu"
-      >
-        <div class="navbar-end">
-          <a
-            class="navbar-item"
-            target="_blank"
-            v-if="siteConfig.contribute_url"
-            @click="showUploadDialog"
-          >
-            <b-icon icon="plus"></b-icon>
-            <span>Upload</span>
-          </a>
-          <a class="navbar-item" @click="showAboutDialog">
-            <b-icon icon="information-outline"></b-icon>
-            <span>About</span>
-          </a>
-          <a class="navbar-item" id="imjoy-menu"> </a>
-        </div>
-      </div>
-    </nav>
-    <!-- Header -->
     <section
       class="hero is-link is-fullheight is-fullheight-with-navbar"
       style="max-height: 1024px!important;height:100%;min-height:380px;background-image:url(/static/img/bg.jpg)"
@@ -388,7 +340,7 @@ const DEFAULT_ICONS = {
   application: "puzzle",
   model: "hubspot"
 };
-import { setupBioEngine, runAppForItem, runAppForAllItems } from "../bioEngine";
+import { runAppForItem, runAppForAllItems } from "../bioEngine";
 import { concatAndResolveUrl, debounce } from "../utils";
 
 const isTouchDevice = (function() {
@@ -663,8 +615,6 @@ export default {
     // });
     window.addEventListener("resize", this.updateSize);
     window.dispatchEvent(new Event("resize"));
-    setupBioEngine();
-
     // select models as default
     for (let list of this.resourceCategories) {
       if (list.type === "dataset") {
@@ -1009,19 +959,20 @@ export default {
         });
       }
     },
-    showResourceItemInfo(mInfo, focus) {
-      this.showInfoDialogMode = "viewer";
-      mInfo._focus = focus;
-      this.selectedResourceItem = mInfo;
-      this.infoDialogTitle = this.selectedResourceItem.name;
-      this.viewerUrl = `https://viewer.shareloc.xyz/#/?file=${mInfo.download_url}`;
-      this.infoDialogFullscreen = true;
-      this.$modal.show("info-dialog");
-      if (mInfo.id) {
-        const query = Object.assign({}, this.$route.query);
-        query.id = mInfo.id;
-        this.$router.replace({ query: query }).catch(() => {});
-      }
+    showResourceItemInfo(mInfo) {
+      this.$router.push({ name: "Dataset", params: { resourceId: mInfo.id } });
+      // this.showInfoDialogMode = "viewer";
+      // mInfo._focus = focus;
+      // this.selectedResourceItem = mInfo;
+      // this.infoDialogTitle = this.selectedResourceItem.name;
+      // this.viewerUrl = `https://viewer.shareloc.xyz/#/?file=${mInfo.download_url}`;
+      // this.infoDialogFullscreen = true;
+      // this.$modal.show("info-dialog");
+      // if (mInfo.id) {
+      //   const query = Object.assign({}, this.$route.query);
+      //   query.id = mInfo.id;
+      //   this.$router.replace({ query: query }).catch(() => {});
+      // }
     },
     updateStatus(status) {
       if (status.loading === true) this.showMessage("Loading...");
@@ -1280,6 +1231,7 @@ export default {
   font-size: 1.3rem;
 }
 .site-title {
+  color: white;
   font-size: 2.2em;
   padding-top: 10px;
   padding-left: 4px;

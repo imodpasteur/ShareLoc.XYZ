@@ -17,8 +17,10 @@ const zenodoBaseURL = siteConfig.zenodo_config.use_sandbox
 
 export const store = new Vuex.Store({
   state: {
+    loadedUrl: null,
     allApps: {},
     allTags: [],
+    imjoy: null,
     resourceItems: [],
     zenodoClient: siteConfig.zenodo_config.enabled
       ? new ZenodoClient(
@@ -38,8 +40,11 @@ export const store = new Vuex.Store({
         alert(`Failed to login: ${e}`);
       }
     },
-
     async fetchResourceItems(context, { manifest_url, repo, transform }) {
+      if (context.state.loadedUrl === manifest_url) {
+        console.log("manifest already loaded");
+        return;
+      }
       const items = await context.state.zenodoClient.getResourceItems({});
       items.map(item => context.commit("addResourceItem", item));
 
@@ -65,9 +70,13 @@ export const store = new Vuex.Store({
         context.commit("addResourceItem", item);
       }
       context.commit("normalizeItems", transform);
+      context.state.loadedUrl = manifest_url;
     }
   },
   mutations: {
+    setImJoy(state, imjoy) {
+      state.imjoy = imjoy;
+    },
     addResourceItem(state, item) {
       item.authors = item.authors || [];
       item.authors = item.authors.map(author =>

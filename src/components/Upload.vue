@@ -19,28 +19,17 @@
       label-position="right"
     >
       <b-step-item :disabled="rdfYaml" label="Select file" icon="file">
-        <b-field label="Option 1: Select a local file" expanded>
-          <b-upload
-            v-model="dropFile"
-            @input="fileSelected(dropFile)"
-            drag-drop
+        <b-field label="Option 1: Create a new deposit" expanded>
+          <b-button
+            style="text-transform:none;"
+            class="button is-fullwidth"
+            @click="initializeRdfForm()"
             expanded
+            >Start Upload</b-button
           >
-            <section class="section">
-              <div class="content has-text-centered">
-                <p>
-                  <b-icon icon="upload" size="is-large"></b-icon>
-                </p>
-                <p>
-                  Please select the zip package (*.zip) or the RDF file (*.yaml)
-                </p>
-                <p>Drop your files here or click to upload</p>
-              </div>
-            </section>
-          </b-upload>
         </b-field>
         <b-field
-          label="Option 2: Load from DOI or URL"
+          label="Option 2: Update an existing deposit"
           message="A URI can be a Zenodo DOI, Zenodo URL or Github URL to the RDF file"
         >
           <b-input
@@ -140,7 +129,10 @@
             <p>
               Authors:
               {{
-                item.authors.map(author => author.name.split(";")[0]).join(",")
+                item.authors &&
+                  item.authors
+                    .map(author => author.name.split(";")[0])
+                    .join(",")
               }}
             </p>
             <p>Uploaded: {{ item.config._deposit.updated }}</p>
@@ -287,12 +279,7 @@ import { saveAs } from "file-saver";
 import spdxLicenseList from "spdx-license-list/full";
 import "vue-form-json/dist/vue-form-json.css";
 import formJson from "vue-form-json/dist/vue-form-json.common.js";
-import {
-  rdfToMetadata,
-  resolveDOI,
-  getFullRdfFromDeposit,
-  compareVersions
-} from "../utils";
+import { rdfToMetadata, resolveDOI, getFullRdfFromDeposit } from "../utils";
 import JSZip from "jszip";
 import Markdown from "@/components/Markdown.vue";
 import TagInputField from "./tagInputField.vue";
@@ -312,7 +299,7 @@ export default {
     DropFilesField
   },
   mounted() {
-    this.dropFile = null;
+    this.dropFiles = null;
     this.uploadStatus = "";
     this.uploadProgress = 0;
 
@@ -342,6 +329,7 @@ export default {
     },
     components: () => ({ TagInputField, DropFilesField }),
     ...mapState({
+      imjoy: state => state.imjoy,
       allTags: state => state.allTags,
       resourceItems: state => state.resourceItems,
       client: state => state.zenodoClient
@@ -349,7 +337,7 @@ export default {
   },
   data() {
     return {
-      dropFile: null,
+      dropFiles: null,
       uploadProgress: 0,
       uploadStatus: "",
       uploaded: false,
@@ -371,42 +359,43 @@ export default {
     };
   },
   methods: {
-    async fileSelected(file) {
-      const loadingComponent = this.$buefy.loading.open({
-        container: this.$el
-      });
-      try {
-        var new_zip = new JSZip();
-        this.zipPackage = await new_zip.loadAsync(file);
-        console.log(this.zipPackage.files);
-        if (
-          !this.zipPackage.files["model.yaml"] &&
-          !this.zipPackage.files["rdf.yaml"]
-        ) {
-          alert(
-            "Invalid file: no model.yaml or rdf.yaml found in the model package."
-          );
-          return;
-        }
-        const configFile =
-          this.zipPackage.files["rdf.yaml"] ||
-          this.zipPackage.files["model.yaml"];
-        this.rdfYaml = await configFile.async("string");
-        const rdf = yaml.load(this.rdfYaml);
-        rdf.type = rdf.type || "model";
-        rdf.config = rdf.config || {};
-        rdf.config._rdf_file = "./" + configFile.name; // assuming we will add the rdf.yaml/model.yaml to the zip
-        if (rdf.type === "model") {
-          rdf.links = rdf.links || [];
-          rdf.links.push("imjoy/BioImageIO-Packager");
-        }
-        this.initializeRdfForm(rdf, Object.values(this.zipPackage.files));
-      } catch (e) {
-        console.error(e);
-      } finally {
-        loadingComponent.close();
-      }
-    },
+    // async parseFile(file) {
+    //   const loadingComponent = this.$buefy.loading.open({
+    //     container: this.$el
+    //   });
+    //   try {
+    //     var new_zip = new JSZip();
+    //     this.zipPackage = await new_zip.loadAsync(file);
+    //     console.log(this.zipPackage.files);
+    //     if (
+    //       !this.zipPackage.files["model.yaml"] &&
+    //       !this.zipPackage.files["rdf.yaml"]
+    //     ) {
+    //       alert(
+    //         "Invalid file: no model.yaml or rdf.yaml found in the model package."
+    //       );
+    //       return;
+    //     }
+    //     const configFile =
+    //       this.zipPackage.files["rdf.yaml"] ||
+    //       this.zipPackage.files["model.yaml"];
+    //     this.rdfYaml = await configFile.async("string");
+    //     const rdf = yaml.load(this.rdfYaml);
+    //     rdf.type = rdf.type || "model";
+    //     rdf.config = rdf.config || {};
+    //     rdf.config._rdf_file = "./" + configFile.name; // assuming we will add the rdf.yaml/model.yaml to the zip
+    //     if (rdf.type === "model") {
+    //       rdf.links = rdf.links || [];
+    //       rdf.links.push("imjoy/BioImageIO-Packager");
+    //     }
+    //     this.initializeRdfForm(rdf, Object.values(this.zipPackage.files));
+    //   } catch (e) {
+    //     console.error(e);
+    //     throw e
+    //   } finally {
+    //     loadingComponent.close();
+    //   }
+    // },
     async loadRdfFromURL(url) {
       try {
         const doiURLRegex = doiRegex.resolvePath();
@@ -453,6 +442,12 @@ export default {
       this.rdf.links = this.rdf.links || [];
       this.jsonFields = this.transformFields([
         {
+          label: "Files",
+          type: "files",
+          value: files,
+          isRequired: true
+        },
+        {
           label: "Name",
           placeholder: "name",
           value: this.rdf.name
@@ -461,6 +456,13 @@ export default {
           label: "Description",
           placeholder: "description",
           value: this.rdf.description
+        },
+        {
+          label: "Authors",
+          placeholder: "authors (Full name, separated by comma)",
+          value:
+            this.rdf.authors &&
+            this.rdf.authors.map(author => author.name.split(";")[0]).join(",")
         },
         // {
         //   label: "Source",
@@ -487,12 +489,6 @@ export default {
           })
         },
         {
-          label: "Git repository",
-          placeholder: "Git repository URL",
-          value: this.rdf.git_repo,
-          isRequired: false
-        },
-        {
           label: "Tags",
           type: "tags",
           value: this.rdf.tags,
@@ -501,23 +497,17 @@ export default {
           allow_new: true,
           icon: "label",
           isRequired: false
-        },
-        {
-          label: "Links",
-          type: "tags",
-          value: this.rdf.links,
-          placeholder: "Add a link (resource item ID)",
-          options: this.resourceItems.map(item => item.id),
-          allow_new: true,
-          icon: "vector-link",
-          isRequired: false
-        },
-        {
-          label: "Files",
-          type: "files",
-          value: files,
-          isRequired: false
         }
+        // {
+        //   label: "Links",
+        //   type: "tags",
+        //   value: this.rdf.links,
+        //   placeholder: "Add a link (resource item ID)",
+        //   options: this.resourceItems.map(item => item.id),
+        //   allow_new: true,
+        //   icon: "vector-link",
+        //   isRequired: false
+        // }
       ]);
     },
     transformFields(fields) {
@@ -541,15 +531,17 @@ export default {
         description: "Description",
         version: "Version",
         license: "License",
+        authors: "Authors",
         // source: "Source",
-        git_repo: "Git Repository",
-        tags: "Tags",
-        links: "Links"
+        // git_repo: "Git Repository",
+        tags: "Tags"
+        // links: "Links"
       };
       const values = result.values;
       for (let k in rdfNameMapping) {
         this.rdf[k] = values[rdfNameMapping[k]];
       }
+      this.zipPackage = new JSZip();
       // Fix files
       if (this.zipPackage) {
         const packageFiles = Object.values(this.zipPackage.files);
@@ -570,6 +562,15 @@ export default {
       } else {
         this.editedFiles = values["Files"];
       }
+      let rdfFileName = "rdf.yaml";
+
+      this.rdf.type = "dataset";
+      this.rdf.tags = this.rdf.tags || [];
+      this.rdf.config = this.rdf.config || {};
+      this.rdf.config._rdf_file = "./" + rdfFileName;
+      this.rdf.authors = this.rdf.authors.split(",").map(name => {
+        return { name: name.trim() };
+      });
 
       // TODO: fix attachments.files for the packager
       const rdf = Object.assign({}, this.rdf);
@@ -579,13 +580,7 @@ export default {
       const blob = new Blob([this.rdfYaml], {
         type: "application/yaml"
       });
-      let rdfFileName = "rdf.yaml";
-      if (
-        this.rdf.type === "model" &&
-        compareVersions(rdf.format_version, "<", "0.3.2")
-      ) {
-        rdfFileName = "model.yaml";
-      }
+
       if (this.zipPackage) {
         delete this.zipPackage.files[rdfFileName];
         this.zipPackage.file(rdfFileName, blob);
@@ -599,7 +594,7 @@ export default {
 
       this.similarDeposits = await this.client.getResourceItems({
         sort: "bestmatch",
-        query: this.rdf.name
+        query: rdf.name
       });
       console.log("Similar deposits:", this.similarDeposits);
       // if there is any similar items, we can try to login first
@@ -811,5 +806,6 @@ export default {
   overflow: auto;
   height: calc(100% - 48px);
   display: block;
+  margin-top: 72px;
 }
 </style>

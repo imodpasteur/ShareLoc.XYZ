@@ -85,7 +85,7 @@
       "name": "Dataset",
       "type": "dataset",
       "description": "List datasets",
-      "outline_color": "rgb(255 255 255)",
+      "outline_color": "rgb(138 138 138)",
       "tag_categories": {
         "modality": [
           "PALM", 
