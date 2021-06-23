@@ -170,7 +170,7 @@
           <b-switch v-model="requestedJoinCommunity">
             Apply for listing in the
             <a
-              :href="client.baseURL + '/communities/bioimage-io/'"
+              :href="client.baseURL + '/communities/shareloc-xyz/'"
               target="_blank"
               >ShareLoc.XYZ community list</a
             >
@@ -733,7 +733,7 @@ export default {
         const metadata = rdfToMetadata(this.rdf, baseUrl, docstring);
         // this will send a email request to the admin of bioimgae-io team
         if (this.requestedJoinCommunity) {
-          metadata.communities.push({ identifier: "bioimage-io" });
+          metadata.communities.push({ identifier: "shareloc-xyz" });
         }
         metadata.prereserve_doi = true; // we will generate the doi and store it in the model yaml file
         depositionInfo = await this.client.updateMetadata(
