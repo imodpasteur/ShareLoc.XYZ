@@ -148,7 +148,6 @@
     </div>
     <br />
     <resource-item-list
-      @select-tag="selectTag"
       @show-resource-item-info="showResourceItemInfo"
       v-if="selectedItems"
       :allItems="selectedItems"
@@ -366,7 +365,6 @@
       >
       <resource-item-info
         v-else-if="showInfoDialogMode === 'model' && selectedResourceItem"
-        :resourceItem="selectedResourceItem"
       ></resource-item-info>
     </modal>
   </div>
@@ -374,6 +372,7 @@
 
 <script>
 import { mapState } from "vuex";
+import spdxLicenseList from "spdx-license-list/full";
 import ResourceItemSelector from "@/components/ResourceItemSelector.vue";
 import ResourceItemList from "@/components/ResourceItemList.vue";
 import ResourceItemInfo from "@/components/ResourceItemInfo.vue";
@@ -382,7 +381,7 @@ import Attachments from "@/components/Attachments.vue";
 import CommentBox from "@/components/CommentBox.vue";
 import About from "@/views/About.vue";
 import Markdown from "@/components/Markdown.vue";
-import siteConfig from "../../site.config.json";
+
 const DEFAULT_ICONS = {
   notebook: "notebook-outline",
   dataset: "database",
@@ -390,12 +389,7 @@ const DEFAULT_ICONS = {
   model: "hubspot"
 };
 import { setupBioEngine, runAppForItem, runAppForAllItems } from "../bioEngine";
-import { randId, concatAndResolveUrl, debounce } from "../utils";
-
-// set default values for table_view
-siteConfig.table_view = siteConfig.table_view || {
-  columns: ["name", "authors", "badges", "apps"]
-};
+import { concatAndResolveUrl, debounce } from "../utils";
 
 const isTouchDevice = (function() {
   try {
@@ -407,6 +401,7 @@ const isTouchDevice = (function() {
 })();
 
 function normalizeItem(self, item) {
+  item = Object.assign({}, item);
   item.covers = item.covers || [];
   item.authors = item.authors || [];
   item.description = item.description || "";
@@ -558,7 +553,8 @@ function normalizeItem(self, item) {
     item.badges.unshift({
       label: "license",
       ext: item.license,
-      ext_type: "is-info"
+      ext_type: "is-info",
+      url: spdxLicenseList[item.license] && spdxLicenseList[item.license].url
     });
   }
   if (item.config && item.config._doi) {
@@ -609,10 +605,12 @@ function normalizeItem(self, item) {
       });
     }
   }
+  return item;
 }
 
 export default {
   name: "Home",
+  props: ["resourceId"],
   components: {
     "resource-item-list": ResourceItemList,
     "resource-item-selector": ResourceItemSelector,
@@ -629,13 +627,10 @@ export default {
       progress: 100,
       searchTags: null,
       isTouchDevice: isTouchDevice,
-      siteConfig: siteConfig,
-      resourceItems: null,
       rawResourceItems: null,
       selectedItems: null,
       showMenu: false,
       applications: [],
-      allApps: {},
       dialogWindowConfig: {
         width: "800px",
         height: "670px",
@@ -656,8 +651,7 @@ export default {
       selectedCategory: null,
       displayMode: "card",
       currentTags: [],
-      selectedPartner: null,
-      currentDepositionId: null
+      selectedPartner: null
     };
   },
   mounted: async function() {
@@ -689,7 +683,7 @@ export default {
         window.location.pathname + "#" + window.location.hash.substr(1);
       window.history.replaceState(null, "", originalUrl);
 
-      let repo = siteConfig.model_repo;
+      let repo = this.siteConfig.rdf_root_repo;
       const query_repo = this.$route.query.repo;
       let manifest_url = this.siteConfig.manifest_url;
       if (query_repo) {
@@ -706,38 +700,33 @@ export default {
 
         repo = query_repo;
       }
-
-      const response = await fetch(manifest_url + "?" + randId());
-      const repo_manifest = JSON.parse(await response.text());
-      if (repo_manifest.collections && this.siteConfig.partners) {
-        for (let c of repo_manifest.collections) {
-          const duplicates = this.siteConfig.partners.filter(
-            p => p.id === c.id
-          );
-          duplicates.forEach(p => {
-            this.siteConfig.partners.splice(
-              this.siteConfig.partners.indexOf(p),
-              1
-            );
-          });
-          this.siteConfig.partners.push(c);
+      const self = this;
+      await this.$store.dispatch("fetchResourceItems", {
+        repo,
+        manifest_url,
+        transform(item) {
+          return normalizeItem(self, item);
         }
-      }
-
-      const resourceItems = repo_manifest.resources;
-      this.rawResourceItems = JSON.parse(JSON.stringify(resourceItems));
-      this.resourceItems = resourceItems;
-      for (let item of resourceItems) {
-        item.repo = repo;
-        normalizeItem(this, item);
-        // if (item.source && !item.source.startsWith("http"))
-        //   item.source = concatAndResolveUrl(item.root_url, item.source);
-      }
+      });
 
       const tp = this.selectedCategory && this.selectedCategory.type;
       this.selectedItems = tp
-        ? resourceItems.filter(m => m.type === tp)
-        : resourceItems;
+        ? this.resourceItems.filter(m => m.type === tp)
+        : this.resourceItems;
+
+      // get id from component props
+      if (this.resourceId) {
+        if (this.resourceId.startsWith("zenodo:")) {
+          const zenodoId = parseInt(this.resourceId.split(":")[1]);
+          const matchedItem = this.resourceItems.filter(
+            item =>
+              item.config &&
+              item.config._deposit &&
+              item.config._deposit.id === zenodoId
+          )[0];
+          if (matchedItem) this.$route.query.id = matchedItem.id;
+        } else this.$route.query.id = this.resourceId;
+      }
 
       this.updateViewByUrlQuery();
       this.$forceUpdate();
@@ -1019,10 +1008,6 @@ export default {
           confirmText: "OK"
         });
       }
-    },
-    selectTag(tag) {
-      this.searchTags = [tag];
-      this.$forceUpdate();
     },
     showResourceItemInfo(mInfo, focus) {
       this.showInfoDialogMode = "viewer";

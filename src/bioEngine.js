@@ -29,10 +29,7 @@ export async function setupBioEngine() {
       app.addMenuItem({
         label: "➕ Load Plugin",
         callback() {
-          const uri = prompt(
-            `Please type a ImJoy plugin URL`,
-            ""
-          );
+          const uri = prompt(`Please type a ImJoy plugin URL`, "");
           if (uri) app.loadPlugin(uri);
         }
       });
@@ -108,7 +105,11 @@ export async function runAppForAllItems(context, config, allItems) {
     }
     const plugin = await window.api.getPlugin({ src: config.source });
     await plugin.run({
-      config: { referer: window.location.href, mode: "all", type: "shareloc.xyz" },
+      config: {
+        referer: window.location.href,
+        mode: "all",
+        type: "shareloc.xyz"
+      },
       data: allItems
     });
     context.showLoader(false);
@@ -130,7 +131,11 @@ export async function runAppForItem(context, config, item) {
     }
     const plugin = await window.api.getPlugin({ src: config.source });
     await plugin.run({
-      config: { referer: window.location.href, mode: "one", type: "shareloc.xyz" },
+      config: {
+        referer: window.location.href,
+        mode: "one",
+        type: "shareloc.xyz"
+      },
       data: item
     });
   } catch (e) {

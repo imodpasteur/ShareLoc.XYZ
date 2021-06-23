@@ -12,6 +12,18 @@ const routes = [
     component: Home
   },
   {
+    path: "/r/:resourceId+",
+    name: "Home",
+    component: Home,
+    props: true
+  },
+  {
+    path: "/p/:resourceId+",
+    name: "Package",
+    component: Home,
+    props: true
+  },
+  {
     path: "/app",
     name: "App",
     component: ResourceItemList

@@ -27,10 +27,6 @@ export async function getFullRdfFromDeposit(deposition) {
     const yamlStr = await response.text();
     const fullRdf = yaml.load(yamlStr);
     fullRdf.config = fullRdf.config || {};
-    // infer the rdf type for old RDFs
-    if (!fullRdf.type && fullRdf.inputs && fullRdf.outputs) {
-      fullRdf.type = "model";
-    }
     Object.assign(fullRdf.config, rdf.config);
     return fullRdf;
   } else {
@@ -39,14 +35,6 @@ export async function getFullRdfFromDeposit(deposition) {
 }
 
 export function rdfToMetadata(rdf, baseUrl, docstring) {
-  if (
-    rdf.type === "model" &&
-    compareVersions(rdf.format_version, ">", MAX_RDF_VERSION)
-  ) {
-    throw new Error(
-      `Unsupported format version ${rdf.format_version} (it must <=${MAX_RDF_VERSION})`
-    );
-  }
   if (!spdxLicenseList[rdf.license])
     throw new Error(
       "Invalid license, the license identifier must be one from the SPDX license list (https://spdx.org/licenses/)"
@@ -74,14 +62,14 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
     if (link.includes("access_token="))
       throw new Error("Link should not contain access token: " + link);
     related_identifiers.push({
-      identifier: "https://bioimage.io/#/r/" + encodeURIComponent(link),
+      identifier: "https://shareloc.xyz/#/r/" + encodeURIComponent(link),
       relation: "references", // is referenced by this upload
       resource_type: "other",
       scheme: "url"
     });
   }
   if (rdf.config._rdf_file)
-    // rdf.yaml or model.yaml
+    // rdf.yaml
     related_identifiers.push({
       identifier: rdf.config._rdf_file.startsWith("http")
         ? rdf.config._rdf_file
@@ -117,11 +105,11 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
       };
   });
   const description =
-    `<a href="https://bioimage.io/#/p/zenodo:${encodeURIComponent(
+    `<a href="https://shareloc.xyz/#/p/zenodo:${encodeURIComponent(
       rdf.config._deposit.id
     )}"><span class="label label-success">Download RDF Package</span></a><br>` +
     (docstring || `<p>${docstring}</p>`);
-  const keywords = ["bioimage.io", "bioimage.io:" + rdf.type];
+  const keywords = ["shareloc.xyz", "shareloc.xyz:" + rdf.type];
   const metadata = {
     title: rdf.name,
     description,
@@ -131,7 +119,7 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
     creators: creators,
     publication_date: new Date().toISOString().split("T")[0],
     keywords: keywords.concat(rdf.tags),
-    notes: rdf.description + " (Uploaded via https://bioimage.io)",
+    notes: rdf.description + " (Uploaded via https://shareloc.xyz)",
     related_identifiers,
     communities: []
   };
@@ -140,13 +128,13 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
 
 export function depositionToRdf(deposition) {
   const metadata = deposition.metadata;
-  let type = metadata.keywords.filter(k => k.startsWith("bioimage.io:"))[0];
+  let type = metadata.keywords.filter(k => k.startsWith("shareloc.xyz:"))[0];
   if (!type) {
     throw new Error(
-      `deposit (${deposition.id}) does not contain a bioimage.io type keyword starts with "bioimage.io:<TYPE>"`
+      `deposit (${deposition.id}) does not contain a shareloc.xyz type keyword starts with "shareloc.xyz:<TYPE>"`
     );
   }
-  type = type.replace("bioimage.io:", "");
+  type = type.replace("shareloc.xyz:", "");
   const covers = [];
   const links = [];
   let rdfFile = null;
@@ -181,10 +169,10 @@ export function depositionToRdf(deposition) {
     } else if (
       idf.relation === "references" &&
       idf.scheme === "url" &&
-      idf.identifier.startsWith("https://bioimage.io/#/r/")
+      idf.identifier.startsWith("https://shareloc.xyz/#/r/")
     ) {
       // links
-      const id = idf.identifier.replace("https://bioimage.io/#/r/", "");
+      const id = idf.identifier.replace("https://shareloc.xyz/#/r/", "");
       links.push(decodeURIComponent(id));
     } else if (idf.relation === "isDocumentedBy" && idf.scheme === "url") {
       // links
@@ -197,7 +185,7 @@ export function depositionToRdf(deposition) {
   const description = div.textContent || div.innerText || "";
   if (!rdfFile) {
     throw new Error(
-      `Invalid deposit (${deposition.id}), rdf.yaml or model.yaml is not defined in the metadata (as part of the "related_identifiers")`
+      `Invalid deposit (${deposition.id}), rdf.yaml is not defined in the metadata (as part of the "related_identifiers")`
     );
   }
   return {
@@ -206,7 +194,7 @@ export function depositionToRdf(deposition) {
     type,
     authors: metadata.creators,
     tags: metadata.keywords
-      .filter(k => k !== "bioimage.io" || !k.startsWith("bioimage.io:"))
+      .filter(k => k !== "shareloc.xyz" || !k.startsWith("shareloc.xyz:"))
       .concat(["zenodo"]),
     description,
     license:
@@ -280,10 +268,10 @@ export class ZenodoClient {
     page = page || 1;
     type = type || "all";
     keywords = keywords || [];
-    if (!keywords.includes("bioimage.io")) keywords.push("bioimage.io");
+    if (!keywords.includes("shareloc.xyz")) keywords.push("shareloc.xyz");
     size = size || 20;
     sort = sort || "mostviewed";
-    const typeKeywords = type !== "all" ? "&keywords=bioimage.io:" + type : "";
+    const typeKeywords = type !== "all" ? "&keywords=shareloc.xyz:" + type : "";
     const additionalKeywords =
       typeKeywords +
       (keywords.length > 0
@@ -291,7 +279,7 @@ export class ZenodoClient {
         : "") +
       (query ? "&q=" + query : "");
     const url =
-      `${this.baseURL}/api/records/?communities=bioimage-io&sort=${sort}&page=${page}&size=${size}` +
+      `${this.baseURL}/api/records/?communities=shareloc-xyz&sort=${sort}&page=${page}&size=${size}` +
       additionalKeywords; //&all_versions
     const response = await fetch(url);
     const results = JSON.parse(await response.text());
@@ -318,7 +306,7 @@ export class ZenodoClient {
         loginWindow.focus();
       } catch (e) {
         reject(
-          "Login window blocked. If you have a popup blocker enabled, please add bioimage.io to your exception list."
+          "Login window blocked. If you have a popup blocker enabled, please add shareloc.xyz to your exception list."
         );
         return;
       }
