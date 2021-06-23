@@ -31,7 +31,7 @@ export async function setupBioEngine() {
         callback() {
           const uri = prompt(
             `Please type a ImJoy plugin URL`,
-            "https://github.com/imjoy-team/imjoy-plugins/blob/master/repository/ImageAnnotator.imjoy.html"
+            ""
           );
           if (uri) app.loadPlugin(uri);
         }
@@ -89,7 +89,7 @@ export async function setupBioEngine() {
       app.addMenuItem({
         label: "ℹ️ Github",
         callback() {
-          window.open("https://github.com/bioimage-io/bioimage.io");
+          window.open("https://github.com/imodpasteur/shareLoc.xyz");
         }
       });
     })
@@ -108,7 +108,7 @@ export async function runAppForAllItems(context, config, allItems) {
     }
     const plugin = await window.api.getPlugin({ src: config.source });
     await plugin.run({
-      config: { referer: window.location.href, mode: "all", type: "bioengine" },
+      config: { referer: window.location.href, mode: "all", type: "shareloc.xyz" },
       data: allItems
     });
     context.showLoader(false);
@@ -130,7 +130,7 @@ export async function runAppForItem(context, config, item) {
     }
     const plugin = await window.api.getPlugin({ src: config.source });
     await plugin.run({
-      config: { referer: window.location.href, mode: "one", type: "bioengine" },
+      config: { referer: window.location.href, mode: "one", type: "shareloc.xyz" },
       data: item
     });
   } catch (e) {
