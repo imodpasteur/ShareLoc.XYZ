@@ -49,7 +49,7 @@
     <!-- Header -->
     <section
       class="hero is-link is-fullheight is-fullheight-with-navbar"
-      style="max-height: 1024px!important;height:100%;min-height:380px;"
+      style="max-height: 1024px!important;height:100%;min-height:380px;background-image:url(/static/img/bg.jpg)"
     >
       <div class="hero-body" style="position: relative;">
         <img
