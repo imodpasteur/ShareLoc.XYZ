@@ -84,10 +84,33 @@
       "description": "List datasets",
       "outline_color": "rgb(36 0 236)",
       "tag_categories": {
-        "modality": ["PALM", "STORM", "DNA-PAINT"],
+        "modality": [
+          "PALM", 
+          "STORM", 
+          "DNA-PAINT", 
+          "PAINT"
+        ],
+        "cell line": [
+          "U2OS",
+          "U373",
+          "yeast"
+        ],
         "structure": [
           "microtubule",
-          "nuclear pore"
+          "nuclear pore",
+          "actin",
+          "DNA"
+        ],
+        "fluorophore (red)": [
+          "Alexa 555",
+          "mEos2",
+          "mApple"
+        ],
+        "fluorophore (far-red)": [
+          "Alexa 647",
+          "Cy5",
+          "Phalloidin 647",
+          "CF680"
         ]
       }
     }
