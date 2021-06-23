@@ -43,6 +43,7 @@
             <b-icon icon="information-outline"></b-icon>
             <span>About</span>
           </a>
+          <a class="navbar-item" id="imjoy-menu"> </a>
         </div>
       </div>
     </nav>
@@ -388,14 +389,7 @@ const DEFAULT_ICONS = {
   application: "puzzle",
   model: "hubspot"
 };
-import {
-  setupBioEngine,
-  loadPlugins,
-  loadCodeFromFile,
-  setupBioEngineAPI,
-  runAppForItem,
-  runAppForAllItems
-} from "../bioEngine";
+import { setupBioEngine, runAppForItem, runAppForAllItems } from "../bioEngine";
 import { randId, concatAndResolveUrl, debounce } from "../utils";
 
 // set default values for table_view
@@ -505,7 +499,7 @@ function normalizeItem(self, item) {
       icon: "play",
       run() {
         if (self.allApps[item.name])
-          runAppForAllItems(self.allApps[item.name], self.rawResourceItems);
+          runAppForAllItems(self, self.allApps[item.id], self.resourceItems);
         else alert("This application is not ready or unavailable.");
       }
     });
@@ -518,7 +512,7 @@ function normalizeItem(self, item) {
           icon: lit.icon || DEFAULT_ICONS[lit.type],
           run() {
             if (self.allApps[link_key])
-              runAppForItem(self.allApps[link_key], item);
+              runAppForItem(self, self.allApps[link_key], item);
             else self.showResourceItemInfo(lit);
           }
         });
@@ -565,6 +559,16 @@ function normalizeItem(self, item) {
       label: "license",
       ext: item.license,
       ext_type: "is-info"
+    });
+  }
+  if (item.config && item.config._doi) {
+    item.badges.unshift({
+      label: item.config._doi,
+      label_type: "is-dark",
+      label_short: self.zenodoClient.isSandbox ? "Zenodo" : "DOI",
+      url: self.zenodoClient.isSandbox
+        ? `${item.config._deposit.links.html}`
+        : `https://doi.org/${item.config._doi}`
     });
   }
   if (item.type === "model" && item.co2) {
@@ -665,6 +669,7 @@ export default {
     // });
     window.addEventListener("resize", this.updateSize);
     window.dispatchEvent(new Event("resize"));
+    setupBioEngine();
 
     // select models as default
     for (let list of this.resourceCategories) {
@@ -736,44 +741,6 @@ export default {
 
       this.updateViewByUrlQuery();
       this.$forceUpdate();
-      console.log("Loading ImJoy...");
-      const workspace = this.$route.query.workspace || this.$route.query.w;
-      setupBioEngine(
-        workspace,
-        this.showMessage,
-        this.showProgress,
-        this.showWindowDialog,
-        this.closeWindowDialog,
-        this.updateStatus
-      ).then(imjoy => {
-        this.imjoy = imjoy;
-        imjoy.event_bus.on("show_message", msg => {
-          this.showMessage(msg);
-        });
-        imjoy.event_bus.on("add_window", w => {
-          this.addWindow(w);
-        });
-        imjoy.event_bus.on("plugin_loaded", () => {});
-
-        imjoy.event_bus.on("imjoy_ready", () => {});
-
-        imjoy.event_bus.on("close_window", w => {
-          this.closeDialogWindow(w);
-        });
-        const applications = resourceItems.filter(
-          m => m.type === "application"
-        );
-        loadPlugins(imjoy, applications).then(allApps => {
-          this.showMessage(
-            `Successfully loaded ${Object.keys(allApps).length} applications.`
-          );
-          this.allApps = allApps;
-        });
-      });
-      // inside an iframe
-      if (window.self !== window.top) {
-        setupBioEngineAPI();
-      }
     } catch (e) {
       console.error(e);
       alert(`Failed to fetch manifest file from the repo: ${e}.`);
@@ -1195,12 +1162,6 @@ export default {
     },
     showWindowDialog() {},
     closeWindowDialog() {},
-    fileSelected() {
-      if (!this.$refs.file_select.files) return;
-      const local_file = this.$refs.file_select.files[0];
-      this.showMessage("Loading App...");
-      loadCodeFromFile(this.imjoy, local_file);
-    },
     getLabelCount(label) {
       return this.filteredModels.filter(models =>
         models.allLabels.includes(label)
