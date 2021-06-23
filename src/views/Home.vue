@@ -1245,7 +1245,7 @@ export default {
 }
 
 .b-tooltip.is-primary:after {
-  background: #3273dc !important;
+  background: #002e52 !important;
   color: white;
 }
 .card-image {
@@ -1259,7 +1259,7 @@ export default {
   height: 40px;
   font-size: 1.4rem;
   cursor: move;
-  background-color: #3273dc;
+  background-color: #002e52;
   color: white;
   text-align: center;
   line-height: 40px;

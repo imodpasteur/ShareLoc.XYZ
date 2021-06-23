@@ -204,7 +204,7 @@ a.badge {
   border-radius: 30px;
   font-size: 0.8rem;
   background-color: rgba(255, 255, 255, 0.85);
-  color: #3273dc;
+  color: #002e52;
 }
 .resource-card {
   height: 400px;

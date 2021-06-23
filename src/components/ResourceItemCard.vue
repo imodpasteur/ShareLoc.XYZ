@@ -196,7 +196,7 @@ export default {
   font-size: 1.2em;
   font-weight: 400;
   cursor: pointer;
-  color: #3273dc;
+  color: #002e52;
 }
 .authors {
   font-size: 0.9em;
