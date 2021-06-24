@@ -10,21 +10,7 @@
     </label>
     <div class="control">
       <section>
-        <span
-          v-for="(file, index) in value"
-          :key="index"
-          class="tag is-primary"
-          style="cursor: pointer;"
-          @click="previewFile(file)"
-        >
-          {{ file.name.slice(0, 20) + (file.name.length > 20 ? "..." : "") }}
-          <button
-            class="delete is-small"
-            type="button"
-            @click.prevent="removeFile(item.label, index)"
-          ></button>
-        </span>
-        <div id="preview-container"></div>
+        
         <b-field>
           <b-upload
             :id="item.label"
@@ -33,8 +19,9 @@
             multiple
             drag-drop
             expanded
+            style="height: 96px;"
           >
-            <section class="section">
+            <section class="section" style="height: 96px;">
               <div class="content has-text-centered">
                 <b-icon icon="upload" size="is-large"></b-icon>
 
@@ -50,6 +37,20 @@
             </section>
           </b-upload>
         </b-field>
+        <span
+          v-for="(file, index) in value"
+          :key="index"
+          class="tag is-primary"
+          style="cursor: pointer;"
+          @click="previewFile(file)"
+        >
+          {{ file.name.slice(0, 20) + (file.name.length > 20 ? "..." : "") }}
+          <button
+            class="delete is-small"
+            type="button"
+            @click.prevent="removeFile(item.label, index)"
+          ></button>
+        </span>
       </section>
       <p v-if="error" class="help is-danger">
         {{ error }}

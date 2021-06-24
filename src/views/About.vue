@@ -62,7 +62,6 @@ export default {
 </script>
 <style scoped>
 .about {
-  margin-top: 72px;
   height: calc(100% - 40px);
   background-repeat: no-repeat;
   background-position: bottom;

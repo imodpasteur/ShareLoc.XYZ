@@ -46,7 +46,7 @@
       </div>
     </nav>
     <!-- Header -->
-    <router-view />
+    <router-view style="margin-top:72px;" />
   </div>
 </template>
 <script>

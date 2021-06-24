@@ -23,7 +23,7 @@
           <b-button
             style="text-transform:none;"
             class="button is-fullwidth"
-            @click="initializeRdfForm()"
+            @click="startUpload"
             expanded
             >Start Upload</b-button
           >
@@ -50,18 +50,8 @@
       </b-step-item>
 
       <b-step-item label="Edit & Review" icon="pencil" :disabled="!rdfYaml">
-        <section style="padding: 20px;">
-          <form-json
-            v-if="jsonFields && jsonFields.length > 0"
-            :btnReset="{ value: 'Reset' }"
-            :btnSubmit="{ value: 'OK' }"
-            :camelizePayloadKeys="false"
-            :formFields="jsonFields"
-            :formName="'metadata'"
-            @formSubmitted="formSubmitted"
-            :components="components"
-          >
-          </form-json>
+        <section v-if="stepIndex==1">
+          <dataset :rdf="rdf" :files="rdfFiles"></dataset>
         </section>
       </b-step-item>
 
@@ -274,16 +264,14 @@
 
 <script>
 import { mapState } from "vuex";
-import yaml from "js-yaml";
 import { saveAs } from "file-saver";
-import spdxLicenseList from "spdx-license-list/full";
-import "vue-form-json/dist/vue-form-json.css";
-import formJson from "vue-form-json/dist/vue-form-json.common.js";
+
 import { rdfToMetadata, resolveDOI, getFullRdfFromDeposit } from "../utils";
 import JSZip from "jszip";
 import Markdown from "@/components/Markdown.vue";
 import TagInputField from "./tagInputField.vue";
 import DropFilesField from "./dropFilesField.vue";
+import Dataset from "./Dataset.vue";
 import doiRegex from "doi-regex";
 import marked from "marked";
 import DOMPurify from "dompurify";
@@ -291,12 +279,12 @@ import DOMPurify from "dompurify";
 export default {
   name: "upload",
   components: {
-    "form-json": formJson,
     markdown: Markdown,
     // eslint-disable-next-line vue/no-unused-components
     TagInputField,
     // eslint-disable-next-line vue/no-unused-components
-    DropFilesField
+    DropFilesField,
+    Dataset
   },
   mounted() {
     this.dropFiles = null;
@@ -327,7 +315,6 @@ export default {
         this.client && this.client.credential && this.client.credential.user_id
       );
     },
-    components: () => ({ TagInputField, DropFilesField }),
     ...mapState({
       imjoy: state => state.imjoy,
       allTags: state => state.allTags,
@@ -337,12 +324,12 @@ export default {
   },
   data() {
     return {
+      rdfFiles: null,
       dropFiles: null,
       uploadProgress: 0,
       uploadStatus: "",
       uploaded: false,
       jsonFields: null,
-      zipFiles: null,
       rdfYaml: null,
       rdf: null,
       stepIndex: 0,
@@ -359,6 +346,11 @@ export default {
     };
   },
   methods: {
+    startUpload(){
+      this.rdf={};
+      this.rdfFiles=[];
+      this.stepIndex = 1;
+    },
     // async parseFile(file) {
     //   const loadingComponent = this.$buefy.loading.open({
     //     container: this.$el
@@ -416,201 +408,35 @@ export default {
             depositionInfo = await this.client.retrieve(this.depositId);
           }
           console.log("orcid matched: " + this.depositId, depositionInfo);
-          const rdf = await getFullRdfFromDeposit(depositionInfo);
+          this.rdf = await getFullRdfFromDeposit(depositionInfo);
           this.zipPackage = null;
+          this.files = depositionInfo.files.map(item => {
+            return {
+              type: "remote",
+              name: item.filename || item.key, // depending on what api we use, it may be in two different format
+              size: item.filesize || item.size,
+              url: item.links.self,
+              checksum: item.checksum
+            };
+          })
           // load files
-          this.initializeRdfForm(
-            rdf,
-            depositionInfo.files.map(item => {
-              return {
-                type: "remote",
-                name: item.filename || item.key, // depending on what api we use, it may be in two different format
-                size: item.filesize || item.size,
-                url: item.links.self,
-                checksum: item.checksum
-              };
-            })
-          );
+          this.rdfFiles = depositionInfo.files.map(item => {
+            return {
+              type: "remote",
+              name: item.filename || item.key, // depending on what api we use, it may be in two different format
+              size: item.filesize || item.size,
+              url: item.links.self,
+              checksum: item.checksum
+            };
+          })
+          this.stepIndex = 1;
         }
       } catch (e) {
         alert(`Failed to fetch RDF from ${url}, error: ${e}`);
       }
     },
-    initializeRdfForm(rdf, files) {
-      this.stepIndex = 1;
-      this.rdf = rdf || {};
-      this.rdf.links = this.rdf.links || [];
-      this.rdf.config = this.rdf.config || {};
-      this.jsonFields = this.transformFields([
-        {
-          label: "Files",
-          type: "files",
-          value: files,
-          isRequired: true
-        },
-        {
-          label: "Name",
-          placeholder: "name",
-          value: this.rdf.name
-        },
-        {
-          label: "Description",
-          placeholder: "description",
-          value: this.rdf.description,
-          help: 'A short description in one sentence' 
-        },
-        {
-          label: "Authors",
-          placeholder: "authors (Full name, separated by comma)",
-          value:
-            this.rdf.authors &&
-            this.rdf.authors.map(author => author.name.split(";")[0]).join(",")
-        },
-        // {
-        //   label: "Source",
-        //   placeholder: "A doi or URL to the source of the item",
-        //   isRequired: false,
-        //   value: this.rdf.version
-        // },
-        {
-          label: "Version",
-          placeholder: "Version in MAJOR.MINOR.PATCH format(e.g. 0.1.0)",
-          isRequired: false,
-          value: this.rdf.version || "0.1.0"
-        },
-        {
-          label: "License",
-          type: "select",
-          placeholder: "Select your license",
-          options: Object.keys(spdxLicenseList).map(opt => {
-            return {
-              text: opt,
-              value: opt,
-              selected: this.rdf.license === opt
-            };
-          })
-        },
-        {
-          label: "Tags",
-          type: "tags",
-          value: this.rdf.tags,
-          placeholder: "Add a tag",
-          options: this.allTags,
-          allow_new: true,
-          icon: "label",
-          isRequired: false
-        },
-        {
-          label: "Detailed Descrription",
-          placeholder: "",
-          type: 'textarea',
-          value: this.rdf.config._details,
-          help: 'Detailed description in markdown format' 
-        },
-        // {
-        //   label: "Links",
-        //   type: "tags",
-        //   value: this.rdf.links,
-        //   placeholder: "Add a link (resource item ID)",
-        //   options: this.resourceItems.map(item => item.id),
-        //   allow_new: true,
-        //   icon: "vector-link",
-        //   isRequired: false
-        // }
-      ]);
-    },
-    transformFields(fields) {
-      const typeMapping = {};
-      for (let k in this.components) {
-        typeMapping[this.components[k].name] = k;
-      }
-      // mapping type to component name
-      for (let field of fields) {
-        if (typeMapping[field.type]) {
-          field.is = typeMapping[field.type];
-          delete field.type;
-        }
-      }
-      return fields;
-    },
-    async formSubmitted(result) {
-      const rdfNameMapping = {
-        type: "Type",
-        name: "Name",
-        description: "Description",
-        version: "Version",
-        license: "License",
-        authors: "Authors",
-        // source: "Source",
-        // git_repo: "Git Repository",
-        tags: "Tags"
-        // links: "Links"
-      };
-      const values = result.values;
-      for (let k in rdfNameMapping) {
-        this.rdf[k] = values[rdfNameMapping[k]];
-      }
-      this.zipPackage = new JSZip();
-      // Fix files
-      if (this.zipPackage) {
-        const packageFiles = Object.values(this.zipPackage.files);
-        for (let file of values["Files"]) {
-          if (packageFiles.includes(file)) continue;
-          if (file instanceof Blob) {
-            this.zipPackage.file(file.name, file);
-          } else {
-            console.error("Invalid file type", file);
-          }
-        }
-        // remove files
-        for (let file of packageFiles) {
-          if (!values["Files"].includes(file)) {
-            delete this.zipPackage.files[file.name];
-          }
-        }
-      } else {
-        this.editedFiles = values["Files"];
-      }
-      let rdfFileName = "rdf.yaml";
-
-      this.rdf.type = "dataset";
-      this.rdf.tags = this.rdf.tags || [];
-      this.rdf.config = this.rdf.config || {};
-      this.rdf.config._rdf_file = "./" + rdfFileName;
-      this.rdf.authors = this.rdf.authors.split(",").map(name => {
-        return { name: name.trim() };
-      });
-
-      // TODO: fix attachments.files for the packager
-      const rdf = Object.assign({}, this.rdf);
-      delete rdf._metadata;
-      console.log("RDF: ", rdf);
-      this.rdfYaml = yaml.dump(rdf);
-      const blob = new Blob([this.rdfYaml], {
-        type: "application/yaml"
-      });
-
-      if (this.zipPackage) {
-        delete this.zipPackage.files[rdfFileName];
-        this.zipPackage.file(rdfFileName, blob);
-      } else {
-        const file = new File([blob], rdfFileName);
-        this.editedFiles = this.editedFiles.filter(
-          item => item.name !== rdfFileName
-        );
-        this.editedFiles.push(file);
-      }
-
-      this.similarDeposits = await this.client.getResourceItems({
-        sort: "bestmatch",
-        query: rdf.name
-      });
-      console.log("Similar deposits:", this.similarDeposits);
-      // if there is any similar items, we can try to login first
-      if (this.similarDeposits.length > 0)
-        await this.client.getCredential(true);
-      this.stepIndex = 2;
-    },
+    
+   
     async publishDeposition() {
       if (
         !confirm(
@@ -815,6 +641,5 @@ export default {
   overflow: auto;
   height: calc(100% - 48px);
   display: block;
-  margin-top: 72px;
 }
 </style>
