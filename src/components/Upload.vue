@@ -440,6 +440,7 @@ export default {
       this.stepIndex = 1;
       this.rdf = rdf || {};
       this.rdf.links = this.rdf.links || [];
+      this.rdf.config = this.rdf.config || {};
       this.jsonFields = this.transformFields([
         {
           label: "Files",
@@ -455,7 +456,8 @@ export default {
         {
           label: "Description",
           placeholder: "description",
-          value: this.rdf.description
+          value: this.rdf.description,
+          help: 'A short description in one sentence' 
         },
         {
           label: "Authors",
@@ -497,7 +499,14 @@ export default {
           allow_new: true,
           icon: "label",
           isRequired: false
-        }
+        },
+        {
+          label: "Detailed Descrription",
+          placeholder: "",
+          type: 'textarea',
+          value: this.rdf.config._details,
+          help: 'Detailed description in markdown format' 
+        },
         // {
         //   label: "Links",
         //   type: "tags",

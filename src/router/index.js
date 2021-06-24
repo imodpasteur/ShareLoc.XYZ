@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import ResourceItemList from "../components/ResourceItemList.vue";
 import Upload from "../components/Upload.vue";
-import Dataset from "../views/Dataset.vue";
+import Dataset from "../components/Dataset.vue";
 
 Vue.use(VueRouter);
 

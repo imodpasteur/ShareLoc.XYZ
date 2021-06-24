@@ -14,6 +14,7 @@
           v-for="(file, index) in value"
           :key="index"
           class="tag is-primary"
+          style="cursor: pointer;"
           @click="previewFile(file)"
         >
           {{ file.name.slice(0, 20) + (file.name.length > 20 ? "..." : "") }}
@@ -99,8 +100,8 @@ export default {
           data: file,
           config: { window_id: "preview-container" }
         });
+      // eslint-disable-next-line no-useless-catch
       } catch (e) {
-        // eslint-disable-next-line no-useless-catch
         throw e;
       } finally {
         loadingComponent.close();
