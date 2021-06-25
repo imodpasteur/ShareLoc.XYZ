@@ -3,14 +3,14 @@
   "site_icon": "🔬",
   "author": "IMOD",
   "keywords": "SMLM,PALM,STORM,PAINT,SR,SuperRes,Super resolution,Microscopy,Live Cell Imaging,Bioimaging",
-  "description": "ShareLoc--A platform for sharing localization data",
+  "description": "ShareLoc--A platform for sharing single-molecule localization microscopy data",
   "twitter_site": "@ImodLab",
   "twitter_creator": "@weioyang",
   "twitter_image": "",
   "og_url": "https://shareloc.xyz",
   "og_title": "ShareLoc.XYZ",
   "og_image": "",
-  "og_description": "A platform for sharing localization data",
+  "og_description": "A platform for sharing single-molecule localization microscopy data",
   "background_image": "",
   "manifest_url": "/manifest.shareloc.json",
   "explore_button_text": "🚀 Explore",
@@ -24,12 +24,15 @@
       "url": "https://github.com/imodpasteur/shareLoc.xyz"
     }
   ],
-  "zenodo_client_id": "mRJ0Q2ihVpuPhISMPKpFtGakv6LBaKMN8Ap2ruPZ",
-  "zenodo_use_sandbox": true,
-  "model_repo": "imodpasteur/shareLoc.xyz",
+  "zenodo_config": {
+    "enabled": true,
+    "client_id": "mRJ0Q2ihVpuPhISMPKpFtGakv6LBaKMN8Ap2ruPZ",
+    "use_sandbox": true
+  },
+  "rdf_root_repo": "imodpasteur/shareLoc.xyz",
   "enable_comment": true,
   "splash_title": "ShareLoc.XYZ",
-  "splash_subtitle": "A platform for sharing localization data",
+  "splash_subtitle": "A platform for sharing single-molecule localization microscopy data",
   "splash_feature_list": [
   ],
   "table_view": {
@@ -82,7 +85,7 @@
       "name": "Dataset",
       "type": "dataset",
       "description": "List datasets",
-      "outline_color": "rgb(36 0 236)",
+      "outline_color": "rgb(138 138 138)",
       "tag_categories": {
         "modality": [
           "PALM", 

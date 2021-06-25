@@ -331,7 +331,7 @@ export default {
   align-items: center;
 }
 .tag:hover {
-  background: #3273dc !important;
+  background: #002e52 !important;
   color: white;
 }
 .tags-button {
