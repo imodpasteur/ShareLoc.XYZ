@@ -11,6 +11,14 @@ siteConfig.table_view = siteConfig.table_view || {
   columns: ["name", "authors", "badges", "apps"]
 };
 
+const tagCates = siteConfig.resource_categories.filter(
+  c => c.type === "dataset"
+)[0].tag_categories;
+let allTags = [];
+for (let cat in tagCates) {
+  allTags = allTags.concat(tagCates[cat]);
+}
+
 const zenodoBaseURL = siteConfig.zenodo_config.use_sandbox
   ? "https://sandbox.zenodo.org"
   : "https://zenodo.org";
@@ -19,7 +27,7 @@ export const store = new Vuex.Store({
   state: {
     loadedUrl: null,
     allApps: {},
-    allTags: [],
+    allTags: allTags,
     imjoy: null,
     resourceItems: [],
     zenodoClient: siteConfig.zenodo_config.enabled

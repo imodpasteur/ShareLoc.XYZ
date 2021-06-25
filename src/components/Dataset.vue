@@ -65,7 +65,7 @@ import DropFilesField from "@/components/dropFilesField.vue";
 import FilePreviewField from "@/components/filePreviewField.vue";
 // import marked from "marked";
 // import DOMPurify from "dompurify";
-
+import { mapState } from "vuex";
 import yaml from "js-yaml";
 import { randId, dataURLtoFile, resizeImage } from "../utils";
 
@@ -83,7 +83,10 @@ export default {
     FilePreviewField
   },
   computed: {
-    components: () => ({ TagInputField, DropFilesField, FilePreviewField })
+    components: () => ({ TagInputField, DropFilesField, FilePreviewField }),
+    ...mapState({
+      allTags: state => state.allTags
+    })
   },
   data() {
     return {
@@ -272,7 +275,7 @@ export default {
           options: this.allTags,
           allow_new: true,
           icon: "label",
-          isRequired: false
+          isRequired: true
         },
         {
           label: "Documentation",

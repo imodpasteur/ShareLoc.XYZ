@@ -320,7 +320,6 @@ export default {
     },
     ...mapState({
       imjoy: state => state.imjoy,
-      allTags: state => state.allTags,
       resourceItems: state => state.resourceItems,
       client: state => state.zenodoClient
     })
