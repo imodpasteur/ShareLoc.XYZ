@@ -96,7 +96,7 @@
             @click="exportPackage()"
             expanded
             icon-left="download"
-            >Export package locally</b-button
+            >Export package locally (Optional)</b-button
           >
         </div>
         <br />
