@@ -960,7 +960,7 @@ export default {
       }
     },
     showResourceItemInfo(mInfo) {
-      this.$router.push({ name: "Dataset", params: { resourceId: mInfo.id } });
+      this.$router.push({ name: "Viewer", params: { resourceId: mInfo.id } });
       // this.showInfoDialogMode = "viewer";
       // mInfo._focus = focus;
       // this.selectedResourceItem = mInfo;

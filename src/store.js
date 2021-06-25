@@ -69,7 +69,7 @@ export const store = new Vuex.Store({
         //   item.source = concatAndResolveUrl(item.root_url, item.source);
         context.commit("addResourceItem", item);
       }
-      context.commit("normalizeItems", transform);
+      if (transform) context.commit("normalizeItems", transform);
       context.state.loadedUrl = manifest_url;
     }
   },
