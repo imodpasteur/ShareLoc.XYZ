@@ -1,28 +1,17 @@
 <template>
   <div class="dataset">
-    <section class="sidebar-layout">
-      <b-sidebar
-        position="static"
-        mobile="hide"
-        :expand-on-hover="expandOnHover"
-        :reduce="false"
-        :delay="expandWithDelay ? 500 : null"
-        type="is-light"
-        open
-      >
-        <div class="p-1">
-          <form-json
-            v-if="jsonFields && jsonFields.length > 0"
-            :btnReset="{ value: 'Reset' }"
-            :btnSubmit="{ value: 'OK' }"
-            :camelizePayloadKeys="false"
-            :formFields="jsonFields"
-            :formName="'metadata'"
-            @formSubmitted="formSubmitted"
-            :components="components"
-          >
-          </form-json>
-          <!-- <b-menu class="is-custom-mobile">
+    <form-json
+      v-if="jsonFields && jsonFields.length > 0"
+      :btnReset="{ value: 'Reset' }"
+      :btnSubmit="{ value: 'OK' }"
+      :camelizePayloadKeys="false"
+      :formFields="jsonFields"
+      :formName="'metadata'"
+      @formSubmitted="formSubmitted"
+      :components="components"
+    >
+    </form-json>
+    <!-- <b-menu class="is-custom-mobile">
             <b-menu-list label="Menu">
               <b-menu-item
                 icon="information-outline"
@@ -63,41 +52,38 @@
               <b-menu-item icon="logout" label="Logout"></b-menu-item>
             </b-menu-list>
           </b-menu> -->
-        </div>
-        
-      </b-sidebar>
-      <div style="width: 100%;">
-        <drop-files-field class="block" :item="fileField"></drop-files-field>
-        <div class="viewer block" id="preview-container"></div>
-      </div>
-    </section>
   </div>
 </template>
 <script>
 import JSZip from "jszip";
-import yaml from "js-yaml";
 import spdxLicenseList from "spdx-license-list/full";
 import "vue-form-json/dist/vue-form-json.css";
 import formJson from "vue-form-json/dist/vue-form-json.common.js";
 // import Markdown from "@/components/Markdown.vue";
 import TagInputField from "@/components/tagInputField.vue";
 import DropFilesField from "@/components/dropFilesField.vue";
+import FilePreviewField from "@/components/filePreviewField.vue";
 // import marked from "marked";
 // import DOMPurify from "dompurify";
 
+import yaml from "js-yaml";
+import { randId, dataURLtoFile, resizeImage } from "../utils";
+
 export default {
   name: "dataset",
-  props: ["resourceId", "rdf", "files"],
+  props: ["resourceId", "initRdf", "files"],
   components: {
     "form-json": formJson,
     // markdown: Markdown,
     // eslint-disable-next-line vue/no-unused-components
     TagInputField,
     // eslint-disable-next-line vue/no-unused-components
-    DropFilesField
+    DropFilesField,
+    // eslint-disable-next-line vue/no-unused-components
+    FilePreviewField
   },
   computed: {
-    components: () => ({ TagInputField, DropFilesField })
+    components: () => ({ TagInputField, DropFilesField, FilePreviewField })
   },
   data() {
     return {
@@ -105,18 +91,20 @@ export default {
       expandOnHover: false,
       expandWithDelay: false,
       reduce: false,
-      fileField: {}
+      fileField: {},
+      rdf: null
     };
   },
-  mounted(){
-    this.initializeRdfForm(this.rdf, this.files);
+  mounted() {
+    this.initializeRdfForm(this.initRdf, this.files);
     this.fileField = {
-        name: "Files",
-        value: this.files,
-      }
+      name: "Files",
+      value: this.files
+    };
+    this.$root.$on("formSubmitted", this.formSubmitted);
   },
   methods: {
-     transformFields(fields) {
+    transformFields(fields) {
       const typeMapping = {};
       for (let k in this.components) {
         typeMapping[this.components[k].name] = k;
@@ -135,7 +123,7 @@ export default {
         type: "Type",
         name: "Name",
         description: "Description",
-        version: "Version",
+        // version: "Version",
         license: "License",
         authors: "Authors",
         // source: "Source",
@@ -144,29 +132,9 @@ export default {
         // links: "Links"
       };
       const values = result.values;
+      this.rdf = {};
       for (let k in rdfNameMapping) {
         this.rdf[k] = values[rdfNameMapping[k]];
-      }
-      this.zipPackage = new JSZip();
-      // Fix files
-      if (this.zipPackage) {
-        const packageFiles = Object.values(this.zipPackage.files);
-        for (let file of values["Files"]) {
-          if (packageFiles.includes(file)) continue;
-          if (file instanceof Blob) {
-            this.zipPackage.file(file.name, file);
-          } else {
-            console.error("Invalid file type", file);
-          }
-        }
-        // remove files
-        for (let file of packageFiles) {
-          if (!values["Files"].includes(file)) {
-            delete this.zipPackage.files[file.name];
-          }
-        }
-      } else {
-        this.editedFiles = values["Files"];
       }
       let rdfFileName = "rdf.yaml";
 
@@ -178,47 +146,82 @@ export default {
         return { name: name.trim() };
       });
 
+      if (!this.rdf.tags.includes("smlm")) this.rdf.tags.push("smlm");
+
+      const editedFiles = values["Files"];
+      // Add documentation
+      if (this.rdf.config._docstring) {
+        const blob = new Blob([this.rdf.config._docstring], {
+          type: "text/markdown"
+        });
+        const file = new File([blob], "README.md");
+        this.rdf.documentation = "./README.md";
+        editedFiles.push(file);
+      }
+
+      // Add screenshots
+      if (editedFiles.screenshots) {
+        this.rdf.covers = this.rdf.covers || [];
+        for (let img of editedFiles.screenshots) {
+          const blob = dataURLtoFile(img);
+          const fileName = "screenshot-" + randId();
+          const file = new File([blob], fileName + ".png", {
+            type: blob.type
+          });
+          editedFiles.push(file);
+
+          const resizedImage = await resizeImage({
+            file,
+            maxSize: 256
+          });
+
+          const fileSmall = new File(
+            [resizedImage],
+            fileName + "_thumbnail.png",
+            {
+              type: resizedImage.type
+            }
+          );
+          editedFiles.push(fileSmall);
+
+          this.rdf.covers.push("./" + fileName + "_thumbnail.png");
+        }
+        delete editedFiles.screenshots;
+      }
+
       // TODO: fix attachments.files for the packager
       const rdf = Object.assign({}, this.rdf);
       delete rdf._metadata;
       console.log("RDF: ", rdf);
-      this.rdfYaml = yaml.dump(rdf);
-      const blob = new Blob([this.rdfYaml], {
+      const rdfYaml = yaml.dump(rdf);
+      // Add rdf.yaml
+      const blob = new Blob([rdfYaml], {
         type: "application/yaml"
       });
+      const file = new File([blob], rdfFileName);
+      editedFiles.push(file);
 
-      if (this.zipPackage) {
-        delete this.zipPackage.files[rdfFileName];
-        this.zipPackage.file(rdfFileName, blob);
-      } else {
-        const file = new File([blob], rdfFileName);
-        this.editedFiles = this.editedFiles.filter(
-          item => item.name !== rdfFileName
-        );
-        this.editedFiles.push(file);
-      }
-
-      this.similarDeposits = await this.client.getResourceItems({
-        sort: "bestmatch",
-        query: rdf.name
+      // save the files to zip
+      const zipPackage = new JSZip();
+      editedFiles.map(file => {
+        zipPackage.file(file.name, file);
       });
-      console.log("Similar deposits:", this.similarDeposits);
-      // if there is any similar items, we can try to login first
-      if (this.similarDeposits.length > 0)
-        await this.client.getCredential(true);
-      this.stepIndex = 2;
+
+      this.rdf.config._zip = zipPackage;
+      this.rdf.config._yaml = rdfYaml;
+      this.$emit("submit", this.rdf);
     },
-    initializeRdfForm(rdf) {
+    initializeRdfForm(rdf, files) {
       this.rdf = rdf || {};
-      this.rdf.links = this.rdf.links || [];
+      // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
       this.jsonFields = this.transformFields([
-        // {
-        //   label: "Files",
-        //   type: "files",
-        //   value: files,
-        //   isRequired: true
-        // },
+        {
+          label: "Files",
+          type: "file-preview",
+          value: files,
+          isRequired: true
+        },
         {
           label: "Name",
           placeholder: "name",
@@ -228,7 +231,7 @@ export default {
           label: "Description",
           placeholder: "description",
           value: this.rdf.description,
-          help: 'A short description in one sentence' 
+          help: "A short description in one sentence"
         },
         {
           label: "Authors",
@@ -243,12 +246,12 @@ export default {
         //   isRequired: false,
         //   value: this.rdf.version
         // },
-        {
-          label: "Version",
-          placeholder: "Version in MAJOR.MINOR.PATCH format(e.g. 0.1.0)",
-          isRequired: false,
-          value: this.rdf.version || "0.1.0"
-        },
+        // {
+        //   label: "Version",
+        //   placeholder: "Version in MAJOR.MINOR.PATCH format(e.g. 0.1.0)",
+        //   isRequired: false,
+        //   value: this.rdf.version || "0.1.0"
+        // },
         {
           label: "License",
           type: "select",
@@ -272,12 +275,13 @@ export default {
           isRequired: false
         },
         {
-          label: "Detailed Descrription",
+          label: "Documentation",
           placeholder: "",
-          type: 'textarea',
-          value: this.rdf.config._details,
-          help: 'Detailed description in markdown format' 
-        },
+          type: "textarea",
+          value: this.rdf.config._docstring,
+          help: "Documentation in markdown format",
+          isRequired: false
+        }
         // {
         //   label: "Links",
         //   type: "tags",
@@ -289,7 +293,7 @@ export default {
         //   isRequired: false
         // }
       ]);
-    },
+    }
   }
 };
 </script>
@@ -314,7 +318,7 @@ export default {
 .sidebar-content {
   height: 100% !important;
 }
-.viewer{
+.viewer {
   width: 100%;
   height: 100%;
 }

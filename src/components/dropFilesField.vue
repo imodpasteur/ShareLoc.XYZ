@@ -10,7 +10,6 @@
     </label>
     <div class="control">
       <section>
-        
         <b-field>
           <b-upload
             :id="item.label"
@@ -19,38 +18,39 @@
             multiple
             drag-drop
             expanded
-            style="height: 96px;"
           >
-            <section class="section" style="height: 96px;">
+            <section class="section">
               <div class="content has-text-centered">
                 <b-icon icon="upload" size="is-large"></b-icon>
 
                 Drop additional files here
                 <br />
-                <!-- <b-button
+                <span
+                  v-for="(file, index) in value"
+                  :key="index"
+                  class="tag is-primary"
+                >
+                  {{
+                    file.name.slice(0, 20) +
+                      (file.name.length > 20 ? "..." : "")
+                  }}
+                  <button
+                    class="delete is-small"
+                    type="button"
+                    @click.prevent="removeFile(item.label, index)"
+                  ></button>
+                </span>
+                <br />
+                <b-button
                   v-if="value && value.length > 0"
                   class="is-small"
                   @click.prevent="clearFiles()"
                   >Clear files</b-button
-                > -->
+                >
               </div>
             </section>
           </b-upload>
         </b-field>
-        <span
-          v-for="(file, index) in value"
-          :key="index"
-          class="tag is-primary"
-          style="cursor: pointer;"
-          @click="previewFile(file)"
-        >
-          {{ file.name.slice(0, 20) + (file.name.length > 20 ? "..." : "") }}
-          <button
-            class="delete is-small"
-            type="button"
-            @click.prevent="removeFile(item.label, index)"
-          ></button>
-        </span>
       </section>
       <p v-if="error" class="help is-danger">
         {{ error }}
@@ -78,38 +78,7 @@ export default {
     this.value = this.item.value;
     this.item.value && this.$emit("input", this.item.value);
   },
-  computed: {
-    imjoy: function() {
-      return window.imjoy;
-    }
-  },
-  mounted() {
-    const api = this.imjoy.api;
-    const baseUrl = window.location.origin + window.location.pathname;
-    api.getPlugin(baseUrl + "SMLMFileIO.imjoy.html");
-  },
   methods: {
-    async previewFile(file) {
-      const api = this.imjoy.api;
-      const smlmPlugin = await api.getPlugin("SMLM File IO");
-      document.getElementById("preview-container").style.height = "600px";
-      const loadingComponent = this.$buefy.loading.open({
-        container: document.getElementById("preview-container")
-      });
-      try {
-        await smlmPlugin.run({
-          data: file,
-          config: { window_id: "preview-container" }
-        });
-      // eslint-disable-next-line no-useless-catch
-      } catch (e) {
-        throw e;
-      } finally {
-        loadingComponent.close();
-      }
-
-      // preview-container
-    },
     removeFile(label, index) {
       this.value.splice(index, 1);
       this.$forceUpdate();
@@ -123,9 +92,6 @@ export default {
       this.$emit("input", this.value);
       // we need this because otherwise we cannot update the list on the interface
       this.$forceUpdate();
-      if (this.value && this.value.length > 0) {
-        this.previewFile(this.value[this.value.length - 1]);
-      }
     },
     trimEllip(str, length) {
       if (!str) return str;
@@ -135,8 +101,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-#preview-container {
-  width: 100%;
-}
-</style>

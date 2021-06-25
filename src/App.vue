@@ -77,7 +77,7 @@ body {
   overscroll-behavior-y: none;
 }
 #app {
-  height: 100vh;
+  height: calc(100vh - 72px);
 }
 .card {
   margin-bottom: 3rem;

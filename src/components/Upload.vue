@@ -50,8 +50,12 @@
       </b-step-item>
 
       <b-step-item label="Edit & Review" icon="pencil" :disabled="!rdfYaml">
-        <section v-if="stepIndex==1">
-          <dataset :rdf="rdf" :files="rdfFiles"></dataset>
+        <section v-if="stepIndex == 1">
+          <dataset
+            @submit="submitRDF"
+            :init-rdf="rdf"
+            :files="rdfFiles"
+          ></dataset>
         </section>
       </b-step-item>
 
@@ -290,7 +294,6 @@ export default {
     this.dropFiles = null;
     this.uploadStatus = "";
     this.uploadProgress = 0;
-
     this.$root.$on("formSubmitted", this.formSubmitted);
   },
   computed: {
@@ -346,9 +349,9 @@ export default {
     };
   },
   methods: {
-    startUpload(){
-      this.rdf={};
-      this.rdfFiles=[];
+    startUpload() {
+      this.rdf = {};
+      this.rdfFiles = [];
       this.stepIndex = 1;
     },
     // async parseFile(file) {
@@ -388,6 +391,26 @@ export default {
     //     loadingComponent.close();
     //   }
     // },
+    submitRDF(rdf) {
+      this.$nextTick(async () => {
+        this.rdfYaml = rdf.config._yaml;
+        delete rdf.config._yaml;
+        this.zipPackage = rdf.config._zip;
+        delete rdf.config._zip;
+        this.rdf = rdf;
+
+        this.similarDeposits = await this.client.getResourceItems({
+          sort: "bestmatch",
+          query: rdf.name
+        });
+        console.log("Similar deposits:", this.similarDeposits);
+        // if there is any similar items, we can try to login first
+        if (this.similarDeposits.length > 0)
+          await this.client.getCredential(true);
+
+        this.stepIndex = 2;
+      });
+    },
     async loadRdfFromURL(url) {
       try {
         const doiURLRegex = doiRegex.resolvePath();
@@ -418,7 +441,7 @@ export default {
               url: item.links.self,
               checksum: item.checksum
             };
-          })
+          });
           // load files
           this.rdfFiles = depositionInfo.files.map(item => {
             return {
@@ -428,15 +451,14 @@ export default {
               url: item.links.self,
               checksum: item.checksum
             };
-          })
+          });
           this.stepIndex = 1;
         }
       } catch (e) {
         alert(`Failed to fetch RDF from ${url}, error: ${e}`);
       }
     },
-    
-   
+
     async publishDeposition() {
       if (
         !confirm(
@@ -493,7 +515,7 @@ export default {
         }
       );
       this.uploadStatus = "Exporting zip package...";
-      saveAs(zipBlob, this.rdf.name + ".smlm");
+      saveAs(zipBlob, this.rdf.name + ".zip");
       this.uploadStatus = "Done!";
     },
     async createOrUpdateDeposit(depositId, skipUpload) {
