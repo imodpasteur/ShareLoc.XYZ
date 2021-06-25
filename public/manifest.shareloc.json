@@ -38,13 +38,14 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/04cb0d658f351d47446b351dca89ef4c/data.smlm",
             "id": "04cb0d658f351d47446b351dca89ef4c",
             "name": "s4b-c1-7pos-30k-20ms_1_MMStack_Pos0_1_min",
-            "description": "Microtubules labeled with Alexa 647 in U373 cells.",
+            "description": "2D STORM imaging of microtubules labeled with Alexa 647 in U373 cells.",
             "hash": "04cb0d658f351d47446b351dca89ef4c",
             "tags": [
-                "alexa647",
+                "Alexa-647",
                 "microtubule",
                 "STORM",
-                "U373"
+                "U373",
+                "2D"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-01-31T00:17:42.049511",
@@ -62,10 +63,10 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/1cdcc96c6666bede255331b39bbc5a1b/data.smlm",
             "id": "1cdcc96c6666bede255331b39bbc5a1b",
             "name": "s1-c2-storm-wo-COT_1_min",
-            "description": "",
+            "description": "2D SMLM imaging of microtubules labeled with Alexa 647.",
             "hash": "1cdcc96c6666bede255331b39bbc5a1b",
             "tags": [
-                "alexa647",
+                "Alexa-647",
                 "microtubule"
             ],
             "license": "CC BY 4.0",
@@ -84,10 +85,12 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/768e0f720f4343daa6781445fb93eea8/data.smlm",
             "id": "768e0f720f4343daa6781445fb93eea8",
             "name": "2017-03-29-sp-tub-brb80-s1-c3-5-dstorm-buf_min",
-            "description": "",
+            "description": "2D dSTORM imaging of microtubules.",
             "hash": "768e0f720f4343daa6781445fb93eea8",
             "tags": [
-                "microtubule"
+                "dSTORM",
+                "microtubule",
+                "2D"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-01-31T07:57:59.935434",
@@ -124,11 +127,13 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/94106847488a2e145b5e062ed0addbb2/data.smlm",
             "id": "94106847488a2e145b5e062ed0addbb2",
             "name": "s1-c2-fixed-TOM22-642-30ms_1_MMStack_Pos0",
-            "description": "Mitochondria image used for figure 6b",
+            "description": "Mitochondrial protein TOM22 in COS7 cells, using secondary antibody immunolabeling strategy. Used for figure 6b, Ouyang et al., Nat. Biotechnol. 2018",
             "hash": "94106847488a2e145b5e062ed0addbb2",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22",
+                "COS7", 
+                "4%PFA"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:28:12.229980",
@@ -150,7 +155,7 @@
             "hash": "0809c64060133878c89c9285e7525d46",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:48:08.907171",
@@ -172,7 +177,7 @@
             "hash": "5bd2ddd657a6a156debe44cd0e24f25f",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:51:16.969614",
@@ -194,7 +199,7 @@
             "hash": "1962da75758f9ed25128e916d63464e4",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:54:37.585753",
@@ -216,7 +221,7 @@
             "hash": "d8574f7760a25fa979bcaecd5cb24166",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:59:29.144987",
@@ -238,7 +243,7 @@
             "hash": "1445ef6401f5c2a907b8c06e27e7e76a",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:00:55.994846",
@@ -260,7 +265,7 @@
             "hash": "5b86dd2fb8dd1a7812706644adcc08ec",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:02:16.793363",
@@ -282,7 +287,7 @@
             "hash": "fa20310565e71a288e2267741e78c075",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:03:04.366268",
@@ -304,7 +309,7 @@
             "hash": "25ac748ac74a6982941f37a80afcc6d3",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:04:08.671422",
@@ -325,7 +330,7 @@
             "description": "",
             "hash": "f21d95759bbcbe18693520bad1759d4a",
             "tags": [
-                "3d",
+                "3D",
                 "astigmatism",
                 "A647",
                 "ZOLA",
@@ -440,7 +445,7 @@
             "hash": "8490d963d4296904a0db84c3d5993137",
             "tags": [
                 "mitochondria",
-                "tom22"
+                "TOM22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-03-08T14:45:34.300701",
@@ -845,7 +850,7 @@
             "description": "test",
             "hash": "ce79b7efababea4221259db9b9a3495f",
             "tags": [
-                "microtubules"
+                "microtubule"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-08-16T21:28:13.170343",
@@ -908,7 +913,7 @@
             "description": "A reduced version of the SMLM file(500 frame) provided in the pointcloud-loader (https://t.co/jsXs7mBJtz)",
             "hash": "74357d215b5b13be040548004fe36a74",
             "tags": [
-                "microtuble"
+                "microtubule"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-10-10T12:03:02.411516",
@@ -931,7 +936,7 @@
             "tags": [
                 "dSTORM",
                 "actin",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-11-29T15:52:30.203468",
@@ -1001,8 +1006,8 @@
             "tags": [
                 "dSTORM",
                 "3D Biplane",
-                "microtubules",
-                "Alexa647"
+                "microtubule",
+                "Alexa-647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-12-03T09:56:07.025655",
@@ -1024,7 +1029,7 @@
             "hash": "ebecd054c0311723d3b43b76a4b01938",
             "tags": [
                 "nuclear pore",
-                "Alexa647",
+                "Alexa-647",
                 "dSTORM"
             ],
             "license": "CC BY 4.0",
@@ -1047,8 +1052,9 @@
             "hash": "cc4b9e6c6fe27b03a5eb2502b9e094b9",
             "tags": [
                 "dSTORM",
-                "Alexa532",
-                "microtubules"
+                "Alexa-532",
+                "microtubule", 
+                "COS7"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-12-03T10:30:37.569958",
@@ -1070,8 +1076,8 @@
             "hash": "5193a76969b6c745efb8d8bfcf1e7c76",
             "tags": [
                 "dSTORM",
-                "microtubules",
-                "Alexa647"
+                "microtubule",
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:10:56.491732",
@@ -1093,8 +1099,8 @@
             "hash": "4f9f5c695b1c1fceb52bfc85f42776a9",
             "tags": [
                 "dSTORM",
-                "microtubules",
-                "Alexa647"
+                "microtubule",
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:24:15.207736",
@@ -1116,8 +1122,8 @@
             "hash": "71404f432ee69f41486054a6e471290f",
             "tags": [
                 "dSTORM",
-                "microtubules",
-                "Alexa647"
+                "microtubule",
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:27:22.310725",
@@ -1139,8 +1145,8 @@
             "hash": "2ef45b60988e370cf80dfe994524245b",
             "tags": [
                 "dSTORM",
-                "microtubules",
-                "Alexa647"
+                "microtubule",
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:30:55.644953",
@@ -1164,7 +1170,7 @@
                 "dSTORM",
                 "actin",
                 "phalloidin",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-05T16:22:37.197370",
@@ -1188,7 +1194,7 @@
                 "dSTORM",
                 "actin",
                 "phalloidin",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-05T16:26:58.011794",
@@ -1302,7 +1308,7 @@
                 "gp210",
                 "nuclear pore",
                 "dSTORM",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T09:49:20.912381",
@@ -1326,7 +1332,7 @@
                 "dSTORM",
                 "nuclear pore",
                 "gp210",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T13:54:39.748577",
@@ -1350,7 +1356,7 @@
                 "dSTORM",
                 "nuclear pore",
                 "gp210",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T14:35:48.141079",
@@ -1398,7 +1404,7 @@
                 "dSTORM",
                 "nuclear pore",
                 "gp210",
-                "Alexa647"
+                "Alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T15:00:09.011918",
@@ -1421,7 +1427,7 @@
             "tags": [
                 "dSTORM",
                 "WGA",
-                "Alexa532",
+                "Alexa-532",
                 "nuclear pore"
             ],
             "license": "CC BY-NC 4.0",
@@ -1445,7 +1451,7 @@
             "tags": [
                 "dSTORM",
                 "nuclear pore",
-                "Alexa647",
+                "Alexa-647",
                 "gp210"
             ],
             "license": "CC BY-NC 4.0",
@@ -2237,7 +2243,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "73d11d9450a1021d6a30272ff6ee947a",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "storm",
                 "alexa fluor 647",
                 "REF52",
@@ -2262,7 +2268,7 @@
             "description": "Microtubules labelled (DMA1) with alexa fluor 647 in REF52",
             "hash": "d9d9e0be7a6793e8336231c231f2f72e",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "ref52",
                 "storm",
@@ -2291,7 +2297,7 @@
                 "storm",
                 "alexa fluor 647",
                 "alpha tubulin",
-                "microtubules"
+                "microtubule"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T09:48:34.425712",
@@ -2312,7 +2318,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "2a6927678ac1869f0a5898aaf40cc5e7",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "storm",
                 "alpha tubulin",
@@ -2337,7 +2343,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "4f3fd0b80ef2ecc5a8acb0260ffa1dad",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "storm",
                 "ref52",
                 "alexa fluor 647",
@@ -2362,7 +2368,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "3e03aa668f9d6e34bd3dd63b2d0c12be",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "storm",
                 "alexa fluor 647",
                 "alpha tubulin",
@@ -2387,7 +2393,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "995bcaf5213b69ab0e94a7491e0a4f4e",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "alpha tubulin",
                 "storm",
@@ -2412,7 +2418,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "23ba67dd0b091f44f7621f19f885b23d",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "ref52",
                 "alpha tubulin",
@@ -2437,7 +2443,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "59b04bb3928603c641fe19edbb651556",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "storm",
                 "ref52",
@@ -2487,7 +2493,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "8048161eba455019f4b3ded6be861551",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "storm",
                 "alpha tubulin",
@@ -2512,7 +2518,7 @@
             "description": "microtubules (DMA1) in MDCK cells labelled with alexa fluor 647",
             "hash": "1a7f4a71aff55977f356151ffd41e76e",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "storm",
                 "mdck",
@@ -2537,7 +2543,7 @@
             "description": "microtubules (DMA1) in MDCK cells labelled with alexa fluor 647",
             "hash": "dbb40a565175d895a29cd182d76a859b",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "storm",
                 "alexa fluor 647",
                 "mdck",
@@ -2562,7 +2568,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "dfa9105aaba5b481d6a64ee172e60f6f",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "storm",
                 "alexa fluor 647",
                 "alpha tubulin",
@@ -2587,7 +2593,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "dc9c45759a50e256ba88aa5020655611",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "storm",
                 "alpha tubulin",
                 "ref52",
@@ -2612,7 +2618,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "bd0aa5c216c56c7972237079c8ab4e10",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "ref52",
                 "alexa fluor 647",
                 "storm",
@@ -2637,7 +2643,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "65e40fe545fab6c99459e49865225ff7",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "storm",
                 "alpha tubulin",
@@ -2662,9 +2668,9 @@
             "description": "Microtubules labelled with AF647 in NIH3T3 cells",
             "hash": "0a5a7780cac28a5817c50d966807f500",
             "tags": [
-                "Microtubules",
+                "microtubule",
                 "STORM",
-                "Alexa Fluor 647",
+                "Alexa-647",
                 "NIH3T3"
             ],
             "license": "CC BY 4.0",
@@ -2686,7 +2692,7 @@
             "description": "Microtubules labelled with AF647 in NIH3T3 cells",
             "hash": "5a8543143a767fa93e08f31d814cf03c",
             "tags": [
-                "Microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "NIH3T3",
                 "STORM"
@@ -2710,7 +2716,7 @@
             "description": "Microtubules labelled with AF647 in NIH3T3 cells",
             "hash": "ff1c0e1e0169ce2a7e8ab2c146526973",
             "tags": [
-                "Microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "NIH3T3"
             ],
@@ -2733,7 +2739,7 @@
             "description": "Microtubules labelled with AF647 in NIH3T3 cells",
             "hash": "25253a6a297bb96e8e78c21bafa193e5",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "alexa fluor 647",
                 "NIH3T3",
                 "STORM"
@@ -2757,10 +2763,10 @@
             "description": "NIH3T3 labelled microtubules",
             "hash": "9cafc59c54508af782dcd320d717ea2f",
             "tags": [
-                "Microtubules",
+                "microtubule",
                 "NIH3T3",
                 "STORM",
-                "Alexa Fluor 647"
+                "Alexa-647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-14T03:39:36.292272",
@@ -2781,7 +2787,7 @@
             "description": "NIH3T3 cells with labelled microtubules",
             "hash": "b92bd7c99d6115fa07373622e0b09be1",
             "tags": [
-                "Microtubles",
+                "microtubule",
                 "NIH3T3",
                 "STORM",
                 "alexa fluor 647"
@@ -2805,7 +2811,7 @@
             "description": "microtubules in REF52 labelled with CF660",
             "hash": "d76e1c1facd1576011f7da71dace9567",
             "tags": [
-                "microtubules",
+                "microtubule",
                 "CF660",
                 "STORM",
                 "alpha-tubulin"

@@ -86,7 +86,7 @@
       "tag_categories": {
         "modality": [
           "PALM", 
-          "STORM", 
+          "STORM",
           "dSTORM", 
           "DNA-PAINT", 
           "PAINT"
