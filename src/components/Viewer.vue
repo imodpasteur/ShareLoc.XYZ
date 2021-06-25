@@ -1,6 +1,6 @@
 <template>
   <div class="dataset">
-    <b-sidebar
+    <!-- <b-sidebar
       position="static"
       mobile="fullwidth"
       :expand-on-hover="true"
@@ -12,40 +12,21 @@
       <div class="p-1">
         <b-menu class="is-custom-mobile">
           <b-menu-list label="Menu">
-            <b-menu-item icon="information-outline" label="Info"></b-menu-item>
-            <b-menu-item active expanded icon="settings" label="Administrator">
-              <b-menu-item icon="account" label="Users"></b-menu-item>
-              <b-menu-item icon="cellphone-link" label="Devices"></b-menu-item>
-              <b-menu-item
-                icon="cash-multiple"
-                label="Payments"
-                disabled
-              ></b-menu-item>
+            <b-menu-item active expanded icon="settings" label="Files">
+              <b-menu-item icon="file" label="file"></b-menu-item>
             </b-menu-item>
-            <b-menu-item icon="account" label="My Account">
-              <b-menu-item
-                icon="account-box"
-                label="Account data"
-              ></b-menu-item>
-              <b-menu-item icon="home-account" label="Addresses"></b-menu-item>
-            </b-menu-item>
-          </b-menu-list>
-          <b-menu-list>
-            <b-menu-item label="Expo" icon="link"></b-menu-item>
-          </b-menu-list>
-          <b-menu-list label="Actions">
-            <b-menu-item icon="logout" label="Logout"></b-menu-item>
           </b-menu-list>
         </b-menu>
       </div>
-    </b-sidebar>
-    <div style="width: 100%;">
+    </b-sidebar> -->
+    <div style="width: 100%; height: 100%;">
       <div class="viewer block" :id="containerId"></div>
     </div>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
+import axios from "axios";
 
 export default {
   name: "dataset",
@@ -71,6 +52,7 @@ export default {
   },
   methods: {
     async init() {
+      const loadingComponent = this.$buefy.loading.open();
       if (!this.loadedUrl) {
         const repo = this.siteConfig.rdf_root_repo;
         let manifest_url = this.siteConfig.manifest_url;
@@ -79,7 +61,7 @@ export default {
           manifest_url
         });
       }
-      console.log(this.resourceItems);
+
       const resourceItem = this.resourceItems.filter(item => {
         return item.id === this.resourceId;
       })[0];
@@ -87,12 +69,71 @@ export default {
         alert("Item not found: " + this.resourceId);
         return;
       }
-      // const file =
-      // const api = window.imjoy.api;
-      // const baseUrl = window.location.origin + window.location.pathname;
-      // api.getPlugin(baseUrl + "SMLMFileIO.imjoy.html").then(() => {
-      //   this.previewFile(file);
-      // });
+
+      if (resourceItem.download_url) {
+        try {
+          const file = await this.fetchFile(resourceItem.download_url);
+          const api = window.imjoy.api;
+          const baseUrl = window.location.origin + window.location.pathname;
+          api.getPlugin(baseUrl + "SMLMFileIO.imjoy.html").then(() => {
+            this.previewFile(file);
+          });
+        } catch (e) {
+          alert("Failed to download file: " + resourceItem.download_url);
+
+          console.error(e);
+          throw e;
+        } finally {
+          loadingComponent.close();
+        }
+      }
+      console.log(resourceItem);
+    },
+    async fetchFile(url) {
+      const response = await axios({
+        url,
+        method: "GET",
+        responseType: "blob",
+        onDownloadProgress: progressEvent => {
+          const status = `Downloading file ${progressEvent.loaded /
+            1000}kB (${progressEvent.total &&
+            Math.round((progressEvent.loaded / progressEvent.total) * 100)}%)`;
+          if (window.imjoy) window.imjoy.api.showMessage(status);
+          else {
+            console.log(status);
+          }
+        }
+      });
+      const filename = url
+        .split("/")
+        .pop()
+        .split("#")[0]
+        .split("?")[0];
+      const blob = new Blob([response.data]);
+      const file = new File([blob], filename, {
+        type: "application/octet-stream",
+        lastModified: Date.now()
+      });
+      return file;
+    },
+    async previewFile(file) {
+      const api = window.imjoy.api;
+      const smlmPlugin = await api.getPlugin("SMLM File IO");
+      const container = document.getElementById(this.containerId);
+      // const w = container.getBoundingClientRect().width;
+      container.style.height = "100%"; //w / 2 + 111 + "px"; // add 111px for the plane slider
+      const loadingComponent = this.$buefy.loading.open({
+        container
+      });
+      try {
+        await smlmPlugin.show(file, this.containerId);
+        this.smlmPlugin = smlmPlugin;
+        // eslint-disable-next-line no-useless-catch
+      } catch (e) {
+        throw e;
+      } finally {
+        loadingComponent.close();
+      }
     }
   }
 };

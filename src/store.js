@@ -41,10 +41,10 @@ export const store = new Vuex.Store({
       }
     },
     async fetchResourceItems(context, { manifest_url, repo, transform }) {
-      if (context.state.loadedUrl === manifest_url) {
-        console.log("manifest already loaded");
-        return;
-      }
+      // if (context.state.loadedUrl === manifest_url) {
+      //   console.log("manifest already loaded");
+      //   return;
+      // }
       const items = await context.state.zenodoClient.getResourceItems({});
       items.map(item => context.commit("addResourceItem", item));
 

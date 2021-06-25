@@ -1015,7 +1015,7 @@ export default {
       window.scrollTo({ top: top - 100, behavior: "smooth", block: "start" });
     },
     updateResourceItemList(models) {
-      if (models.length <= 0) {
+      if (this.initialized && models.length <= 0) {
         this.showMessage("No item found.");
       }
       this.selectedItems = models;
