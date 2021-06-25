@@ -745,7 +745,9 @@
             "name": "sid_actin_01",
             "description": "actin in neurons",
             "hash": "1b05462a3e9c1d3ee6809590da8970d2",
-            "tags": [],
+            "tags": [
+            "actin"
+            ],
             "license": "CC BY 4.0",
             "timestamp": "2018-06-19T05:49:56.159768",
             "uploaded_by": "nrsiddharth@gmail.com",
@@ -764,7 +766,9 @@
             "name": "sid_actin_03",
             "description": "actin in neurons",
             "hash": "aea02b71ae74ef73cd5b3cbaa684818e",
-            "tags": [],
+            "tags": [
+            "actin"
+            ],
             "license": "CC BY 4.0",
             "timestamp": "2018-06-19T05:53:20.320526",
             "uploaded_by": "nrsiddharth@gmail.com",
@@ -783,7 +787,9 @@
             "name": "sid_actin_04",
             "description": "actin in neurons",
             "hash": "e98d0854e7c72e8d949ec2780c38daac",
-            "tags": [],
+            "tags": [
+            "actin"
+            ],
             "license": "CC BY 4.0",
             "timestamp": "2018-06-19T06:00:05.335312",
             "uploaded_by": "nrsiddharth@gmail.com",
