@@ -69,8 +69,8 @@ export default {
 };
 </script>
 <style>
-.autocomplete .dropdown-content {
-  display: block !important;
+.dropdown-content {
+  display: inline-block !important;
   width: 100%;
 }
 </style>
