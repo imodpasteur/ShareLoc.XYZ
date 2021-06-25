@@ -86,31 +86,111 @@
       "tag_categories": {
         "modality": [
           "PALM", 
-          "STORM", 
+          "STORM",
+          "dSTORM", 
           "DNA-PAINT", 
           "PAINT"
         ],
         "cell line": [
-          "U2OS",
-          "U373",
-          "yeast"
+          "U2OS", 
+          "U373", 
+          "COS7",
+          "REF52",
+          "MDCK",
+          "Hela",
+          "NIH3T3",
+          "yeast", 
+          "E-coli",
+          "Listeria", 
+          "Archaea"
         ],
         "structure": [
           "microtubule",
-          "nuclear pore",
+          "mitochondria",
           "actin",
-          "DNA"
+          "nuclear pore",
+          "DNA",
+          "plasma membrane",
+          "neuronal synapse",
+          "neuronal axon",
+          "vimentin"
         ],
-        "fluorophore (red)": [
-          "Alexa 555",
-          "mEos2",
-          "mApple"
-        ],
-        "fluorophore (far-red)": [
-          "Alexa 647",
+        "fluorophore": [
+          "Alexa-647",
+          "Alexa-532",
           "Cy5",
-          "Phalloidin 647",
-          "CF680"
+          "Phalloidin-647",
+          "CF680",
+          "HMSiR",
+          "JF-646",
+          "PA-JF646",
+          "Alexa-555",
+          "mEos2",
+          "mApple",
+          "Cy3b",
+          "CF568",
+          "Dendra2",
+          "PA-mCherry",
+          "JF-568",
+          "PA-JF568",
+          "Nile Red",     
+          "PA-GFP",
+          "Dronpa",
+          "Atto-488"
+        ],
+        "Labeling strategy":[
+          "transient transfection",
+          "stable knock-in",
+          "endogenous labeling CRISPR",
+          "primary antibody",
+          "secondary antibody",
+          "HaloTag",
+          "SNAP-tag",
+          "Tetracysteine Tag"     
+        ],
+        "Target protein":[
+          "NUP133",
+          "NUP96",
+          "TOM22",
+          "WGA",
+          "ESCRT",
+          "FtsZ",
+          "alpha-tub",
+          "beta-tub",
+          "H2",
+          "H3",
+          "H1",
+          "polyE"
+        ],
+        "dimension":[
+          "2D",
+          "3D"
+        ],
+        "camera":[
+          "EM-CCD",
+          "sCMOS"
+        ],
+        "reconstruction software":[
+          "ThunderSTORM",
+          "SMAP",
+          "SMOIphot",
+          "ZOLA-3D",
+          "Picasso",
+          "QuickPALM"
+        ],
+        "buffer":[
+          "GluOx",
+          "catalase",
+          "MEA",
+          "Abbelight Safe Reagent",
+          "Idylle Everspark"
+        ],
+        "fixation":[
+          "4%PFA",
+          "1%PFA",
+          "PFA+Gluta",
+          "Glyoxal",
+          "methanol"
         ]
       }
     }
