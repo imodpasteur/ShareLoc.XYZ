@@ -662,5 +662,9 @@ export default {
   overflow: auto;
   height: calc(100% - 48px);
   display: block;
+  max-width: 1080px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
 }
 </style>
