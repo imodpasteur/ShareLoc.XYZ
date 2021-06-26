@@ -21,6 +21,9 @@
     function randId() {
         return Math.random().toString(36).substr(2, 10);
     }
+    function randId() {
+        return Math.random().toString(36).substr(2, 10);
+    }
 
     class smlmFile {
         constructor(file) {
@@ -34,6 +37,163 @@
             this.manifest.license = this.manifest.license || 'CC BY 4.0'
             this.manifest.tags = this.manifest.tags || []
             this.manifest.citeAs = this.manifest.citeAs || ''
+        }
+        import_image(file, image_format, info, is_append, update_callback) {
+            return new Promise((resolve, reject) => {
+                console.log('import file', image_format)
+                var FR = new FileReader();
+                FR.onload = (e) => {
+                    var img = new Image();
+                    img.addEventListener("load", () => {
+                        const file_info = {}
+                        file_info.format = image_format
+
+                        file_info.type = "image"
+                        file_info.size = [img.height, img.width]
+                        Object.assign(file_info, info)
+                        const data = {}
+                        data.image = img
+                        data.file = file
+                        data.name = file.name
+                        data.file_name = file.name
+                        data.file_size = file.size
+                        file_info.name = file.name
+                        file_info.data = data
+                        const hash = this.calculate_hash(file_info)
+                        file_info.hash = hash
+                        file_info.tags = info.tags || []
+                        file_info.pixel_size = info.pixel_size
+                        data.file_hash = hash
+
+                        if (is_append || !this.files || this.files.length == 0) {
+                            // append to this file
+                            this.files.push(file_info)
+                        }
+                        else {
+                            // reset files
+                            this.manifest = JSON.parse(JSON.stringify(manifest_template))
+                            this.formats = this.manifest.formats
+                            this.files = this.manifest.files
+                            this.files.push(file_info)
+                        }
+
+                        this.formats[image_format] = supported_image_formats[image_format]
+                        if (!this.manifest.name || this.manifest.name == "") {
+                            if (this.isSMLM) {
+                                this.manifest.name = file.name.split(".")[0] + ".smlm"
+                            }
+                            else {
+                                this.manifest.name = file.name.split(".")[0] + ".zip"
+                            }
+
+                        }
+                        if (!this.manifest.hash)
+                            this.update_hash()
+                        info.channel = info.channel || 'default'
+                        this.channels[info.channel] = this.channels[info.channel] || []
+                        this.channels[info.channel].push(data)
+                        this.zipFile = null
+                        this.uploaded = false
+                        console.log(data)
+                        resolve(file_info)
+                        //context.drawImage(img, 0, 0);
+                    });
+                    img.src = e.target.result;
+                };
+                FR.onerror = (e) => {
+                    reject(e)
+                }
+                FR.readAsDataURL(file);
+            })
+        }
+        import_text_table(file, table_format, info, is_append, update_callback) {
+            console.log(table_format)
+            if (typeof table_format === 'string' || table_format instanceof String) {
+                table_format = supported_text_formats[table_format]
+            }
+            return new Promise((resolve, reject) => {
+                if (!table_format) {
+                    console.log("no table format not found.", table_format)
+                    reject("no table format not found.")
+                    return
+                }
+                var loadWorker;
+                if (typeof (Worker) !== "undefined") {
+                    loadWorker = new Worker("static/js/AsyncTextLoader.js")
+                } else {
+                    console.log("Web Worker not available")
+                    reject("Web Worker not available")
+                    return
+                }
+                console.log('loading...')
+                update_callback({ running: true, running_status: 'running ' })
+
+                loadWorker.onmessage = (e) => {
+                    var data = e.data
+                    if (data.error) {
+                        reject(data.error)
+                        loadWorker.terminate()
+                    }
+                    else if (data.loaded) {
+                        // this.file_loaded = true
+                        console.log(data.tableDict)
+                        console.log('done', data.statshtml, data)
+                        const file_info = JSON.parse(JSON.stringify(file_info_template))
+
+                        data.name = file.name
+                        data.file_size = file.size
+                        file_info.name = file.name
+                        file_info.type = "table"
+                        file_info.rows = data.rows
+                        file_info.min = data.min
+                        file_info.max = data.max
+                        file_info.avg = data.avg
+                        file_info.offset = { "x": 0, "y": 0 }
+                        file_info.data = data
+                        const hash = this.calculate_hash(file_info)
+                        file_info.hash = hash
+                        data.file_hash = hash
+                        file_info.tags = info.tags || []
+                        file_info.pixel_size = info.pixel_size
+                        if (is_append) {
+                            // append to this file
+                            this.files.push(file_info)
+                        }
+                        else {
+                            // reset files
+                            this.manifest = JSON.parse(JSON.stringify(manifest_template))
+                            this.formats = this.manifest.formats
+                            this.files = this.manifest.files
+                            this.files.push(file_info)
+                        }
+                        if (!this.manifest.name || this.manifest.name == "") {
+                            this.manifest.name = file.name.split(".")[0] + ".smlm"
+                        }
+                        if (!this.manifest.hash)
+                            this.update_hash()
+                        info.channel = info.channel || 'default'
+                        this.channels[info.channel] = this.channels[info.channel] || []
+                        this.channels[info.channel].push(data)
+                        // this.formats[table_format.name] = table_format
+                        this.zipFile = null
+                        this.uploaded = false
+                        // only files with a table can count as smlm
+                        this.isSMLM = true
+                        loadWorker.terminate()
+                        console.log(data)
+                        resolve(file_info)
+                    }
+                    else if (data.progress) {
+                        update_callback({ running_progress: data.progress, running_status: (data.localization_num / 1000000).toFixed(1) + 'M localizations loaded' })
+                    }
+                }
+                loadWorker.onerror = () => {
+                    console.log('load error')
+                    reject('error occured during running.')
+                    loadWorker.terminate()
+                }
+                loadWorker.postMessage({ file: file, format: table_format })
+            });
         }
         import_smlm(file, is_append, update_callback) {
             // TODO: support append
@@ -77,7 +237,7 @@
                                                         console.log(table_file)
                                                         const fileReader = new FileReader();
                                                         fileReader.onload = (evt) => {
-                                                            update_callback({ running_status: 'file loaded, parsing the table...' })
+                                                            update_callback({ running_status: 'table loaded.' })
                                                             const arrayBuffer = evt.target.result
                                                             const uint8Arr = new Uint8Array(arrayBuffer)
                                                             let rows = file_info.rows
@@ -238,6 +398,8 @@
                                     // only files with a table can count as smlm
                                     this.isSMLM = true
                                     resolve(this.files)
+                                }).catch((e) => {
+                                    reject(e)
                                 })
 
                             }).catch((e) => {
@@ -300,6 +462,66 @@
             const name = file_name.split(".")[0] + "." + (mimeString.split('/')[1] || 'png')
             return new File([blob], name);
         }
+        saveAs(format, update_callback) {
+            let delimiter;
+            if (format === 'csv') delimiter = ','
+            else if (format === 'tsv') delimiter = '\n'
+            else throw new Error("Unsupported format " + format)
+            update_callback({ running: true, running_progress: 0, running_status: "Preparing..." })
+            return new Promise((resolve, reject) => {
+                for (let file_no = 0; file_no < this.files.length; file_no++) {
+                    const file_info = this.files[file_no]
+                    if (file_info.type == "table") {
+                        // TODO: compare with existing format, if the same format already exist, reuse it.
+                        try {
+                            const data = this.files[file_no].data
+                            const tableDict = data.tableDict
+                            const headers = []
+                            for (let i = 0; i < data.headers.length; i++) {
+                                headers.push(data.headers[i])
+                            }
+
+                            var loadWorker;
+                            if (typeof (Worker) !== "undefined") {
+                                loadWorker = new Worker("static/js/AsyncExport.js")
+                            } else {
+                                console.log("Web Worker not available")
+                                reject("Web Worker not available")
+                                return
+                            }
+                            console.log('loading...')
+                            update_callback({ running: true, running_status: 'running ' })
+
+                            loadWorker.onmessage = (e) => {
+                                var data = e.data
+                                if (data.error) {
+                                    reject(data.error)
+                                    loadWorker.terminate()
+                                }
+                                else if (data.progress) {
+                                    update_callback({ running: true, running_progress: data.progress, running_status: `Converting format...${data.progress.toFixed(1)}%` })
+                                }
+                                else if (data.file) {
+                                    update_callback({ running: false, running_progress: 100, running_status: "Export" })
+                                    resolve(data.file)
+                                    loadWorker.terminate()
+                                }
+                            }
+                            loadWorker.onerror = () => {
+                                console.log('load error')
+                                reject('error occured during running.')
+                                loadWorker.terminate()
+                            }
+                            loadWorker.postMessage({ headers, tableDict, delimiter, format, filename: this.manifest.name })
+
+                        }
+                        catch (e) {
+                            reject(e)
+                        }
+                    }
+                }
+            })
+        }
         save(update_callback) {
             console.log('preparing .smlm file')
             return new Promise((resolve, reject) => {
@@ -317,7 +539,13 @@
                             const format = JSON.parse(JSON.stringify(native_formats['smlm-table(binary)']))
                             const format_key = format.name + '-' + file_no
                             const data = this.files[file_no].data
-                            const tableUint8Arrays = data.tableUint8Arrays
+                            const tableDict = data.tableDict
+
+                            const tableUint8Arrays = []
+
+                            for (let i = 0; i < data.headers.length; i++) {
+                                tableUint8Arrays.push(new Uint8Array(tableDict[data.headers[i]].buffer))
+                            }
                             const rows = tableUint8Arrays[0].length / 4
                             const columns = tableUint8Arrays.length
 
@@ -339,9 +567,10 @@
                             const buffer = new ArrayBuffer(rows * columns * 4)
                             const uint8Arr = new Uint8Array(buffer)
                             console.log('binary file size: ' + rows * columns * 4)
+
                             // for(let c=0;c<columns;c++){
-                            //   for(let r=0;r<rows;r++){
-                            //     uint8Arr[r*columns+c] = tableUint8Arrays[c][r]
+                            //   for(let r=0;r<rows*4;r++){
+                            //     uint8Arr[4*rows*c+r] = tableUint8Arrays[c][r]
                             //   }
                             // }
                             for (let c = 0; c < columns; c++) {
@@ -426,29 +655,29 @@
             // Required
             "type": "image",
             "extension": ".png",
-            "type": "binary",
+            "mode": "binary",
         },
         "jpg": {
             // Required
             "type": "image",
             "extension": ".jpg",
-            "type": "binary",
+            "mode": "binary",
         },
         "jpeg": {
             // Required
             "type": "image",
             "extension": ".jpeg",
-            "type": "binary",
+            "mode": "binary",
         }
 
     }
 
     const supported_text_formats = {
-        "ThunderSTORM(csv)": {
+        "ThunderSTORM (csv)": {
             // Required
             "type": "table",
             "extension": ".csv",
-            "type": "text",
+            "mode": "text",
             "dtype": "float32",
             "delimiter": ",",
             "comments": "",
@@ -458,14 +687,14 @@
             "header_transform": { "x [nm]": "x", "y [nm]": "y", "z [nm]": "z", "uncertainty_xy [nm]": "uncertainty_xy", "uncertainty_z [nm]": "uncertainty_z" },
 
             // Optional
-            "name": "ThunderSTORM(csv)",
+            "name": "ThunderSTORM (csv)",
             "description": "a csv format used in thunderSTORM"
         },
-        "ThunderSTORM(xls)": {
+        "ThunderSTORM (xls)": {
             // Required
             "type": "table",
-            "extension": ".csv",
-            "type": "text",
+            "extension": ".xls",
+            "mode": "text",
             "dtype": "float32",
             "delimiter": "\t",
             "comments": "",
@@ -475,8 +704,114 @@
             "header_transform": { "x [nm]": "x", "y [nm]": "y", "z [nm]": "z", "uncertainty_xy [nm]": "uncertainty_xy", "uncertainty_z [nm]": "uncertainty_z" },
 
             // Optional
+            "name": "ThunderSTORM (xls)",
             "description": "a xls format used in thunderSTORM"
-        }
+        },
+        "ZEISS (txt)": {
+            // Required
+            "type": "table",
+            "extension": ".txt",
+            "mode": "text",
+            "dtype": "float32",
+            "delimiter": "\t",
+            "comments": "",
+            // specify which row is the header, set to -1 if there is no header
+            "header_row": 0,
+            // specify how to transform the headers to the standard header defined in smlm format,
+            "header_transform": { "Position X [nm]": "x", "Position Y [nm]": "y", "Position Z [nm]": "z", "First Frame": "frame" },
+
+            // Optional
+            "name": "ZEISS (txt)",
+            "description": "a txt format used in ZEISS microscope"
+        },
+        "ZEISSv1 (csv)": {
+            // Required
+            "type": "table",
+            "extension": ".csv",
+            "mode": "text",
+            "dtype": "float32",
+            "delimiter": ";",
+            "comments": "",
+            // specify which row is the header, set to -1 if there is no header
+            "header_row": 0,
+            // specify how to transform the headers to the standard header defined in smlm format,
+            "header_transform": { "Position X [nm]": "x", "Position Y [nm]": "y", "Position Z [nm]": "z", "First Frame": "frame" },
+
+            // Optional
+            "name": "ZEISSv1 (csv)",
+            "description": "a csv format used in ZEISS microscope"
+        },
+        "ZEISSv2 (csv)": {
+            // Required
+            "type": "table",
+            "extension": ".csv",
+            "mode": "text",
+            "dtype": "float32",
+            "delimiter": ";",
+            "comments": "",
+            // specify which row is the header, set to -1 if there is no header
+            "header_row": 0,
+            // specify how to transform the headers to the standard header defined in smlm format,
+            "header_transform": { "x [nm]": "x", "y [nm]": "y", "z [nm]": "z", "First Frame": "frame" },
+
+            // Optional
+            "name": "ZEISSv2 (csv)",
+            "description": "a csv format used for ZEISS microscope"
+        },
+        "RapidSTORM (txt)": {
+            // Required
+            "type": "table",
+            "extension": ".txt",
+            "mode": "text",
+            "dtype": "float32",
+            "delimiter": " ",
+            "comments": "",
+            // specify which row is the header, set to -1 if there is no header
+            "header_row": 0,
+
+            // specify how to transform the headers to the standard header defined in smlm format,
+            "header_transform": { "*all*": 'identifier="([\\w\\d\\-_]+)"', "Position-0-0": "x", "Position-1-0": "y", "Position-2-0": "z", "ImageNumber-0-0": "frame" },
+
+            // Optional
+            "name": "RapidSTORM (txt)",
+            "description": "a text format used in RapidSTORM"
+        },
+        "Space Seperated List (txt)": {
+            // Required
+            "type": "table",
+            "extension": ".txt",
+            "mode": "text",
+            "dtype": "float32",
+            "delimiter": " ",
+            "comments": "",
+            // specify which row is the header, set to -1 if there is no header
+            "header_row": 0,
+
+            // specify how to transform the headers to the standard header defined in smlm format,
+            "header_transform": {},
+
+            // Optional
+            "name": "Space Seperated List (txt)",
+            "description": "A list of coordinates seperated with space."
+        },
+        "Nikon NSTORM (txt)": {
+            // Required
+            "type": "table",
+            "extension": ".txt",
+            "mode": "text",
+            "dtype": "float32",
+            "delimiter": "\t",
+            "comments": "",
+            // specify which row is the header, set to -1 if there is no header
+            "header_row": 0,
+            // specify how to transform the headers to the standard header defined in smlm format,
+            "header_transform": { "X": "x", "Y": "y", "Z": "z", "Frame": "frame" },
+
+            // Optional
+            "name": "Nikon NSTORM (txt)",
+            "description": "a txt format exported from Nikon NSTORM software"
+        },
+
     }
 
     const native_formats = {
@@ -484,13 +819,13 @@
             // Required
             "name": "smlm-table(binary)",
             "type": "table",
-            "type": "binary",
+            "mode": "binary",
             "extension": ".bin",
             "columns": 0,
             "headers": [],
             "dtype": [],
             "shape": [],
-            "units": {},
+            "units": [],
             // Optional
             "name": "smlm-table(binary)",
             "description": "the default smlm format for localization tables"
@@ -498,7 +833,7 @@
         "smlm-image(binary)": {
             // Required
             "type": "image",
-            "type": "binary",
+            "mode": "binary",
             "extension": ".raw",
             "dtype": "uint32",
             "shape": [512, 512, null],
@@ -510,7 +845,7 @@
         "smlm-table(csv)": {
             // Required
             "type": "table",
-            "type": "text",
+            "mode": "text",
             "extension": ".csv",
             "dtype": "float32",
             "delimiter": ",",
@@ -562,6 +897,7 @@
         "metadata": {},
         "exposure": -1,
     }
+
 
     class ImJoyPlugin {
         setup() {
@@ -633,7 +969,7 @@
                 }
                 api.showStatus("histogram rendered.")
                 await api.createWindow({
-                    src: "https://kitware.github.io/itk-vtk-viewer/app/", 
+                    src: "https://kitware.github.io/itk-vtk-viewer/app/",
                     data: {
                         image: {
                             _rtype: 'ndarray',
@@ -654,7 +990,79 @@
 
         }
 
-        async load(selectedFile) {
+        async load(file) {
+            if (file.name.endsWith('.smlm')) {
+                return await this.loadSmlmFile(file)
+            }
+            else {
+                return await new Promise((resolve, reject) => {
+                    var r = new FileReader();
+                    var blob = file.slice(0, 100);
+                    r.onload = (evt) => {
+                        let textFormat = null;
+                        const sampleLines = evt.target.result.split('\n').slice(0, 2)
+                        if (sampleLines[0].includes('x [nm]') && sampleLines[0].includes('\t')) {
+                            textFormat = 'ThunderSTORM (xls)'
+                        }
+                        else if (sampleLines[0].includes('x [nm]') && sampleLines[0].includes(',')) {
+                            textFormat = 'ThunderSTORM (csv)'
+                        }
+                        else if (sampleLines[0].includes('Position X [nm]') && sampleLines[0].includes('\t')) {
+                            textFormat = 'ZEISS (txt)'
+                        }
+                        else if (sampleLines[0].includes('Position X [nm]') && sampleLines[0].includes(';')) {
+                            textFormat = 'ZEISSv1 (csv)'
+                        }
+                        else if (sampleLines[0].includes('x [nm]') && sampleLines[0].includes(';')) {
+                            textFormat = 'ZEISSv2 (csv)'
+                        }
+                        else if (sampleLines[0].startsWith('#') && sampleLines[0].includes('identifier=')) {
+                            textFormat = 'RapidSTORM (txt)'
+                        }
+                        else if (sampleLines[0].includes('x ') && sampleLines[0].includes('y ')) {
+                            textFormat = 'Space Seperated List (txt)'
+                        }
+                        else if (sampleLines[0].includes('X\t') && sampleLines[0].includes('\tY\t') && sampleLines[0].includes('Channel Name')) {
+                            textFormat = 'Nikon NSTORM (txt)'
+                        }
+                        else if (file.name.endsWith('.png')) {
+                            textFormat = 'png'
+                        }
+                        else if (file.name.endsWith('.jpg')) {
+                            textFormat = 'jpg'
+                        }
+                        else if (file.name.endsWith('.jpeg')) {
+                            textFormat = 'jpeg'
+                        }
+                        if (textFormat) {
+                            resolve(this.loadTextFile(file, textFormat))
+                        }
+                        else {
+                            reject('File format is not recognized: ' + file.name)
+                        }
+
+                    };
+                    r.onerror = (e) => {
+                        console.error(e)
+                        reject(`Failed to read file: ${e}`)
+                    }
+                    r.readAsText(blob);
+                })
+            }
+
+        }
+
+        async loadTextFile(file, format) {
+            console.time('load text file', format);
+            const smlm = new smlmFile();
+            const file_info = await smlm.import_text_table(file, format, info, false, api.showMessage)
+            console.timeEnd('load text file');
+            console.log(file_info)
+            const metadata = file_info.metadata
+            return smlm
+        }
+
+        async loadSmlmFile(selectedFile) {
             const smlm = new smlmFile();
             console.time('import smlm')
             await smlm.import_smlm(selectedFile, false, (status) => {
@@ -668,10 +1076,10 @@
             return smlm
         }
 
-        async show(file, windowId){
+        async show(file, windowId) {
             const smlm = await this.load(file)
             const viewer = await api.createWindow({
-                src: "https://kitware.github.io/itk-vtk-viewer/app/",
+                src: "http://localhost:8090/",//"https://kitware.github.io/itk-vtk-viewer/app/"
                 window_id: windowId
             })
             const sets = []
@@ -692,8 +1100,8 @@
             this.viewer = viewer;
         }
 
-        async capture(){
-            if(!this.viewer) throw new Error("no viewer is created");
+        async capture() {
+            if (!this.viewer) throw new Error("no viewer is created");
             return await this.viewer.captureImage();
         }
 
