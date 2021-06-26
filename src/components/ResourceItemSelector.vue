@@ -45,7 +45,12 @@
                 :key="name"
               >
                 {{ name }}: <br />
-                <a @click="addTagSelection(t)" v-for="t in tags" :key="t">
+                <a
+                  @click="addTagSelection(t)"
+                  v-for="t in tags"
+                  :key="t"
+                  style="display:inline-block;"
+                >
                   <b-tag style="cursor: pointer;" rounded>{{ t }}</b-tag>
                 </a>
               </div>
@@ -58,6 +63,7 @@
                   @click="addTagSelection(t)"
                   v-for="t in categories.other"
                   :key="t"
+                  style="display:inline-block;"
                 >
                   <b-tag rounded style="cursor: pointer;">{{ t }}</b-tag>
                 </a>
