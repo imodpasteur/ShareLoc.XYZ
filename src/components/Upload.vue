@@ -18,7 +18,7 @@
       v-model="stepIndex"
       label-position="right"
     >
-      <b-step-item :disabled="rdfYaml" label="Select file" icon="file">
+      <b-step-item :disabled="rdfYaml" label="Start" icon="file">
         <b-field label="Option 1: Create a new deposit" expanded>
           <b-button
             style="text-transform:none;"
@@ -49,7 +49,7 @@
         >
       </b-step-item>
 
-      <b-step-item label="Edit & Review" icon="pencil" :disabled="!rdfYaml">
+      <b-step-item label="Edit" icon="pencil" :disabled="!rdfYaml">
         <section v-if="stepIndex == 1">
           <dataset
             @submit="submitRDF"
@@ -59,7 +59,7 @@
         </section>
       </b-step-item>
 
-      <b-step-item label="Export & Upload" icon="upload">
+      <b-step-item label="Upload" icon="upload">
         <b-field
           label="RDF content"
           style="height: 260px; overflow: auto;"
