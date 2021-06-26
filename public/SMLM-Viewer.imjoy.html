@@ -1,5 +1,5 @@
 <config lang="json">
-{
+    {
     "name": "SMLM-Viewer",
     "description": "SMLM viewer",
     "type": "web-worker",
@@ -7,7 +7,7 @@
     "ui": "",
     "version": "0.0.1",
     "cover": "",
-    "icon": "extension",
+    "icon": "eye-outline",
     "inputs": null,
     "outputs": null,
     "api_version": "0.1.8",
@@ -15,42 +15,80 @@
     "permissions": [],
     "requirements": ["https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"],
     "dependencies": []
-}
+    }
 </config>
 
 <script lang="javascript">
 
-async function fetchFile(url, showMessage, showProgress){
-    const response = await axios({
-    url,
-    method: 'GET',
-    responseType: 'blob',
-    onDownloadProgress: (progressEvent) => {
-        showMessage(`Downloading weights ${progressEvent.loaded}/${progressEvent.total}`);
-        if(progressEvent.total)
-        showProgress(progressEvent.loaded/progressEvent.total)
-    }
-    })
-    const filename = url.split('/').pop().split('#')[0].split('?')[0];
-    const blob = new Blob([response.data]);
-    const file = new File([blob], filename, {type: "application/octet-stream", lastModified: Date.now()});
-    return file
-}
-
-class ImJoyPlugin {
-    async setup() {
-        api.log('initialized')
+    async function fetchFile(url, showMessage, showProgress) {
+        const response = await axios({
+            url,
+            method: 'GET',
+            responseType: 'blob',
+            onDownloadProgress: (progressEvent) => {
+                showMessage(`Downloading file ${progressEvent.loaded}/${progressEvent.total}`);
+                if (progressEvent.total)
+                    showProgress(progressEvent.loaded / progressEvent.total)
+            }
+        })
+        const filename = url.split('/').pop().split('#')[0].split('?')[0];
+        const blob = new Blob([response.data]);
+        const file = new File([blob], filename, { type: "application/octet-stream", lastModified: Date.now() });
+        return file
     }
 
-    async run(ctx) {
-        ctx.data.download_url = 'https://imjoy-s3.pasteur.fr/imod-data-pasteur/059917b48293e1b1597ea258094fe259/data.smlm'
-        const file = await fetchFile(ctx.data.download_url, console.log, api.showProgress)
-        // const p = await api.getPlugin("SMLM File IO")
-        const p = await api.getPlugin('https://raw.githubusercontent.com/imjoy-team/imjoy-plugins/master/repository/smlmFileIO.imjoy.html')
-        await p.run({data: file})
-    }
-}
+    class ImJoyPlugin {
+        async setup() {
+            api.log('initialized')
+        }
 
-api.export(new ImJoyPlugin())
+        async run(ctx) {
+            if (ctx.data.download_url) {
+                const file = await fetchFile(ctx.data.download_url, api.showMessage, api.showProgress)
+                await this.previewFile(file);
+            }
+
+        }
+
+        async previewFile(file, type) {
+            await api.showMessage("Rendering file...")
+            const smlmPlugin = await api.getPlugin("SMLM File IO");
+
+            const smlm = await smlmPlugin.load(file)
+            if (type === 'itk-vtk-viewer') {
+                const viewer = await api.createWindow({
+                    src: "https://kitware.github.io/itk-vtk-viewer/app/",
+                })
+                const sets = []
+                let is3d = false;
+                for (let f of smlm.files) {
+                    sets.push(this.toNdArray(f))
+                    if (f.data.headers.includes('z')) {
+                        is3d = true
+                    }
+                }
+                await viewer.setPointSets(sets);
+                await viewer.setBackgroundColor([0, 0, 0]);
+                await viewer.setAxesEnabled(false);
+                if (is3d)
+                    await viewer.setViewMode('Volume');
+                else
+                    await viewer.setViewMode('ZPlane');
+                this.viewer = viewer;
+            }
+            else {
+                for (let f of smlm.files) {
+                    this.viewer = await api.createWindow({
+                        name: file.name,
+                        type: "3D Histogram",
+                        data: f.data,
+                    })
+                }
+            }
+            // eslint-disable-next-line no-useless-catch
+
+        }
+    }
+
+    api.export(new ImJoyPlugin())
 </script>
-    

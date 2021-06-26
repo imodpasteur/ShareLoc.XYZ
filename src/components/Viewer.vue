@@ -75,7 +75,7 @@ export default {
           const file = await this.fetchFile(resourceItem.download_url);
           const api = window.imjoy.api;
           const baseUrl = window.location.origin + window.location.pathname;
-          api.getPlugin(baseUrl + "SMLMFileIO.imjoy.html").then(() => {
+          api.getPlugin(baseUrl + "SMLM File IO.imjoy.html").then(() => {
             this.previewFile(file);
           });
         } catch (e) {
@@ -116,7 +116,7 @@ export default {
       });
       return file;
     },
-    async previewFile(file) {
+    async previewFile(file, type) {
       const api = window.imjoy.api;
       const smlmPlugin = await api.getPlugin("SMLM File IO");
       const container = document.getElementById(this.containerId);
@@ -126,8 +126,36 @@ export default {
         container
       });
       try {
-        await smlmPlugin.show(file, this.containerId);
-        this.smlmPlugin = smlmPlugin;
+        const smlm = await smlmPlugin.load(file);
+        if (type === "itk-vtk-viewer") {
+          const viewer = await api.createWindow({
+            src: "https://kitware.github.io/itk-vtk-viewer/app/",
+            window_id: this.containerId
+          });
+          const sets = [];
+          let is3d = false;
+          for (let f of smlm.files) {
+            sets.push(this.toNdArray(f));
+            if (f.data.headers.includes("z")) {
+              is3d = true;
+            }
+          }
+          await viewer.setPointSets(sets);
+          await viewer.setBackgroundColor([0, 0, 0]);
+          await viewer.setAxesEnabled(false);
+          if (is3d) await viewer.setViewMode("Volume");
+          else await viewer.setViewMode("ZPlane");
+          this.viewer = viewer;
+        } else {
+          for (let f of smlm.files) {
+            this.viewer = await api.createWindow({
+              name: file.name,
+              src: "http://127.0.0.1:8080/3DHistogram.imjoy.html",
+              data: f.data,
+              window_id: this.containerId
+            });
+          }
+        }
         // eslint-disable-next-line no-useless-catch
       } catch (e) {
         throw e;

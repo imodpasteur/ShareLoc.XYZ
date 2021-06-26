@@ -49,10 +49,10 @@ export const store = new Vuex.Store({
       }
     },
     async fetchResourceItems(context, { manifest_url, repo, transform }) {
-      // if (context.state.loadedUrl === manifest_url) {
-      //   console.log("manifest already loaded");
-      //   return;
-      // }
+      if (context.state.loadedUrl === manifest_url) {
+        console.log("manifest already loaded");
+        return;
+      }
       const items = await context.state.zenodoClient.getResourceItems({});
       items.map(item => context.commit("addResourceItem", item));
 
@@ -77,8 +77,12 @@ export const store = new Vuex.Store({
         //   item.source = concatAndResolveUrl(item.root_url, item.source);
         context.commit("addResourceItem", item);
       }
-      if (transform) context.commit("normalizeItems", transform);
-      context.state.loadedUrl = manifest_url;
+      if (transform) {
+        context.commit("normalizeItems", transform);
+        // only set to load when the items are transformed
+        // for the viewer, the items won't be transformed
+        context.state.loadedUrl = manifest_url;
+      }
     }
   },
   mutations: {
@@ -108,6 +112,20 @@ export const store = new Vuex.Store({
       if (index >= 0) state.resourceItems.splice(index, 1);
     },
     normalizeItems(state, transform) {
+      // add default links
+      state.resourceItems.map(item => {
+        const setting = siteConfig.resource_categories.filter(
+          cat => cat.type === item.type
+        )[0];
+        if (setting && setting.default_links) {
+          item.links = item.links || [];
+          for (let link of setting.default_links) {
+            if (state.resourceItems.filter(item => item.id === link)[0])
+              item.links.push(link);
+            else console.warn("Default link item not foud: " + link);
+          }
+        }
+      });
       state.resourceItems = state.resourceItems.map(transform);
     }
   }

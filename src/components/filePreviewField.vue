@@ -112,7 +112,7 @@ export default {
     this.item.value && this.$emit("input", this.item.value);
     const api = window.imjoy.api;
     const baseUrl = window.location.origin + window.location.pathname;
-    api.getPlugin(baseUrl + "SMLMFileIO.imjoy.html");
+    api.getPlugin(baseUrl + "SMLM File IO.imjoy.html");
   },
   methods: {
     removeScreenshot(index) {

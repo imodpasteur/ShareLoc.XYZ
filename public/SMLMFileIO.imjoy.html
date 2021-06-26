@@ -12,8 +12,7 @@
     "icon": "🙀",
     "requirements":
     ["https://cdn.rawgit.com/Stuk/jszip/9fb481ac/dist/jszip.min.js","https://cdn.rawgit.com/satazor/js-spark-md5/bbd1624a/spark-md5.min.js"],
-    "dependencies": ["imjoy-team/imjoy-plugins:Image Window", "imjoy-team/imjoy-plugins:2D Histogram",
-    "imjoy-team/imjoy-plugins:3D Histogram"]
+    "dependencies": []
     }
 </config>
 <script lang="javascript">
@@ -126,7 +125,7 @@
                     return
                 }
                 console.log('loading...')
-                update_callback({ running: true, running_status: 'running ' })
+                update_callback({ running: true, running_status: 'Running ' })
 
                 loadWorker.onmessage = (e) => {
                     var data = e.data
@@ -214,7 +213,7 @@
                             .then((meta_json) => {
                                 const manifest = JSON.parse(meta_json)
                                 const format_version = manifest.format_version
-                                update_callback({ running_status: 'manifest file loaded.' })
+                                update_callback({ running_status: 'Manifest file loaded.' })
                                 const data = {}
                                 const load_files = async () => {
                                     //TODO: render the files with a different async loader
@@ -222,10 +221,10 @@
                                         await new Promise((resolve2, reject2) => {
                                             const file_info = manifest.files[file_no]
                                             if (file_info.type == "table") {
-                                                update_callback({ running_status: 'loading smlm file...' })
+                                                update_callback({ running_status: 'Loading smlm file...' })
                                                 const table_file = zip.file(file_info.name)
                                                 const format_key = file_info.format
-                                                update_callback({ running_status: 'uncompressing file: ' + file_info.name })
+                                                update_callback({ running_status: 'Uncompressing file: ' + file_info.name })
                                                 if (!table_file && manifest.formats[format_key]) {
                                                     reject2('table file ' + manifest.table_file + ' is not present in the zip file')
                                                     return
@@ -237,7 +236,7 @@
                                                         console.log(table_file)
                                                         const fileReader = new FileReader();
                                                         fileReader.onload = (evt) => {
-                                                            update_callback({ running_status: 'table loaded.' })
+                                                            update_callback({ running_status: 'Table loaded.' })
                                                             const arrayBuffer = evt.target.result
                                                             const uint8Arr = new Uint8Array(arrayBuffer)
                                                             let rows = file_info.rows
@@ -346,7 +345,7 @@
                                                     })
                                             }
                                             else if (file_info.type == "image") {
-                                                update_callback({ running_status: 'loading image file...' })
+                                                update_callback({ running_status: 'Loading image file...' })
 
                                                 const format_key = file_info.format
 
@@ -357,7 +356,7 @@
                                                     reject2('image file ' + manifest.image_file + ' is not present in the zip file.')
                                                     return
                                                 }
-                                                update_callback({ running_status: 'uncompressing file: ' + file_info.name })
+                                                update_callback({ running_status: 'Uncompressing file: ' + file_info.name })
                                                 image_file.async("blob")
                                                     .then((image_file) => {
 
@@ -490,7 +489,7 @@
                                 return
                             }
                             console.log('loading...')
-                            update_callback({ running: true, running_status: 'running ' })
+                            update_callback({ running: true, running_status: 'Running ' })
 
                             loadWorker.onmessage = (e) => {
                                 var data = e.data
@@ -625,7 +624,7 @@
                         }
                     },
                         (mdata) => {
-                            update_callback({ running_status: "making zip files... ", running_progress: mdata.percent })
+                            update_callback({ running_status: "Making zip files... ", running_progress: mdata.percent })
                         }
                     ).then((zipBlob) => {
                         const zip_file_name = this.manifest.name
@@ -968,7 +967,8 @@
                     canvas_data[s] = canvas_data[s] + 1
                 }
                 api.showStatus("histogram rendered.")
-                await api.createWindow({
+                console.timeEnd('plot histogram')
+                return await api.createWindow({
                     src: "https://kitware.github.io/itk-vtk-viewer/app/",
                     data: {
                         image: {
@@ -981,7 +981,7 @@
                 })
                 // const image = {type: 'image/grayscale', array: canvas_data, height: height, width: width} // table: files[0].data
                 // await api.createWindow({name: 'Histogram', type: 'Image Window', data: image, w: 10, h: 10, config: {}, window_id: window_id})
-                console.timeEnd('plot histogram')
+                
                 //return my
             } catch (e) {
                 console.error(e)
@@ -991,11 +991,12 @@
         }
 
         async load(file) {
+            let data;
             if (file.name.endsWith('.smlm')) {
-                return await this.loadSmlmFile(file)
+                data = await this.loadSmlmFile(file)
             }
             else {
-                return await new Promise((resolve, reject) => {
+                data = await new Promise((resolve, reject) => {
                     var r = new FileReader();
                     var blob = file.slice(0, 100);
                     r.onload = (evt) => {
@@ -1049,6 +1050,7 @@
                     r.readAsText(blob);
                 })
             }
+            return {files: data.files, manifest: data.manifest}
 
         }
 
@@ -1079,7 +1081,7 @@
         async show(file, windowId) {
             const smlm = await this.load(file)
             const viewer = await api.createWindow({
-                src: "http://localhost:8090/",//"https://kitware.github.io/itk-vtk-viewer/app/"
+                src: "https://kitware.github.io/itk-vtk-viewer/app/",
                 window_id: windowId
             })
             const sets = []
@@ -1098,6 +1100,7 @@
             else
                 await viewer.setViewMode('ZPlane');
             this.viewer = viewer;
+            
         }
 
         async capture() {

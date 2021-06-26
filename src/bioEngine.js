@@ -47,7 +47,9 @@ export async function setupBioEngine() {
       //     imjoy.wm.windows.push(w);
       //   }
       // });
-
+      const baseUrl = window.location.origin + window.location.pathname;
+      await app.loadPlugin(baseUrl + "SMLMFileIO.imjoy.html");
+      await app.loadPlugin(baseUrl + "3DHistogram.imjoy.html");
       app.imjoy.pm
         .reloadPluginRecursively({
           // uri: "http://localhost:9090/Jupyter-Engine-Manager.imjoy.html"

@@ -439,7 +439,6 @@ function normalizeItem(self, item) {
       url: item.git_repo,
       show_on_hover: true
     });
-
   if (item.type === "application") {
     item.apps.unshift({
       name: "Run",
@@ -883,6 +882,16 @@ export default {
         this.$forceUpdate();
       }, 250)();
     },
+    showLoader(enable) {
+      if (enable)
+        this.loadingComponent = this.$buefy.loading.open({ canCancel: true });
+      else {
+        if (this.loadingComponent) {
+          this.loadingComponent.close();
+          this.loadingComponent = null;
+        }
+      }
+    },
     showAboutDialog() {
       this.showInfoDialogMode = "about";
       this.infoDialogTitle = "About";
@@ -960,19 +969,19 @@ export default {
       }
     },
     showResourceItemInfo(mInfo) {
-      // this.$router.push({ name: "Viewer", params: { resourceId: mInfo.id } });
-      this.showInfoDialogMode = "viewer";
-      mInfo._focus = focus;
-      this.selectedResourceItem = mInfo;
-      this.infoDialogTitle = this.selectedResourceItem.name;
-      this.viewerUrl = `https://viewer.shareloc.xyz/#/?file=${mInfo.download_url}`;
-      this.infoDialogFullscreen = true;
-      this.$modal.show("info-dialog");
-      if (mInfo.id) {
-        const query = Object.assign({}, this.$route.query);
-        query.id = mInfo.id;
-        this.$router.replace({ query: query }).catch(() => {});
-      }
+      this.$router.push({ name: "Viewer", params: { resourceId: mInfo.id } });
+      // this.showInfoDialogMode = "viewer";
+      // mInfo._focus = focus;
+      // this.selectedResourceItem = mInfo;
+      // this.infoDialogTitle = this.selectedResourceItem.name;
+      // this.viewerUrl = `https://viewer.shareloc.xyz/#/?file=${mInfo.download_url}`;
+      // this.infoDialogFullscreen = true;
+      // this.$modal.show("info-dialog");
+      // if (mInfo.id) {
+      //   const query = Object.assign({}, this.$route.query);
+      //   query.id = mInfo.id;
+      //   this.$router.replace({ query: query }).catch(() => {});
+      // }
     },
     updateStatus(status) {
       if (status.loading === true) this.showMessage("Loading...");
@@ -1015,9 +1024,9 @@ export default {
       window.scrollTo({ top: top - 100, behavior: "smooth", block: "start" });
     },
     updateResourceItemList(models) {
-      if (this.initialized && models.length <= 0) {
-        this.showMessage("No item found.");
-      }
+      // if (this.initialized && models.length <= 0) {
+      //   this.showMessage("No item found.");
+      // }
       this.selectedItems = models;
     },
     updateViewByUrlQuery() {
