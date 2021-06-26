@@ -1025,15 +1025,15 @@
                         else if (sampleLines[0].includes('X\t') && sampleLines[0].includes('\tY\t') && sampleLines[0].includes('Channel Name')) {
                             textFormat = 'Nikon NSTORM (txt)'
                         }
-                        else if (file.name.endsWith('.png')) {
-                            textFormat = 'png'
-                        }
-                        else if (file.name.endsWith('.jpg')) {
-                            textFormat = 'jpg'
-                        }
-                        else if (file.name.endsWith('.jpeg')) {
-                            textFormat = 'jpeg'
-                        }
+                        // else if (file.name.endsWith('.png')) {
+                        //     textFormat = 'png'
+                        // }
+                        // else if (file.name.endsWith('.jpg')) {
+                        //     textFormat = 'jpg'
+                        // }
+                        // else if (file.name.endsWith('.jpeg')) {
+                        //     textFormat = 'jpeg'
+                        // }
                         if (textFormat) {
                             resolve(this.loadTextFile(file, textFormat))
                         }
