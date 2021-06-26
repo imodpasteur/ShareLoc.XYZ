@@ -43,7 +43,7 @@
           ></button>
         </span>
         <div :id="containerId"></div>
-        <span v-if="smlmPlugin">
+        <span v-if="viewer">
           <b-button
             style="text-transform:none;display:inline-block;"
             class="button is-primary is-small"
@@ -98,7 +98,7 @@ export default {
     }
   },
   data: () => ({
-    smlmPlugin: null,
+    viewer: null,
     value: undefined,
     screenshots: [],
     containerId:
@@ -121,7 +121,7 @@ export default {
       this.$emit("input", this.value);
     },
     async capture() {
-      const img = await this.smlmPlugin.capture();
+      const img = await this.viewer.captureImage();
       if (!this.screenshots.includes(img)) this.screenshots.push(img);
       this.value.screenshots = this.screenshots;
       // this.selectedScreenshot = this.screenshots.length-1;
@@ -158,10 +158,17 @@ export default {
         container
       });
       try {
-        await smlmPlugin.show(file, this.containerId);
-        this.smlmPlugin = smlmPlugin;
-        // eslint-disable-next-line no-useless-catch
+        const smlm = await smlmPlugin.load(file, file.slice(0, 100));
+        this.viewer = await api.createWindow({
+          name: file.name,
+          src: "http://127.0.0.1:8080/3DHistogram.imjoy.html",
+          window_id: this.containerId
+        });
+        for (let f of smlm.files) {
+          this.viewer.show(f)
+        }
       } catch (e) {
+        console.error(e)
         throw e;
       } finally {
         loadingComponent.close();

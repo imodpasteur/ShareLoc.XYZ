@@ -126,7 +126,7 @@ export default {
         container
       });
       try {
-        const smlm = await smlmPlugin.load(file);
+        const smlm = await smlmPlugin.load(file, file.slice(0, 100));
         if (type === "itk-vtk-viewer") {
           const viewer = await api.createWindow({
             src: "https://kitware.github.io/itk-vtk-viewer/app/",
@@ -147,13 +147,13 @@ export default {
           else await viewer.setViewMode("ZPlane");
           this.viewer = viewer;
         } else {
+          this.viewer = await api.createWindow({
+            name: file.name,
+            src: "http://127.0.0.1:8080/3DHistogram.imjoy.html",
+            window_id: this.containerId
+          });
           for (let f of smlm.files) {
-            this.viewer = await api.createWindow({
-              name: file.name,
-              src: "http://127.0.0.1:8080/3DHistogram.imjoy.html",
-              data: f.data,
-              window_id: this.containerId
-            });
+            this.viewer.show(f)
           }
         }
         // eslint-disable-next-line no-useless-catch
