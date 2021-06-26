@@ -671,7 +671,7 @@
         async show(file, windowId){
             const smlm = await this.load(file)
             const viewer = await api.createWindow({
-                src: "http://localhost:8090/",//"https://kitware.github.io/itk-vtk-viewer/app/"
+                src: "https://kitware.github.io/itk-vtk-viewer/app/",
                 window_id: windowId
             })
             const sets = []
