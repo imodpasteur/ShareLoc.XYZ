@@ -122,7 +122,9 @@ export default {
     },
     async capture() {
       const img = await this.viewer.captureImage();
-      if (!this.screenshots.includes(img)) this.screenshots.push(img);
+      const config = await this.viewer.getViewConfig();
+      if (!this.screenshots.includes(img))
+        this.screenshots.push({ config, image: img });
       this.value.screenshots = this.screenshots;
       // this.selectedScreenshot = this.screenshots.length-1;
       this.$emit("input", this.value);

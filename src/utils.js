@@ -173,10 +173,10 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
       };
   });
   const description =
-    `<a href="https://shareloc.xyz/#/p/zenodo:${encodeURIComponent(
+    `<a href="https://shareloc.xyz/#/r/zenodo:${encodeURIComponent(
       rdf.config._deposit.id
     )}"><span class="label label-success">Preview in Shareloc.XYZ</span></a><br>` +
-    (docstring || `<p>${docstring}</p>`);
+    (docstring && `<p>${docstring}</p>`);
   const keywords = ["shareloc.xyz", "shareloc.xyz:" + rdf.type];
   const metadata = {
     title: rdf.name,
@@ -336,6 +336,7 @@ export class ZenodoClient {
     page = page || 1;
     type = type || "all";
     keywords = keywords || [];
+    const community = null; //'shareloc-xyz'; TODO: Enable this!!!
     if (!keywords.includes("shareloc.xyz")) keywords.push("shareloc.xyz");
     size = size || 20;
     sort = sort || "mostviewed";
@@ -347,8 +348,9 @@ export class ZenodoClient {
         : "") +
       (query ? "&q=" + query : "");
     const url =
-      `${this.baseURL}/api/records/?communities=shareloc-xyz&sort=${sort}&page=${page}&size=${size}` +
-      additionalKeywords; //&all_versions
+      `${this.baseURL}/api/records/?${
+        community ? "communities=" + community : ""
+      }&sort=${sort}&page=${page}&size=${size}` + additionalKeywords; //&all_versions
     const response = await fetch(url);
     const results = JSON.parse(await response.text());
     const hits = results.hits.hits;

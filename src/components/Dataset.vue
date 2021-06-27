@@ -85,6 +85,7 @@ export default {
   computed: {
     components: () => ({ TagInputField, DropFilesField, FilePreviewField }),
     ...mapState({
+      resourceItems: state => state.resourceItems,
       allTags: state => state.allTags
     })
   },
@@ -131,8 +132,8 @@ export default {
         authors: "Authors",
         // source: "Source",
         // git_repo: "Git Repository",
-        tags: "Tags"
-        // links: "Links"
+        tags: "Tags",
+        links: "Links"
       };
       const values = result.values;
       this.rdf = {};
@@ -165,8 +166,10 @@ export default {
       // Add screenshots
       if (editedFiles.screenshots) {
         this.rdf.covers = this.rdf.covers || [];
-        for (let img of editedFiles.screenshots) {
-          const blob = dataURLtoFile(img);
+        this.rdf.config = this.rdf.config || {};
+        for (let screenshoot of editedFiles.screenshots) {
+          const { image, config } = screenshoot;
+          const blob = dataURLtoFile(image);
           const fileName = "screenshot-" + randId();
           const file = new File([blob], fileName + ".png", {
             type: blob.type
@@ -175,7 +178,7 @@ export default {
 
           const resizedImage = await resizeImage({
             file,
-            maxSize: 256
+            maxSize: 512
           });
 
           const fileSmall = new File(
@@ -186,7 +189,9 @@ export default {
             }
           );
           editedFiles.push(fileSmall);
-
+          // save view config for screenshots
+          this.rdf.config.view_config = this.rdf.config.view_config || {};
+          this.rdf.config.view_config[fileName] = config;
           this.rdf.covers.push("./" + fileName + "_thumbnail.png");
         }
         delete editedFiles.screenshots;
@@ -284,17 +289,17 @@ export default {
           value: this.rdf.config._docstring,
           help: "Documentation in markdown format",
           isRequired: false
+        },
+        {
+          label: "Links",
+          type: "tags",
+          value: this.rdf.links,
+          placeholder: "Add a link (resource item ID)",
+          options: this.resourceItems.map(item => item.id),
+          allow_new: true,
+          icon: "vector-link",
+          isRequired: false
         }
-        // {
-        //   label: "Links",
-        //   type: "tags",
-        //   value: this.rdf.links,
-        //   placeholder: "Add a link (resource item ID)",
-        //   options: this.resourceItems.map(item => item.id),
-        //   allow_new: true,
-        //   icon: "vector-link",
-        //   isRequired: false
-        // }
       ]);
     }
   }

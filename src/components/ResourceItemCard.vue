@@ -31,7 +31,10 @@
       </div>
       <div class="card-content">
         <div class="content">
-          <h4 class="resource-item-title" @click="showResourceItemInfo">
+          <h4
+            class="resource-item-title truncated"
+            @click="showResourceItemInfo"
+          >
             <img
               v-if="icon.type === 'img'"
               style="border-radius: 4px; background: #ffffffd0;"
@@ -45,10 +48,7 @@
               :src="'/static/anonymousAnimals/' + icon.src + '.png'"
             />
             <b-icon v-else class="item-icon" :icon="icon.src" />
-            <span>{{
-              resourceItem.name.slice(0, 30) +
-                (resourceItem.name.length > 30 ? "..." : "")
-            }}</span>
+            {{ resourceItem.name }}
           </h4>
           <div class="buttons floating-buttons">
             <app-icons
@@ -159,7 +159,7 @@ export default {
   methods: {
     etAl(authors) {
       authors = authors.map(author => {
-        return author.split(";")[0];
+        return author.name.split(";")[0];
       });
       if (authors.length < 3) {
         return authors.join(", ");
@@ -238,5 +238,12 @@ export default {
   position: absolute;
   left: 5px;
   bottom: 5px;
+}
+
+.truncated {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

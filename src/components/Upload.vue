@@ -13,6 +13,7 @@
       Zenodo at anytime without notice.
     </b-notification>
     <b-steps
+      class="width-limited"
       position="left"
       :has-navigation="false"
       v-model="stepIndex"
@@ -662,6 +663,8 @@ export default {
   overflow: auto;
   height: calc(100% - 48px);
   display: block;
+}
+.width-limited {
   max-width: 1080px;
   margin-left: auto !important;
   margin-right: auto !important;

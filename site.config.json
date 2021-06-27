@@ -80,6 +80,7 @@
   },
   "footnote": "ShareLoc.XZY is a community efforts for promoting open science",
   "partners": [],
+  "excluded_tags": ["shareloc.xyz", "shareloc.xyz:dataset", "smlm", "zenodo"],
   "resource_categories": [
     {
       "name": "Dataset",

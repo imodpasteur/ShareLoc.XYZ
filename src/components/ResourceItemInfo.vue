@@ -49,7 +49,7 @@
       :attachments="resourceItem.attachments"
       :focusTarget="resourceItem._focus"
     ></attachments> -->
-    <div class="markdown-body">
+    <div class="markdown-body width-limited">
       <markdown
         v-if="resourceItem.docs"
         :baseUrl="resourceItem.baseUrl"
@@ -228,6 +228,9 @@ export default {
   height: calc(100% - 50px);
   overflow: auto;
   overscroll-behavior: contain;
+}
+
+.width-limited {
   max-width: 1080px;
   margin-left: auto !important;
   margin-right: auto !important;

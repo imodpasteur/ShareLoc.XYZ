@@ -72,7 +72,7 @@
             this.noPan = false;
 
             this.staticMoving = false;
-            this.dynamicDampingFactor = 0.2;
+            this.dynamicDampingFactor = 10;
 
             this.minDistance = 0;
             this.maxDistance = Infinity;
@@ -1542,6 +1542,10 @@
     class ImJoyPlugin {
         async setup() {
             await load3DViewer(document.getElementById("histogram_canvas_3d"));
+        }
+
+        getViewConfig(){
+            return scopeParams;
         }
 
         captureImage() {
