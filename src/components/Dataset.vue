@@ -178,7 +178,7 @@ export default {
 
           const resizedImage = await resizeImage({
             file,
-            maxSize: 512
+            maxSize: 256
           });
 
           const fileSmall = new File(

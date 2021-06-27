@@ -23,7 +23,7 @@
               <div class="content has-text-centered">
                 <b-icon icon="upload" size="is-large"></b-icon>
 
-                Drop additional files here
+                Drag and drop files here
               </div>
             </section>
           </b-upload>
@@ -43,18 +43,33 @@
           ></button>
         </span>
         <div :id="containerId"></div>
-        <span v-if="viewer">
-          <b-button
-            style="text-transform:none;display:inline-block;"
-            class="button is-primary is-small"
-            @click="capture"
-            icon-left="camera"
-            >Take screenshot</b-button
-          >
-        </span>
-        <span>(You need to set at least one screenshot)</span>
-
-        <b-carousel
+        <label class="label">Take screenshots for the cover</label>
+        <div
+          v-if="viewer || (screenshots && screenshots.length > 0)"
+          class="snapshot-container"
+        >
+          <div v-for="(screenshot, i) in screenshots" :key="i" class="item">
+            <b-button
+              size="is-small"
+              class="close-button"
+              icon-left="close"
+              @click="removeScreenshot(i)"
+            >
+              Remove
+            </b-button>
+            <img class="image" :src="screenshot.image" alt="Screenshot" />
+          </div>
+          <a v-if="viewer" @click="capture" style="text-align: center;">
+            <img
+              class="image"
+              style="width:60px;margin-left:50px;margin-right: 50px;"
+              src="static/img/add.png"
+              alt="Add button"
+            />
+            Take Screenshot
+          </a>
+        </div>
+        <!-- <b-carousel
           v-if="screenshots && screenshots.length > 0"
           :progress="false"
           :autoplay="false"
@@ -71,11 +86,11 @@
             </b-button>
             <img
               style="width:100%;height:100%;"
-              :src="screenshot"
+              :src="screenshot.image"
               alt="Screenshot"
             />
           </b-carousel-item>
-        </b-carousel>
+        </b-carousel> -->
       </section>
 
       <p v-if="error" class="help is-danger">
@@ -123,8 +138,12 @@ export default {
     async capture() {
       const img = await this.viewer.captureImage();
       const config = await this.viewer.getViewConfig();
-      if (!this.screenshots.includes(img))
+      if (this.screenshots.filter(s => s.image === img).length <= 0)
         this.screenshots.push({ config, image: img });
+      else
+        window.imjoy.api.showMessage(
+          "Please change the image to another view and try again."
+        );
       this.value.screenshots = this.screenshots;
       // this.selectedScreenshot = this.screenshots.length-1;
       this.$emit("input", this.value);
@@ -163,6 +182,9 @@ export default {
           window_id: this.containerId,
           data: smlm.files
         });
+        if (this.screenshots.length <= 0) {
+          await this.capture();
+        }
       } catch (e) {
         console.error(e);
         throw e;
@@ -173,3 +195,32 @@ export default {
   }
 };
 </script>
+<style scoped>
+.snapshot-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.snapshot-container .item {
+  flex: 1;
+  max-width: 20%;
+  margin: 3px;
+  min-width: 120px;
+}
+
+.snapshot-container .item > .image {
+  border-radius: 6px;
+}
+.close-button {
+  opacity: 0;
+  position: absolute;
+  z-index: 1;
+  background: #ffffff8f;
+}
+
+.snapshot-container:hover .close-button {
+  opacity: 1;
+}
+</style>

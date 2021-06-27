@@ -1378,9 +1378,12 @@
     }
 
     var colors = [
+        [255,28,14],
         [0, 255, 0],
         [255, 0, 255],
-        [0, 0, 255]
+        [0, 0, 255],
+        [255, 255, 0],
+        [0, 255, 255],
     ];
 
     var files = [];
@@ -1494,8 +1497,8 @@
                     var colorN = 'color ' + N;
                     var alphaN = 'alpha ' + N;
                     scopeParams[activN] = true;
-                    scopeParams[colorN] = colors[colorIndex];
-                    scopeParams[alphaN] = 0.9;
+                    scopeParams[colorN] = fileIDs.length ===1?colors[0]:colors[colorIndex];
+                    scopeParams[alphaN] = 0.85;
                     colorFolder.add(scopeParams, activN).onChange(setRerender);
                     colorFolder.addColor(scopeParams, colorN).onChange(setRerender);
                     colorFolder.add(scopeParams, alphaN, 0, 1).onChange(setRerender);
