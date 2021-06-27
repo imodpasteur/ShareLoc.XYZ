@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/2DHistogram.imjoy.html"
   },
   {
-    "revision": "480a6cf0e219eb74f0ea3cd7ddef77b4",
+    "revision": "51bff9591aa1dd75c0fbb70f089bb00c",
     "url": "/3DHistogram.imjoy.html"
   },
   {
@@ -12,20 +12,24 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/CNAME"
   },
   {
-    "revision": "d2982a58ab603f1ccff5107832967f0a",
+    "revision": "4db0b8905dc1354d0a3dfc08b0e56b46",
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "00ad5fa33fa14d365462af46fe03e07d",
+    "revision": "61c7ec562c8c5fc78cd3df85fa5a7306",
     "url": "/SMLMFileIO.imjoy.html"
   },
   {
-    "revision": "90d80ac7566253d01ced",
-    "url": "/css/app.c21391f5.css"
+    "revision": "23d1965f7570d312c0c0",
+    "url": "/css/app.b2500d0d.css"
   },
   {
     "revision": "c2a246aceefd7954dc86",
     "url": "/css/chunk-vendors.0e62b2a1.css"
+  },
+  {
+    "revision": "8bfde320023aca21451c399adeb171c9",
+    "url": "/default_base_frame.html"
   },
   {
     "revision": "6a2ddad1092a0a1c326b6d0e738e682b",
@@ -48,12 +52,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/index.ejs"
   },
   {
-    "revision": "ce803cdd54753ffeca2f7959b8758a02",
+    "revision": "c76f000fe78b54e519a495bf0fa23d82",
     "url": "/index.html"
   },
   {
-    "revision": "90d80ac7566253d01ced",
-    "url": "/js/app.c4c6e5da.js"
+    "revision": "23d1965f7570d312c0c0",
+    "url": "/js/app.f53862c2.js"
   },
   {
     "revision": "c2a246aceefd7954dc86",
@@ -64,7 +68,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/manifest.json"
   },
   {
-    "revision": "8798d857780e8995177253d0059cc65a",
+    "revision": "393657b0cefcc8b1577e438b9266dc16",
     "url": "/manifest.shareloc.json"
   },
   {
