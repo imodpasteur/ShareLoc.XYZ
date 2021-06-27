@@ -180,8 +180,8 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
   else throw new Error("`_rdf_file` key is not found in the RDF config");
 
   if (rdf.attachments && rdf.attachments.datasets) {
-    const datasets = rdf.attachments.datasets.map(c =>
-      c.startsWith("http") ? c : new URL(c, baseUrl).href
+    const datasets = rdf.attachments.datasets.map(d =>
+      d.download_url ? d.download_url : new URL(d.name, baseUrl).href
     );
     datasets.forEach(dataset => {
       related_identifiers.push({
@@ -256,9 +256,7 @@ export function depositionToRdf(deposition) {
   for (let idf of metadata.related_identifiers) {
     if (idf.relation === "isCompiledBy" && idf.scheme === "url") {
       rdfFile = idf.identifier;
-      if (rdfFile.startsWith("file://")) {
-        rdfFile = rdfFile.replace("file://", deposition.links.bucket + "/");
-      } else if (rdfFile.includes(`${deposition.id}/files/`)) {
+      if (rdfFile.includes(`${deposition.id}/files/`)) {
         const fileName = rdfFile.split("/files/")[1];
         rdfFile = `${deposition.links.bucket}/${fileName}`;
       } else {
@@ -285,15 +283,14 @@ export function depositionToRdf(deposition) {
       idf.scheme === "url"
     ) {
       let url = idf.identifier;
-      if (url.startsWith("file://")) {
-        url = url.replace("file://", deposition.links.bucket + "/");
-      } else if (url.includes(`${deposition.id}/files/`)) {
+      if (url.includes(`${deposition.id}/files/`)) {
         const fileName = url.split("/files/")[1];
         url = `${deposition.links.bucket}/${fileName}`;
+        debugger;
+        datasets.push({ name: fileName, download_url: url });
       } else {
         throw new Error("Invalid file identifier: " + idf.identifier);
       }
-      datasets.push(url);
     } else if (
       idf.relation === "references" &&
       idf.scheme === "url" &&
@@ -303,8 +300,8 @@ export function depositionToRdf(deposition) {
       const id = idf.identifier.replace("https://shareloc.xyz/#/r/", "");
       links.push(decodeURIComponent(id));
     } else if (idf.relation === "isDocumentedBy" && idf.scheme === "url") {
-      // links
-      documentation = idf.identifier;
+      const fileName = idf.identifier.split("/files/")[1];
+      documentation = `${deposition.links.bucket}/${fileName}`;
     }
   }
   const description = metadata.notes.replace(additionalNote, "");

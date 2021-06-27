@@ -418,8 +418,6 @@ export default {
       this.$nextTick(async () => {
         this.rdfYaml = rdf.config._yaml;
         delete rdf.config._yaml;
-        console.log("=======>", rdf.covers);
-        debugger;
         this.zipPackage = rdf.config._zip;
         delete rdf.config._zip;
         this.rdf = rdf;

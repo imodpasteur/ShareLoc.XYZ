@@ -124,7 +124,6 @@ export default {
       return fields;
     },
     async formSubmitted(result) {
-      debugger;
       const rdfNameMapping = {
         type: "Type",
         name: "Name",
@@ -165,8 +164,8 @@ export default {
         const file = new File([blob], "README.md");
         this.rdf.documentation = "./README.md";
         editedFiles.push(file);
+        delete this.rdf.config._docstring;
       }
-      debugger;
       // Add screenshots
       if (editedFiles.screenshots) {
         this.rdf.covers = this.rdf.covers || [];
@@ -220,9 +219,14 @@ export default {
       const file = new File([blob], rdfFileName);
       editedFiles.push(file);
 
-      const dataFiles = editedFiles.filter(file => file.name.endsWith(".smlm"));
+      const dataFiles = editedFiles.filter(
+        file => file.name.endsWith(".smlm") || file.name.endsWith(".csv")
+      );
       this.rdf.attachments = this.rdf.attachments || {};
-      this.rdf.attachments.datasets = dataFiles.map(file => file.name);
+      if (dataFiles.length > 0)
+        this.rdf.attachments.datasets = dataFiles.map(file => {
+          return { name: file.name };
+        });
       // save the files to zip
       const zipPackage = new JSZip();
       editedFiles.map(file => {

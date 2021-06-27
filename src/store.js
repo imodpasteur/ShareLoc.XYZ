@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { randId } from "./utils";
-import { ZenodoClient, concatAndResolveUrl } from "./utils.js";
+import { ZenodoClient } from "./utils.js";
 import siteConfig from "../site.config.json";
 import spdxLicenseList from "spdx-license-list/full";
 
@@ -30,6 +30,7 @@ function normalizeItem(item) {
   item.covers = item.covers || [];
   item.authors = item.authors || [];
   item.description = item.description || "";
+  if (item.config._deposit) item.root_url = item.config._deposit.links.bucket;
   if (item.covers && !Array.isArray(item.covers)) {
     item.covers = [item.covers];
   }
@@ -41,9 +42,7 @@ function normalizeItem(item) {
       continue;
     }
     if (!cover.startsWith("http")) {
-      item.cover_images.push(
-        encodeURI(concatAndResolveUrl(item.root_url, cover))
-      );
+      item.cover_images.push(new URL(cover, item.root_url).href);
     } else {
       if (cover.includes(" ")) {
         item.cover_images.push(encodeURI(cover));

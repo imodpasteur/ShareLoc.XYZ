@@ -132,7 +132,7 @@ export default {
   }),
   created() {
     this.value = this.item.value;
-    this.screenshots = this.item.value && this.item.value.screenshots;
+    this.screenshots = (this.item.value && this.item.value.screenshots) || [];
     this.item.value && this.$emit("input", this.item.value);
     const api = window.imjoy.api;
     const baseUrl = window.location.origin + window.location.pathname;

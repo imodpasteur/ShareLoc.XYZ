@@ -258,7 +258,6 @@
       <about
         v-if="showInfoDialogMode === 'about'"
         @contribute="showUploadDialog"
-        @join="showJoinDialog"
       ></about>
       <upload
         v-else-if="showInfoDialogMode === 'upload'"
@@ -330,7 +329,7 @@ import ResourceItemList from "@/components/ResourceItemList.vue";
 import ResourceItemInfo from "@/components/ResourceItemInfo.vue";
 import Upload from "@/components/Upload.vue";
 import Attachments from "@/components/Attachments.vue";
-import CommentBox from "@/components/CommentBox.vue";
+// import CommentBox from "@/components/CommentBox.vue";
 import About from "@/views/About.vue";
 import Markdown from "@/components/Markdown.vue";
 
@@ -453,7 +452,7 @@ export default {
     "resource-item-list": ResourceItemList,
     "resource-item-selector": ResourceItemSelector,
     "resource-item-info": ResourceItemInfo,
-    "comment-box": CommentBox,
+    // "comment-box": CommentBox,
     upload: Upload,
     attachments: Attachments,
     markdown: Markdown,
@@ -643,10 +642,6 @@ export default {
       this.$router.push({ query: query }).catch(() => {});
     },
     switchPartner(partner) {
-      if (partner.isJoinButton) {
-        this.showJoinDialog();
-        return;
-      }
       this.selectedPartner = partner;
       this.selectedCategory = null; // select all
       if (this.selectedPartner.default_type) {
@@ -672,14 +667,6 @@ export default {
     restorePageScroll() {
       document.getElementsByTagName("html")[0].style.overflow = "auto";
       document.body.style.overflow = "auto";
-    },
-    showJoinDialog() {
-      this.infoDialogTitle = `Join ${this.siteConfig.site_name} as a community partner`;
-      this.infoCommentBoxTitle = this.infoDialogTitle;
-      this.infoMarkdownUrl = this.siteConfig.join_partners_url;
-      this.showInfoDialogMode = "markdown";
-      if (this.screenWidth < 700) this.infoDialogFullscreen = true;
-      this.$modal.show("info-dialog");
     },
     showAttachmentsDialog(item, focus) {
       this.infoDialogTitle = focus
@@ -944,8 +931,6 @@ export default {
           this.showAboutDialog();
         } else if (this.$route.query.show === "upload") {
           this.showUploadDialog();
-        } else if (this.$route.query.show === "join") {
-          this.showJoinDialog();
         }
       }
       if (this.$route.query.id) {

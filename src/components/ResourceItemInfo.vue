@@ -92,7 +92,7 @@ import AppIcons from "@/components/AppIcons.vue";
 // import Attachments from "@/components/Attachments.vue";
 import Markdown from "@/components/Markdown.vue";
 // import CommentBox from "@/components/CommentBox.vue";
-import { randId, concatAndResolveUrl } from "../utils";
+import { randId } from "../utils";
 
 export default {
   name: "ResourceItemInfo",
@@ -184,10 +184,8 @@ export default {
       try {
         let docsUrl;
         if (!resourceItem.documentation.startsWith("http"))
-          docsUrl = concatAndResolveUrl(
-            resourceItem.root_url,
-            resourceItem.documentation
-          );
+          docsUrl = new URL(resourceItem.documentation, resourceItem.root_url)
+            .href;
         else {
           docsUrl = resourceItem.documentation;
         }
