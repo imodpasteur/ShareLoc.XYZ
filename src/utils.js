@@ -175,7 +175,7 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
   const description =
     `<a href="https://shareloc.xyz/#/p/zenodo:${encodeURIComponent(
       rdf.config._deposit.id
-    )}"><span class="label label-success">Download RDF Package</span></a><br>` +
+    )}"><span class="label label-success">Preview in Shareloc.XYZ</span></a><br>` +
     (docstring || `<p>${docstring}</p>`);
   const keywords = ["shareloc.xyz", "shareloc.xyz:" + rdf.type];
   const metadata = {
