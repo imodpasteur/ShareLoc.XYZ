@@ -316,7 +316,8 @@
         >Loading…</iframe
       >
       <resource-item-info
-        v-else-if="showInfoDialogMode === 'model' && selectedResourceItem"
+        v-else-if="showInfoDialogMode === 'item' && selectedResourceItem"
+        :resource-id="selectedResourceItem.id"
       ></resource-item-info>
     </modal>
   </div>
@@ -860,10 +861,22 @@ export default {
       }
     },
     showResourceItemInfo(mInfo) {
-      this.$router.push({
-        name: "ResourceItemInfo",
-        params: { resourceId: mInfo.id }
-      });
+      // this.$router.push({
+      //   name: "ResourceItemInfo",
+      //   params: { resourceId: mInfo.id }
+      // });
+      this.showInfoDialogMode = "item";
+      mInfo._focus = focus;
+      this.selectedResourceItem = mInfo;
+      this.infoDialogTitle = this.selectedResourceItem.name;
+      this.infoDialogFullscreen = false;
+      this.$modal.show("info-dialog");
+      if (mInfo.id) {
+        const query = Object.assign({}, this.$route.query);
+        query.id = mInfo.id;
+        this.$router.replace({ query: query }).catch(() => {});
+      }
+
       // this.showInfoDialogMode = "viewer";
       // mInfo._focus = focus;
       // this.selectedResourceItem = mInfo;

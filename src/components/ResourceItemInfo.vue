@@ -228,6 +228,10 @@ export default {
   height: calc(100% - 50px);
   overflow: auto;
   overscroll-behavior: contain;
+  max-width: 1080px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
 }
 
 @media screen and (max-width: 768px) {
