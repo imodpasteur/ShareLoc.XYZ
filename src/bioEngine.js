@@ -19,6 +19,12 @@ export async function setupBioEngine() {
       imjoy_api: {} // override some imjoy API functions here
     })
     .then(async app => {
+      const baseUrl = window.location.origin + window.location.pathname;
+      // FIXME: This is a temporary fix for the sending file from shareloc.xyz to imjoy.io
+      // Without this, the file object won't be able to perform .slice operation
+      // In Chrome, this issue only happens if the file size exceed some size
+      app.imjoy.pm.default_base_frame = baseUrl + "default_base_frame.html";
+      app.imjoy.pm.init();
       // get the api object from the root plugin
       const api = app.imjoy.api;
       window.imjoy = app.imjoy;
@@ -47,7 +53,7 @@ export async function setupBioEngine() {
       //     imjoy.wm.windows.push(w);
       //   }
       // });
-      const baseUrl = window.location.origin + window.location.pathname;
+
       await app.loadPlugin(baseUrl + "SMLMFileIO.imjoy.html");
       await app.loadPlugin(baseUrl + "3DHistogram.imjoy.html");
       app.imjoy.pm

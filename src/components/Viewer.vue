@@ -75,7 +75,7 @@ export default {
           const file = await this.fetchFile(resourceItem.download_url);
           const api = window.imjoy.api;
           const baseUrl = window.location.origin + window.location.pathname;
-          api.getPlugin(baseUrl + "SMLM File IO.imjoy.html").then(() => {
+          api.getPlugin(baseUrl + "SMLMFileIO.imjoy.html").then(() => {
             this.previewFile(file);
           });
         } catch (e) {
@@ -147,9 +147,10 @@ export default {
           else await viewer.setViewMode("ZPlane");
           this.viewer = viewer;
         } else {
+          const baseUrl = window.location.origin + window.location.pathname;
           this.viewer = await api.createWindow({
             name: file.name,
-            src: "http://127.0.0.1:8080/3DHistogram.imjoy.html",
+            src: baseUrl + "3DHistogram.imjoy.html",
             window_id: this.containerId
           });
           for (let f of smlm.files) {

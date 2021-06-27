@@ -11,14 +11,7 @@
     <div class="control">
       <section>
         <b-field>
-          <input
-            ref="fileInput"
-            type="file"
-            @input="updateFiles()"
-            multiple
-            style="position: relative;display:block;z-index: 100;opacity:1;"
-          />
-          <!-- <b-upload
+          <b-upload
             :id="item.label"
             v-model="value"
             @input="updateFiles()"
@@ -33,7 +26,7 @@
                 Drop additional files here
               </div>
             </section>
-          </b-upload> -->
+          </b-upload>
         </b-field>
         <span
           v-for="(file, index) in value"
@@ -119,7 +112,7 @@ export default {
     this.item.value && this.$emit("input", this.item.value);
     const api = window.imjoy.api;
     const baseUrl = window.location.origin + window.location.pathname;
-    api.getPlugin(baseUrl + "SMLM File IO.imjoy.html");
+    api.getPlugin(baseUrl + "SMLMFileIO.imjoy.html");
   },
   methods: {
     removeScreenshot(index) {
@@ -139,7 +132,6 @@ export default {
       this.$forceUpdate();
     },
     updateFiles() {
-      this.value = this.$refs.fileInput.files;
       this.$emit("input", this.value);
       // we need this because otherwise we cannot update the list on the interface
       this.$forceUpdate();
@@ -161,34 +153,14 @@ export default {
         container
       });
       try {
-        //         file = new File(
-        //           [
-        //             `"frame"	"x [nm]"	"y [nm]"	"z [nm]"	"uncertainty_xy [nm]"	"uncertainty_z [nm]"
-        // 1	22720.3	13546.8	-228	1.3	2.6
-        // 1	22305.9	25354.2	-376	1.4	2.7
-        // 1	22429	26580.5	36	4.5	9.1
-        // 1	20848.3	1742.4	-361	5.1	10.2
-        // 1	22269.5	12820.5	-146	2.3	4.6
-        // 1	22166.9	27517.8	165	3.7	7.3
-        // 1	21467.8	2985.8	95	7.4	14.8
-        // 1	22909.8	11994.2	-120	4.2	8.4
-        // 1	21464.5	3614	52	2	4.1`
-        //           ],
-        //           "myfile.xls"
-        //         );
-        // const fileElem = document.getElementById("file")
-        // file = fileElem.files[0]
-
         const smlm = await smlmPlugin.load(file);
+        const baseUrl = window.location.origin + window.location.pathname;
         this.viewer = await api.createWindow({
-          name: file.name,
-          src: "http://127.0.0.1:8080/3DHistogram.imjoy.html",
+          name: file.name.slice(0, 40),
+          src: baseUrl + "3DHistogram.imjoy.html",
           window_id: this.containerId,
           data: smlm.files
         });
-        // for (let f of smlm.files) {
-        //   await this.viewer.show(f);
-        // }
       } catch (e) {
         console.error(e);
         throw e;
