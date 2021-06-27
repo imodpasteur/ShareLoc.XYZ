@@ -250,7 +250,7 @@ export default {
                     .includes(label)) ||
                 (item.authors &&
                   item.authors.some(author =>
-                    author.toLowerCase().includes(label)
+                    (author.name || author).toLowerCase().includes(label)
                   )) ||
                 (item.apps &&
                   item.apps.some(
