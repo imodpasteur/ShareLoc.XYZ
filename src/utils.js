@@ -336,7 +336,7 @@ export class ZenodoClient {
     page = page || 1;
     type = type || "all";
     keywords = keywords || [];
-    const community = null; //'shareloc-xyz'; TODO: Enable this!!!
+    const community = "shareloc-xyz";
     if (!keywords.includes("shareloc.xyz")) keywords.push("shareloc.xyz");
     size = size || 20;
     sort = sort || "mostviewed";

@@ -223,6 +223,7 @@ export default {
       this.rdf = rdf || {};
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
+      this.rdf.license = this.rdf.license || "CC-BY-4.0";
       this.jsonFields = this.transformFields([
         {
           label: "Files",

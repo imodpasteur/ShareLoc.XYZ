@@ -28,7 +28,8 @@
             </section>
           </b-upload>
         </b-field>
-        <span
+        <div
+          :id="containerId + '-files'"
           v-for="(file, index) in value"
           :key="index"
           class="tag is-primary"
@@ -41,7 +42,7 @@
             type="button"
             @click.prevent="removeFile(item.label, index)"
           ></button>
-        </span>
+        </div>
         <div :id="containerId"></div>
         <label class="label">Take screenshots for the cover</label>
         <div
@@ -185,6 +186,7 @@ export default {
         if (this.screenshots.length <= 0) {
           await this.capture();
         }
+        document.getElementById(this.containerId + "-files").scrollIntoView();
       } catch (e) {
         console.error(e);
         throw e;

@@ -20,16 +20,37 @@
       label-position="right"
     >
       <b-step-item :disabled="rdfYaml" label="Start" icon="file">
-        <b-field label="Option 1: Create a new deposit" expanded>
+        <b-field
+          v-if="!client.credential"
+          label="Please login or signup to Zenodo.org"
+          message="ShareLoc.XYZ uses https://zenodo.org as storage service, you will need to sign up or login to Zenodo, and allow ShareLoc.XYZ to upload files to zenodo on behave of you."
+          expanded
+        >
+          <b-button
+            style="text-transform:none;"
+            class="button is-fullwidth is-primary"
+            @click="login()"
+            expanded
+            >Login to Zenodo</b-button
+          >
+        </b-field>
+
+        <b-field
+          v-if="client.credential"
+          label="Option 1: Create a new deposit"
+          expanded
+        >
           <b-button
             style="text-transform:none;"
             class="button is-fullwidth"
             @click="startUpload"
             expanded
+            :disabled="!client.credential"
             >Start Upload</b-button
           >
         </b-field>
         <b-field
+          v-if="client.credential"
           label="Option 2: Update an existing deposit"
           message="A URI can be a Zenodo DOI, Zenodo URL or Github URL to the RDF file"
         >
@@ -42,10 +63,12 @@
         </b-field>
 
         <b-button
+          v-if="client.credential"
           style="text-transform:none;"
           class="button is-fullwidth"
           @click="loadRdfFromURL(URI4Load)"
           expanded
+          :disabled="!client.credential"
           >Load</b-button
         >
       </b-step-item>
@@ -517,6 +540,14 @@ export default {
       this.uploadStatus = "Exporting zip package...";
       saveAs(zipBlob, this.rdf.name + ".zip");
       this.uploadStatus = "Done!";
+    },
+    async login() {
+      try {
+        await this.client.getCredential(true);
+        this.$forceUpdate();
+      } catch (e) {
+        alert(`Failed to login: ${e}`);
+      }
     },
     async createOrUpdateDeposit(depositId, skipUpload) {
       try {
