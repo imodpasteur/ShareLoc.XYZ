@@ -418,6 +418,8 @@ export default {
       this.$nextTick(async () => {
         this.rdfYaml = rdf.config._yaml;
         delete rdf.config._yaml;
+        console.log("=======>", rdf.covers);
+        debugger;
         this.zipPackage = rdf.config._zip;
         delete rdf.config._zip;
         this.rdf = rdf;
@@ -475,9 +477,18 @@ export default {
               checksum: item.checksum
             };
           });
+          if (this.rdf.documentation) {
+            const baseUrl = depositionInfo.links.bucket + "/";
+            const docsUrl = this.rdf.documentation.startsWith("http")
+              ? this.rdf.documentation
+              : new URL(this.rdf.documentation, baseUrl).href;
+            const response = await fetch(docsUrl);
+            this.rdf.config._docstring = await response.text();
+          }
           this.stepIndex = 1;
         }
       } catch (e) {
+        console.error(e);
         alert(`Failed to fetch RDF from ${url}, error: ${e}`);
       }
     },
@@ -637,7 +648,9 @@ export default {
           this.stepIndex = 3;
           return depositionInfo;
         }
-        const zipFiles = Object.values(this.zipPackage.files);
+        const zipFiles = Object.values(this.zipPackage.files).filter(
+          file => file.type !== "remote"
+        );
         // sort the files so we will upload the covers in the end
         // this allows zenodo to display it as preview
         if (this.rdf.covers && this.rdf.covers.length > 0) {

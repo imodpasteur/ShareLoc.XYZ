@@ -10,6 +10,36 @@ export function randId() {
     .substr(2, 10);
 }
 
+export async function fetchFile(url, filename) {
+  const response = await axios({
+    url,
+    method: "GET",
+    responseType: "blob",
+    onDownloadProgress: progressEvent => {
+      const status = `Downloading file ${progressEvent.loaded /
+        1000}kB (${progressEvent.total &&
+        Math.round((progressEvent.loaded / progressEvent.total) * 100)}%)`;
+      if (window.imjoy) window.imjoy.api.showMessage(status);
+      else {
+        console.log(status);
+      }
+    }
+  });
+  filename =
+    filename ||
+    url
+      .split("/")
+      .pop()
+      .split("#")[0]
+      .split("?")[0];
+  const blob = new Blob([response.data]);
+  const file = new File([blob], filename, {
+    type: "application/octet-stream",
+    lastModified: Date.now()
+  });
+  return file;
+}
+
 export async function resolveDOI(doi) {
   const response = await fetch("https://doi.org/api/handles/" + doi);
   if (response.ok) {
@@ -102,6 +132,7 @@ export async function getFullRdfFromDeposit(deposition) {
   }
 }
 
+const additionalNote = " (Uploaded via https://shareloc.xyz)";
 export function rdfToMetadata(rdf, baseUrl, docstring) {
   if (!spdxLicenseList[rdf.license])
     throw new Error(
@@ -148,6 +179,19 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
     });
   else throw new Error("`_rdf_file` key is not found in the RDF config");
 
+  if (rdf.attachments && rdf.attachments.datasets) {
+    const datasets = rdf.attachments.datasets.map(c =>
+      c.startsWith("http") ? c : new URL(c, baseUrl).href
+    );
+    datasets.forEach(dataset => {
+      related_identifiers.push({
+        relation: "hasPart", // is part of this upload
+        identifier: dataset,
+        resource_type: "dataset",
+        scheme: "url"
+      });
+    });
+  }
   if (rdf.documentation) {
     if (rdf.documentation.includes("access_token="))
       throw new Error("Documentation URL should not contain access token");
@@ -187,7 +231,7 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
     creators: creators,
     publication_date: new Date().toISOString().split("T")[0],
     keywords: keywords.concat(rdf.tags),
-    notes: rdf.description + " (Uploaded via https://shareloc.xyz)",
+    notes: rdf.description + additionalNote,
     related_identifiers,
     communities: []
   };
@@ -204,6 +248,7 @@ export function depositionToRdf(deposition) {
   }
   type = type.replace("shareloc.xyz:", "");
   const covers = [];
+  const datasets = [];
   const links = [];
   let rdfFile = null;
   let documentation = null;
@@ -235,6 +280,21 @@ export function depositionToRdf(deposition) {
       }
       covers.push(url);
     } else if (
+      idf.relation === "hasPart" &&
+      idf.resource_type === "dataset" &&
+      idf.scheme === "url"
+    ) {
+      let url = idf.identifier;
+      if (url.startsWith("file://")) {
+        url = url.replace("file://", deposition.links.bucket + "/");
+      } else if (url.includes(`${deposition.id}/files/`)) {
+        const fileName = url.split("/files/")[1];
+        url = `${deposition.links.bucket}/${fileName}`;
+      } else {
+        throw new Error("Invalid file identifier: " + idf.identifier);
+      }
+      datasets.push(url);
+    } else if (
       idf.relation === "references" &&
       idf.scheme === "url" &&
       idf.identifier.startsWith("https://shareloc.xyz/#/r/")
@@ -247,10 +307,7 @@ export function depositionToRdf(deposition) {
       documentation = idf.identifier;
     }
   }
-  // strip the html tags
-  const div = document.createElement("div");
-  div.innerHTML = metadata.description;
-  const description = div.textContent || div.innerText || "";
+  const description = metadata.notes.replace(additionalNote, "");
   if (!rdfFile) {
     throw new Error(
       `Invalid deposit (${deposition.id}), rdf.yaml is not defined in the metadata (as part of the "related_identifiers")`
@@ -273,6 +330,9 @@ export function depositionToRdf(deposition) {
     covers,
     source: rdfFile, //TODO: fix for other RDF types
     links,
+    attachments: {
+      datasets
+    },
     config: {
       _doi: metadata.doi,
       _deposit: deposition,

@@ -4,39 +4,36 @@
       <app-icons :apps="resourceItem.apps"></app-icons>
       &nbsp;&nbsp;<badges :badges="resourceItem.badges"></badges>
     </section>
-    <b-carousel
-      style="max-width: 512px;"
-      v-if="resourceItem.cover_images && resourceItem.cover_images.length > 0"
-      :indicator="resourceItem.cover_images.length > 1"
-      :arrow="resourceItem.cover_images.length > 1"
-      :pause-info="false"
-    >
-      <b-carousel-item v-for="cover in resourceItem.cover_images" :key="cover">
-        <figure class="image is-16by9">
-          <img
-            loading="lazy"
-            :src="cover"
-            :alt="resourceItem.name"
-            class="cover-image"
-            data-target="modal-image2"
-          />
-        </figure>
-      </b-carousel-item>
-    </b-carousel>
-    <span class="authors">
-      {{
-        resourceItem.authors && resourceItem.authors.length > 0
-          ? "Author(s): " + resourceItem.authors.join(",")
-          : ""
-      }}
-    </span>
-    <br />
+    <section style="text-align:center;">
+      <b-carousel
+        style="max-width: 512px;"
+        v-if="resourceItem.cover_images && resourceItem.cover_images.length > 0"
+        :indicator="resourceItem.cover_images.length > 1"
+        :arrow="resourceItem.cover_images.length > 1"
+        :pause-info="false"
+      >
+        <b-carousel-item
+          v-for="cover in resourceItem.cover_images"
+          :key="cover"
+        >
+          <figure class="image is-16by9">
+            <img
+              loading="lazy"
+              :src="cover"
+              :alt="resourceItem.name"
+              class="cover-image"
+              data-target="modal-image2"
+            />
+          </figure>
+        </b-carousel-item>
+      </b-carousel>
+    </section>
+
     <span style="margin-top:3px;display: block;">
       <span v-for="t in resourceItem.tags" :key="t">
         <b-tag style="cursor: pointer;" rounded>{{ t }}</b-tag>
       </span>
     </span>
-    <br />
     <p v-if="resourceItem.description">
       {{ resourceItem.description.slice(0, maxDescriptionLetters) }}
       <a
@@ -45,6 +42,18 @@
         >...show all.</a
       >
     </p>
+    <span class="authors">
+      {{
+        resourceItem.authors && resourceItem.authors.length > 0
+          ? "Author(s): " +
+            resourceItem.authors
+              .map(author => author.name.split(";")[0])
+              .join(",")
+          : ""
+      }}
+    </span>
+    <br />
+
     <!-- <attachments
       :attachments="resourceItem.attachments"
       :focusTarget="resourceItem._focus"

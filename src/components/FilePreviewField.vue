@@ -54,13 +54,18 @@
               size="is-small"
               class="close-button"
               icon-left="close"
+              v-if="!screenshot.image.startsWith('http')"
               @click="removeScreenshot(i)"
             >
               Remove
             </b-button>
             <img class="image" :src="screenshot.image" alt="Screenshot" />
           </div>
-          <a v-if="viewer" @click="capture" style="text-align: center;">
+          <a
+            v-if="viewer && viewer.captureImage"
+            @click="capture"
+            style="text-align: center;"
+          >
             <img
               class="image"
               style="width:60px;margin-left:50px;margin-right: 50px;"
@@ -101,6 +106,7 @@
   </div>
 </template>
 <script>
+import { fetchFile } from "../utils";
 export default {
   name: "file-preview",
   props: {
@@ -117,6 +123,7 @@ export default {
     viewer: null,
     value: undefined,
     screenshots: [],
+    fileCache: {},
     containerId:
       "preview-container-" +
       Math.random()
@@ -125,15 +132,17 @@ export default {
   }),
   created() {
     this.value = this.item.value;
+    this.screenshots = this.item.value && this.item.value.screenshots;
     this.item.value && this.$emit("input", this.item.value);
     const api = window.imjoy.api;
     const baseUrl = window.location.origin + window.location.pathname;
-    api.getPlugin(baseUrl + "SMLMFileIO.imjoy.html");
+    api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
   },
   methods: {
     removeScreenshot(index) {
       this.screenshots.splice(index, 1);
       // this.selectedScreenshot = this.screenshots.length-1;
+      this.value.screenshots = this.screenshots;
       this.$emit("input", this.value);
     },
     async capture() {
@@ -154,6 +163,7 @@ export default {
       this.$forceUpdate();
     },
     updateFiles() {
+      this.value.screenshots = this.screenshots;
       this.$emit("input", this.value);
       // we need this because otherwise we cannot update the list on the interface
       this.$forceUpdate();
@@ -167,14 +177,65 @@ export default {
     },
     async previewFile(file) {
       const api = window.imjoy.api;
-      const smlmPlugin = await api.getPlugin("SMLM File IO");
-      const container = document.getElementById(this.containerId);
-      const w = container.getBoundingClientRect().width;
-      container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
       const loadingComponent = this.$buefy.loading.open({
         container
       });
+      const container = document.getElementById(this.containerId);
+      const w = container.getBoundingClientRect().width;
+      const fn = file.name.toLowerCase();
+
+      // fetch remote file
+      if (file.type === "remote") {
+        try {
+          if (!this.fileCache[file.url]) {
+            const newFile = await fetchFile(file.url, file.name);
+            file = newFile;
+            // replace the file with the actual one
+            this.fileCache[file.url] = file;
+          } else {
+            file = this.fileCache[file.url];
+          }
+        } catch (e) {
+          console.error(e);
+          alert(`Failed to fetch file from ${file.url}: ${e}`);
+          return;
+        }
+      }
+
+      // display image
+      if (fn.endsWith(".png") || fn.endsWith(".jpeg") || fn.endsWith(".jpg")) {
+        try {
+          this.viewer = await api.createWindow({
+            name: file.name.slice(0, 40),
+            src: "http://localhost:8081/#/app",
+            window_id: this.containerId,
+            config: { open_sidebar: false }
+          });
+          // encode the file using the FileReader API
+          const base64 = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              // use a regex to remove data url part
+              resolve(reader.result);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+          container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
+
+          await this.viewer.view_image(base64);
+
+          return;
+        } catch (e) {
+          console.error(e);
+          throw e;
+        } finally {
+          loadingComponent.close();
+        }
+      }
+      // display SMLM file
       try {
+        const smlmPlugin = await api.getPlugin("SMLM File IO");
         const smlm = await smlmPlugin.load(file);
         const baseUrl = window.location.origin + window.location.pathname;
         this.viewer = await api.createWindow({
@@ -183,6 +244,7 @@ export default {
           window_id: this.containerId,
           data: smlm.files
         });
+        container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
         if (this.screenshots.length <= 0) {
           await this.capture();
         }

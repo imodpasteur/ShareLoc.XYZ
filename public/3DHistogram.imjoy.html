@@ -1548,7 +1548,13 @@
         }
 
         getViewConfig(){
-            return scopeParams;
+            const config = {};
+            for(let k of Object.keys(scopeParams)){
+                if(typeof scopeParams[k] !== 'function'){
+                    config[k] = scopeParams[k]
+                }
+            }
+            return config;
         }
 
         captureImage() {

@@ -28,7 +28,7 @@
             responseType: 'blob',
             cancelToken: source.token,
             onDownloadProgress: (progressEvent) => {
-                showMessage(`Downloading file ${progressEvent.loaded}/${progressEvent.total}`);
+                showMessage(`Downloading file ${progressEvent.loaded / 1000}kB (${progressEvent.total && Math.round((progressEvent.loaded / progressEvent.total) * 100)}%)`);
                 if (progressEvent.total)
                     showProgress(progressEvent.loaded / progressEvent.total)
             }

@@ -85,6 +85,7 @@ export default {
   computed: {
     components: () => ({ TagInputField, DropFilesField, FilePreviewField }),
     ...mapState({
+      client: state => state.zenodoClient,
       resourceItems: state => state.resourceItems,
       allTags: state => state.allTags
     })
@@ -123,6 +124,7 @@ export default {
       return fields;
     },
     async formSubmitted(result) {
+      debugger;
       const rdfNameMapping = {
         type: "Type",
         name: "Name",
@@ -143,9 +145,11 @@ export default {
       let rdfFileName = "rdf.yaml";
 
       this.rdf.type = "dataset";
+      this.rdf.links = this.rdf.links || [];
       this.rdf.tags = this.rdf.tags || [];
       this.rdf.config = this.rdf.config || {};
       this.rdf.config._rdf_file = "./" + rdfFileName;
+      this.rdf.config._docstring = values["Documentation"];
       this.rdf.authors = this.rdf.authors.split(",").map(name => {
         return { name: name.trim() };
       });
@@ -162,13 +166,19 @@ export default {
         this.rdf.documentation = "./README.md";
         editedFiles.push(file);
       }
-
+      debugger;
       // Add screenshots
       if (editedFiles.screenshots) {
         this.rdf.covers = this.rdf.covers || [];
         this.rdf.config = this.rdf.config || {};
         for (let screenshoot of editedFiles.screenshots) {
           const { image, config } = screenshoot;
+          // skip adding remote screenshot
+          if (image.startsWith("http")) {
+            const tmp = image.split("?")[0].split("/");
+            this.rdf.covers.push("./" + tmp[tmp.length - 1]);
+            continue;
+          }
           const blob = dataURLtoFile(image);
           const fileName = "screenshot-" + randId();
           const file = new File([blob], fileName + ".png", {
@@ -191,9 +201,10 @@ export default {
           editedFiles.push(fileSmall);
           // save view config for screenshots
           this.rdf.config.view_config = this.rdf.config.view_config || {};
-          this.rdf.config.view_config[fileName] = config;
+          this.rdf.config.view_config[fileName + "_thumbnail.png"] = config;
           this.rdf.covers.push("./" + fileName + "_thumbnail.png");
         }
+        // TODO: handle removed screenshots
         delete editedFiles.screenshots;
       }
 
@@ -209,10 +220,13 @@ export default {
       const file = new File([blob], rdfFileName);
       editedFiles.push(file);
 
+      const dataFiles = editedFiles.filter(file => file.name.endsWith(".smlm"));
+      this.rdf.attachments = this.rdf.attachments || {};
+      this.rdf.attachments.datasets = dataFiles.map(file => file.name);
       // save the files to zip
       const zipPackage = new JSZip();
       editedFiles.map(file => {
-        zipPackage.file(file.name, file);
+        if (file.type !== "remote") zipPackage.file(file.name, file);
       });
 
       this.rdf.config._zip = zipPackage;
@@ -224,6 +238,17 @@ export default {
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
       this.rdf.license = this.rdf.license || "CC-BY-4.0";
+      if (rdf.covers) {
+        files.screenshots = rdf.covers.map(c => {
+          const baseUrl = `${this.client.baseURL}/record/${this.rdf.config._deposit.id}/files/`;
+          const coverUrl = c.startsWith("http") ? c : new URL(c, baseUrl).href;
+          return {
+            image: coverUrl,
+            config:
+              this.rdf.config.view_config && this.rdf.config.view_config[c]
+          };
+        });
+      }
       this.jsonFields = this.transformFields([
         {
           label: "Files",
