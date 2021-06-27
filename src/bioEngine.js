@@ -121,6 +121,7 @@ export async function runAppForAllItems(context, config, allItems) {
     context.showLoader(false);
   } catch (e) {
     console.error(e);
+    window.api.showMessage(`${e.message}`);
   } finally {
     context.showLoader(false);
   }
@@ -135,7 +136,16 @@ export async function runAppForItem(context, config, item) {
       await window.api.createWindow({ src: config.source, passive: true });
       return;
     }
+
     const plugin = await window.api.getPlugin({ src: config.source });
+    context.showLoader(false);
+    if (plugin.cancel) {
+      context.showLoader(true, () => {
+        plugin.cancel();
+      });
+    } else {
+      context.showLoader(true);
+    }
     await plugin.run({
       config: {
         referer: window.location.href,
@@ -146,6 +156,7 @@ export async function runAppForItem(context, config, item) {
     });
   } catch (e) {
     console.error(e);
+    window.api.showMessage(`${e.message}`);
   } finally {
     context.showLoader(false);
   }

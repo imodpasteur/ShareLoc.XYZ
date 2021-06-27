@@ -126,7 +126,7 @@ export default {
         container
       });
       try {
-        const smlm = await smlmPlugin.load(file, file.slice(0, 100));
+        const smlm = await smlmPlugin.load(file);
         if (type === "itk-vtk-viewer") {
           const viewer = await api.createWindow({
             src: "https://kitware.github.io/itk-vtk-viewer/app/",
@@ -153,7 +153,7 @@ export default {
             window_id: this.containerId
           });
           for (let f of smlm.files) {
-            this.viewer.show(f)
+            this.viewer.show(f);
           }
         }
         // eslint-disable-next-line no-useless-catch

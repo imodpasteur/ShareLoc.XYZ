@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import ResourceItemList from "../components/ResourceItemList.vue";
 import Upload from "../components/Upload.vue";
-import Viewer from "../components/Viewer.vue";
+import ResourceItemInfo from "../components/ResourceItemInfo.vue";
 
 Vue.use(VueRouter);
 
@@ -14,9 +14,9 @@ const routes = [
     component: Home
   },
   {
-    path: "/viewer/:resourceId+",
-    name: "Viewer",
-    component: Viewer,
+    path: "/r/:resourceId+",
+    name: "ResourceItemInfo",
+    component: ResourceItemInfo,
     props: true
   },
   {

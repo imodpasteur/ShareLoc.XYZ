@@ -19,12 +19,14 @@
 </config>
 
 <script lang="javascript">
-
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
     async function fetchFile(url, showMessage, showProgress) {
         const response = await axios({
             url,
             method: 'GET',
             responseType: 'blob',
+            cancelToken: source.token,
             onDownloadProgress: (progressEvent) => {
                 showMessage(`Downloading file ${progressEvent.loaded}/${progressEvent.total}`);
                 if (progressEvent.total)
@@ -38,7 +40,7 @@
     }
 
     class ImJoyPlugin {
-        async setup() {
+        async setup() { 
             api.log('initialized')
         }
 
@@ -47,7 +49,10 @@
                 const file = await fetchFile(ctx.data.download_url, api.showMessage, api.showProgress)
                 await this.previewFile(file);
             }
+        }
 
+        async cancel(){
+            source.cancel('Operation canceled by the user.');
         }
 
         async previewFile(file, type) {
@@ -77,13 +82,11 @@
                 this.viewer = viewer;
             }
             else {
-                for (let f of smlm.files) {
-                    this.viewer = await api.createWindow({
-                        name: file.name,
-                        type: "3D Histogram",
-                        data: f.data,
-                    })
-                }
+                this.viewer = await api.createWindow({
+                    name: file.name,
+                    type: "3D Histogram",
+                    data: smlm.files,
+                })
             }
             // eslint-disable-next-line no-useless-catch
 

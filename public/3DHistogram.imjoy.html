@@ -985,10 +985,9 @@
         camera.fov = scopeParams.fov;
         camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);
 
-        controls.rotateSpeed = 2.5;
+        controls.rotateSpeed = 5;
         controls.zoomSpeed = 1.2;
         controls.panSpeed = 0.065;
-        console.log('====>', controls)
 
         controls.dynamicDampingFactor = 0.2;
     }
@@ -1400,7 +1399,7 @@
     }
 
     function show3DLocalizations(options, update_status_callback) {
-        const bufferLength = (512 * 512); // defaulting to 2M
+        let bufferLength = (512 * 512); // defaulting to 2M
         const before = Date.now();
         const strideTitles = ["x", "y", "z"]
         const stridedArrayBuffers = [];
@@ -1412,10 +1411,9 @@
             else
                 is2D = false;
         }
-
         const isFiltered = options.isFiltered;
         if (!isFiltered) options.filteredRows = options.rows;
-        const numChunks = isFiltered ? Math.ceil(options.filteredRows / bufferLength) : Math.ceil(options.rows / bufferLength);
+        const numChunks = Math.ceil(options.filteredRows / bufferLength);
         for (var chunkIndex = 0; chunkIndex < numChunks; chunkIndex++) {
             stridedArrayBuffers[chunkIndex] = new ArrayBuffer(bufferLength * 16); // 4x4 for four float32 values of four bytes for the values for the given stride indices
             stridedFloat32Arrays[chunkIndex] = new Float32Array(stridedArrayBuffers[chunkIndex]);
@@ -1551,8 +1549,8 @@
             return canvas.toDataURL();
         }
 
-        async show(data) {
-            show3DLocalizations(data);
+        async show(fileInfo) {
+            show3DLocalizations(fileInfo.data);
         }
 
         async run(ctx) {

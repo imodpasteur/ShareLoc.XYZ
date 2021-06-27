@@ -324,7 +324,6 @@
 
 <script>
 import { mapState } from "vuex";
-import spdxLicenseList from "spdx-license-list/full";
 import ResourceItemSelector from "@/components/ResourceItemSelector.vue";
 import ResourceItemList from "@/components/ResourceItemList.vue";
 import ResourceItemInfo from "@/components/ResourceItemInfo.vue";
@@ -341,7 +340,7 @@ const DEFAULT_ICONS = {
   model: "hubspot"
 };
 import { runAppForItem, runAppForAllItems } from "../bioEngine";
-import { concatAndResolveUrl, debounce } from "../utils";
+import { debounce } from "../utils";
 
 const isTouchDevice = (function() {
   try {
@@ -352,52 +351,10 @@ const isTouchDevice = (function() {
   }
 })();
 
-function normalizeItem(self, item) {
-  item = Object.assign({}, item);
-  item.covers = item.covers || [];
-  item.authors = item.authors || [];
-  item.description = item.description || "";
-  if (item.covers && !Array.isArray(item.covers)) {
-    item.covers = [item.covers];
-  }
-  if (item.icon === "extension") item.icon = "puzzle";
-  item.cover_images = [];
-  for (let cover of item.covers) {
-    if (cover.includes("(") || cover.includes(")")) {
-      console.error("cover image file name cannot contain brackets.");
-      continue;
-    }
-    if (!cover.startsWith("http")) {
-      item.cover_images.push(
-        encodeURI(concatAndResolveUrl(item.root_url, cover))
-      );
-    } else {
-      if (cover.includes(" ")) {
-        item.cover_images.push(encodeURI(cover));
-      } else item.cover_images.push(cover);
-    }
-  }
-
-  item.allLabels = item.labels || [];
-  if (item.license) {
-    item.allLabels.push(item.license);
-  }
-  if (item.applications) {
-    item.allLabels = item.allLabels.concat(item.applications);
-  }
-  if (item.tags) {
-    item.allLabels = item.allLabels.concat(
-      item.tags
-        .filter(tag => typeof tag === "string")
-        .map(tag => tag.toLowerCase())
-    );
-  }
-
-  // make it lower case and remove duplicates
-  item.allLabels = Array.from(
-    new Set(item.allLabels.map(label => label.toLowerCase()))
-  );
-  item.apps = [];
+function connectApps(self, item) {
+  if (item.config && item.config._linked) return;
+  item.config = item.config || {};
+  item.apps = item.apps || [];
   item.apps.unshift({
     name: "Share",
     icon: "share-variant",
@@ -425,20 +382,7 @@ function normalizeItem(self, item) {
         self.showSource(item);
       }
     });
-  if (item.download_url)
-    item.apps.unshift({
-      name: "Download",
-      icon: "download",
-      url: item.download_url,
-      show_on_hover: true
-    });
-  if (item.git_repo)
-    item.apps.unshift({
-      name: "Git Repository",
-      icon: "github",
-      url: item.git_repo,
-      show_on_hover: true
-    });
+
   if (item.type === "application") {
     item.apps.unshift({
       name: "Run",
@@ -465,8 +409,7 @@ function normalizeItem(self, item) {
       }
     }
   }
-  item.badges = item.badges || [];
-  item.attachments = item.attachments || {};
+
   const linkedItems = self.resourceItems.filter(
     m => m.links && m.links.includes(item.id)
   );
@@ -475,17 +418,6 @@ function normalizeItem(self, item) {
     else item.attachments[it.type] = [it];
   }
 
-  if (item.size) {
-    item.badges.unshift({
-      label: "size",
-      label_type: "is-dark",
-      ext:
-        item.size > 1000000
-          ? Math.round(item.size / 1000000) + "MB"
-          : Math.round(item.size / 1000) + "kB",
-      ext_type: "is-primary"
-    });
-  }
   for (let att_name of Object.keys(item.attachments)) {
     if (Array.isArray(item.attachments[att_name]) && att_name !== "files") {
       item.badges.unshift({
@@ -500,14 +432,6 @@ function normalizeItem(self, item) {
     }
   }
 
-  if (item.license) {
-    item.badges.unshift({
-      label: "license",
-      ext: item.license,
-      ext_type: "is-info",
-      url: spdxLicenseList[item.license] && spdxLicenseList[item.license].url
-    });
-  }
   if (item.config && item.config._doi) {
     item.badges.unshift({
       label: item.config._doi,
@@ -518,45 +442,7 @@ function normalizeItem(self, item) {
         : `https://doi.org/${item.config._doi}`
     });
   }
-  if (item.type === "model" && item.co2) {
-    item.badges.unshift({
-      label: "CO2",
-      ext: item.co2,
-      ext_type: "is-success",
-      run() {
-        alert(
-          `SAVE THE EARTH: The carbon footprint for training this model is around ${item.co2} lbs, reusing existing models can help save the earth from climate change.`
-        );
-      }
-    });
-  }
-  if (item.error) {
-    if (item.error.spec) {
-      item.badges.unshift({
-        label: "spec",
-        label_type: "is-dark",
-        ext: "failing",
-        ext_type: "is-danger",
-        run() {
-          alert(
-            "This model failed the specification checks, here are the errors: \n" +
-              JSON.stringify(item.error.spec, null, "  ")
-          );
-        }
-      });
-    } else {
-      item.badges.unshift({
-        label: "spec",
-        label_type: "is-dark",
-        ext: "passing",
-        ext_type: "is-success",
-        run() {
-          alert("🎉 This model passed the specification checks!");
-        }
-      });
-    }
-  }
-  return item;
+  item.config._linked = true;
 }
 
 export default {
@@ -654,7 +540,7 @@ export default {
         repo,
         manifest_url,
         transform(item) {
-          return normalizeItem(self, item);
+          return connectApps(self, item);
         }
       });
 
@@ -882,9 +768,14 @@ export default {
         this.$forceUpdate();
       }, 250)();
     },
-    showLoader(enable) {
+    showLoader(enable, cancelCallback) {
       if (enable)
-        this.loadingComponent = this.$buefy.loading.open({ canCancel: true });
+        this.loadingComponent = this.$buefy.loading.open({
+          canCancel: true,
+          onCancel: () => {
+            if (cancelCallback) cancelCallback();
+          }
+        });
       else {
         if (this.loadingComponent) {
           this.loadingComponent.close();
@@ -969,7 +860,10 @@ export default {
       }
     },
     showResourceItemInfo(mInfo) {
-      this.$router.push({ name: "Viewer", params: { resourceId: mInfo.id } });
+      this.$router.push({
+        name: "ResourceItemInfo",
+        params: { resourceId: mInfo.id }
+      });
       // this.showInfoDialogMode = "viewer";
       // mInfo._focus = focus;
       // this.selectedResourceItem = mInfo;
