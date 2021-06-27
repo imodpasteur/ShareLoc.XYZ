@@ -19,6 +19,12 @@ export async function setupBioEngine() {
       imjoy_api: {} // override some imjoy API functions here
     })
     .then(async app => {
+      const baseUrl = window.location.origin + window.location.pathname;
+      // FIXME: This is a temporary fix for the sending file from shareloc.xyz to imjoy.io
+      // Without this, the file object won't be able to perform .slice operation
+      // In Chrome, this issue only happens if the file size exceed some size
+      app.imjoy.pm.default_base_frame = baseUrl + "default_base_frame.html";
+      app.imjoy.pm.init();
       // get the api object from the root plugin
       const api = app.imjoy.api;
       window.imjoy = app.imjoy;
@@ -48,6 +54,8 @@ export async function setupBioEngine() {
       //   }
       // });
 
+      await app.loadPlugin(baseUrl + "SMLMFileIO.imjoy.html");
+      await app.loadPlugin(baseUrl + "3DHistogram.imjoy.html");
       app.imjoy.pm
         .reloadPluginRecursively({
           // uri: "http://localhost:9090/Jupyter-Engine-Manager.imjoy.html"
@@ -119,6 +127,7 @@ export async function runAppForAllItems(context, config, allItems) {
     context.showLoader(false);
   } catch (e) {
     console.error(e);
+    window.api.showMessage(`${e.message}`);
   } finally {
     context.showLoader(false);
   }
@@ -133,7 +142,16 @@ export async function runAppForItem(context, config, item) {
       await window.api.createWindow({ src: config.source, passive: true });
       return;
     }
+
     const plugin = await window.api.getPlugin({ src: config.source });
+    context.showLoader(false);
+    if (plugin.cancel) {
+      context.showLoader(true, () => {
+        plugin.cancel();
+      });
+    } else {
+      context.showLoader(true);
+    }
     await plugin.run({
       config: {
         referer: window.location.href,
@@ -144,6 +162,7 @@ export async function runAppForItem(context, config, item) {
     });
   } catch (e) {
     console.error(e);
+    window.api.showMessage(`${e.message}`);
   } finally {
     context.showLoader(false);
   }

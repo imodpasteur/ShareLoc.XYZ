@@ -116,7 +116,7 @@ export default {
       });
       return file;
     },
-    async previewFile(file) {
+    async previewFile(file, type) {
       const api = window.imjoy.api;
       const smlmPlugin = await api.getPlugin("SMLM File IO");
       const container = document.getElementById(this.containerId);
@@ -126,8 +126,37 @@ export default {
         container
       });
       try {
-        await smlmPlugin.show(file, this.containerId);
-        this.smlmPlugin = smlmPlugin;
+        const smlm = await smlmPlugin.load(file);
+        if (type === "itk-vtk-viewer") {
+          const viewer = await api.createWindow({
+            src: "https://kitware.github.io/itk-vtk-viewer/app/",
+            window_id: this.containerId
+          });
+          const sets = [];
+          let is3d = false;
+          for (let f of smlm.files) {
+            sets.push(this.toNdArray(f));
+            if (f.data.headers.includes("z")) {
+              is3d = true;
+            }
+          }
+          await viewer.setPointSets(sets);
+          await viewer.setBackgroundColor([0, 0, 0]);
+          await viewer.setAxesEnabled(false);
+          if (is3d) await viewer.setViewMode("Volume");
+          else await viewer.setViewMode("ZPlane");
+          this.viewer = viewer;
+        } else {
+          const baseUrl = window.location.origin + window.location.pathname;
+          this.viewer = await api.createWindow({
+            name: file.name,
+            src: baseUrl + "3DHistogram.imjoy.html",
+            window_id: this.containerId
+          });
+          for (let f of smlm.files) {
+            this.viewer.show(f);
+          }
+        }
         // eslint-disable-next-line no-useless-catch
       } catch (e) {
         throw e;

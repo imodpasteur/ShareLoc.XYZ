@@ -3,17 +3,16 @@
     "name": "SMLM File IO",
     "type": "web-worker",
     "version": "0.1.3",
-    "api_version": "0.1.2",
+    "api_version": "0.1.8",
     "description": "A plugin for loading and exporting SMLM images.",
     "ui": "",
     "tags": [],
-    "inputs": {"type": "object", "properties": {"name": { "pattern":"(.*\\.smlm|\\.SMLM)$" }}},
-    "outputs": {"type": "object", "properties": {"type": { "type": "string", "enum": ["image/grayscale"] }}},
+    "inputs": null,
+    "outputs": null,
     "icon": "🙀",
     "requirements":
     ["https://cdn.rawgit.com/Stuk/jszip/9fb481ac/dist/jszip.min.js","https://cdn.rawgit.com/satazor/js-spark-md5/bbd1624a/spark-md5.min.js"],
-    "dependencies": ["imjoy-team/imjoy-plugins:Image Window", "imjoy-team/imjoy-plugins:2D Histogram",
-    "imjoy-team/imjoy-plugins:3D Histogram"]
+    "dependencies": []
     }
 </config>
 <script lang="javascript">
@@ -21,8 +20,292 @@
     function randId() {
         return Math.random().toString(36).substr(2, 10);
     }
-    function randId() {
-        return Math.random().toString(36).substr(2, 10);
+
+    /**
+     * Copyright 2016-2017 Felix Woitzel. All Rights Reserved.
+     *
+     * Licensed under the Apache License, Version 2.0 (the "License");
+     * you may not use this file except in compliance with the License.
+     * You may obtain a copy of the License at
+     *
+     *     http://www.apache.org/licenses/LICENSE-2.0
+     *
+     * Unless required by applicable law or agreed to in writing, software
+     * distributed under the License is distributed on an "AS IS" BASIS,
+     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+     * limitations under the License.
+     */
+
+    function parseFile(file, reading_callback, finish_callback) {
+        var fileSize = file.size;
+        var chunkSize = 104857600; //100 mega bytes
+        var offset = 0;
+        var self = this; // we need a reference to the current object
+        var chunkReaderBlock = null;
+        if (!file) {
+            finish_callback(false)
+            return
+        }
+        var readEventHandler = function (evt) {
+            if (evt.target.error == null) {
+                offset += evt.target.result.length;
+                reading_callback(evt.target.result); // callback for handling read chunk
+            } else {
+                console.log("Read error: " + evt.target.error);
+                finish_callback(false);
+                return;
+            }
+            if (offset >= fileSize) {
+                finish_callback(true);
+                console.log("Done reading file");
+                return;
+            }
+            // of to the next chunk
+            chunkReaderBlock(offset, chunkSize, file);
+        }
+        chunkReaderBlock = function (_offset, length, _file) {
+            var r = new FileReader();
+            var blob = _file.slice(_offset, length + _offset);
+            r.onload = readEventHandler;
+            r.onerror = function () { finish_callback(false) }
+            r.readAsText(blob);
+        }
+        // now let's start the read with the first block
+        chunkReaderBlock(offset, chunkSize, file);
+    }
+
+    async function readTextFile(data, callback) {
+        var format = data.format
+
+        try {
+            console.assert(format.type == 'table')
+            console.assert(format.mode == 'text')
+            console.assert(format.delimiter)
+        } catch (e) {
+            console.error(e)
+            callback({ error: 'format error' });
+            return
+        }
+
+        var delimiter = format.delimiter
+        var headers = [];
+        var escapedHeaders = [];
+        var transformedHeaders = [];
+        var reader = new FileReader();
+
+
+        var table_data = {};
+        var arrayBuffersList = []
+        var statshtml = "";
+        var leftover_str = null;
+        var min = [], max = [], avg = [];
+        var rows = 0;
+        var localization_num = 0;
+        var before = Date.now();
+        var file = data.file;
+        var totalBytes = file.size;
+        var bytesRead = 0;
+        var val;
+        table_data.file_name = file.name
+        table_data.file_size = file.size
+        table_data.file_type = file.type
+        // table_data.arrayBuffersList = arrayBuffersList;
+        // table_data.file = data.file;
+        var isFirstBlock = true;
+        var reading_callback = function (result) {
+            var arrayBuffers = [];
+            var float32Arrays = [];
+            if (leftover_str) {
+                result = leftover_str + result;
+            }
+            var lines = result.split('\n');
+            if (isFirstBlock) {
+
+                if (format.header_row >= 0) {
+                    if (format.header_transform['*all*']) {
+                        var regex = new RegExp(format.header_transform['*all*'], "g")// /identifier="([\w\d\-_]+)"/g;
+                        var match = regex.exec(lines[0]);
+                        var ids = []
+                        while (match != null) {
+                            ids.push(match[1])
+                            match = regex.exec(lines[0]);
+                        }
+                        lines[0] = ids.join(delimiter)
+                    }
+                    headers = lines[0].split(delimiter)
+                    table_data.header_line = lines[0];
+                    lines.shift();
+                }
+                else {
+                    table_data.header_line = null
+                    const num = lines[0].split(delimiter).length
+                    headers = []
+                    for (var header = 0; header < num; header++) {
+                        headers.push(header.toString())
+                    }
+                }
+
+                for (var header = 0; header < headers.length; header++) {
+                    var escapedTitle = headers[header].toString().replace(/'/g, '').replace(/"/g, '');
+                    escapedHeaders[header] = escapedTitle;
+                    if (format.header_transform[escapedTitle]) {
+                        transformedHeaders[header] = format.header_transform[escapedTitle].replace(/[^a-zA-Z0-9]+/g, '_').trim()
+                    }
+                    else {
+                        transformedHeaders[header] = escapedTitle.replace(/[^a-zA-Z0-9]+/g, '_').trim()
+                    }
+                    if (transformedHeaders[header].startsWith('_')) {
+                        transformedHeaders[header] = transformedHeaders[header].slice(1)
+                    }
+                    min[header] = Number.POSITIVE_INFINITY;
+                    max[header] = Number.NEGATIVE_INFINITY;
+                    avg[header] = 0;
+                }
+
+                table_data.headers_original = escapedHeaders;
+                isFirstBlock = false;
+                table_data.headers = transformedHeaders;
+                if (transformedHeaders.indexOf('x') < 0 || !transformedHeaders.indexOf('y') < 0) {
+                    callback({ error: 'wrong file format' });
+                    return
+                }
+            }
+            var endsWithNewLine = (lines[lines.length - 1] != "");
+            var lineNum = lines.length - (endsWithNewLine ? 1 : 0);
+
+            if (endsWithNewLine) {
+                leftover_str = lines[lines.length - 1];
+            }
+            else {
+                leftover_str = null;
+            }
+            for (var header = 0; header < headers.length; header++) {
+                arrayBuffers[header] = new ArrayBuffer(lineNum * 4);
+                float32Arrays[header] = new Float32Array(arrayBuffers[header]);
+            }
+            var skipped = 0
+            for (var line = 0; line < lineNum; line++) {
+                localization_num += 1;
+                bytesRead += lines[line].length
+                if (localization_num % 100000 == 0) {
+                    callback({ progress: bytesRead / totalBytes * 100, localization_num: localization_num });
+                }
+                val = lines[line].split(delimiter);
+                if (lines[line] == '' || headers.length != val.length) {
+                    skipped++
+                    continue
+                }
+                for (var header = 0; header < headers.length; header++) {
+                    var v = Number(val[header]);
+                    if (min[header] > v) {
+                        min[header] = v;
+                    }
+                    if (max[header] < v) {
+                        max[header] = v;
+                    }
+                    if (avg[header] == undefined) {
+                        avg[header] = 0;
+                    }
+                    avg[header] += v;
+                    float32Arrays[header][line - skipped] = v;
+                }
+            }
+            if (skipped) console.log('skipped ' + skipped + ' lines.')
+            for (var header = 0; header < headers.length; header++) {
+                arrayBuffers[header] = arrayBuffers[header].slice(0, arrayBuffers[header].byteLength - skipped * 4)
+                float32Arrays[header] = float32Arrays[header].slice(0, float32Arrays[header].length - skipped)
+            }
+            rows += (lineNum - skipped);
+            arrayBuffersList.push(arrayBuffers)
+        };
+
+        var finish_callback = function (sucess) {
+            if (!sucess) {
+                console.log('finished with error')
+                callback({ error: 'loading error' });
+                return
+            }
+            isFirstBlock = true
+            var float32Arrays = [];
+            var tableUint8Arrays = []
+            var dd = new Float32Array(arrayBuffersList[0][1]);
+            for (var header = 0; header < headers.length; header++) {
+                var arrayUint8 = new Uint8Array(rows * 4);
+                var offset = 0;
+                for (var i = 0; i < arrayBuffersList.length; i++) {
+                    arrayUint8.set(new Uint8Array(arrayBuffersList[i][header]), offset);
+                    offset += arrayBuffersList[i][header].byteLength
+                }
+                tableUint8Arrays[header] = new Uint8Array(arrayUint8.buffer);
+                float32Arrays[header] = new Float32Array(arrayUint8.buffer);
+            }
+            table_data.tableArrays = float32Arrays;
+            table_data.tableUint8Arrays = tableUint8Arrays;
+            statshtml = rows + " samples loaded; ";
+            for (var header = 0; header < transformedHeaders.length; header++) {
+                avg[header] = avg[header] / rows
+                statshtml += transformedHeaders[header] + ": "
+                    + min[header] + " - " + max[header] + " ("
+                    + Math.round(avg[header] * 10) / 10 + "), ";
+            }
+            statshtml += "parsing time [ms]: " + (Date.now() - before);
+            table_data.statshtml = statshtml
+            table_data.rows = rows
+            table_data.columns = float32Arrays.length
+
+            table_data.min = {}
+            table_data.max = {}
+            table_data.avg = {}
+            table_data.tableDict = {}
+            table_data.tableUint8Dict = {}
+            var transferables = []
+            for (let i = 0; i < transformedHeaders.length; i++) {
+                table_data.min[transformedHeaders[i]] = min[i]
+                table_data.max[transformedHeaders[i]] = max[i]
+                table_data.avg[transformedHeaders[i]] = avg[i]
+                table_data.tableDict[transformedHeaders[i]] = float32Arrays[i]
+                transferables.push(float32Arrays[i].buffer)
+                table_data.tableUint8Dict[transformedHeaders[i]] = tableUint8Arrays[i]
+            }
+            table_data.loaded = true
+            callback(table_data, transferables);
+        }
+        parseFile(data.file, reading_callback, finish_callback)
+    }
+
+
+    function exportToFile(data, callback) {
+        try {
+            console.log('rendering worker is running...')
+            const headers = data.headers;
+            const delimiter = data.delimiter;
+            const tableDict = data.tableDict;
+            const format = data.format;
+            let content = ""
+            for (let header of headers) {
+                content = content + header + delimiter
+            }
+
+            content = content.slice(0, content.length - 1) + '\n'
+            callback({ progress: 0 });
+            const rows = tableDict[headers[0]].length
+            for (let i = 0; i < rows; i++) {
+                for (let header of headers) {
+                    content = content + tableDict[header][i].toPrecision(3) + delimiter
+                }
+                content = content.slice(0, content.length - 1) + '\n'
+
+                if (i % 1000 === 0) callback({ progress: i / rows * 100 });
+            }
+            const file = new File([content], data.filename + '.' + format, {
+                type: "text/plain",
+            })
+            callback({ finished: true, file });
+        } catch (e) {
+            console.error(e)
+            callback({ error: e, message: 'something went wrong during rendering.', _options: options }, transferables);
+        }
     }
 
     class smlmFile {
@@ -117,22 +400,13 @@
                     reject("no table format not found.")
                     return
                 }
-                var loadWorker;
-                if (typeof (Worker) !== "undefined") {
-                    loadWorker = new Worker("static/js/AsyncTextLoader.js")
-                } else {
-                    console.log("Web Worker not available")
-                    reject("Web Worker not available")
-                    return
-                }
-                console.log('loading...')
-                update_callback({ running: true, running_status: 'running ' })
 
-                loadWorker.onmessage = (e) => {
-                    var data = e.data
+                console.log('loading...')
+                update_callback({ running: true, running_status: 'Running ' })
+
+                const callback = (data) => {
                     if (data.error) {
                         reject(data.error)
-                        loadWorker.terminate()
                     }
                     else if (data.loaded) {
                         // this.file_loaded = true
@@ -179,7 +453,6 @@
                         this.uploaded = false
                         // only files with a table can count as smlm
                         this.isSMLM = true
-                        loadWorker.terminate()
                         console.log(data)
                         resolve(file_info)
                     }
@@ -187,12 +460,7 @@
                         update_callback({ running_progress: data.progress, running_status: (data.localization_num / 1000000).toFixed(1) + 'M localizations loaded' })
                     }
                 }
-                loadWorker.onerror = () => {
-                    console.log('load error')
-                    reject('error occured during running.')
-                    loadWorker.terminate()
-                }
-                loadWorker.postMessage({ file: file, format: table_format })
+                readTextFile({ file: file, format: table_format }, callback)
             });
         }
         import_smlm(file, is_append, update_callback) {
@@ -214,7 +482,7 @@
                             .then((meta_json) => {
                                 const manifest = JSON.parse(meta_json)
                                 const format_version = manifest.format_version
-                                update_callback({ running_status: 'manifest file loaded.' })
+                                update_callback({ running_status: 'Manifest file loaded.' })
                                 const data = {}
                                 const load_files = async () => {
                                     //TODO: render the files with a different async loader
@@ -222,10 +490,10 @@
                                         await new Promise((resolve2, reject2) => {
                                             const file_info = manifest.files[file_no]
                                             if (file_info.type == "table") {
-                                                update_callback({ running_status: 'loading smlm file...' })
+                                                update_callback({ running_status: 'Loading smlm file...' })
                                                 const table_file = zip.file(file_info.name)
                                                 const format_key = file_info.format
-                                                update_callback({ running_status: 'uncompressing file: ' + file_info.name })
+                                                update_callback({ running_status: 'Uncompressing file: ' + file_info.name })
                                                 if (!table_file && manifest.formats[format_key]) {
                                                     reject2('table file ' + manifest.table_file + ' is not present in the zip file')
                                                     return
@@ -237,7 +505,7 @@
                                                         console.log(table_file)
                                                         const fileReader = new FileReader();
                                                         fileReader.onload = (evt) => {
-                                                            update_callback({ running_status: 'table loaded.' })
+                                                            update_callback({ running_status: 'Table loaded.' })
                                                             const arrayBuffer = evt.target.result
                                                             const uint8Arr = new Uint8Array(arrayBuffer)
                                                             let rows = file_info.rows
@@ -346,7 +614,7 @@
                                                     })
                                             }
                                             else if (file_info.type == "image") {
-                                                update_callback({ running_status: 'loading image file...' })
+                                                update_callback({ running_status: 'Loading image file...' })
 
                                                 const format_key = file_info.format
 
@@ -357,7 +625,7 @@
                                                     reject2('image file ' + manifest.image_file + ' is not present in the zip file.')
                                                     return
                                                 }
-                                                update_callback({ running_status: 'uncompressing file: ' + file_info.name })
+                                                update_callback({ running_status: 'Uncompressing file: ' + file_info.name })
                                                 image_file.async("blob")
                                                     .then((image_file) => {
 
@@ -490,10 +758,9 @@
                                 return
                             }
                             console.log('loading...')
-                            update_callback({ running: true, running_status: 'running ' })
+                            update_callback({ running: true, running_status: 'Running ' })
 
-                            loadWorker.onmessage = (e) => {
-                                var data = e.data
+                            const callback = (data) => {
                                 if (data.error) {
                                     reject(data.error)
                                     loadWorker.terminate()
@@ -507,12 +774,8 @@
                                     loadWorker.terminate()
                                 }
                             }
-                            loadWorker.onerror = () => {
-                                console.log('load error')
-                                reject('error occured during running.')
-                                loadWorker.terminate()
-                            }
-                            loadWorker.postMessage({ headers, tableDict, delimiter, format, filename: this.manifest.name })
+
+                            exportToFile({ headers, tableDict, delimiter, format, filename: this.manifest.name }, callback)
 
                         }
                         catch (e) {
@@ -625,7 +888,7 @@
                         }
                     },
                         (mdata) => {
-                            update_callback({ running_status: "making zip files... ", running_progress: mdata.percent })
+                            update_callback({ running_status: "Making zip files... ", running_progress: mdata.percent })
                         }
                     ).then((zipBlob) => {
                         const zip_file_name = this.manifest.name
@@ -968,7 +1231,8 @@
                     canvas_data[s] = canvas_data[s] + 1
                 }
                 api.showStatus("histogram rendered.")
-                await api.createWindow({
+                console.timeEnd('plot histogram')
+                return await api.createWindow({
                     src: "https://kitware.github.io/itk-vtk-viewer/app/",
                     data: {
                         image: {
@@ -981,7 +1245,7 @@
                 })
                 // const image = {type: 'image/grayscale', array: canvas_data, height: height, width: width} // table: files[0].data
                 // await api.createWindow({name: 'Histogram', type: 'Image Window', data: image, w: 10, h: 10, config: {}, window_id: window_id})
-                console.timeEnd('plot histogram')
+
                 //return my
             } catch (e) {
                 console.error(e)
@@ -991,11 +1255,14 @@
         }
 
         async load(file) {
+            // const blob2 = file.slice(0, 3)
+            // console.log(await blob2.text())
+            let data;
             if (file.name.endsWith('.smlm')) {
-                return await this.loadSmlmFile(file)
+                data = await this.loadSmlmFile(file)
             }
             else {
-                return await new Promise((resolve, reject) => {
+                data = await new Promise((resolve, reject) => {
                     var r = new FileReader();
                     var blob = file.slice(0, 100);
                     r.onload = (evt) => {
@@ -1049,13 +1316,14 @@
                     r.readAsText(blob);
                 })
             }
+            return { files: data.files, manifest: data.manifest }
 
         }
 
         async loadTextFile(file, format) {
             console.time('load text file', format);
             const smlm = new smlmFile();
-            const file_info = await smlm.import_text_table(file, format, info, false, api.showMessage)
+            const file_info = await smlm.import_text_table(file, format, {}, false, api.showMessage)
             console.timeEnd('load text file');
             console.log(file_info)
             const metadata = file_info.metadata
@@ -1079,7 +1347,7 @@
         async show(file, windowId) {
             const smlm = await this.load(file)
             const viewer = await api.createWindow({
-                src: "http://localhost:8090/",//"https://kitware.github.io/itk-vtk-viewer/app/"
+                src: "https://kitware.github.io/itk-vtk-viewer/app/",
                 window_id: windowId
             })
             const sets = []
@@ -1098,6 +1366,7 @@
             else
                 await viewer.setViewMode('ZPlane');
             this.viewer = viewer;
+
         }
 
         async capture() {

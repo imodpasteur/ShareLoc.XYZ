@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { randId } from "./utils";
-import { ZenodoClient } from "./utils.js";
+import { ZenodoClient, concatAndResolveUrl } from "./utils.js";
 import siteConfig from "../site.config.json";
+import spdxLicenseList from "spdx-license-list/full";
 
 Vue.use(Vuex);
 
@@ -23,6 +24,133 @@ const zenodoBaseURL = siteConfig.zenodo_config.use_sandbox
   ? "https://sandbox.zenodo.org"
   : "https://zenodo.org";
 
+function normalizeItem(item) {
+  if (item.config && item.config._normalized) return;
+  item.config = item.config || {};
+  item.covers = item.covers || [];
+  item.authors = item.authors || [];
+  item.description = item.description || "";
+  if (item.covers && !Array.isArray(item.covers)) {
+    item.covers = [item.covers];
+  }
+  if (item.icon === "extension") item.icon = "puzzle";
+  item.cover_images = [];
+  for (let cover of item.covers) {
+    if (cover.includes("(") || cover.includes(")")) {
+      console.error("cover image file name cannot contain brackets.");
+      continue;
+    }
+    if (!cover.startsWith("http")) {
+      item.cover_images.push(
+        encodeURI(concatAndResolveUrl(item.root_url, cover))
+      );
+    } else {
+      if (cover.includes(" ")) {
+        item.cover_images.push(encodeURI(cover));
+      } else item.cover_images.push(cover);
+    }
+  }
+
+  item.allLabels = item.labels || [];
+  if (item.license) {
+    item.allLabels.push(item.license);
+  }
+  if (item.applications) {
+    item.allLabels = item.allLabels.concat(item.applications);
+  }
+  if (item.tags) {
+    item.allLabels = item.allLabels.concat(
+      item.tags
+        .filter(tag => typeof tag === "string")
+        .map(tag => tag.toLowerCase())
+    );
+  }
+
+  // make it lower case and remove duplicates
+  item.allLabels = Array.from(
+    new Set(item.allLabels.map(label => label.toLowerCase()))
+  );
+
+  item.apps = item.apps || [];
+  if (item.download_url)
+    item.apps.unshift({
+      name: "Download",
+      icon: "download",
+      url: item.download_url,
+      show_on_hover: true
+    });
+  if (item.git_repo)
+    item.apps.unshift({
+      name: "Git Repository",
+      icon: "github",
+      url: item.git_repo,
+      show_on_hover: true
+    });
+
+  item.badges = item.badges || [];
+  item.attachments = item.attachments || {};
+
+  if (item.license) {
+    item.badges.unshift({
+      label: "license",
+      ext: item.license,
+      ext_type: "is-info",
+      url: spdxLicenseList[item.license] && spdxLicenseList[item.license].url
+    });
+  }
+
+  if (item.size) {
+    item.badges.unshift({
+      label: "size",
+      label_type: "is-dark",
+      ext:
+        item.size > 1000000
+          ? Math.round(item.size / 1000000) + "MB"
+          : Math.round(item.size / 1000) + "kB",
+      ext_type: "is-primary"
+    });
+  }
+
+  if (item.type === "model" && item.co2) {
+    item.badges.unshift({
+      label: "CO2",
+      ext: item.co2,
+      ext_type: "is-success",
+      run() {
+        alert(
+          `SAVE THE EARTH: The carbon footprint for training this model is around ${item.co2} lbs, reusing existing models can help save the earth from climate change.`
+        );
+      }
+    });
+  }
+  if (item.error) {
+    if (item.error.spec) {
+      item.badges.unshift({
+        label: "spec",
+        label_type: "is-dark",
+        ext: "failing",
+        ext_type: "is-danger",
+        run() {
+          alert(
+            "This model failed the specification checks, here are the errors: \n" +
+              JSON.stringify(item.error.spec, null, "  ")
+          );
+        }
+      });
+    } else {
+      item.badges.unshift({
+        label: "spec",
+        label_type: "is-dark",
+        ext: "passing",
+        ext_type: "is-success",
+        run() {
+          alert("🎉 This model passed the specification checks!");
+        }
+      });
+    }
+  }
+  item.config._normalized = true;
+}
 export const store = new Vuex.Store({
   state: {
     loadedUrl: null,
@@ -49,10 +177,10 @@ export const store = new Vuex.Store({
       }
     },
     async fetchResourceItems(context, { manifest_url, repo, transform }) {
-      // if (context.state.loadedUrl === manifest_url) {
-      //   console.log("manifest already loaded");
-      //   return;
-      // }
+      if (context.state.loadedUrl === manifest_url) {
+        console.log("manifest already loaded");
+        return;
+      }
       const items = await context.state.zenodoClient.getResourceItems({});
       items.map(item => context.commit("addResourceItem", item));
 
@@ -77,8 +205,12 @@ export const store = new Vuex.Store({
         //   item.source = concatAndResolveUrl(item.root_url, item.source);
         context.commit("addResourceItem", item);
       }
-      if (transform) context.commit("normalizeItems", transform);
-      context.state.loadedUrl = manifest_url;
+      context.commit("normalizeItems", transform);
+      if (transform) {
+        // only set to load when the items are transformed
+        // for the viewer, the items won't be transformed
+        context.state.loadedUrl = manifest_url;
+      }
     }
   },
   mutations: {
@@ -108,7 +240,22 @@ export const store = new Vuex.Store({
       if (index >= 0) state.resourceItems.splice(index, 1);
     },
     normalizeItems(state, transform) {
-      state.resourceItems = state.resourceItems.map(transform);
+      // add default links
+      state.resourceItems.map(item => {
+        normalizeItem(item);
+        const setting = siteConfig.resource_categories.filter(
+          cat => cat.type === item.type
+        )[0];
+        if (setting && setting.default_links) {
+          item.links = item.links || [];
+          for (let link of setting.default_links) {
+            if (state.resourceItems.filter(item => item.id === link)[0])
+              item.links.push(link);
+            else console.warn("Default link item not foud: " + link);
+          }
+        }
+      });
+      if (transform) state.resourceItems.map(transform);
     }
   }
 });

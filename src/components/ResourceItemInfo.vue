@@ -1,11 +1,11 @@
 <template>
-  <div class="resource-item-info">
-    <section style="margin-bottom:10px;">
+  <div class="resource-item-info" v-if="resourceItem">
+    <section style="margin-bottom:10px;" v-if="resourceItem.apps">
       <app-icons :apps="resourceItem.apps"></app-icons>
       &nbsp;&nbsp;<badges :badges="resourceItem.badges"></badges>
     </section>
     <b-carousel
-      style="max-width: 1024px;"
+      style="max-width: 512px;"
       v-if="resourceItem.cover_images && resourceItem.cover_images.length > 0"
       :indicator="resourceItem.cover_images.length > 1"
       :arrow="resourceItem.cover_images.length > 1"
@@ -64,7 +64,7 @@
       >
 
       <br />
-      <h3 v-if="formatedCitation" id="citation">How to cite</h3>
+      <h3 v-if="formatedCitation" id="citation">Citation</h3>
       <ul v-if="formatedCitation" class="citation">
         <li v-for="c in formatedCitation" :key="c.text">
           {{ c.text }}
@@ -72,53 +72,39 @@
         </li>
       </ul>
     </div>
-    <comment-box :title="resourceItem.name"></comment-box>
+    <!-- <comment-box :title="resourceItem.name"></comment-box> -->
   </div>
 </template>
 
 <script>
-import siteConfig from "../../site.config.json";
+import { mapState } from "vuex";
 import Badges from "@/components/Badges.vue";
 import AppIcons from "@/components/AppIcons.vue";
 // import Attachments from "@/components/Attachments.vue";
 import Markdown from "@/components/Markdown.vue";
-import CommentBox from "@/components/CommentBox.vue";
+// import CommentBox from "@/components/CommentBox.vue";
 import { randId, concatAndResolveUrl } from "../utils";
 
 export default {
   name: "ResourceItemInfo",
-  props: {
-    resourceItem: {
-      type: Object,
-      default: null
-    }
-  },
+  props: ["resourceId"],
   components: {
     markdown: Markdown,
     badges: Badges,
     // attachments: Attachments,
-    "app-icons": AppIcons,
-    "comment-box": CommentBox
+    "app-icons": AppIcons
+    // "comment-box": CommentBox
   },
   data() {
     return {
-      siteConfig: siteConfig,
+      resourceItem: null,
       maxDescriptionLetters: 100,
       maxDocsLetters: 500,
       showSource: false
     };
   },
-
   mounted() {
-    const focus = () => {
-      if (this.resourceItem._focus) {
-        const el = document.getElementById(this.resourceItem._focus);
-        if (el) {
-          el.parentNode.scrollTop = el.offsetTop - 40;
-        }
-      }
-    };
-    this.getDocs(this.resourceItem).then(focus);
+    this.init();
   },
   computed: {
     formatedCitation: function() {
@@ -149,9 +135,41 @@ export default {
         }
       }
       return citations;
-    }
+    },
+    ...mapState({
+      siteConfig: state => state.siteConfig,
+      loadedUrl: state => state.loadedUrl,
+      resourceItems: state => state.resourceItems
+    })
   },
   methods: {
+    async init() {
+      if (!this.loadedUrl) {
+        const repo = this.siteConfig.rdf_root_repo;
+        let manifest_url = this.siteConfig.manifest_url;
+        await this.$store.dispatch("fetchResourceItems", {
+          repo,
+          manifest_url
+        });
+      }
+      const resourceItem = this.resourceItems.filter(item => {
+        return item.id === this.resourceId;
+      })[0];
+      if (!resourceItem) {
+        alert("Item not found: " + this.resourceId);
+        return;
+      }
+      this.resourceItem = resourceItem;
+      const focus = () => {
+        if (this.resourceItem._focus) {
+          const el = document.getElementById(this.resourceItem._focus);
+          if (el) {
+            el.parentNode.scrollTop = el.offsetTop - 40;
+          }
+        }
+      };
+      this.getDocs(this.resourceItem).then(focus);
+    },
     async getDocs(resourceItem) {
       resourceItem.docs = "@loading...";
       try {

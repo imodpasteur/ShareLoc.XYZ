@@ -86,6 +86,9 @@
       "type": "dataset",
       "description": "List datasets",
       "outline_color": "rgb(138 138 138)",
+      "default_links": [
+        "smlm-viewer"
+      ],
       "tag_categories": {
         "modality": [
           "PALM", 
