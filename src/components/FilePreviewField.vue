@@ -207,7 +207,7 @@ export default {
         try {
           this.viewer = await api.createWindow({
             name: file.name.slice(0, 40),
-            src: "http://localhost:8081/#/app",
+            src: "https://kaibu.org/#/app",
             window_id: this.containerId,
             config: { open_sidebar: false }
           });

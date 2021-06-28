@@ -1344,7 +1344,10 @@
         async loadTextFile(file, format) {
             console.time('load text file', format);
             const smlm = new smlmFile();
-            const file_info = await smlm.import_text_table(file, format, {}, false, api.showMessage)
+            const file_info = await smlm.import_text_table(file, format, {}, false, (status) => {
+                status.running_prgress && api.showProgress(status.running_prgress)
+                status.running_status && api.showStatus(status.running_status)
+            })
             console.timeEnd('load text file');
             console.log(file_info)
             const metadata = file_info.metadata
