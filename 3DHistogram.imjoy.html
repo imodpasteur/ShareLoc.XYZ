@@ -45,9 +45,6 @@
         }
 
         constructor(object, domElement) {
-
-
-
             if (domElement === undefined) console.warn('THREE.TrackballControls: The second parameter "domElement" is now mandatory.');
             if (domElement === document) console.error('THREE.TrackballControls: "document" should not be used as the target "domElement". Please use "renderer.domElement" instead.');
 
@@ -72,7 +69,7 @@
             this.noPan = false;
 
             this.staticMoving = false;
-            this.dynamicDampingFactor = 0.2;
+            this.dynamicDampingFactor = 10;
 
             this.minDistance = 0;
             this.maxDistance = Infinity;
@@ -1014,11 +1011,16 @@
         rerender = true;
     }
 
-    function load3DViewer(canvasElement, update_callback) {
-        update_webgl_status_callback = update_callback || console.log;
-        scopeParams = new ScopeParams();
+    function initGUI(){
         // gui = new dat.GUI();
         gui = new dat.GUI({ autoPlace: false });
+        scopeParams = new ScopeParams();
+    }
+
+
+    function load3DViewer(canvasElement, update_callback) {
+        update_webgl_status_callback = update_callback || console.log;
+        
         var customContainer = document.getElementById('gui-webgl');
         customContainer.appendChild(gui.domElement);
         scopeParams['Total # of locations'] = 0;
@@ -1378,9 +1380,12 @@
     }
 
     var colors = [
+        [255,28,14],
         [0, 255, 0],
         [255, 0, 255],
-        [0, 0, 255]
+        [0, 0, 255],
+        [255, 255, 0],
+        [0, 255, 255],
     ];
 
     var files = [];
@@ -1494,8 +1499,8 @@
                     var colorN = 'color ' + N;
                     var alphaN = 'alpha ' + N;
                     scopeParams[activN] = true;
-                    scopeParams[colorN] = colors[colorIndex];
-                    scopeParams[alphaN] = 0.9;
+                    scopeParams[colorN] = fileIDs.length ===1?colors[0]:colors[colorIndex];
+                    scopeParams[alphaN] = 0.85;
                     colorFolder.add(scopeParams, activN).onChange(setRerender);
                     colorFolder.addColor(scopeParams, colorN).onChange(setRerender);
                     colorFolder.add(scopeParams, alphaN, 0, 1).onChange(setRerender);
@@ -1541,7 +1546,16 @@
 
     class ImJoyPlugin {
         async setup() {
-            await load3DViewer(document.getElementById("histogram_canvas_3d"));
+        }
+
+        getViewConfig(){
+            const config = {};
+            for(let k of Object.keys(scopeParams)){
+                if(typeof scopeParams[k] !== 'function'){
+                    config[k] = scopeParams[k]
+                }
+            }
+            return config;
         }
 
         captureImage() {
@@ -1554,10 +1568,29 @@
         }
 
         async run(ctx) {
-            if (ctx.data && ctx.data.tableDict)
-                this.show(ctx.data);
-            else if (ctx.data && Array.isArray(ctx.data)) {
-                ctx.data.map(this.show)
+            initGUI();
+            if(ctx.config && ctx.config.files){
+                scopeParams.File = ctx.config.files[0].download_url;
+                const options = {}
+                for(let f of ctx.config.files){
+                    options[f.name] = f.download_url;
+                }
+                const smlmPlugin = await api.getPlugin("SMLM File IO");
+                gui.add(scopeParams, 'File', options).listen().onChange(async ()=>{
+                    const data = await smlmPlugin.load(scopeParams['File'])
+                    data.files.map(this.show);
+                });
+                await load3DViewer(document.getElementById("histogram_canvas_3d"));
+                const data = await smlmPlugin.load(scopeParams['File'])
+                data.files.map(this.show)
+            }
+            else{
+                await load3DViewer(document.getElementById("histogram_canvas_3d"));
+                if (ctx.data && ctx.data.tableDict)
+                    await this.show(ctx.data);
+                else if (ctx.data && Array.isArray(ctx.data)) {
+                    ctx.data.map(this.show)
+                }
             }
         }
     }

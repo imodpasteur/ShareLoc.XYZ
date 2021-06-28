@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/2DHistogram.imjoy.html"
   },
   {
-    "revision": "51bff9591aa1dd75c0fbb70f089bb00c",
+    "revision": "58269e8c6d9e945c0087f71c3a78b050",
     "url": "/3DHistogram.imjoy.html"
   },
   {
@@ -12,16 +12,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/CNAME"
   },
   {
-    "revision": "4db0b8905dc1354d0a3dfc08b0e56b46",
+    "revision": "7c2a59f370d178fe1e5c3cf68828d32f",
+    "url": "/SMLM-File-IO.imjoy.html"
+  },
+  {
+    "revision": "ad6ce1c41a88df280c2ac5e017c30f64",
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "61c7ec562c8c5fc78cd3df85fa5a7306",
-    "url": "/SMLMFileIO.imjoy.html"
-  },
-  {
-    "revision": "39286a21faa4c77557c3",
-    "url": "/css/app.42bf627b.css"
+    "revision": "e767d1304a90e57ca9f2",
+    "url": "/css/app.b26ee77f.css"
   },
   {
     "revision": "c2a246aceefd7954dc86",
@@ -52,12 +52,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/index.ejs"
   },
   {
-    "revision": "200e7cb83f825d34deb519715dbff4a2",
+    "revision": "ebd83457dda18fe6225c77a626ab9af0",
     "url": "/index.html"
   },
   {
-    "revision": "39286a21faa4c77557c3",
-    "url": "/js/app.75bb6104.js"
+    "revision": "e767d1304a90e57ca9f2",
+    "url": "/js/app.9a351b6e.js"
   },
   {
     "revision": "c2a246aceefd7954dc86",
@@ -380,6 +380,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/icons/favicon-32x32.png"
   },
   {
+    "revision": "5356a11bf2864e5a3a7773319bc09d67",
+    "url": "/static/img/add.png"
+  },
+  {
     "revision": "2db3ab0e73df9d294027ab84a78a0a9a",
     "url": "/static/img/bg.jpg"
   },
@@ -406,9 +410,5 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "19c9badcf53e14e3deb0954e322c93d4",
     "url": "/static/img/zoo-background.svg"
-  },
-  {
-    "revision": "88fe8ad8d1311594c43484acbfb3ae96",
-    "url": "/static/test_manifest.bioimage.io.json"
   }
 ]);

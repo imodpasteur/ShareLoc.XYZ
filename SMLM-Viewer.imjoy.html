@@ -28,7 +28,7 @@
             responseType: 'blob',
             cancelToken: source.token,
             onDownloadProgress: (progressEvent) => {
-                showMessage(`Downloading file ${progressEvent.loaded}/${progressEvent.total}`);
+                showMessage(`Downloading file ${progressEvent.loaded / 1000}kB (${progressEvent.total && Math.round((progressEvent.loaded / progressEvent.total) * 100)}%)`);
                 if (progressEvent.total)
                     showProgress(progressEvent.loaded / progressEvent.total)
             }
@@ -48,6 +48,16 @@
             if (ctx.data.download_url) {
                 const file = await fetchFile(ctx.data.download_url, api.showMessage, api.showProgress)
                 await this.previewFile(file);
+            }
+            else if(ctx.data.attachments && ctx.data.attachments.datasets){
+                const files = ctx.data.attachments.datasets;
+                this.viewer = await api.createWindow({
+                    name: ctx.data.name.slice(0, 40),
+                    type: "3D Histogram",
+                    config: {
+                        files
+                    },
+                })
             }
         }
 
@@ -88,8 +98,6 @@
                     data: smlm.files,
                 })
             }
-            // eslint-disable-next-line no-useless-catch
-
         }
     }
 
