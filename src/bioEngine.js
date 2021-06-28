@@ -141,7 +141,15 @@ export async function runAppForItem(context, config, item) {
   context.showLoader(true);
   try {
     if (config.passive) {
-      await window.api.createWindow({ src: config.source, passive: true });
+      const plugin = await window.api.createWindow({
+        src: config.source,
+        passive: true
+      });
+      if (plugin.cancel) {
+        context.showLoader(true, () => {
+          plugin.cancel();
+        });
+      }
       return;
     }
 
