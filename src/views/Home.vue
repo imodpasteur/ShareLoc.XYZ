@@ -37,11 +37,11 @@
             <span class="explore-btn">About</span></b-button
           >
           &nbsp;
-          <b-button rounded style="text-transform:none;" @click="enter">
+          <!-- <b-button rounded style="text-transform:none;" @click="enter">
             <span class="explore-btn">{{
               selectedPartner.explore_button_text
             }}</span></b-button
-          >
+          > -->
         </div>
 
         <div class="container" v-else>
@@ -60,11 +60,11 @@
             </li>
           </ul>
           <br />
-          <b-button rounded style="text-transform:none;" @click="enter">
+          <!-- <b-button rounded style="text-transform:none;" @click="enter">
             <span class="explore-btn">{{
               siteConfig.explore_button_text
             }}</span></b-button
-          >
+          > -->
         </div>
       </div>
     </section>
@@ -74,6 +74,43 @@
     </section>
     <br />
     <span ref="search_anchor"></span>
+    <div
+      class="container"
+      v-if="resourceCategories.length > 1"
+      style="text-align:center;"
+    >
+      <b-tooltip label="List all items" position="is-bottom">
+        <div
+          class="item-lists is-link"
+          style="width:30px; margin-left: -16px;border-bottom-color: gray;"
+          @click="
+            selectedCategory = null;
+            updateQueryTags();
+          "
+          :class="{ active: !selectedCategory }"
+        >
+          All
+        </div>
+      </b-tooltip>
+      <b-tooltip
+        v-for="list in resourceCategories"
+        :key="list.name"
+        :label="list.description"
+        position="is-bottom"
+      >
+        <div
+          class="item-lists is-link"
+          @click="
+            selectedCategory = list;
+            updateQueryTags();
+          "
+          :style="{ 'border-bottom-color': list.outline_color }"
+          :class="{ active: selectedCategory === list }"
+        >
+          {{ list.name }}
+        </div>
+      </b-tooltip>
+    </div>
     <resource-item-selector
       @selection-changed="updateResourceItemList"
       :allItems="resourceItems"
@@ -86,18 +123,7 @@
       @tags-updated="updateQueryTags"
       @input-change="removePartner"
     ></resource-item-selector>
-    <div
-      v-if="selectedCategory && selectedCategory.type === 'application'"
-      style="text-align:center;"
-    >
-      <a @click="$refs.file_select.click()">Load application from file</a>
-      <input
-        type="file"
-        style="display:none;"
-        @change="fileSelected"
-        ref="file_select"
-      />
-    </div>
+
     <br />
     <resource-item-list
       @show-resource-item-info="showResourceItemInfo"
@@ -396,7 +422,7 @@ function connectApps(self, item) {
       name: "Run",
       icon: "play",
       run() {
-        if (self.allApps[item.name])
+        if (self.allApps[item.id])
           runAppForAllItems(self, self.allApps[item.id], self.resourceItems);
         else alert("This application is not ready or unavailable.");
       }

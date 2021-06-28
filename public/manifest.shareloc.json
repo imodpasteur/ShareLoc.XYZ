@@ -21,7 +21,7 @@
             "name": "SMLM-Viewer",
             "version": "0.1.0",
             "api_version": "0.1.8",
-            "description": "SMLM Viewer",
+            "description": "A web-based point cloud viewer adapted from Fairy Dust by Felix Woitzel",
             "requirements": [],
             "dependencies": [],
             "env": "",
@@ -31,6 +31,30 @@
             "badges": [],
             "authors": [
                 "Wei OUYANG"
+            ]
+        },
+        {
+            "id": "anna-palm",
+            "type": "application",
+            "source": "https://github.com/imjoy-team/imjoy-plugins/blob/master/repository/annaPalm.imjoy.html",
+            "icon": "https://imod.pages.pasteur.fr/anna-palm-web/static/icons/apple-icon-152x152.png",
+            "name": "ANNA-PALM",
+            "version": "0.1.0",
+            "api_version": "0.1.8",
+            "description": "ANNA-PALM: Accelerating Single Molecule Localization Microscopy with Deep Learning",
+            "requirements": [],
+            "dependencies": [],
+            "env": "",
+            "tags": [],
+            "documentation": "",
+            "covers": [
+                "http://imod.pages.pasteur.fr/anna-palm-web/static/img/ANNA-PALM-sr-arrow.png",
+                "http://imod.pages.pasteur.fr/anna-palm-web/static/img/ANNA-PALM-wf-arrow.png",
+                "http://imod.pages.pasteur.fr/anna-palm-web/static/img/tub-anna-palm-zoom-in_combined_1.gif"
+            ],
+            "badges": [],
+            "authors": [
+                "Ouyang et al."
             ]
         },
         {

@@ -200,6 +200,12 @@
           "methanol"
         ]
       }
+    },
+    {
+      "name": "Applications",
+      "type": "application",
+      "outline_color": "rgb(83 230 7)",
+      "description": "List software, web apps and utility tools"
     }
   ]
 }

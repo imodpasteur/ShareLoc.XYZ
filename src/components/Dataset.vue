@@ -338,7 +338,7 @@ export default {
           value: this.rdf.tags,
           placeholder: "Add a citation",
           help: "Indicate how this dataset should be cited",
-          isRequired: true
+          isRequired: false
         },
         {
           label: "Links",

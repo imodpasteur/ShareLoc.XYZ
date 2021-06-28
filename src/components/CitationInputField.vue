@@ -29,7 +29,7 @@
             type="text"
             placeholder="DOI (optional)"
             v-model="citation.doi"
-            maxlength="1000"
+            maxlength="100"
           >
           </b-input>
           <b-input
@@ -41,12 +41,13 @@
           >
           </b-input>
           <b-button
+            v-if="i === value.length - 1"
             style="text-transform:none;"
             class="button"
+            icon-left="plus"
             @click="addNewCitation"
             :disabled="!citation.text || citation.text === ''"
-            >Add more</b-button
-          >
+          ></b-button>
         </b-field>
       </div>
       <p v-if="error" class="help is-danger">
