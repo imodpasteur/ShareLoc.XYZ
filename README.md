@@ -1,4 +1,4 @@
-# ShareLoc.xyz
+# ShareLoc.XYZ
 A platform for sharing single-molecule localization microscopy data.
 
 ## Key Features
