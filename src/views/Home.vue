@@ -383,6 +383,14 @@ function connectApps(self, item) {
       }
     });
 
+  if (item.attachments.datasets)
+    item.apps.unshift({
+      name: "Datasets",
+      icon: "download",
+      run() {
+        self.showAttachmentsDialog(item, "datasets");
+      }
+    });
   if (item.type === "application") {
     item.apps.unshift({
       name: "Run",

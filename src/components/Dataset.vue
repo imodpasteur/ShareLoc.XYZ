@@ -63,6 +63,7 @@ import formJson from "vue-form-json/dist/vue-form-json.common.js";
 import TagInputField from "@/components/TagInputField.vue";
 import DropFilesField from "@/components/DropFilesField.vue";
 import FilePreviewField from "@/components/FilePreviewField.vue";
+import CitationInputField from "@/components/CitationInputField.vue";
 // import marked from "marked";
 // import DOMPurify from "dompurify";
 import { mapState } from "vuex";
@@ -80,10 +81,17 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     DropFilesField,
     // eslint-disable-next-line vue/no-unused-components
-    FilePreviewField
+    FilePreviewField,
+    // eslint-disable-next-line vue/no-unused-components
+    CitationInputField
   },
   computed: {
-    components: () => ({ TagInputField, DropFilesField, FilePreviewField }),
+    components: () => ({
+      TagInputField,
+      DropFilesField,
+      FilePreviewField,
+      CitationInputField
+    }),
     ...mapState({
       client: state => state.zenodoClient,
       resourceItems: state => state.resourceItems,
@@ -134,6 +142,7 @@ export default {
         // source: "Source",
         // git_repo: "Git Repository",
         tags: "Tags",
+        cite: "Citation",
         links: "Links"
       };
       const values = result.values;
@@ -142,7 +151,6 @@ export default {
         this.rdf[k] = values[rdfNameMapping[k]];
       }
       let rdfFileName = "rdf.yaml";
-
       this.rdf.type = "dataset";
       this.rdf.links = this.rdf.links || [];
       this.rdf.tags = this.rdf.tags || [];
@@ -257,6 +265,7 @@ export default {
         {
           label: "Files",
           type: "file-preview",
+          help: "Add one or multiple files into the dataset",
           value: files,
           isRequired: true
         },
@@ -310,6 +319,8 @@ export default {
           options: this.allTags,
           allow_new: true,
           icon: "label",
+          help:
+            "Tags describing imaging modality, cell line, structure, fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc.",
           isRequired: true
         },
         {
@@ -317,8 +328,17 @@ export default {
           placeholder: "",
           type: "textarea",
           value: this.rdf.config._docstring,
-          help: "Documentation in markdown format",
+          help:
+            "Full documentation in markdown format, covering how the dataset is obtained and link to publications etc.",
           isRequired: false
+        },
+        {
+          label: "Citation",
+          type: "citation",
+          value: this.rdf.tags,
+          placeholder: "Add a citation",
+          help: "Indicate how this dataset should be cited",
+          isRequired: true
         },
         {
           label: "Links",
@@ -327,6 +347,8 @@ export default {
           placeholder: "Add a link (resource item ID)",
           options: this.resourceItems.map(item => item.id),
           allow_new: true,
+          help:
+            "Optinally, you can link to other uploaded datasets or applications",
           icon: "vector-link",
           isRequired: false
         }

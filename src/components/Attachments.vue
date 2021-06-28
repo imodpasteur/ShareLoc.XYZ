@@ -2,7 +2,7 @@
   <div class="attachments">
     <template v-for="(att_val, name) in normalizedAttachments">
       <h2
-        style="font-size:1.5rem;font-weight: 600;margin-top: 24px;
+        style="font-size:2rem;font-weight: 600;margin-top: 24px;
     margin-bottom: 16px; text-transform:capitalize;"
         :id="name"
         v-if="att_val"
@@ -66,7 +66,7 @@ export default {
       default: null
     },
     focusTarget: {
-      type: String,
+      type: Function,
       default: null
     }
   },

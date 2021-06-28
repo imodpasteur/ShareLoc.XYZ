@@ -2,6 +2,11 @@
   <div>
     <label :for="item.label" class="label">
       {{ item.label }}
+      <span
+        class="helpLabel has-text-grey-light is-size-7 is-italic"
+        style="margin-left: .5rem;font-weight: 400;"
+        >{{ item.help }}</span
+      >
       <sup
         class="has-text-grey-light is-size-7"
         v-if="item.isRequired !== false"
@@ -44,7 +49,9 @@
           ></button>
         </div>
         <div :id="containerId"></div>
-        <label class="label">Take screenshots for the cover</label>
+        <label class="label" v-if="viewer"
+          >Take screenshots for the cover</label
+        >
         <div
           v-if="viewer || (screenshots && screenshots.length > 0)"
           class="snapshot-container"
@@ -98,7 +105,16 @@
           </b-carousel-item>
         </b-carousel> -->
       </section>
-
+      <p
+        v-if="
+          value.length <= 0 ||
+            !value.screenshots ||
+            value.screenshots.length <= 0
+        "
+        class="help is-danger"
+      >
+        You should select at least one file and take screenshots for the cover.
+      </p>
       <p v-if="error" class="help is-danger">
         {{ error }}
       </p>
@@ -246,7 +262,9 @@ export default {
         });
         container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
         if (this.screenshots.length <= 0) {
-          await this.capture();
+          setTimeout(() => {
+            this.capture();
+          }, 1000);
         }
         document.getElementById(this.containerId + "-files").scrollIntoView();
       } catch (e) {

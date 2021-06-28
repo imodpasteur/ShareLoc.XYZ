@@ -56,45 +56,47 @@ export async function setupBioEngine() {
 
       await app.loadPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
       await app.loadPlugin(baseUrl + "3DHistogram.imjoy.html");
-      app.imjoy.pm
-        .reloadPluginRecursively({
-          // uri: "http://localhost:9090/Jupyter-Engine-Manager.imjoy.html"
-          uri:
-            "https://imjoy-team.github.io/jupyter-engine-manager/Jupyter-Engine-Manager.imjoy.html"
-        })
-        .then(enginePlugin => {
-          const queryString = window.location.search;
-          const urlParams = new URLSearchParams(queryString);
-          const engine = urlParams.get("engine");
-          const spec = urlParams.get("spec");
-          if (engine) {
-            enginePlugin.api
-              .createEngine({
-                name: "MyCustomEngine",
-                nbUrl: engine,
-                url: engine.split("?")[0]
-              })
-              .then(() => {
-                console.log("Jupyter Engine connected!");
-              })
-              .catch(e => {
-                console.error("Failed to connect to Jupyter Engine", e);
-              });
-          } else {
-            enginePlugin.api
-              .createEngine({
-                name: "MyBinder Engine",
-                url: "https://mybinder.org",
-                spec: spec || "oeway/imjoy-binder-image/master"
-              })
-              .then(() => {
-                console.log("Binder Engine connected!");
-              })
-              .catch(e => {
-                console.error("Failed to connect to MyBinder Engine", e);
-              });
-          }
-        });
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const engine = urlParams.get("engine");
+      const spec = urlParams.get("spec");
+      if (engine || spec) {
+        app.imjoy.pm
+          .reloadPluginRecursively({
+            // uri: "http://localhost:9090/Jupyter-Engine-Manager.imjoy.html"
+            uri:
+              "https://imjoy-team.github.io/jupyter-engine-manager/Jupyter-Engine-Manager.imjoy.html"
+          })
+          .then(enginePlugin => {
+            if (engine) {
+              enginePlugin.api
+                .createEngine({
+                  name: "MyCustomEngine",
+                  nbUrl: engine,
+                  url: engine.split("?")[0]
+                })
+                .then(() => {
+                  console.log("Jupyter Engine connected!");
+                })
+                .catch(e => {
+                  console.error("Failed to connect to Jupyter Engine", e);
+                });
+            } else {
+              enginePlugin.api
+                .createEngine({
+                  name: "MyBinder Engine",
+                  url: "https://mybinder.org",
+                  spec: spec || "oeway/imjoy-binder-image/master"
+                })
+                .then(() => {
+                  console.log("Binder Engine connected!");
+                })
+                .catch(e => {
+                  console.error("Failed to connect to MyBinder Engine", e);
+                });
+            }
+          });
+      }
       app.addMenuItem({
         label: "ℹ️ Github",
         callback() {
