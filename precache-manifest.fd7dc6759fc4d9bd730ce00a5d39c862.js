@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/CNAME"
   },
   {
-    "revision": "7c2a59f370d178fe1e5c3cf68828d32f",
+    "revision": "1a74ab88e6d1d6666346374e7e39eb95",
     "url": "/SMLM-File-IO.imjoy.html"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "e767d1304a90e57ca9f2",
-    "url": "/css/app.b26ee77f.css"
+    "revision": "0e3a56d8b04cd24ecd54",
+    "url": "/css/app.8b227cb8.css"
   },
   {
     "revision": "c2a246aceefd7954dc86",
@@ -52,12 +52,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/index.ejs"
   },
   {
-    "revision": "ebd83457dda18fe6225c77a626ab9af0",
+    "revision": "c163348b854ccfb26d3e49156ba31717",
     "url": "/index.html"
   },
   {
-    "revision": "e767d1304a90e57ca9f2",
-    "url": "/js/app.9a351b6e.js"
+    "revision": "0e3a56d8b04cd24ecd54",
+    "url": "/js/app.e4c75b2c.js"
   },
   {
     "revision": "c2a246aceefd7954dc86",
