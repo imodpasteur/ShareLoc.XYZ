@@ -318,7 +318,14 @@ export default {
     this.dropFiles = null;
     this.uploadStatus = "";
     this.uploadProgress = 0;
-    this.$root.$on("formSubmitted", this.formSubmitted);
+    if (!this.loadedUrl) {
+      const repo = this.siteConfig.rdf_root_repo;
+      let manifest_url = this.siteConfig.manifest_url;
+      this.$store.dispatch("fetchResourceItems", {
+        repo,
+        manifest_url
+      });
+    }
   },
   computed: {
     sameNameDeposits() {
@@ -344,6 +351,8 @@ export default {
     },
     ...mapState({
       imjoy: state => state.imjoy,
+      siteConfig: state => state.siteConfig,
+      loadedUrl: state => state.loadedUrl,
       resourceItems: state => state.resourceItems,
       client: state => state.zenodoClient
     })

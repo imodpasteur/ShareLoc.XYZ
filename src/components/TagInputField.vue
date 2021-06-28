@@ -2,6 +2,11 @@
   <div>
     <label :for="item.label" class="label">
       {{ item.label }}
+      <span
+        class="helpLabel has-text-grey-light is-size-7 is-italic"
+        style="margin-left: .5rem;font-weight: 400;"
+        >{{ item.help }}</span
+      >
       <sup
         class="has-text-grey-light is-size-7"
         v-if="item.isRequired !== false"

@@ -145,7 +145,7 @@
           "Dronpa",
           "Atto-488"
         ],
-        "Labeling strategy":[
+        "labeling strategy":[
           "transient transfection",
           "stable knock-in",
           "endogenous labeling CRISPR",
@@ -155,7 +155,7 @@
           "SNAP-tag",
           "Tetracysteine Tag"     
         ],
-        "Target protein":[
+        "target protein":[
           "NUP133",
           "NUP96",
           "TOM22",
