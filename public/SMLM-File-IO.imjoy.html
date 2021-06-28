@@ -11,7 +11,7 @@
     "outputs": null,
     "icon": "🙀",
     "requirements":
-    ["https://cdn.rawgit.com/Stuk/jszip/9fb481ac/dist/jszip.min.js","https://cdn.rawgit.com/satazor/js-spark-md5/bbd1624a/spark-md5.min.js"],
+    ["https://cdn.rawgit.com/Stuk/jszip/9fb481ac/dist/jszip.min.js","https://cdn.rawgit.com/satazor/js-spark-md5/bbd1624a/spark-md5.min.js", "https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"],
     "dependencies": []
     }
 </config>
@@ -1161,6 +1161,25 @@
         "exposure": -1,
     }
 
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+    async function fetchFile(url, showMessage, showProgress) {
+        const response = await axios({
+            url,
+            method: 'GET',
+            responseType: 'blob',
+            cancelToken: source.token,
+            onDownloadProgress: (progressEvent) => {
+                showMessage(`Downloading file ${progressEvent.loaded / 1000}kB (${progressEvent.total && Math.round((progressEvent.loaded / progressEvent.total) * 100)}%)`);
+                if (progressEvent.total)
+                    showProgress(progressEvent.loaded / progressEvent.total)
+            }
+        })
+        const filename = url.split('/').pop().split('#')[0].split('?')[0];
+        const blob = new Blob([response.data]);
+        const file = new File([blob], filename, { type: "application/octet-stream", lastModified: Date.now() });
+        return file
+    }
 
     class ImJoyPlugin {
         setup() {
@@ -1255,6 +1274,8 @@
         }
 
         async load(file) {
+            if(typeof file === 'string' && file.startsWith('http'))
+                file = await fetchFile(file, api.showMessage, api.showProgress)
             // const blob2 = file.slice(0, 3)
             // console.log(await blob2.text())
             let data;

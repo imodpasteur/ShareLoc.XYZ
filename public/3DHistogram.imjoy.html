@@ -45,9 +45,6 @@
         }
 
         constructor(object, domElement) {
-
-
-
             if (domElement === undefined) console.warn('THREE.TrackballControls: The second parameter "domElement" is now mandatory.');
             if (domElement === document) console.error('THREE.TrackballControls: "document" should not be used as the target "domElement". Please use "renderer.domElement" instead.');
 
@@ -1014,11 +1011,16 @@
         rerender = true;
     }
 
-    function load3DViewer(canvasElement, update_callback) {
-        update_webgl_status_callback = update_callback || console.log;
-        scopeParams = new ScopeParams();
+    function initGUI(){
         // gui = new dat.GUI();
         gui = new dat.GUI({ autoPlace: false });
+        scopeParams = new ScopeParams();
+    }
+
+
+    function load3DViewer(canvasElement, update_callback) {
+        update_webgl_status_callback = update_callback || console.log;
+        
         var customContainer = document.getElementById('gui-webgl');
         customContainer.appendChild(gui.domElement);
         scopeParams['Total # of locations'] = 0;
@@ -1544,7 +1546,6 @@
 
     class ImJoyPlugin {
         async setup() {
-            await load3DViewer(document.getElementById("histogram_canvas_3d"));
         }
 
         getViewConfig(){
@@ -1567,10 +1568,29 @@
         }
 
         async run(ctx) {
-            if (ctx.data && ctx.data.tableDict)
-                this.show(ctx.data);
-            else if (ctx.data && Array.isArray(ctx.data)) {
-                ctx.data.map(this.show)
+            initGUI();
+            if(ctx.config && ctx.config.files){
+                scopeParams.File = ctx.config.files[0].download_url;
+                const options = {}
+                for(let f of ctx.config.files){
+                    options[f.name] = f.download_url;
+                }
+                const smlmPlugin = await api.getPlugin("SMLM File IO");
+                gui.add(scopeParams, 'File', options).listen().onChange(async ()=>{
+                    const data = await smlmPlugin.load(scopeParams['File'])
+                    data.files.map(this.show);
+                });
+                await load3DViewer(document.getElementById("histogram_canvas_3d"));
+                const data = await smlmPlugin.load(scopeParams['File'])
+                data.files.map(this.show)
+            }
+            else{
+                await load3DViewer(document.getElementById("histogram_canvas_3d"));
+                if (ctx.data && ctx.data.tableDict)
+                    await this.show(ctx.data);
+                else if (ctx.data && Array.isArray(ctx.data)) {
+                    ctx.data.map(this.show)
+                }
             }
         }
     }

@@ -286,7 +286,6 @@ export function depositionToRdf(deposition) {
       if (url.includes(`${deposition.id}/files/`)) {
         const fileName = url.split("/files/")[1];
         url = `${deposition.links.bucket}/${fileName}`;
-        debugger;
         datasets.push({ name: fileName, download_url: url });
       } else {
         throw new Error("Invalid file identifier: " + idf.identifier);

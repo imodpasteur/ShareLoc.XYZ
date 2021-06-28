@@ -225,7 +225,7 @@ export default {
       this.rdf.attachments = this.rdf.attachments || {};
       if (dataFiles.length > 0)
         this.rdf.attachments.datasets = dataFiles.map(file => {
-          return { name: file.name };
+          return { name: file.name, size: file.size };
         });
       // save the files to zip
       const zipPackage = new JSZip();
