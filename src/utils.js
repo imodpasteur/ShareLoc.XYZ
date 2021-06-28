@@ -10,6 +10,36 @@ export function randId() {
     .substr(2, 10);
 }
 
+export async function fetchFile(url, filename) {
+  const response = await axios({
+    url,
+    method: "GET",
+    responseType: "blob",
+    onDownloadProgress: progressEvent => {
+      const status = `Downloading file ${progressEvent.loaded /
+        1000}kB (${progressEvent.total &&
+        Math.round((progressEvent.loaded / progressEvent.total) * 100)}%)`;
+      if (window.imjoy) window.imjoy.api.showMessage(status);
+      else {
+        console.log(status);
+      }
+    }
+  });
+  filename =
+    filename ||
+    url
+      .split("/")
+      .pop()
+      .split("#")[0]
+      .split("?")[0];
+  const blob = new Blob([response.data]);
+  const file = new File([blob], filename, {
+    type: "application/octet-stream",
+    lastModified: Date.now()
+  });
+  return file;
+}
+
 export async function resolveDOI(doi) {
   const response = await fetch("https://doi.org/api/handles/" + doi);
   if (response.ok) {
@@ -102,6 +132,7 @@ export async function getFullRdfFromDeposit(deposition) {
   }
 }
 
+const additionalNote = " (Uploaded via https://shareloc.xyz)";
 export function rdfToMetadata(rdf, baseUrl, docstring) {
   if (!spdxLicenseList[rdf.license])
     throw new Error(
@@ -148,6 +179,19 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
     });
   else throw new Error("`_rdf_file` key is not found in the RDF config");
 
+  if (rdf.attachments && rdf.attachments.datasets) {
+    const datasets = rdf.attachments.datasets.map(d =>
+      d.download_url ? d.download_url : new URL(d.name, baseUrl).href
+    );
+    datasets.forEach(dataset => {
+      related_identifiers.push({
+        relation: "hasPart", // is part of this upload
+        identifier: dataset,
+        resource_type: "dataset",
+        scheme: "url"
+      });
+    });
+  }
   if (rdf.documentation) {
     if (rdf.documentation.includes("access_token="))
       throw new Error("Documentation URL should not contain access token");
@@ -173,10 +217,10 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
       };
   });
   const description =
-    `<a href="https://shareloc.xyz/#/p/zenodo:${encodeURIComponent(
+    `<a href="https://shareloc.xyz/#/r/zenodo:${encodeURIComponent(
       rdf.config._deposit.id
     )}"><span class="label label-success">Preview in Shareloc.XYZ</span></a><br>` +
-    (docstring || `<p>${docstring}</p>`);
+    (docstring && `<p>${docstring}</p>`);
   const keywords = ["shareloc.xyz", "shareloc.xyz:" + rdf.type];
   const metadata = {
     title: rdf.name,
@@ -187,7 +231,7 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
     creators: creators,
     publication_date: new Date().toISOString().split("T")[0],
     keywords: keywords.concat(rdf.tags),
-    notes: rdf.description + " (Uploaded via https://shareloc.xyz)",
+    notes: rdf.description + additionalNote,
     related_identifiers,
     communities: []
   };
@@ -204,6 +248,7 @@ export function depositionToRdf(deposition) {
   }
   type = type.replace("shareloc.xyz:", "");
   const covers = [];
+  const datasets = [];
   const links = [];
   let rdfFile = null;
   let documentation = null;
@@ -211,9 +256,7 @@ export function depositionToRdf(deposition) {
   for (let idf of metadata.related_identifiers) {
     if (idf.relation === "isCompiledBy" && idf.scheme === "url") {
       rdfFile = idf.identifier;
-      if (rdfFile.startsWith("file://")) {
-        rdfFile = rdfFile.replace("file://", deposition.links.bucket + "/");
-      } else if (rdfFile.includes(`${deposition.id}/files/`)) {
+      if (rdfFile.includes(`${deposition.id}/files/`)) {
         const fileName = rdfFile.split("/files/")[1];
         rdfFile = `${deposition.links.bucket}/${fileName}`;
       } else {
@@ -235,6 +278,19 @@ export function depositionToRdf(deposition) {
       }
       covers.push(url);
     } else if (
+      idf.relation === "hasPart" &&
+      idf.resource_type === "dataset" &&
+      idf.scheme === "url"
+    ) {
+      let url = idf.identifier;
+      if (url.includes(`${deposition.id}/files/`)) {
+        const fileName = url.split("/files/")[1];
+        url = `${deposition.links.bucket}/${fileName}`;
+        datasets.push({ name: fileName, download_url: url });
+      } else {
+        throw new Error("Invalid file identifier: " + idf.identifier);
+      }
+    } else if (
       idf.relation === "references" &&
       idf.scheme === "url" &&
       idf.identifier.startsWith("https://shareloc.xyz/#/r/")
@@ -243,14 +299,11 @@ export function depositionToRdf(deposition) {
       const id = idf.identifier.replace("https://shareloc.xyz/#/r/", "");
       links.push(decodeURIComponent(id));
     } else if (idf.relation === "isDocumentedBy" && idf.scheme === "url") {
-      // links
-      documentation = idf.identifier;
+      const fileName = idf.identifier.split("/files/")[1];
+      documentation = `${deposition.links.bucket}/${fileName}`;
     }
   }
-  // strip the html tags
-  const div = document.createElement("div");
-  div.innerHTML = metadata.description;
-  const description = div.textContent || div.innerText || "";
+  const description = metadata.notes.replace(additionalNote, "");
   if (!rdfFile) {
     throw new Error(
       `Invalid deposit (${deposition.id}), rdf.yaml is not defined in the metadata (as part of the "related_identifiers")`
@@ -273,6 +326,9 @@ export function depositionToRdf(deposition) {
     covers,
     source: rdfFile, //TODO: fix for other RDF types
     links,
+    attachments: {
+      datasets
+    },
     config: {
       _doi: metadata.doi,
       _deposit: deposition,
@@ -336,6 +392,7 @@ export class ZenodoClient {
     page = page || 1;
     type = type || "all";
     keywords = keywords || [];
+    const community = "shareloc-xyz";
     if (!keywords.includes("shareloc.xyz")) keywords.push("shareloc.xyz");
     size = size || 20;
     sort = sort || "mostviewed";
@@ -347,8 +404,9 @@ export class ZenodoClient {
         : "") +
       (query ? "&q=" + query : "");
     const url =
-      `${this.baseURL}/api/records/?communities=shareloc-xyz&sort=${sort}&page=${page}&size=${size}` +
-      additionalKeywords; //&all_versions
+      `${this.baseURL}/api/records/?${
+        community ? "communities=" + community : ""
+      }&sort=${sort}&page=${page}&size=${size}` + additionalKeywords; //&all_versions
     const response = await fetch(url);
     const results = JSON.parse(await response.text());
     const hits = results.hits.hits;

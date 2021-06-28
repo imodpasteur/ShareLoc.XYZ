@@ -85,6 +85,8 @@ export default {
   computed: {
     components: () => ({ TagInputField, DropFilesField, FilePreviewField }),
     ...mapState({
+      client: state => state.zenodoClient,
+      resourceItems: state => state.resourceItems,
       allTags: state => state.allTags
     })
   },
@@ -131,8 +133,8 @@ export default {
         authors: "Authors",
         // source: "Source",
         // git_repo: "Git Repository",
-        tags: "Tags"
-        // links: "Links"
+        tags: "Tags",
+        links: "Links"
       };
       const values = result.values;
       this.rdf = {};
@@ -142,9 +144,11 @@ export default {
       let rdfFileName = "rdf.yaml";
 
       this.rdf.type = "dataset";
+      this.rdf.links = this.rdf.links || [];
       this.rdf.tags = this.rdf.tags || [];
       this.rdf.config = this.rdf.config || {};
       this.rdf.config._rdf_file = "./" + rdfFileName;
+      this.rdf.config._docstring = values["Documentation"];
       this.rdf.authors = this.rdf.authors.split(",").map(name => {
         return { name: name.trim() };
       });
@@ -160,13 +164,21 @@ export default {
         const file = new File([blob], "README.md");
         this.rdf.documentation = "./README.md";
         editedFiles.push(file);
+        delete this.rdf.config._docstring;
       }
-
       // Add screenshots
       if (editedFiles.screenshots) {
         this.rdf.covers = this.rdf.covers || [];
-        for (let img of editedFiles.screenshots) {
-          const blob = dataURLtoFile(img);
+        this.rdf.config = this.rdf.config || {};
+        for (let screenshoot of editedFiles.screenshots) {
+          const { image, config } = screenshoot;
+          // skip adding remote screenshot
+          if (image.startsWith("http")) {
+            const tmp = image.split("?")[0].split("/");
+            this.rdf.covers.push("./" + tmp[tmp.length - 1]);
+            continue;
+          }
+          const blob = dataURLtoFile(image);
           const fileName = "screenshot-" + randId();
           const file = new File([blob], fileName + ".png", {
             type: blob.type
@@ -186,9 +198,12 @@ export default {
             }
           );
           editedFiles.push(fileSmall);
-
+          // save view config for screenshots
+          this.rdf.config.view_config = this.rdf.config.view_config || {};
+          this.rdf.config.view_config[fileName + "_thumbnail.png"] = config;
           this.rdf.covers.push("./" + fileName + "_thumbnail.png");
         }
+        // TODO: handle removed screenshots
         delete editedFiles.screenshots;
       }
 
@@ -204,10 +219,18 @@ export default {
       const file = new File([blob], rdfFileName);
       editedFiles.push(file);
 
+      const dataFiles = editedFiles.filter(
+        file => file.name.endsWith(".smlm") || file.name.endsWith(".csv")
+      );
+      this.rdf.attachments = this.rdf.attachments || {};
+      if (dataFiles.length > 0)
+        this.rdf.attachments.datasets = dataFiles.map(file => {
+          return { name: file.name, size: file.size };
+        });
       // save the files to zip
       const zipPackage = new JSZip();
       editedFiles.map(file => {
-        zipPackage.file(file.name, file);
+        if (file.type !== "remote") zipPackage.file(file.name, file);
       });
 
       this.rdf.config._zip = zipPackage;
@@ -218,6 +241,18 @@ export default {
       this.rdf = rdf || {};
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
+      this.rdf.license = this.rdf.license || "CC-BY-4.0";
+      if (rdf.covers) {
+        files.screenshots = rdf.covers.map(c => {
+          const baseUrl = `${this.client.baseURL}/record/${this.rdf.config._deposit.id}/files/`;
+          const coverUrl = c.startsWith("http") ? c : new URL(c, baseUrl).href;
+          return {
+            image: coverUrl,
+            config:
+              this.rdf.config.view_config && this.rdf.config.view_config[c]
+          };
+        });
+      }
       this.jsonFields = this.transformFields([
         {
           label: "Files",
@@ -284,17 +319,17 @@ export default {
           value: this.rdf.config._docstring,
           help: "Documentation in markdown format",
           isRequired: false
+        },
+        {
+          label: "Links",
+          type: "tags",
+          value: this.rdf.links,
+          placeholder: "Add a link (resource item ID)",
+          options: this.resourceItems.map(item => item.id),
+          allow_new: true,
+          icon: "vector-link",
+          isRequired: false
         }
-        // {
-        //   label: "Links",
-        //   type: "tags",
-        //   value: this.rdf.links,
-        //   placeholder: "Add a link (resource item ID)",
-        //   options: this.resourceItems.map(item => item.id),
-        //   allow_new: true,
-        //   icon: "vector-link",
-        //   isRequired: false
-        // }
       ]);
     }
   }

@@ -26,7 +26,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
+import { fetchFile } from "../utils";
 
 export default {
   name: "dataset",
@@ -72,10 +72,13 @@ export default {
 
       if (resourceItem.download_url) {
         try {
-          const file = await this.fetchFile(resourceItem.download_url);
+          const file = await fetchFile(
+            resourceItem.download_url,
+            resourceItem.name
+          );
           const api = window.imjoy.api;
           const baseUrl = window.location.origin + window.location.pathname;
-          api.getPlugin(baseUrl + "SMLMFileIO.imjoy.html").then(() => {
+          api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html").then(() => {
             this.previewFile(file);
           });
         } catch (e) {
@@ -88,33 +91,6 @@ export default {
         }
       }
       console.log(resourceItem);
-    },
-    async fetchFile(url) {
-      const response = await axios({
-        url,
-        method: "GET",
-        responseType: "blob",
-        onDownloadProgress: progressEvent => {
-          const status = `Downloading file ${progressEvent.loaded /
-            1000}kB (${progressEvent.total &&
-            Math.round((progressEvent.loaded / progressEvent.total) * 100)}%)`;
-          if (window.imjoy) window.imjoy.api.showMessage(status);
-          else {
-            console.log(status);
-          }
-        }
-      });
-      const filename = url
-        .split("/")
-        .pop()
-        .split("#")[0]
-        .split("?")[0];
-      const blob = new Blob([response.data]);
-      const file = new File([blob], filename, {
-        type: "application/octet-stream",
-        lastModified: Date.now()
-      });
-      return file;
     },
     async previewFile(file, type) {
       const api = window.imjoy.api;

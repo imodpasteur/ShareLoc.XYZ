@@ -54,7 +54,7 @@ export async function setupBioEngine() {
       //   }
       // });
 
-      await app.loadPlugin(baseUrl + "SMLMFileIO.imjoy.html");
+      await app.loadPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
       await app.loadPlugin(baseUrl + "3DHistogram.imjoy.html");
       app.imjoy.pm
         .reloadPluginRecursively({
