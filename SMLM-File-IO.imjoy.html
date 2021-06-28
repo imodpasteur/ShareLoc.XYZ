@@ -1273,6 +1273,10 @@
 
         }
 
+        async cancel(){
+            source.cancel('Operation canceled by the user.');
+        }
+
         async load(file) {
             if(typeof file === 'string' && file.startsWith('http'))
                 file = await fetchFile(file, api.showMessage, api.showProgress)
