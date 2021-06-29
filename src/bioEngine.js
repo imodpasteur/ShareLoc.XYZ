@@ -56,7 +56,7 @@ export async function setupBioEngine() {
         // });
 
         await app.loadPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
-        await app.loadPlugin(baseUrl + "3DHistogram.imjoy.html");
+        await app.loadPlugin(baseUrl + "FairyDust.imjoy.html");
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const engine = urlParams.get("engine");
