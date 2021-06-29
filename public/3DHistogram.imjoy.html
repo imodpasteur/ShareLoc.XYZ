@@ -1011,7 +1011,7 @@
         rerender = true;
     }
 
-    function initGUI(){
+    function initGUI() {
         // gui = new dat.GUI();
         gui = new dat.GUI({ autoPlace: false });
         scopeParams = new ScopeParams();
@@ -1020,7 +1020,7 @@
 
     function load3DViewer(canvasElement, update_callback) {
         update_webgl_status_callback = update_callback || console.log;
-        
+
         var customContainer = document.getElementById('gui-webgl');
         customContainer.appendChild(gui.domElement);
         scopeParams['Total # of locations'] = 0;
@@ -1380,7 +1380,7 @@
     }
 
     var colors = [
-        [255,28,14],
+        [255, 28, 14],
         [0, 255, 0],
         [255, 0, 255],
         [0, 0, 255],
@@ -1499,7 +1499,7 @@
                     var colorN = 'color ' + N;
                     var alphaN = 'alpha ' + N;
                     scopeParams[activN] = true;
-                    scopeParams[colorN] = fileIDs.length ===1?colors[0]:colors[colorIndex];
+                    scopeParams[colorN] = fileIDs.length === 1 ? colors[0] : colors[colorIndex];
                     scopeParams[alphaN] = 0.85;
                     colorFolder.add(scopeParams, activN).onChange(setRerender);
                     colorFolder.addColor(scopeParams, colorN).onChange(setRerender);
@@ -1548,10 +1548,10 @@
         async setup() {
         }
 
-        getViewConfig(){
+        getViewConfig() {
             const config = {};
-            for(let k of Object.keys(scopeParams)){
-                if(typeof scopeParams[k] !== 'function'){
+            for (let k of Object.keys(scopeParams)) {
+                if (typeof scopeParams[k] !== 'function') {
                     config[k] = scopeParams[k]
                 }
             }
@@ -1569,29 +1569,45 @@
 
         async run(ctx) {
             initGUI();
-            if(ctx.config && ctx.config.files){
+            if (ctx.config && ctx.config.files) {
                 scopeParams.File = ctx.config.files[0].download_url;
                 const options = {}
-                for(let f of ctx.config.files){
+                for (let f of ctx.config.files) {
                     options[f.name] = f.download_url;
                 }
                 const smlmPlugin = await api.getPlugin("SMLM File IO");
-                gui.add(scopeParams, 'File', options).listen().onChange(async ()=>{
-                    const data = await smlmPlugin.load(scopeParams['File'])
-                    data.files.map(this.show);
+                gui.add(scopeParams, 'File', options).listen().onChange(async () => {
+                    try {
+                        const data = await smlmPlugin.load(scopeParams['File'])
+                        data.files.map(this.show);
+                    }
+                    catch (e) {
+                        api.showMessage(`Failed to load file: ${e}`)
+                    }
                 });
                 await load3DViewer(document.getElementById("histogram_canvas_3d"));
-                const data = await smlmPlugin.load(scopeParams['File'])
-                data.files.map(this.show)
+                try {
+
+                    const data = await smlmPlugin.load(scopeParams['File'])
+                    data.files.map(this.show)
+                }
+                catch (e) {
+                    api.showMessage(`Failed to load file: ${e}`)
+                }
             }
-            else if(ctx.config && ctx.config.enable_local_file){
+            else if (ctx.config && ctx.config.enable_local_file) {
                 const smlmPlugin = await api.getPlugin("SMLM File IO");
-                scopeParams['Load file'] = ()=>{
+                scopeParams['Load file'] = () => {
                     const fileElem = document.getElementById('myLocalFile');
-                    fileElem.onchange = async ()=>{
-                        if(fileElem.files[0]){
-                            const data = await smlmPlugin.load(fileElem.files[0])
-                            data.files.map(this.show);
+                    fileElem.onchange = async () => {
+                        try {
+                            if (fileElem.files[0]) {
+                                const data = await smlmPlugin.load(fileElem.files[0])
+                                data.files.map(this.show);
+                            }
+                        }
+                        catch (e) {
+                            api.showMessage(`Failed to load file: ${e}`)
                         }
                     }
                     document.getElementById('myLocalFile').click();
@@ -1599,7 +1615,7 @@
                 gui.add(scopeParams, 'Load file')
                 await load3DViewer(document.getElementById("histogram_canvas_3d"));
             }
-            else if(ctx.data){
+            else if (ctx.data) {
                 await load3DViewer(document.getElementById("histogram_canvas_3d"));
                 if (ctx.data && ctx.data.tableDict)
                     await this.show(ctx.data);
