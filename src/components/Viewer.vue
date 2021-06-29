@@ -60,7 +60,7 @@ export default {
             const api = window.imjoy.api;
             api.createWindow({
               name: "SMLM Viewer",
-              type: "3D Histogram",
+              type: "Fairy Dust",
               config: {
                 enable_local_file: true
               },
@@ -146,7 +146,7 @@ export default {
           const baseUrl = window.location.origin + window.location.pathname;
           this.viewer = await api.createWindow({
             name: file.name,
-            src: baseUrl + "3DHistogram.imjoy.html",
+            src: baseUrl + "FairyDust.imjoy.html",
             window_id: this.containerId
           });
           for (let f of smlm.files) {

@@ -283,7 +283,7 @@ export default {
         const baseUrl = window.location.origin + window.location.pathname;
         this.viewer = await api.createWindow({
           name: file.name.slice(0, 40),
-          src: baseUrl + "3DHistogram.imjoy.html",
+          src: baseUrl + "FairyDust.imjoy.html",
           window_id: this.containerId,
           data: smlm.files
         });
