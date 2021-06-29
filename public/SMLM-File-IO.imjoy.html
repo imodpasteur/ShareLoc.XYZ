@@ -402,7 +402,7 @@
                 }
 
                 console.log('loading...')
-                update_callback({ running: true, running_status: 'Running ' })
+                update_callback({ running: true, running_status: 'Loading...' })
 
                 const callback = (data) => {
                     if (data.error) {
@@ -786,7 +786,11 @@
             })
         }
         save(update_callback) {
-            console.log('preparing .smlm file')
+            update_callback = update_callback || function (status) {
+                if(status.running_progress) api.showProgress(status.running_progress)
+                if(status.running_status) api.showMessage(status.running_status)
+            }
+            api.showMessage('Preparing .smlm file...')
             return new Promise((resolve, reject) => {
                 try {
                     if (this.zipFile) {
@@ -1341,7 +1345,7 @@
                     r.readAsText(blob);
                 })
             }
-            return { files: data.files, manifest: data.manifest }
+            return {_rintf: true, files: data.files, manifest: data.manifest, save: data.save.bind(data) }
 
         }
 

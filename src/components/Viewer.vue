@@ -78,8 +78,8 @@ export default {
           );
           const api = window.imjoy.api;
           const baseUrl = window.location.origin + window.location.pathname;
-          api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html").then(() => {
-            this.previewFile(file);
+          api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html").then(async () => {
+            await this.previewFile(file);
           });
         } catch (e) {
           alert("Failed to download file: " + resourceItem.download_url);
