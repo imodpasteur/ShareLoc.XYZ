@@ -471,9 +471,11 @@ export class ZenodoClient {
             return;
           }
           loggedIn = true;
-          if(!event.data.access_token){
-            reject("Failed to obtain the access token, please make sure your account is valid and try it again.");
-            return
+          if (!event.data.access_token) {
+            reject(
+              "Failed to obtain the access token, please make sure your account is valid and try it again."
+            );
+            return;
           }
           console.log("Successfully logged in", event.data);
           this.credential = event.data;
