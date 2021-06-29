@@ -1,7 +1,10 @@
 <template>
-  <div id="app">
+  <div
+    id="app"
+    :style="{ height: showNavbar ? 'calc(100vh - 72px)' : '100vh' }"
+  >
     <!-- Navigation bar -->
-    <nav class="navbar is-link is-fixed-top">
+    <nav class="navbar is-link is-fixed-top" v-if="showNavbar">
       <div class="navbar-brand">
         <a href="#/">
           <span class="site-title" style="cursor: pointer;">
@@ -54,7 +57,7 @@
       </div>
     </nav>
     <!-- Header -->
-    <router-view style="margin-top:72px;" />
+    <router-view :style="{ marginTop: showNavbar ? '72px' : '0px' }" />
   </div>
 </template>
 <script>
@@ -69,6 +72,7 @@ export default {
   },
   computed: {
     ...mapState({
+      showNavbar: state => state.showNavbar,
       siteConfig: state => state.siteConfig
     })
   }
@@ -84,9 +88,7 @@ body {
   background: #dcdcdc;
   overscroll-behavior-y: none;
 }
-#app {
-  height: calc(100vh - 72px);
-}
+
 .card {
   margin-bottom: 3rem;
 }
