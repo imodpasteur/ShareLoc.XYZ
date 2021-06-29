@@ -31,14 +31,29 @@
             class="button is-fullwidth is-primary"
             @click="login()"
             expanded
+            icon-left="login"
             >Login to Zenodo</b-button
           >
         </b-field>
-
+        <b-field
+          v-else
+          label="You have already logged in via Zenodo"
+          message="ShareLoc.XYZ uses https://zenodo.org as storage service, you will need to sign up or login to Zenodo, and allow ShareLoc.XYZ to upload files to zenodo on behave of you."
+          expanded
+        >
+          <b-button
+            style="text-transform:none;"
+            class="button is-small"
+            @click="client.logout()"
+            icon-left="logout"
+            >Logout</b-button
+          >
+        </b-field>
         <b-field
           v-if="client.credential"
           label="Option 1: Create a new deposit"
           expanded
+          message="With this option, you can upload a dataset or application to ShareLoc (via Zenodo), please make sure you have prepared a set of files. Also note that for each dataset can contain files with the total size up to 50GB, if you have more than that, you should either split the files into several deposits or contact Zenodo to increase the quota."
         >
           <b-button
             style="text-transform:none;"
@@ -52,7 +67,7 @@
         <b-field
           v-if="client.credential"
           label="Option 2: Update an existing deposit"
-          message="A URI can be a Zenodo DOI, Zenodo URL or Github URL to the RDF file"
+          message="With this option, you can update an existing dataset or application. A Zenodo DOI or URL should be provided."
         >
           <b-input
             type="url"
