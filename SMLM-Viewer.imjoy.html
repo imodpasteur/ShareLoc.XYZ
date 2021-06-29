@@ -53,7 +53,7 @@
                 const files = ctx.data.attachments.datasets;
                 this.viewer = await api.createWindow({
                     name: ctx.data.name.slice(0, 40),
-                    type: "3D Histogram",
+                    type: "Fairy Dust",
                     config: {
                         files
                     },
@@ -62,7 +62,7 @@
             else{
                 this.viewer = await api.createWindow({
                     name: "SMLM Viewer",
-                    type: "3D Histogram",
+                    type: "Fairy Dust",
                     config: {
                         enable_local_file: true
                     },
@@ -103,7 +103,7 @@
             else {
                 this.viewer = await api.createWindow({
                     name: file.name,
-                    type: "3D Histogram",
+                    type: "Fairy Dust",
                     data: smlm.files,
                 })
             }
