@@ -166,7 +166,7 @@ manifest = {"id": "shareloc",
   "logo": "🔬",
   "icon": "🔬",
   "splash_title": "",
-  "splash_subtitle": "ShareLoc.XYZ: A platform for sharing single molecule localization microscopy data",
+  "splash_subtitle": "ShareLoc.XYZ: An open platform for sharing single molecule localization microscopy data",
   "splash_feature_list": [
   ],
   "resource_types": [

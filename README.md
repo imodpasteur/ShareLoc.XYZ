@@ -1,5 +1,5 @@
 # ShareLoc.XYZ
-A platform for sharing single-molecule localization microscopy data.
+An open platform for sharing single-molecule localization microscopy data and tools.
 
 ## Key Features
  * Public localization data repository

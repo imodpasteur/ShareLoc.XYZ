@@ -5,7 +5,7 @@
     "logo": "\ud83d\udd2c",
     "icon": "\ud83d\udd2c",
     "splash_title": "ShareLoc.XYZ",
-    "splash_subtitle": "A platform for sharing single molecule localization microscopy data",
+    "splash_subtitle": "An open platform for sharing single molecule localization microscopy data",
     "splash_feature_list": [],
     "resource_types": [
         "dataset"
