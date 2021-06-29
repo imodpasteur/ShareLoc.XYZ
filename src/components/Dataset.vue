@@ -268,7 +268,8 @@ export default {
         {
           label: "Name",
           placeholder: "name",
-          value: this.rdf.name
+          value: this.rdf.name,
+          help: "The name of your dataset or application to be uploaded"
         },
         {
           label: "Description",
@@ -281,7 +282,8 @@ export default {
           placeholder: "authors (Full name, separated by comma)",
           value:
             this.rdf.authors &&
-            this.rdf.authors.map(author => author.name.split(";")[0]).join(",")
+            this.rdf.authors.map(author => author.name.split(";")[0]).join(","),
+          help: "The authors who contributed to this dataset or application"
         },
         // {
         //   label: "Source",
@@ -305,7 +307,9 @@ export default {
               value: opt,
               selected: this.rdf.license === opt
             };
-          })
+          }),
+          help:
+            "Choose the license that fits you most, we recommend to use CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/). For other license options, please visit here https://spdx.org/licenses/"
         },
         {
           label: "Tags",
