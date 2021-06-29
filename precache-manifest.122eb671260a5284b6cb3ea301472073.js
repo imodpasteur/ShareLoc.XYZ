@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/FairyDust.imjoy.html"
   },
   {
-    "revision": "20a69b185533202f759837666f04fe9b",
+    "revision": "7f793f52979082c08df6d3ffed86c1de",
     "url": "/ITK-VTK-Viewer.imjoy.html"
   },
   {
