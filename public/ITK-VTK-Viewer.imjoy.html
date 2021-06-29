@@ -1,7 +1,7 @@
 <config lang="json">
     {
-    "name": "SMLM-Viewer",
-    "description": "A web-based point cloud viewer adapted from Fairy Dust by Felix Woitzel",
+    "name": "ITK VTK Viewer",
+    "description": "ITK VTK viewer for displaying point cloud data",
     "type": "web-worker",
     "tags": [],
     "ui": "",
@@ -73,18 +73,63 @@
         async cancel(){
             source.cancel('Operation canceled by the user.');
         }
-
+        toNdArray(file) {
+            var data = file.data
+            var xx = data.tableDict.x
+            var yy = data.tableDict.y
+            var zz = data.tableDict.z
+            var ff = data.tableDict.frame
+            var rows = data.rows
+            var table_dict = data.tableDict
+            var progress = 0
+            const array = new Float32Array(new ArrayBuffer(rows * 3 * 4))
+            for (var line = 0; line < rows; line++) {
+                var newProgress = Math.floor(100 * line / (rows + 0.5));
+                if (newProgress != progress) {
+                    progress = newProgress
+                    api.showProgress(progress)
+                }
+                array[line * 3] = xx[line];
+                array[line * 3 + 1] = yy[line];
+                if (zz)
+                    array[line * 3 + 2] = zz[line];
+                else
+                    array[line * 3 + 2] = -5.0e-6
+            }
+            return {
+                _rtype: 'ndarray',
+                _rdtype: 'float32',
+                _rshape: [rows, 3],
+                _rvalue: array.buffer,
+            }
+        }
+        
         async previewFile(file, type) {
             await api.showMessage("Rendering file...")
             const smlmPlugin = await api.getPlugin("SMLM File IO");
 
             const smlm = await smlmPlugin.load(file)
-            this.viewer = await api.createWindow({
-                name: file.name,
-                type: "Fairy Dust",
-                data: smlm.files,
+
+            const viewer = await api.createWindow({
+                src: "https://kitware.github.io/itk-vtk-viewer/app/",
             })
-        
+            const sets = []
+            let is3d = false;
+            for (let f of smlm.files) {
+                sets.push(this.toNdArray(f))
+                if (f.data.headers.includes('z')) {
+                    is3d = true
+                }
+            }
+            await viewer.setPointSets(sets);
+            await viewer.setBackgroundColor([0, 0, 0]);
+            await viewer.setAxesEnabled(false);
+            if (is3d)
+                await viewer.setViewMode('Volume');
+            else
+                await viewer.setViewMode('ZPlane');
+            this.viewer = viewer;
+  
         }
     }
 

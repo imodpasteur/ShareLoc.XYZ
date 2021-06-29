@@ -34,6 +34,26 @@
             ]
         },
         {
+            "id": "itk-vtk-viewer",
+            "type": "application",
+            "source": "https://shareloc.xyz/ITK-VTK-Viewer.imjoy.html",
+            "icon": "https://kitware.github.io/itk-vtk-viewer/app/favicon-32x32.png",
+            "name": "ITK VTK Viewer",
+            "version": "0.1.0",
+            "api_version": "0.1.8",
+            "description": "ITK VTK viewer for displaying point cloud data",
+            "requirements": [],
+            "dependencies": [],
+            "env": "",
+            "tags": [],
+            "documentation": "",
+            "covers": [],
+            "badges": [],
+            "authors": [
+                "Wei OUYANG"
+            ]
+        },
+        {
             "id": "anna-palm",
             "type": "application",
             "source": "https://github.com/imjoy-team/imjoy-plugins/blob/master/repository/annaPalm.imjoy.html",
@@ -80,6 +100,9 @@
             "size": 11036353,
             "covers": [
                 "https://imjoy-s3.pasteur.fr/imod-data-pasteur/04cb0d658f351d47446b351dca89ef4c/thumbnail.png"
+            ],
+            "links": [
+                "itk-vtk-viewer"
             ]
         },
         {
@@ -356,8 +379,8 @@
             "tags": [
                 "3D",
                 "astigmatism",
-                "Alexa-647",
-                "ZOLA-3D",
+                "A647",
+                "ZOLA",
                 "microtubule"
             ],
             "license": "CC BY 4.0",
@@ -380,10 +403,10 @@
             "hash": "2d633561d86ad6ee27ba68da5ed30ac6",
             "tags": [
                 "NUP133",
-                "3D",
+                "3d",
                 "tetrapod",
-                "ZOLA-3D",
-                "nuclear pore"
+                "zola",
+                "nuclear_pore"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-02T16:22:49.661635",
@@ -490,7 +513,7 @@
             "description": "Localization table for Ouyang et al, Nat Biotech, 2018  figure3",
             "hash": "319692307ae80cb58bf9f728f56e32d1",
             "tags": [
-                "Alexa-647",
+                "alexa647",
                 "STORM",
                 "microtubule"
             ],
@@ -770,7 +793,7 @@
             "description": "actin in neurons",
             "hash": "1b05462a3e9c1d3ee6809590da8970d2",
             "tags": [
-                "actin"
+            "actin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-06-19T05:49:56.159768",
@@ -791,7 +814,7 @@
             "description": "actin in neurons",
             "hash": "aea02b71ae74ef73cd5b3cbaa684818e",
             "tags": [
-                "actin"
+            "actin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-06-19T05:53:20.320526",
@@ -812,7 +835,7 @@
             "description": "actin in neurons",
             "hash": "e98d0854e7c72e8d949ec2780c38daac",
             "tags": [
-                "actin"
+            "actin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-06-19T06:00:05.335312",
@@ -916,7 +939,7 @@
             "description": "Test",
             "hash": "d19b13b5ef7e181492b4b75bc05eb826",
             "tags": [
-                "nuclear pore"
+                "NPC"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-10-09T17:52:26.487111",
@@ -1005,8 +1028,8 @@
             "hash": "5e56796222dca3bceba7a6d6e3b64e5d",
             "tags": [
                 "gp210",
-                "Alexa-647",
-                "nuclear pore",
+                "A647",
+                "nuclear_complex",
                 "dSTORM"
             ],
             "license": "CC BY 4.0",
@@ -1029,11 +1052,9 @@
             "hash": "ece852505233a90d991befb4921bc8a6",
             "tags": [
                 "dSTORM",
-                "3D",
-                "Biplane",
+                "3D Biplane",
                 "microtubule",
-                "Alexa-647",
-                "COS7"
+                "Alexa-647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-12-03T09:56:07.025655",
@@ -1243,8 +1264,8 @@
             "tags": [
                 "dSTORM",
                 "WGA",
-                "Alexa-647",
-                "nuclear pore"
+                "A647",
+                "nuclear_pore"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-12-14T10:46:34.099000",
@@ -1307,10 +1328,10 @@
             "description": "3D dSTORM with DAISY of clathrin (AF647), imaged by C. Cabriel at ISMO , S. Leveque-Fort's group, https://www.biorxiv.org/content/early/2018/11/16/385799",
             "hash": "dd865cb8a8ef023113a9c7ae9945777c",
             "tags": [
-                "dSTORM",
+                "#dstorm",
                 "#DAISY",
-                "clathrin",
-                "Alexa-647"
+                "#clathrin",
+                "#AF647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2019-01-10T18:00:02.681220",
@@ -2088,8 +2109,8 @@
             "description": "",
             "hash": "7a4c2cc8a6e5ecc949510ed68c6a6e6c",
             "tags": [
-                "microtubule",
-                "Alexa-647",
+                "Tubulin",
+                "AF647",
                 "ABBELIGHT",
                 "STORM"
             ],
@@ -2150,8 +2171,8 @@
             "description": "",
             "hash": "5e3fa8dab523161582c1fa70fa53304e",
             "tags": [
-                "microtubule",
-                "Alexa-647",
+                "Tubulin",
+                "AF647",
                 "ABBELIGHT",
                 "SMLM"
             ],
@@ -2174,8 +2195,8 @@
             "description": "",
             "hash": "e3384c43a79dc103b34a85e37eb0dce9",
             "tags": [
-                "microtubule",
-                "Alexa-647",
+                "Tubulin",
+                "AF647",
                 "ABBELIGHT"
             ],
             "license": "CC BY 4.0",
@@ -2197,8 +2218,8 @@
             "description": "",
             "hash": "48c83914085cd14390ce365b873e0add",
             "tags": [
-                "microtubule",
-                "Alexa-647",
+                "Tubulin",
+                "AF647",
                 "ABBELIGHT"
             ],
             "license": "CC BY 4.0",
@@ -2220,8 +2241,8 @@
             "description": "",
             "hash": "58bfd606bd855e0f32d8a00dc7e1e6a5",
             "tags": [
-                "microtubule",
-                "Alexa-647",
+                "Tubulin",
+                "AF647",
                 "ABBELIGHT",
                 "U2OS"
             ],
@@ -2245,10 +2266,10 @@
             "hash": "059917b48293e1b1597ea258094fe259",
             "tags": [
                 "REF52",
-                "alpha-tub",
-                "STORM",
-                "microtubule",
-                "Alexa-647"
+                "alpha tubulin",
+                "storm",
+                "microtubules",
+                "alexa fluor 647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T09:17:47.611266",
@@ -2270,10 +2291,10 @@
             "hash": "73d11d9450a1021d6a30272ff6ee947a",
             "tags": [
                 "microtubule",
-                "STORM",
-                "Alexa-647",
+                "storm",
+                "alexa fluor 647",
                 "REF52",
-                "alpha-tub"
+                "alpha tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T09:31:41.489917",
@@ -2295,10 +2316,10 @@
             "hash": "d9d9e0be7a6793e8336231c231f2f72e",
             "tags": [
                 "microtubule",
-                "Alexa-647",
-                "REF52",
-                "STORM",
-                "alpha-tub"
+                "alexa fluor 647",
+                "ref52",
+                "storm",
+                "alpha tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T09:40:19.536918",
@@ -2320,9 +2341,9 @@
             "hash": "5a98bfd6f0fe1ec776f41e087215a389",
             "tags": [
                 "REF52",
-                "STORM",
-                "Alexa-647",
-                "alpha-tub",
+                "storm",
+                "alexa fluor 647",
+                "alpha tubulin",
                 "microtubule"
             ],
             "license": "CC BY 4.0",
@@ -2345,9 +2366,9 @@
             "hash": "2a6927678ac1869f0a5898aaf40cc5e7",
             "tags": [
                 "microtubule",
-                "Alexa-647",
-                "STORM",
-                "alpha-tub",
+                "alexa fluor 647",
+                "storm",
+                "alpha tubulin",
                 "REF52"
             ],
             "license": "CC BY 4.0",
@@ -2370,10 +2391,10 @@
             "hash": "4f3fd0b80ef2ecc5a8acb0260ffa1dad",
             "tags": [
                 "microtubule",
-                "STORM",
-                "REF52",
-                "Alexa-647",
-                "alpha-tub"
+                "storm",
+                "ref52",
+                "alexa fluor 647",
+                "alpha tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T10:37:39.014963",
@@ -2395,10 +2416,10 @@
             "hash": "3e03aa668f9d6e34bd3dd63b2d0c12be",
             "tags": [
                 "microtubule",
-                "STORM",
-                "Alexa-647",
-                "alpha-tub",
-                "REF52"
+                "storm",
+                "alexa fluor 647",
+                "alpha tubulin",
+                "ref52"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T10:54:06.499718",
@@ -2420,10 +2441,10 @@
             "hash": "995bcaf5213b69ab0e94a7491e0a4f4e",
             "tags": [
                 "microtubule",
-                "Alexa-647",
-                "alpha-tub",
-                "STORM",
-                "REF52"
+                "alexa fluor 647",
+                "alpha tubulin",
+                "storm",
+                "ref52"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T11:21:45.345546",
@@ -2445,10 +2466,10 @@
             "hash": "23ba67dd0b091f44f7621f19f885b23d",
             "tags": [
                 "microtubule",
-                "Alexa-647",
-                "REF52",
-                "alpha-tub",
-                "STORM"
+                "alexa fluor 647",
+                "ref52",
+                "alpha tubulin",
+                "storm"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T03:07:02.951145",
@@ -2470,10 +2491,10 @@
             "hash": "59b04bb3928603c641fe19edbb651556",
             "tags": [
                 "microtubule",
-                "Alexa-647",
-                "STORM",
-                "REF52",
-                "alpha-tub"
+                "alexa fluor 647",
+                "storm",
+                "ref52",
+                "alpha tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T03:45:18.850014",
@@ -2494,11 +2515,11 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa fluor 647",
             "hash": "1f819f0097eaa9a3916b9c413fb44dad",
             "tags": [
-                "microtubule",
-                "Alexa-647",
-                "STORM",
-                "alpha-tub",
-                "REF52"
+                "microbtubules",
+                "alexa fluor 647",
+                "storm",
+                "alpha tubulin",
+                "ref52"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T04:59:38.448183",
@@ -2520,9 +2541,9 @@
             "hash": "8048161eba455019f4b3ded6be861551",
             "tags": [
                 "microtubule",
-                "Alexa-647",
-                "STORM",
-                "alpha-tub",
+                "alexa fluor 647",
+                "storm",
+                "alpha tubulin",
                 "mdck"
             ],
             "license": "CC BY 4.0",
@@ -2545,10 +2566,10 @@
             "hash": "1a7f4a71aff55977f356151ffd41e76e",
             "tags": [
                 "microtubule",
-                "Alexa-647",
-                "STORM",
+                "alexa fluor 647",
+                "storm",
                 "mdck",
-                "alpha-tub"
+                "alpha tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T07:51:39.014736",
@@ -2570,10 +2591,10 @@
             "hash": "dbb40a565175d895a29cd182d76a859b",
             "tags": [
                 "microtubule",
-                "STORM",
-                "Alexa-647",
+                "storm",
+                "alexa fluor 647",
                 "mdck",
-                "alpha-tub"
+                "alpha tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T08:04:29.077548",
@@ -2595,10 +2616,10 @@
             "hash": "dfa9105aaba5b481d6a64ee172e60f6f",
             "tags": [
                 "microtubule",
-                "STORM",
-                "Alexa-647",
-                "alpha-tub",
-                "REF52"
+                "storm",
+                "alexa fluor 647",
+                "alpha tubulin",
+                "ref52"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T08:40:27.887106",
@@ -2620,10 +2641,10 @@
             "hash": "dc9c45759a50e256ba88aa5020655611",
             "tags": [
                 "microtubule",
-                "STORM",
-                "alpha-tub",
-                "REF52",
-                "Alexa-647"
+                "storm",
+                "alpha tubulin",
+                "ref52",
+                "alexa fluor 647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T09:06:04.638864",
@@ -2645,10 +2666,10 @@
             "hash": "bd0aa5c216c56c7972237079c8ab4e10",
             "tags": [
                 "microtubule",
-                "REF52",
-                "Alexa-647",
-                "STORM",
-                "alpha-tub"
+                "ref52",
+                "alexa fluor 647",
+                "storm",
+                "alpha tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T09:46:18.683243",
@@ -2670,10 +2691,10 @@
             "hash": "65e40fe545fab6c99459e49865225ff7",
             "tags": [
                 "microtubule",
-                "Alexa-647",
-                "STORM",
-                "alpha-tub",
-                "REF52"
+                "alexa fluor 647",
+                "storm",
+                "alpha tubulin",
+                "ref52"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T10:06:46.264610",
@@ -2719,7 +2740,7 @@
             "hash": "5a8543143a767fa93e08f31d814cf03c",
             "tags": [
                 "microtubule",
-                "Alexa-647",
+                "alexa fluor 647",
                 "NIH3T3",
                 "STORM"
             ],
@@ -2743,7 +2764,7 @@
             "hash": "ff1c0e1e0169ce2a7e8ab2c146526973",
             "tags": [
                 "microtubule",
-                "Alexa-647",
+                "alexa fluor 647",
                 "NIH3T3"
             ],
             "license": "CC BY 4.0",
@@ -2766,7 +2787,7 @@
             "hash": "25253a6a297bb96e8e78c21bafa193e5",
             "tags": [
                 "microtubule",
-                "Alexa-647",
+                "alexa fluor 647",
                 "NIH3T3",
                 "STORM"
             ],
@@ -2816,7 +2837,7 @@
                 "microtubule",
                 "NIH3T3",
                 "STORM",
-                "Alexa-647"
+                "alexa fluor 647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-14T04:38:33.189494",
@@ -2840,7 +2861,7 @@
                 "microtubule",
                 "CF660",
                 "STORM",
-                "alpha-tub"
+                "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-31T05:44:21.604510",
