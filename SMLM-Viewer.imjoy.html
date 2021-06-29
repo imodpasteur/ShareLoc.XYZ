@@ -59,6 +59,15 @@
                     },
                 })
             }
+            else{
+                this.viewer = await api.createWindow({
+                    name: "SMLM Viewer",
+                    type: "3D Histogram",
+                    config: {
+                        enable_local_file: true
+                    },
+                })
+            }
         }
 
         async cancel(){
