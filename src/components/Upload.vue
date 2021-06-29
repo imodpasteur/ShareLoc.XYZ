@@ -31,10 +31,24 @@
             class="button is-fullwidth is-primary"
             @click="login()"
             expanded
+            icon-left="login"
             >Login to Zenodo</b-button
           >
         </b-field>
-
+        <b-field
+          v-else
+          label="You have already logged in via Zenodo"
+          message="ShareLoc.XYZ uses https://zenodo.org as storage service, you will need to sign up or login to Zenodo, and allow ShareLoc.XYZ to upload files to zenodo on behave of you."
+          expanded
+        >
+          <b-button
+            style="text-transform:none;"
+            class="button is-small"
+            @click="client.logout()"
+            icon-left="logout"
+            >Logout</b-button
+          >
+        </b-field>
         <b-field
           v-if="client.credential"
           label="Option 1: Create a new deposit"
