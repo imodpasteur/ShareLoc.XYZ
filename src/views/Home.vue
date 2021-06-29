@@ -526,6 +526,7 @@ export default {
     };
   },
   mounted: async function() {
+    this.resourceId = this.resourceId && this.resourceId.toLowerCase();
     // this.$buefy.dialog.alert({
     //   title: "Site under construction",
     //   message:

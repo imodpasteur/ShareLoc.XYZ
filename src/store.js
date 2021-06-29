@@ -26,6 +26,8 @@ const zenodoBaseURL = siteConfig.zenodo_config.use_sandbox
 
 function normalizeItem(item) {
   if (item.config && item.config._normalized) return;
+  item.id = item.id || randId();
+  item.id = item.id.toLowerCase();
   item.config = item.config || {};
   item.covers = item.covers || [];
   item.authors = item.authors || [];

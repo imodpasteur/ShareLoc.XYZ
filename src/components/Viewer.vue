@@ -107,6 +107,7 @@ export default {
     })
   },
   created() {
+    this.resourceId = this.resourceId && this.resourceId.toLowerCase();
     this.value = [];
     this.validConversions = [];
     this.screenshots = [];
