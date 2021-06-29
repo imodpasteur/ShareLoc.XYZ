@@ -286,9 +286,7 @@ export default {
         {
           label: "Authors",
           type: "author",
-          value:
-            this.rdf.authors &&
-            this.rdf.authors.map(author => author.name.split(";")[0]).join(","),
+          value: this.rdf.authors,
           help: "The authors who contributed to this dataset or application"
         },
         // {
