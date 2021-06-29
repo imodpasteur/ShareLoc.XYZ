@@ -14,48 +14,48 @@
       >
     </label>
     <div class="control">
-      <div v-for="(citation, i) in value" :key="i">
+      <div v-for="(author, i) in value" :key="i">
         <b-field>
           <b-input
             @input="commitValue"
             type="text"
-            placeholder="Citation text"
-            v-model="citation.text"
+            placeholder="Full Name"
+            v-model="author.name"
             maxlength="1000"
           >
           </b-input>
           <b-input
             @input="commitValue"
             type="text"
-            placeholder="DOI (optional)"
-            v-model="citation.doi"
+            placeholder="Affiliation (optional)"
+            v-model="author.affiliation"
             maxlength="100"
           >
           </b-input>
           <b-input
             @input="commitValue"
             type="text"
-            placeholder="URL (optional)"
-            v-model="citation.url"
+            placeholder="ORCID (optional)"
+            v-model="author.orcid"
             maxlength="1000"
           >
           </b-input>
+
           <b-button
             v-if="value.length > 1"
             style="text-transform:none;"
             class="button"
             icon-left="delete"
-            @click="removeCitation(citation)"
+            @click="removeAuthor(author)"
           ></b-button>
           <b-button
             v-if="
-              i === value.length - 1 &&
-                !(!citation.text || citation.text === '')
+              i === value.length - 1 && !(!author.name || author.name === '')
             "
             style="text-transform:none;"
             class="button"
             icon-left="plus"
-            @click="addNewCitation"
+            @click="addNewAuthor"
           ></b-button>
         </b-field>
       </div>
@@ -67,7 +67,7 @@
 </template>
 <script>
 export default {
-  name: "citation",
+  name: "author",
   props: {
     error: {
       type: String,
@@ -101,12 +101,12 @@ export default {
     commitValue() {
       if (this.value.length <= 0) this.$emit("input", null);
       else {
-        if (this.value[this.value.length - 1].text === "")
+        if (this.value[this.value.length - 1].name === "")
           this.$emit("input", this.value.slice(0, this.value.length - 1));
       }
     },
-    addNewCitation() {
-      if (this.value[this.value.length - 1].text !== "") {
+    addNewAuthor() {
+      if (this.value[this.value.length - 1].name !== "") {
         this.value.push({
           text: "",
           doi: "",
@@ -115,8 +115,8 @@ export default {
       }
       this.commitValue();
     },
-    removeCitation(citation) {
-      const index = this.value.indexOf(citation);
+    removeAuthor(author) {
+      const index = this.value.indexOf(author);
       if (index >= 0) {
         this.value.splice(index, 1);
       }

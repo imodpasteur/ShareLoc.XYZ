@@ -63,6 +63,7 @@ import TagInputField from "@/components/TagInputField.vue";
 import DropFilesField from "@/components/DropFilesField.vue";
 import FilePreviewField from "@/components/FilePreviewField.vue";
 import CitationInputField from "@/components/CitationInputField.vue";
+import AuthorInputField from "@/components/AuthorInputField.vue";
 // import marked from "marked";
 // import DOMPurify from "dompurify";
 import { mapState } from "vuex";
@@ -82,14 +83,17 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     FilePreviewField,
     // eslint-disable-next-line vue/no-unused-components
-    CitationInputField
+    CitationInputField,
+    // eslint-disable-next-line vue/no-unused-components
+    AuthorInputField
   },
   computed: {
     components: () => ({
       TagInputField,
       DropFilesField,
       FilePreviewField,
-      CitationInputField
+      CitationInputField,
+      AuthorInputField
     }),
     ...mapState({
       client: state => state.zenodoClient,
@@ -261,7 +265,8 @@ export default {
         {
           label: "Files",
           type: "file-preview",
-          help: "Add one or multiple files into the dataset",
+          help:
+            "Add one or multiple files to the dataset, the total file size should be less than 50GB, otherwise please split into several deposits.",
           value: files,
           isRequired: true
         },
@@ -269,7 +274,8 @@ export default {
           label: "Name",
           placeholder: "name",
           value: this.rdf.name,
-          help: "The name of your dataset or application to be uploaded"
+          help:
+            "A human-readable descriptive name for your dataset or application to be uploaded"
         },
         {
           label: "Description",
@@ -279,6 +285,7 @@ export default {
         },
         {
           label: "Authors",
+          type: "author",
           placeholder: "authors (Full name, separated by comma)",
           value:
             this.rdf.authors &&
@@ -315,7 +322,7 @@ export default {
           label: "Tags",
           type: "tags",
           value: this.rdf.tags,
-          placeholder: "Add a tag",
+          placeholder: "Add a tag and press enter to confirm",
           options: this.allTags,
           allow_new: true,
           icon: "label",
