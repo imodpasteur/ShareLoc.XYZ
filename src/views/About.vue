@@ -3,16 +3,12 @@
     class="about"
     :style="{ 'background-image': 'url(' + siteConfig.background_image + ')' }"
   >
+    <p class="version-number">v{{ version }}</p>
     <section class="hero">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">About {{ siteConfig.site_name }}</h1>
-          <h2 class="subtitle">v{{ version }}</h2>
-        </div>
-      </div>
+      <markdown
+        url="https://raw.githubusercontent.com/imodpasteur/ShareLoc.XYZ/main/README.md"
+      ></markdown>
     </section>
-
-    <br />
     <br />
     <div class="columns is-mobile is-centered" v-if="siteConfig.footer">
       <div
@@ -40,14 +36,22 @@
   </div>
 </template>
 <script>
-import siteConfig from "../../site.config.json";
+import { mapState } from "vuex";
 import { version } from "../../package.json";
+import Markdown from "@/components/Markdown.vue";
 export default {
   name: "About",
+  components: {
+    markdown: Markdown
+  },
+  computed: {
+    ...mapState({
+      siteConfig: state => state.siteConfig
+    })
+  },
   data() {
     return {
-      version,
-      siteConfig
+      version
     };
   }
 };
@@ -61,7 +65,6 @@ export default {
 .hero {
   max-width: 100%;
   width: 600px;
-  text-align: center;
   margin-left: auto;
   margin-right: auto;
 }
@@ -73,5 +76,10 @@ export default {
   max-height: 50%;
   max-width: 100%;
   object-fit: contain;
+}
+.version-number {
+  text-align: right;
+  font-size: 20px !important;
+  margin: 10px;
 }
 </style>
