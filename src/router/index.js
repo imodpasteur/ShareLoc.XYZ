@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import ResourceItemList from "../components/ResourceItemList.vue";
 import Upload from "../components/Upload.vue";
-import ResourceItemInfo from "../components/ResourceItemInfo.vue";
+// import ResourceItemInfo from "../components/ResourceItemInfo.vue";
 import Viewer from "../components/Viewer.vue";
 
 Vue.use(VueRouter);
@@ -17,12 +17,6 @@ const routes = [
   {
     path: "/r/:resourceId+",
     name: "ResourceItemInfo",
-    component: ResourceItemInfo,
-    props: true
-  },
-  {
-    path: "/p/:resourceId+",
-    name: "Package",
     component: Home,
     props: true
   },
