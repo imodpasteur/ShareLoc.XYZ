@@ -45,9 +45,20 @@
         }
 
         async run(ctx) {
-            const viewer = await api.createWindow({
-                src: "https://kitware.github.io/itk-vtk-viewer/app/",
-            })
+            if (ctx.data.download_url) {
+                const file = await fetchFile(ctx.data.download_url, api.showMessage, api.showProgress)
+                await this.previewFile(file);
+            }
+            else if(ctx.data.attachments && ctx.data.attachments.datasets){
+                const files = ctx.data.attachments.datasets;
+                // TODO: how to support multiple files?
+                await this.previewFile(files[0]);
+            }
+            else{
+                this.viewer = await api.createWindow({
+                    src: "https://kitware.github.io/itk-vtk-viewer/app/",
+                })
+            }
         }
 
         async cancel(){
