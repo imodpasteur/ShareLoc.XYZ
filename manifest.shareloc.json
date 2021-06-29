@@ -54,6 +54,21 @@
             ]
         },
         {
+            "id": "ImageJ.JS",
+            "type": "application",
+            "source": "https://raw.githubusercontent.com/imjoy-team/bioimage-io-models/master/src/imagej-js.imjoy.html",
+            "passive": false,
+            "name": "ImageJ.JS",
+            "version": "0.1.6",
+            "api_version": "0.2.3",
+            "description": "ImageJ running in the browser",
+            "tags": [],
+            "documentation": "https://raw.githubusercontent.com/imjoy-team/imagej.js/master/README.md",
+            "covers": [],
+            "badges": [],
+            "authors": []
+        },
+        {
             "id": "anna-palm",
             "type": "application",
             "source": "https://github.com/imjoy-team/imjoy-plugins/blob/master/repository/annaPalm.imjoy.html",
