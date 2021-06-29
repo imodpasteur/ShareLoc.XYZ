@@ -4,11 +4,11 @@
     <nav class="navbar is-link is-fixed-top">
       <div class="navbar-brand">
         <a href="#/">
-          <span class="site-icon" style="cursor: pointer;">
-            {{ siteConfig.site_icon }}</span
-          >
           <span class="site-title" style="cursor: pointer;">
-            {{ siteConfig.site_name }}
+            <img
+              style="width: 264px"
+              src="/static/img/shareloc-logo-white.svg"
+            />
           </span>
         </a>
         <div
