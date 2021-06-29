@@ -256,7 +256,7 @@ export function depositionToRdf(deposition) {
   for (let idf of metadata.related_identifiers) {
     if (idf.relation === "isCompiledBy" && idf.scheme === "url") {
       rdfFile = idf.identifier;
-      if (rdfFile.includes(`${deposition.id}/files/`)) {
+      if (rdfFile.includes(`/files/`)) {
         const fileName = rdfFile.split("/files/")[1];
         rdfFile = `${deposition.links.bucket}/${fileName}`;
       } else {
@@ -270,7 +270,7 @@ export function depositionToRdf(deposition) {
       let url = idf.identifier;
       if (url.startsWith("file://")) {
         url = url.replace("file://", deposition.links.bucket + "/");
-      } else if (url.includes(`${deposition.id}/files/`)) {
+      } else if (url.includes(`/files/`)) {
         const fileName = url.split("/files/")[1];
         url = `${deposition.links.bucket}/${fileName}`;
       } else {
@@ -283,7 +283,7 @@ export function depositionToRdf(deposition) {
       idf.scheme === "url"
     ) {
       let url = idf.identifier;
-      if (url.includes(`${deposition.id}/files/`)) {
+      if (url.includes(`/files/`)) {
         const fileName = url.split("/files/")[1];
         url = `${deposition.links.bucket}/${fileName}`;
         datasets.push({ name: fileName, download_url: url });

@@ -595,6 +595,9 @@ export default {
               item.config._deposit.id === zenodoId
           )[0];
           if (matchedItem) this.$route.query.id = matchedItem.id;
+          else {
+            alert("Oops, resource item not found: " + this.resourceId);
+          }
         } else this.$route.query.id = this.resourceId;
       }
 
@@ -975,8 +978,11 @@ export default {
         if (m) {
           this.showResourceItemInfo(m);
           hasQuery = true;
+        } else {
+          alert("Oops, resource item not found: " + this.$route.query.id);
         }
       }
+
       if (this.$route.query.tags) {
         if (typeof this.$route.query.tags === "string")
           this.searchTags = this.$route.query.tags.split(",");

@@ -206,6 +206,7 @@ export const store = new Vuex.Store({
         return;
       }
       const items = await context.state.zenodoClient.getResourceItems({});
+      console.log("All items", items);
       items.map(item => context.commit("addResourceItem", item));
 
       const siteConfig = context.state.siteConfig;
