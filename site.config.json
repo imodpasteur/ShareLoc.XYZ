@@ -91,14 +91,14 @@
         "smlm-viewer"
       ],
       "tag_categories": {
-        "modality": [
+        "1.modality": [
           "PALM", 
           "STORM",
           "dSTORM", 
           "DNA-PAINT", 
           "PAINT"
         ],
-        "cell line": [
+        "2.cell line": [
           "U2OS", 
           "U373", 
           "COS7",
@@ -111,7 +111,7 @@
           "Listeria", 
           "Archaea"
         ],
-        "structure": [
+        "3.structure": [
           "microtubule",
           "mitochondria",
           "actin",
@@ -122,7 +122,7 @@
           "neuronal axon",
           "vimentin"
         ],
-        "fluorophore": [
+        "4.fluorophore": [
           "Alexa-647",
           "Alexa-532",
           "Cy5",
@@ -145,7 +145,7 @@
           "Dronpa",
           "Atto-488"
         ],
-        "labeling strategy":[
+        "5.labeling strategy":[
           "transient transfection",
           "stable knock-in",
           "endogenous labeling CRISPR",
@@ -155,7 +155,7 @@
           "SNAP-tag",
           "Tetracysteine Tag"     
         ],
-        "target protein":[
+        "6.target protein":[
           "NUP133",
           "NUP96",
           "TOM22",
@@ -169,15 +169,15 @@
           "H1",
           "polyE"
         ],
-        "dimension":[
+        "7.dimension":[
           "2D",
           "3D"
         ],
-        "camera":[
+        "8.camera":[
           "EM-CCD",
           "sCMOS"
         ],
-        "reconstruction software":[
+        "9.reconstruction software":[
           "ThunderSTORM",
           "SMAP",
           "SMOIphot",
@@ -185,14 +185,14 @@
           "Picasso",
           "QuickPALM"
         ],
-        "buffer":[
+        "10.buffer":[
           "GluOx",
           "catalase",
           "MEA",
           "Abbelight Safe Reagent",
           "Idylle Everspark"
         ],
-        "fixation":[
+        "11.fixation":[
           "4%PFA",
           "1%PFA",
           "PFA+Gluta",

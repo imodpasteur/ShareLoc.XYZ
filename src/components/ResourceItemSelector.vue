@@ -41,13 +41,14 @@
 
               <div
                 class="column"
-                v-for="(tags, name) in categories.grouped"
+                v-for="name in categories.groupKeys"
                 :key="name"
               >
-                {{ name }}: <br />
+                {{ name.split(".").length === 2 ? name.split(".")[1] : name }}:
+                <br />
                 <a
                   @click="addTagSelection(t)"
-                  v-for="t in tags"
+                  v-for="t in categories.grouped[name]"
                   :key="t"
                   style="display:inline-block;"
                 >
@@ -201,7 +202,11 @@ export default {
         }
       }
 
-      return { grouped: cate, other: other };
+      return {
+        grouped: cate,
+        groupKeys: Object.keys(cate).sort(),
+        other: other
+      };
     }
   },
   methods: {
