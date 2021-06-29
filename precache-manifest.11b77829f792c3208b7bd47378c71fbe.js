@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/FairyDust.imjoy.html"
   },
   {
-    "revision": "ffc32cba36808d190fdb21f32f4600d9",
+    "revision": "20a69b185533202f759837666f04fe9b",
     "url": "/ITK-VTK-Viewer.imjoy.html"
   },
   {
@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "d04a24f2aa96ec797d41",
+    "revision": "cdc9630acf87517f038e",
     "url": "/css/app.41b98c60.css"
   },
   {
@@ -56,12 +56,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/index.ejs"
   },
   {
-    "revision": "1fa452876abca6741e123451d66763c2",
+    "revision": "9553956ee451be13a7551ad50810f325",
     "url": "/index.html"
   },
   {
-    "revision": "d04a24f2aa96ec797d41",
-    "url": "/js/app.14c43746.js"
+    "revision": "cdc9630acf87517f038e",
+    "url": "/js/app.d4bfc091.js"
   },
   {
     "revision": "f8c07cb868b69fb2a795",

@@ -45,29 +45,9 @@
         }
 
         async run(ctx) {
-            if (ctx.data.download_url) {
-                const file = await fetchFile(ctx.data.download_url, api.showMessage, api.showProgress)
-                await this.previewFile(file);
-            }
-            else if(ctx.data.attachments && ctx.data.attachments.datasets){
-                const files = ctx.data.attachments.datasets;
-                this.viewer = await api.createWindow({
-                    name: ctx.data.name.slice(0, 40),
-                    type: "Fairy Dust",
-                    config: {
-                        files
-                    },
-                })
-            }
-            else{
-                this.viewer = await api.createWindow({
-                    name: "SMLM Viewer",
-                    type: "Fairy Dust",
-                    config: {
-                        enable_local_file: true
-                    },
-                })
-            }
+            const viewer = await api.createWindow({
+                src: "https://kitware.github.io/itk-vtk-viewer/app/",
+            })
         }
 
         async cancel(){
