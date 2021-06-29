@@ -352,7 +352,7 @@ export class ZenodoClient {
         this.getCredential();
       }
     } catch (e) {
-      console.error("Failed to reset zenodo_credential");
+      console.error(`Failed to reset zenodo_credential: ${e}`);
       localStorage.removeItem("zenodo_credential");
     }
   }
@@ -371,7 +371,7 @@ export class ZenodoClient {
         try {
           localStorage.removeItem("zenodo_credential");
         } catch (e) {
-          console.error("Failed to reset zenodo_credential");
+          console.error(`Failed to reset zenodo_credential: ${e}`);
         }
       }
     }
@@ -471,6 +471,10 @@ export class ZenodoClient {
             return;
           }
           loggedIn = true;
+          if(!event.data.access_token){
+            reject("Failed to obtain the access token, please make sure your account is valid and try it again.");
+            return
+          }
           console.log("Successfully logged in", event.data);
           this.credential = event.data;
           this.credential.user_id = parseInt(
