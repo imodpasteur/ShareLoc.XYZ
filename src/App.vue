@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="app"
-    :style="{ height: showNavbar ? 'calc(100vh - 72px)' : '100vh' }"
-  >
+  <div id="app">
     <!-- Navigation bar -->
     <nav class="navbar is-link is-fixed-top" v-if="showNavbar">
       <div class="navbar-brand">

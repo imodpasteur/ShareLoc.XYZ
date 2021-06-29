@@ -224,7 +224,7 @@ export default {
             reader.onerror = reject;
             reader.readAsDataURL(file);
           });
-          container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
+          container.style.height = "100vh";
 
           await this.viewer.view_image(base64);
 

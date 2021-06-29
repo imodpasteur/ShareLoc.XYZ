@@ -42,16 +42,20 @@
         >...show all.</a
       >
     </p>
-    <span class="authors">
-      {{
-        resourceItem.authors && resourceItem.authors.length > 0
-          ? "Author(s): " +
-            resourceItem.authors
-              .map(author => author.name.split(";")[0])
-              .join(",")
-          : ""
-      }}
-    </span>
+    <p
+      class="authors"
+      v-if="resourceItem.authors && resourceItem.authors.length > 0"
+    >
+      Author(s):
+      <b-tooltip
+        v-for="author in resourceItem.authors"
+        :key="author.name"
+        :label="author.affiliation"
+        position="is-bottom"
+      >
+        <span>{{ author.name }}</span>
+      </b-tooltip>
+    </p>
     <br />
 
     <attachments
