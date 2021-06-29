@@ -4,11 +4,10 @@ import "./registerServiceWorker";
 import router from "./router";
 import Buefy from "buefy";
 import "buefy/dist/buefy.css";
-import { store } from "./store";
+import { init, store } from "./store";
 import "./bulmaswatch.min.css";
 import vmodal from "vue-js-modal";
 import "@mdi/font/css/materialdesignicons.css";
-import { setupBioEngine } from "./bioEngine";
 
 import { extend, ValidationProvider } from "vee-validate";
 import * as rules from "vee-validate/dist/rules";
@@ -33,6 +32,6 @@ new Vue({
   render: h => h(App),
   store,
   created() {
-    setupBioEngine();
+    init();
   }
 }).$mount("#app");
