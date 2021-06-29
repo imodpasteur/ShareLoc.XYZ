@@ -12,11 +12,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/FairyDust.imjoy.html"
   },
   {
+    "revision": "ffc32cba36808d190fdb21f32f4600d9",
+    "url": "/ITK-VTK-Viewer.imjoy.html"
+  },
+  {
     "revision": "165ccd2e78426136e7e99804654585c9",
     "url": "/SMLM-File-IO.imjoy.html"
   },
   {
-    "revision": "e8bb55a41ec27713e9148deee7821f4f",
+    "revision": "3e811b50c4f2b949122606cac5ab97f1",
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
@@ -68,7 +72,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/manifest.json"
   },
   {
-    "revision": "c7e4e8eeea538ff0bb0126a9c2f12f18",
+    "revision": "c7634ae777f14d3ca296d7859aad329e",
     "url": "/manifest.shareloc.json"
   },
   {
