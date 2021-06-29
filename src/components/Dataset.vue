@@ -286,7 +286,6 @@ export default {
         {
           label: "Authors",
           type: "author",
-          placeholder: "authors (Full name, separated by comma)",
           value:
             this.rdf.authors &&
             this.rdf.authors.map(author => author.name.split(";")[0]).join(","),
