@@ -1,9 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { randId } from "./utils";
-import { ZenodoClient } from "./utils.js";
+import { randId, ZenodoClient } from "./utils";
 import siteConfig from "../site.config.json";
 import spdxLicenseList from "spdx-license-list/full";
+import { setupBioEngine } from "./bioEngine";
 
 Vue.use(Vuex);
 
@@ -151,6 +151,23 @@ function normalizeItem(item) {
   }
   item.config._normalized = true;
 }
+
+let notifyImJoyReady = null;
+let notifyImJoyFailed = null;
+const imjoyReady = new Promise((resolve, reject) => {
+  notifyImJoyReady = resolve;
+  notifyImJoyFailed = reject;
+});
+
+export async function init() {
+  try {
+    await setupBioEngine();
+    notifyImJoyReady();
+  } catch (e) {
+    notifyImJoyFailed(e);
+    console.error(e);
+  }
+}
 export const store = new Vuex.Store({
   state: {
     loadedUrl: null,
@@ -166,7 +183,8 @@ export const store = new Vuex.Store({
         )
       : null,
     zenodoBaseURL,
-    siteConfig
+    siteConfig,
+    imjoyReady
   },
   actions: {
     async login(context) {

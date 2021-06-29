@@ -31,11 +31,19 @@
         <div class="navbar-end">
           <a
             class="navbar-item"
-            v-if="siteConfig.contribute_url"
+            v-if="siteConfig.contribute_url && $route.name !== 'Upload'"
             href="#/upload"
           >
             <b-icon icon="plus"></b-icon>
             <span>Upload</span>
+          </a>
+          <a
+            class="navbar-item"
+            href="#/viewer"
+            v-if="$route.name !== 'Viewer'"
+          >
+            <b-icon icon="eye-outline"></b-icon>
+            <span>Viewer</span>
           </a>
           <a class="navbar-item" href="#/about">
             <b-icon icon="information-outline"></b-icon>

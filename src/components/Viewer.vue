@@ -45,6 +45,7 @@ export default {
   },
   computed: {
     ...mapState({
+      imjoyReady: state => state.imjoyReady,
       siteConfig: state => state.siteConfig,
       loadedUrl: state => state.loadedUrl,
       resourceItems: state => state.resourceItems
@@ -53,6 +54,25 @@ export default {
   methods: {
     async init() {
       const loadingComponent = this.$buefy.loading.open();
+      if (!this.resourceId) {
+        this.imjoyReady
+          .then(() => {
+            const api = window.imjoy.api;
+            api.createWindow({
+              name: "SMLM Viewer",
+              type: "3D Histogram",
+              config: {
+                enable_local_file: true
+              },
+              window_id: this.containerId
+            });
+          })
+          .finally(() => {
+            loadingComponent.close();
+          });
+
+        return;
+      }
       if (!this.loadedUrl) {
         const repo = this.siteConfig.rdf_root_repo;
         let manifest_url = this.siteConfig.manifest_url;

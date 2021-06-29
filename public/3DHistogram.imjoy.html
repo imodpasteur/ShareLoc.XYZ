@@ -1584,7 +1584,22 @@
                 const data = await smlmPlugin.load(scopeParams['File'])
                 data.files.map(this.show)
             }
-            else{
+            else if(ctx.config && ctx.config.enable_local_file){
+                const smlmPlugin = await api.getPlugin("SMLM File IO");
+                scopeParams['Load file'] = ()=>{
+                    const fileElem = document.getElementById('myLocalFile');
+                    fileElem.onchange = async ()=>{
+                        if(fileElem.files[0]){
+                            const data = await smlmPlugin.load(fileElem.files[0])
+                            data.files.map(this.show);
+                        }
+                    }
+                    document.getElementById('myLocalFile').click();
+                }
+                gui.add(scopeParams, 'Load file')
+                await load3DViewer(document.getElementById("histogram_canvas_3d"));
+            }
+            else if(ctx.data){
                 await load3DViewer(document.getElementById("histogram_canvas_3d"));
                 if (ctx.data && ctx.data.tableDict)
                     await this.show(ctx.data);
@@ -1601,6 +1616,7 @@
 <window lang="html">
     <div>
         <div id="gui-webgl"> </div>
+        <input id="myLocalFile" type="file" style="display:none" />
         <canvas id="histogram_canvas_3d"></canvas>
     </div>
 
