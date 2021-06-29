@@ -54,8 +54,10 @@ export async function setupBioEngine() {
         //     imjoy.wm.windows.push(w);
         //   }
         // });
-
-        await app.loadPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
+        await app.imjoy.pm.reloadPluginRecursively({
+          uri: baseUrl + "SMLM-File-IO.imjoy.html"
+        });
+        // This will also add an entry to the plugin menu
         await app.loadPlugin(baseUrl + "FairyDust.imjoy.html");
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);

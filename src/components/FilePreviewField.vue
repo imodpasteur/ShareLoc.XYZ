@@ -290,7 +290,7 @@ export default {
         file.convert = async () => {
           const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
           const smlm = await smlmPlugin.load(file);
-          const zip = await smlm.save();
+          const zip = await smlm.save(file.name);
           return zip;
         };
         // add it for potentila conversion later

@@ -279,9 +279,6 @@ export default {
             api.createWindow({
               name: "SMLM Viewer",
               type: "3D Histogram",
-              config: {
-                enable_local_file: true
-              },
               window_id: this.containerId
             });
           })
