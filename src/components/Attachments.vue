@@ -66,7 +66,7 @@ export default {
       default: null
     },
     focusTarget: {
-      type: Function,
+      type: String,
       default: null
     }
   },

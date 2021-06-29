@@ -331,7 +331,7 @@ export default {
         {
           label: "Citation",
           type: "citation",
-          value: this.rdf.tags,
+          value: this.rdf.cite,
           placeholder: "Add a citation",
           help: "Indicate how this dataset should be cited",
           isRequired: false
