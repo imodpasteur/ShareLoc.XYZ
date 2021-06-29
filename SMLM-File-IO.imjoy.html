@@ -785,7 +785,7 @@
                 }
             })
         }
-        save(update_callback) {
+        save(save_file_name, update_callback) {
             update_callback = update_callback || function (status) {
                 if(status.running_progress) api.showProgress(status.running_progress)
                 if(status.running_status) api.showMessage(status.running_status)
@@ -895,7 +895,7 @@
                             update_callback({ running_status: "Making zip files... ", running_progress: mdata.percent })
                         }
                     ).then((zipBlob) => {
-                        const zip_file_name = this.manifest.name
+                        const zip_file_name = save_file_name || this.manifest.name
                         const zipFile = new File([zipBlob], zip_file_name, { type: "application/smlm", lastModified: Date.now() });
                         console.log(zipFile)
                         this.zipFile = zipFile

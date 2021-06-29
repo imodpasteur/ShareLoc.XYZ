@@ -1595,7 +1595,15 @@
                     api.showMessage(`Failed to load file: ${e}`)
                 }
             }
-            else if (ctx.config && ctx.config.enable_local_file) {
+            else if (ctx.data && (ctx.data.tableDict || Array.isArray(ctx.data))) {
+                await load3DViewer(document.getElementById("histogram_canvas_3d"));
+                if (ctx.data && ctx.data.tableDict)
+                    await this.show(ctx.data);
+                else if (ctx.data && Array.isArray(ctx.data)) {
+                    ctx.data.map(this.show)
+                }
+            }
+            else{
                 const smlmPlugin = await api.getPlugin("SMLM File IO");
                 scopeParams['Load file'] = () => {
                     const fileElem = document.getElementById('myLocalFile');
@@ -1614,14 +1622,6 @@
                 }
                 gui.add(scopeParams, 'Load file')
                 await load3DViewer(document.getElementById("histogram_canvas_3d"));
-            }
-            else if (ctx.data) {
-                await load3DViewer(document.getElementById("histogram_canvas_3d"));
-                if (ctx.data && ctx.data.tableDict)
-                    await this.show(ctx.data);
-                else if (ctx.data && Array.isArray(ctx.data)) {
-                    ctx.data.map(this.show)
-                }
             }
         }
     }
