@@ -882,7 +882,7 @@ export default {
         });
       }
     },
-    showResourceItemInfo(mInfo) {
+    showResourceItemInfo(mInfo, focus) {
       // this.$router.push({
       //   name: "ResourceItemInfo",
       //   params: { resourceId: mInfo.id }

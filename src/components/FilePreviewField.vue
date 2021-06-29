@@ -82,6 +82,11 @@
             Take Screenshot
           </a>
         </div>
+        <b-field>
+          <b-switch :value="convertToSmlm">
+            Convert to SMLM format (Recommended)
+          </b-switch>
+        </b-field>
         <!-- <b-carousel
           v-if="screenshots && screenshots.length > 0"
           :progress="false"
@@ -140,6 +145,9 @@ export default {
     value: undefined,
     screenshots: [],
     fileCache: {},
+    currentFile: null,
+    convertToSmlm: true,
+    validConversions: null,
     containerId:
       "preview-container-" +
       Math.random()
@@ -148,43 +156,61 @@ export default {
   }),
   created() {
     this.value = this.item.value;
+    this.validConversions = [];
     this.screenshots = (this.item.value && this.item.value.screenshots) || [];
-    this.item.value && this.$emit("input", this.item.value);
+    this.commitValue();
     const api = window.imjoy.api;
     const baseUrl = window.location.origin + window.location.pathname;
     api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
   },
   methods: {
+    commitValue() {
+      if (this.convertToSmlm) {
+        this.value.conversions = this.validConversions;
+      } else {
+        this.value.conversions = null;
+      }
+      this.value.screenshots = this.screenshots;
+      this.$emit("input", this.value);
+    },
     removeScreenshot(index) {
       this.screenshots.splice(index, 1);
       // this.selectedScreenshot = this.screenshots.length-1;
-      this.value.screenshots = this.screenshots;
-      this.$emit("input", this.value);
+      this.commitValue();
     },
     async capture() {
       const img = await this.viewer.captureImage();
       const config = await this.viewer.getViewConfig();
+      config["_file"] = this.currentFile && this.currentFile.name;
       if (this.screenshots.filter(s => s.image === img).length <= 0)
         this.screenshots.push({ config, image: img });
       else
         window.imjoy.api.showMessage(
           "Please change the image to another view and try again."
         );
-      this.value.screenshots = this.screenshots;
       // this.selectedScreenshot = this.screenshots.length-1;
-      this.$emit("input", this.value);
+      this.commitValue();
     },
     removeFile(label, index) {
+      const file = this.value[index];
+      if (file === this.currentFile) this.currentFile = null;
+      if (this.validConversions.includes(file))
+        this.validConversions.splice(this.validConversions.indexOf(file), 1);
       this.value.splice(index, 1);
       this.$forceUpdate();
     },
-    updateFiles() {
-      this.value.screenshots = this.screenshots;
-      this.$emit("input", this.value);
+    async updateFiles() {
       // we need this because otherwise we cannot update the list on the interface
       this.$forceUpdate();
-      if (this.value && this.value.length > 0)
-        this.previewFile(this.value[this.value.length - 1]);
+      if (this.value && this.value.length > 0) {
+        try {
+          await this.previewFile(this.value[this.value.length - 1]);
+        } catch (e) {
+          await window.imjoy.api.showMessage(`Failed to preview file: ${e}`);
+          console.error(e);
+        }
+      }
+      this.commitValue();
     },
     trimEllip(str, length) {
       if (!str) return str;
@@ -218,6 +244,7 @@ export default {
         }
       }
 
+      this.currentFile = file;
       // display image
       if (fn.endsWith(".png") || fn.endsWith(".jpeg") || fn.endsWith(".jpg")) {
         try {
@@ -260,6 +287,15 @@ export default {
           window_id: this.containerId,
           data: smlm.files
         });
+        file.convert = async () => {
+          const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
+          const smlm = await smlmPlugin.load(file);
+          const zip = await smlm.save();
+          return zip;
+        };
+        // add it for potentila conversion later
+        if (!this.validConversions.includes(file))
+          this.validConversions.push(file);
         container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
         if (this.screenshots.length <= 0) {
           setTimeout(() => {

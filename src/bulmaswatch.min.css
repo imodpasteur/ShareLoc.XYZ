@@ -6272,6 +6272,7 @@ html.has-navbar-fixed-bottom {
 }
 .navbar-brand,
 .navbar-tabs {
+  height: 72px;
   align-items: stretch;
   display: flex;
   flex-shrink: 0;

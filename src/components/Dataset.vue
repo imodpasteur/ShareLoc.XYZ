@@ -55,7 +55,6 @@
   </div>
 </template>
 <script>
-import JSZip from "jszip";
 import spdxLicenseList from "spdx-license-list/full";
 import "vue-form-json/dist/vue-form-json.css";
 import formJson from "vue-form-json/dist/vue-form-json.common.js";
@@ -235,13 +234,10 @@ export default {
         this.rdf.attachments.datasets = dataFiles.map(file => {
           return { name: file.name, size: file.size };
         });
-      // save the files to zip
-      const zipPackage = new JSZip();
-      editedFiles.map(file => {
-        if (file.type !== "remote") zipPackage.file(file.name, file);
-      });
 
-      this.rdf.config._zip = zipPackage;
+      this.rdf.config._files = editedFiles.filter(
+        file => file.type !== "remote"
+      );
       this.rdf.config._yaml = rdfYaml;
       this.$emit("submit", this.rdf);
     },
@@ -335,7 +331,7 @@ export default {
         {
           label: "Citation",
           type: "citation",
-          value: this.rdf.tags,
+          value: this.rdf.cite,
           placeholder: "Add a citation",
           help: "Indicate how this dataset should be cited",
           isRequired: false

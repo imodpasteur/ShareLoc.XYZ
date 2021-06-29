@@ -95,34 +95,13 @@
             :content="formatedModelYaml"
           ></markdown>
         </b-field>
-        <b-field v-if="zipPackage" label="Files">
-          <b-taglist attached rounded>
-            <b-tag
-              v-for="(file, name) in zipPackage.files"
-              :key="name"
-              rounded
-              >{{ name }}</b-tag
-            >
-          </b-taglist>
-        </b-field>
-        <b-field v-else-if="editedFiles" label="Files">
+        <b-field v-if="editedFiles" label="Files">
           <b-taglist attached rounded>
             <b-tag v-for="file in editedFiles" :key="file.name" rounded>{{
               file.name
             }}</b-tag>
           </b-taglist>
         </b-field>
-        <div class="column">
-          <b-button
-            v-if="zipPackage || editedFiles"
-            style="text-transform:none;"
-            class="button is-fullwidth"
-            @click="exportPackage()"
-            expanded
-            icon-left="download"
-            >Export package locally (Optional)</b-button
-          >
-        </div>
         <br />
         <div v-if="similarDeposits && similarDeposits.length > 0">
           <label class="label">Similar Existing Items</label>
@@ -204,7 +183,7 @@
         >
         </b-progress>
         <div class="columns">
-          <div v-if="client && (zipPackage || editedFiles)" class="column">
+          <div v-if="client && editedFiles" class="column">
             <b-button
               :disabled="
                 uploadProgress ||
@@ -218,10 +197,7 @@
               <span>Upload as new deposit</span>
             </b-button>
           </div>
-          <div
-            v-if="client && (zipPackage || editedFiles) && depositId"
-            class="column"
-          >
+          <div v-if="client && editedFiles && depositId" class="column">
             <b-button
               :disabled="uploadProgress"
               @click="createOrUpdateDeposit(depositId, false)"
@@ -292,10 +268,8 @@
 
 <script>
 import { mapState } from "vuex";
-import { saveAs } from "file-saver";
 
 import { rdfToMetadata, resolveDOI, getFullRdfFromDeposit } from "../utils";
-import JSZip from "jszip";
 import Markdown from "@/components/Markdown.vue";
 import TagInputField from "@/components/TagInputField.vue";
 import DropFilesField from "@/components/DropFilesField.vue";
@@ -372,7 +346,6 @@ export default {
       publishedDOI: null,
       requestedJoinCommunity: true,
       rdfType: "model",
-      zipPackage: null,
       editedFiles: null,
       prereserveDOI: null,
       URI4Load: null,
@@ -386,49 +359,12 @@ export default {
       this.rdfFiles = [];
       this.stepIndex = 1;
     },
-    // async parseFile(file) {
-    //   const loadingComponent = this.$buefy.loading.open({
-    //     container: this.$el
-    //   });
-    //   try {
-    //     var new_zip = new JSZip();
-    //     this.zipPackage = await new_zip.loadAsync(file);
-    //     console.log(this.zipPackage.files);
-    //     if (
-    //       !this.zipPackage.files["model.yaml"] &&
-    //       !this.zipPackage.files["rdf.yaml"]
-    //     ) {
-    //       alert(
-    //         "Invalid file: no model.yaml or rdf.yaml found in the model package."
-    //       );
-    //       return;
-    //     }
-    //     const configFile =
-    //       this.zipPackage.files["rdf.yaml"] ||
-    //       this.zipPackage.files["model.yaml"];
-    //     this.rdfYaml = await configFile.async("string");
-    //     const rdf = yaml.load(this.rdfYaml);
-    //     rdf.type = rdf.type || "model";
-    //     rdf.config = rdf.config || {};
-    //     rdf.config._rdf_file = "./" + configFile.name; // assuming we will add the rdf.yaml/model.yaml to the zip
-    //     if (rdf.type === "model") {
-    //       rdf.links = rdf.links || [];
-    //       rdf.links.push("imjoy/BioImageIO-Packager");
-    //     }
-    //     this.initializeRdfForm(rdf, Object.values(this.zipPackage.files));
-    //   } catch (e) {
-    //     console.error(e);
-    //     throw e
-    //   } finally {
-    //     loadingComponent.close();
-    //   }
-    // },
     submitRDF(rdf) {
       this.$nextTick(async () => {
         this.rdfYaml = rdf.config._yaml;
         delete rdf.config._yaml;
-        this.zipPackage = rdf.config._zip;
-        delete rdf.config._zip;
+        this.editedFiles = rdf.config._files;
+        delete rdf.config._files;
         this.rdf = rdf;
 
         this.similarDeposits = await this.client.getResourceItems({
@@ -464,7 +400,6 @@ export default {
           }
           console.log("orcid matched: " + this.depositId, depositionInfo);
           this.rdf = await getFullRdfFromDeposit(depositionInfo);
-          this.zipPackage = null;
           this.files = depositionInfo.files.map(item => {
             return {
               type: "remote",
@@ -518,46 +453,6 @@ export default {
       } finally {
         loadingComponent.close();
       }
-    },
-    async exportPackage() {
-      let zipPackage = this.zipPackage;
-      if (!zipPackage) {
-        zipPackage = new JSZip();
-        let i = 0;
-        for (let item of this.editedFiles) {
-          this.uploadProgress = (i / this.editedFiles.length) * 100;
-          i++;
-          if (item.type === "remote") {
-            this.uploadStatus = "Download fille " + item.name;
-            const response = await fetch(item.url);
-            if (response.ok) {
-              const blob = await response.blob();
-              zipPackage.file(item.name, blob);
-            } else {
-              throw new Error("Failed to download file: " + item.url);
-            }
-          } else if (item instanceof Blob) {
-            zipPackage.file(item.name, item);
-          }
-        }
-      }
-      console.log("downloading", zipPackage);
-      const zipBlob = await zipPackage.generateAsync(
-        {
-          type: "blob",
-          compression: "DEFLATE",
-          compressionOptions: {
-            level: 9
-          }
-        },
-        mdata => {
-          this.uploadProgress = mdata.percent;
-          this.uploadStatus = "Zipping package...";
-        }
-      );
-      this.uploadStatus = "Exporting zip package...";
-      saveAs(zipBlob, this.rdf.name + ".zip");
-      this.uploadStatus = "Done!";
     },
     async login() {
       try {
@@ -626,9 +521,9 @@ export default {
           !this.rdf.documentation.startsWith("http") &&
           this.rdf.documentation.endsWith(".md")
         ) {
-          const file = this.zipPackage.files[
-            this.rdf.documentation.replace("./", "")
-          ];
+          const file = this.editedFiles.filter(
+            fn => fn === this.rdf.documentation.replace("./", "")
+          )[0];
           if (file) {
             docstring = await file.async("string"); // get markdown
             docstring = DOMPurify.sanitize(marked(docstring));
@@ -655,14 +550,14 @@ export default {
           this.stepIndex = 3;
           return depositionInfo;
         }
-        const zipFiles = Object.values(this.zipPackage.files).filter(
+        const uploadFiles = this.editedFiles.filter(
           file => file.type !== "remote"
         );
         // sort the files so we will upload the covers in the end
         // this allows zenodo to display it as preview
         if (this.rdf.covers && this.rdf.covers.length > 0) {
           const covers = this.rdf.covers;
-          zipFiles.sort((a, b) => {
+          uploadFiles.sort((a, b) => {
             if (
               covers.includes("./" + a.name) &&
               !covers.includes("./" + b.name)
@@ -677,23 +572,19 @@ export default {
           });
         }
 
-        for (let i = 0; i < zipFiles.length; i++) {
-          if (zipFiles[i].dir) {
-            console.warn("Skipping directory: " + zipFiles[i].name);
-            continue;
-          }
-          const blob = await zipFiles[i].async("blob");
-          const file = new File([blob], zipFiles[i].name);
+        for (let i = 0; i < uploadFiles.length; i++) {
+          let file = uploadFiles[i];
+          if (file.convert) file = await file.convert();
           await this.client.uploadFile(depositionInfo, file, size => {
             this.uploadProgress = Math.round((size / file.size) * 100);
-            this.uploadStatus = `Uploading ${i + 1}/${zipFiles.length}(${
+            this.uploadStatus = `Uploading ${i + 1}/${uploadFiles.length}(${
               this.uploadProgress
             }%): ${file.name.slice(0, 40)}... `;
             this.$forceUpdate();
           });
         }
         this.uploadProgress = 0;
-        this.uploadStatus = `Successfully uploaded ${zipFiles.length} files.`;
+        this.uploadStatus = `Successfully uploaded ${uploadFiles.length} files.`;
         this.uploaded = true;
         this.stepIndex = 3;
       } catch (e) {
