@@ -113,7 +113,7 @@
         <b-field
           v-if="editedFiles"
           label="Files"
-          message="The following files will be uploaded or updated"
+          message="These files will be uploaded or updated"
         >
           <b-taglist attached rounded>
             <b-tag v-for="file in editedFiles" :key="file.name" rounded>{{
@@ -381,9 +381,18 @@ export default {
   },
   methods: {
     async startFromDepositURL() {
-      if (!this.client.credential) await this.login();
-      this.URI4Load = `${this.zenodoBaseURL}/record/${this.updateDepositId}`;
-      await this.loadRdfFromURL(this.URI4Load);
+      const loadingComponent = this.$buefy.loading.open({
+        container: this.$el
+      });
+      try {
+        if (!this.client.credential) await this.login();
+        this.URI4Load = `${this.zenodoBaseURL}/record/${this.updateDepositId}`;
+        await this.loadRdfFromURL(this.URI4Load);
+      } catch (e) {
+        alert("Failed to load resource: " + this.updateDepositId);
+      } finally {
+        loadingComponent.close();
+      }
     },
     startUpload() {
       this.rdf = {};
@@ -483,6 +492,9 @@ export default {
         console.log("Published", result);
         this.publishedDOI = result.doi;
         this.publishedUrl = `${this.$store.state.zenodoBaseURL}/record/${this.depositId}`;
+      } catch (e) {
+        console.error(e);
+        alert(`Failed to publish: ${e}`);
       } finally {
         loadingComponent.close();
       }

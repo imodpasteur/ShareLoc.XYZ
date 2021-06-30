@@ -154,7 +154,6 @@ export default {
         this.rdf[k] = values[rdfNameMapping[k]];
       }
       let rdfFileName = "rdf.yaml";
-      this.rdf.type = "dataset";
       this.rdf.links = this.rdf.links || [];
       this.rdf.tags = this.rdf.tags || [];
       this.rdf.config = this.rdf.config || {};
@@ -247,6 +246,7 @@ export default {
     },
     initializeRdfForm(rdf, files) {
       this.rdf = rdf || {};
+      this.rdf.type = this.rdf.type || "dataset";
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
       this.rdf.license = this.rdf.license || "CC-BY-4.0";
@@ -262,6 +262,20 @@ export default {
         });
       }
       this.jsonFields = this.transformFields([
+        {
+          label: "Type",
+          type: "select",
+          placeholder: "Select resource type",
+          help:
+            "If you want to upload data, choose `dataset`; For uploading tools, choose `application`.",
+          options: ["dataset", "application"].map(opt => {
+            return {
+              text: opt,
+              value: opt,
+              selected: this.rdf.type === opt
+            };
+          })
+        },
         {
           label: "Files",
           type: "file-preview",
