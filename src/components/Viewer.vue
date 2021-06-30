@@ -102,7 +102,7 @@
         ></button>
       </div>
     </template>
-    <div :id="containerId"></div>
+    <div class="viewer-container" :id="containerId"></div>
   </div>
 </template>
 <script>
@@ -145,9 +145,6 @@ export default {
     this.validConversions = [];
     this.screenshots = [];
     this.commitValue();
-    const api = window.imjoy.api;
-    const baseUrl = window.location.origin + window.location.pathname;
-    api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
   },
   methods: {
     commitValue() {
@@ -217,7 +214,6 @@ export default {
         container
       });
       const container = document.getElementById(this.containerId);
-      const w = container.getBoundingClientRect().width;
       const fn = file.name.toLowerCase();
 
       // fetch remote file
@@ -258,7 +254,7 @@ export default {
             reader.onerror = reject;
             reader.readAsDataURL(file);
           });
-          container.style.height = "100vh";
+          container.style.height = "calc( 100vh - 72px)";
 
           await this.viewer.view_image(base64);
 
@@ -295,13 +291,12 @@ export default {
         // add it for potentila conversion later
         if (!this.validConversions.includes(file))
           this.validConversions.push(file);
-        container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
+        container.style.height = "calc( 100vh - 72px)";
         if (this.screenshots.length <= 0) {
           setTimeout(() => {
             this.capture();
           }, 1000);
         }
-        document.getElementById(this.containerId + "-files").scrollIntoView();
       } catch (e) {
         console.error(e);
         throw e;
@@ -315,11 +310,8 @@ export default {
         this.imjoyReady
           .then(() => {
             const api = window.imjoy.api;
-            api.createWindow({
-              name: "SMLM Viewer",
-              type: "3D Histogram",
-              window_id: this.containerId
-            });
+            const baseUrl = window.location.origin + window.location.pathname;
+            api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
           })
           .finally(() => {
             loadingComponent.close();
@@ -352,9 +344,11 @@ export default {
           );
           const api = window.imjoy.api;
           const baseUrl = window.location.origin + window.location.pathname;
-          api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html").then(async () => {
-            await this.previewFile(file);
-          });
+          await api
+            .getPlugin(baseUrl + "SMLM-File-IO.imjoy.html")
+            .then(async () => {
+              await this.previewFile(file);
+            });
         } catch (e) {
           alert("Failed to download file: " + resourceItem.download_url);
 
@@ -390,8 +384,7 @@ export default {
 .sidebar-content {
   height: 100% !important;
 }
-.viewer {
+.viewer-container {
   width: 100%;
-  height: 100%;
 }
 </style>
