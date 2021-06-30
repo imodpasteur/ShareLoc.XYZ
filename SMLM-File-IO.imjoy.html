@@ -505,7 +505,7 @@
                                                         console.log(table_file)
                                                         const fileReader = new FileReader();
                                                         fileReader.onload = (evt) => {
-                                                            update_callback({ running_status: 'Table loaded.' })
+                                                            update_callback({ running_status: 'Location table loaded.' })
                                                             const arrayBuffer = evt.target.result
                                                             const uint8Arr = new Uint8Array(arrayBuffer)
                                                             let rows = file_info.rows
@@ -786,6 +786,9 @@
             })
         }
         save(save_file_name, update_callback) {
+            if(save_file_name && !save_file_name.endsWith('.smlm')){
+                throw new Error("Invalid file name, it must has .smlm extension: " + save_file_name)
+            }
             update_callback = update_callback || function (status) {
                 if(status.running_progress) api.showProgress(status.running_progress)
                 if(status.running_status) api.showMessage(status.running_status)
