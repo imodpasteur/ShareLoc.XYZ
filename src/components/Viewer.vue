@@ -1,7 +1,11 @@
 <template>
   <div class="control">
     <section>
-      <b-field v-if="!value || value.length <= 0" style="margin-top: 30%;">
+      <b-field
+        v-if="!value || value.length <= 0"
+        label="View local SMLM files"
+        style="margin-top: 10%; margin-left: 20px; margin-right: 20px;"
+      >
         <b-upload
           v-model="value"
           @input="updateFiles()"
@@ -18,24 +22,7 @@
           </section>
         </b-upload>
       </b-field>
-      <template v-if="!value || value.length <= 0">
-        <div
-          :id="containerId + '-files'"
-          v-for="(file, index) in value"
-          :key="index"
-          class="tag is-primary"
-          style="cursor: pointer"
-          @click="previewFile(file)"
-        >
-          {{ file.name.slice(0, 20) + (file.name.length > 20 ? "..." : "") }}
-          <button
-            class="delete is-small"
-            type="button"
-            @click.prevent="removeFile(index)"
-          ></button>
-        </div>
-      </template>
-      <div :id="containerId"></div>
+
       <!-- <label class="label" v-if="viewer"
           >Take screenshots for the cover</label
         >
@@ -70,6 +57,52 @@
           </a>
         </div> -->
     </section>
+    <div v-if="!value || value.length <= 0" style="margin:20px;">
+      <p>
+        NOTE: Your data will stay locally in your browser, no data will be sent
+        or uploaded to a server, unless you use the upload feature explcitly.
+      </p>
+      <br />
+      <p>
+        You can load files with the following formats:
+        <a
+          href="https://github.com/imodpasteur/smlm-file-format"
+          target="_blank"
+          >SMLM(.smlm)</a
+        >, ThunderSTORM(.csv/.xls), RapidSTROM, ZEISS(ELYRA), Nikon NSTORM(txt),
+        .png, .jpg.
+      </p>
+      <p>
+        If you have other file format which is not supported yet, please
+        <a
+          href="https://www.dropbox.com/request/IyZ7HkzHUpB0t5Mkp46l"
+          target="_blank"
+          >upload a sample file</a
+        >, and
+        <a href="https://oeway.typeform.com/to/rdkPmd" target="_blank"
+          >send us a message</a
+        >
+        to describe your file format, we will try to support your file format.
+      </p>
+    </div>
+    <template v-if="!value || value.length <= 0">
+      <div
+        :id="containerId + '-files'"
+        v-for="(file, index) in value"
+        :key="index"
+        class="tag is-primary"
+        style="cursor: pointer"
+        @click="previewFile(file)"
+      >
+        {{ file.name.slice(0, 20) + (file.name.length > 20 ? "..." : "") }}
+        <button
+          class="delete is-small"
+          type="button"
+          @click.prevent="removeFile(index)"
+        ></button>
+      </div>
+    </template>
+    <div :id="containerId"></div>
   </div>
 </template>
 <script>
@@ -336,7 +369,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .dataset {
   height: 100%;
 }
