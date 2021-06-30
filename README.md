@@ -8,6 +8,7 @@ An open platform for sharing single-molecule localization microscopy data and to
  * Browser-based SMLM data viewer with 2D/3D, no installation required
  * Easy-to-use upload interface with file preview support
  * Import various type of file formats
+
 ## The SMLM file format
 
 To enable faster preview and portable sharing, we developed a binary and losslessly compressed file format for storing localization tables and image patches.
