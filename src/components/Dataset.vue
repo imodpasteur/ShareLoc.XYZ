@@ -250,7 +250,7 @@ export default {
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
       this.rdf.license = this.rdf.license || "CC-BY-4.0";
-      if (rdf.covers) {
+      if (rdf.covers && this.rdf.config._deposit) {
         files.screenshots = rdf.covers.map(c => {
           const baseUrl = `${this.client.baseURL}/record/${this.rdf.config._deposit.id}/files/`;
           const coverUrl = c.startsWith("http") ? c : new URL(c, baseUrl).href;

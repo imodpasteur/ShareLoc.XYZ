@@ -417,6 +417,7 @@ export default {
           await this.client.getCredential(true);
 
         this.stepIndex = 2;
+        this.$forceUpdate();
       });
     },
     async loadRdfFromURL(url) {
