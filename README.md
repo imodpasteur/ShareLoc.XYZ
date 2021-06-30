@@ -4,7 +4,7 @@
 An open platform for sharing single-molecule localization microscopy data and tools.
 
 ## Key Features
- * Open repository single-molecule localization data and tools
+ * Open repository for single-molecule localization data and tools
  * Storing data on [Zenodo](https://zenodo.org)
  * Open and extendable via [ImJoy](https://imjoy.io) plugins
  * Browser-based SMLM data viewer with 2D/3D, no installation required
@@ -23,7 +23,7 @@ The SMLM viewer plugin used in ShareLoc.XYZ is adapted from the Fairy Dust viewe
 
 ## License
 
-The source code of ShareLoc.XYZ platform is released under MIT license. The content hosted in ShareLoc.XYZ, including data and applications are owned by the original authors and made available according to the corresponding license.
+The source code of ShareLoc.XYZ platform is released under MIT license. The content hosted in ShareLoc.XYZ, including data and applications are owned by the original authors and made available according to the corresponding license specified by the authors.
 
 Fairy Dust is released under MIT license, and we apply the same MIT license to the . 
 
