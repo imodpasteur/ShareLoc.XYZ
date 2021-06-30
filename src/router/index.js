@@ -26,6 +26,12 @@ const routes = [
     component: Upload
   },
   {
+    path: "/update/:updateDepositId+",
+    name: "Update",
+    component: Upload,
+    props: true
+  },
+  {
     path: "/viewer",
     name: "Viewer",
     component: Viewer

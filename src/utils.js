@@ -238,6 +238,8 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
   return metadata;
 }
 
+const zenodoFileRegex = /.*zenodo.org\/record\/.*\/files\/(.*)/;
+
 export function depositionToRdf(deposition) {
   const metadata = deposition.metadata;
   let type = metadata.keywords.filter(k => k.startsWith("shareloc.xyz:"))[0];
@@ -256,8 +258,9 @@ export function depositionToRdf(deposition) {
   for (let idf of metadata.related_identifiers) {
     if (idf.relation === "isCompiledBy" && idf.scheme === "url") {
       rdfFile = idf.identifier;
-      if (rdfFile.includes(`/files/`)) {
-        const fileName = rdfFile.split("/files/")[1];
+      const matches = zenodoFileRegex.exec(rdfFile);
+      if (matches) {
+        const fileName = matches[1];
         rdfFile = `${deposition.links.bucket}/${fileName}`;
       } else {
         throw new Error("Invalid file identifier: " + idf.identifier);
@@ -271,8 +274,13 @@ export function depositionToRdf(deposition) {
       if (url.startsWith("file://")) {
         url = url.replace("file://", deposition.links.bucket + "/");
       } else if (url.includes(`/files/`)) {
-        const fileName = url.split("/files/")[1];
-        url = `${deposition.links.bucket}/${fileName}`;
+        const matches = zenodoFileRegex.exec(url);
+        if (matches) {
+          const fileName = matches[1];
+          url = `${deposition.links.bucket}/${fileName}`;
+        } else {
+          throw new Error("Invalid file identifier: " + idf.identifier);
+        }
       } else {
         throw new Error("Invalid file identifier: " + idf.identifier);
       }
@@ -284,9 +292,16 @@ export function depositionToRdf(deposition) {
     ) {
       let url = idf.identifier;
       if (url.includes(`/files/`)) {
-        const fileName = url.split("/files/")[1];
-        url = `${deposition.links.bucket}/${fileName}`;
-        datasets.push({ name: fileName, download_url: url });
+        const matches = zenodoFileRegex.exec(url);
+        if (matches) {
+          let fileName = matches[1];
+          // TODO: This is a hack for now, will need to fix in the upload part
+          // if(fileName.endsWith('.csv')) fileName = fileName.replace('.csv', '.smlm')
+          url = `${deposition.links.bucket}/${fileName}`;
+          datasets.push({ name: fileName, download_url: url });
+        } else {
+          throw new Error("Invalid file identifier: " + idf.identifier);
+        }
       } else {
         throw new Error("Invalid file identifier: " + idf.identifier);
       }

@@ -505,7 +505,7 @@
                                                         console.log(table_file)
                                                         const fileReader = new FileReader();
                                                         fileReader.onload = (evt) => {
-                                                            update_callback({ running_status: 'Table loaded.' })
+                                                            update_callback({ running_status: 'Location table loaded.' })
                                                             const arrayBuffer = evt.target.result
                                                             const uint8Arr = new Uint8Array(arrayBuffer)
                                                             let rows = file_info.rows

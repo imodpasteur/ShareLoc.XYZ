@@ -295,6 +295,7 @@ import DOMPurify from "dompurify";
 
 export default {
   name: "upload",
+  props: ["updateDepositId"],
   components: {
     markdown: Markdown,
     // eslint-disable-next-line vue/no-unused-components
@@ -313,6 +314,12 @@ export default {
       this.$store.dispatch("fetchResourceItems", {
         repo,
         manifest_url
+      });
+    }
+    if (this.updateDepositId) {
+      debugger;
+      this.startFromDepositURL().catch(e => {
+        alert(`Failed to load from deposit URL: ${e}`);
       });
     }
   },
@@ -343,7 +350,8 @@ export default {
       siteConfig: state => state.siteConfig,
       loadedUrl: state => state.loadedUrl,
       resourceItems: state => state.resourceItems,
-      client: state => state.zenodoClient
+      client: state => state.zenodoClient,
+      zenodoBaseURL: state => state.zenodoBaseURL
     })
   },
   data() {
@@ -369,6 +377,11 @@ export default {
     };
   },
   methods: {
+    async startFromDepositURL() {
+      if (!this.client.credential) await this.login();
+      this.URI4Load = `${this.zenodoBaseURL}/record/${this.updateDepositId}`;
+      await this.loadRdfFromURL(this.URI4Load);
+    },
     startUpload() {
       this.rdf = {};
       this.rdfFiles = [];
@@ -397,12 +410,13 @@ export default {
     async loadRdfFromURL(url) {
       try {
         const doiURLRegex = doiRegex.resolvePath();
+        debugger;
         if (doiURLRegex.test(url)) {
           url = await resolveDOI(url.match(doiURLRegex)[4]);
         } else if (doiRegex().test(url)) {
           url = await resolveDOI(url);
         }
-        const zenodoRegex = /zenodo.org\/(record|deposit)\/([0-9]+)/g;
+        const zenodoRegex = /zenodo.org\/(record|deposit)\/([0-9]+)/;
         const m = zenodoRegex.exec(url);
         if (m) {
           this.depositId = parseInt(m[2]);
@@ -443,6 +457,8 @@ export default {
             this.rdf.config._docstring = await response.text();
           }
           this.stepIndex = 1;
+        } else {
+          alert(`Failed to parse RDF URL: ${url}`);
         }
       } catch (e) {
         console.error(e);

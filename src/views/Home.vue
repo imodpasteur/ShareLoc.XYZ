@@ -381,6 +381,21 @@ function connectApps(self, item) {
   if (item.config && item.config._linked) return;
   item.config = item.config || {};
   item.apps = item.apps || [];
+  if (item.config._deposit) {
+    if (item.config._deposit.owners.includes(self.userId)) {
+      item.apps.unshift({
+        name: "Edit",
+        icon: "pencil",
+        show_on_hover: true,
+        run() {
+          self.$router.push({
+            name: "Update",
+            params: { updateDepositId: item.config._deposit.id }
+          });
+        }
+      });
+    }
+  }
   item.apps.unshift({
     name: "Share",
     icon: "share-variant",
@@ -609,6 +624,13 @@ export default {
     }
   },
   computed: {
+    userId() {
+      return (
+        this.zenodoClient &&
+        this.zenodoClient.credential &&
+        this.zenodoClient.credential.user_id
+      );
+    },
     partners: function() {
       return (
         this.siteConfig.partners &&
