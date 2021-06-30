@@ -18,10 +18,21 @@
   "contribute_url": "/docs/contribute.md",
   "join_partners_url": "",
   "footer": [
-    { "label": "Github Repository",
+    { "label": "User Agreement",
+      "tooltip": "Disclaimer, Terms of Use and Privacy Statements",
+      "url": "https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/user-agreement.md#user-agreement"
+    },
+    { "label": "Source code",
       "tooltip": "Github Repository",
-      "logo": "/static/img/github.png", 
       "url": "https://github.com/imodpasteur/shareLoc.xyz"
+    },
+    { "label": "Report bugs",
+      "tooltip": "Report an issue on Github",
+      "url": "https://github.com/imodpasteur/ShareLoc.XYZ/issues"
+    },
+    { "label": "Contact Us",
+      "tooltip": "Send us a private message",
+      "url": "https://oeway.typeform.com/to/rdkPmd"
     }
   ],
   "zenodo_config": {

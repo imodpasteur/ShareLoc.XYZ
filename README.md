@@ -29,6 +29,11 @@ Fairy Dust is released under MIT license, and we apply the same MIT license to t
 
 ## Citation
 If you find ShareLoc.XYZ helpful for your research please consider cite ShareLoc.XYZ: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5045319.svg)](https://doi.org/10.5281/zenodo.5045319)
-## Disclaimer Agreement
+## User Agreement
 
 By using the ShareLoc.XYZ website and/or viewing material on the website, you agree to become bound by the terms of this [User Agreement](./user-agreement.md). If you do not agree to the Disclaimer, Terms of Use, and Privacy Statements of this User Agreement, do not use this website or any portion thereof in any form or manner.
+
+## Contact Us
+
+If you have any question, please feel free to [send us a private message](https://oeway.typeform.com/to/rdkPmd) or write a public [Github issues](https://github.com/imodpasteur/ShareLoc.XYZ/issues).
+
