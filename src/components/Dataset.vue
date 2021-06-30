@@ -160,9 +160,6 @@ export default {
       this.rdf.config = this.rdf.config || {};
       this.rdf.config._rdf_file = "./" + rdfFileName;
       this.rdf.config._docstring = values["Documentation"];
-      this.rdf.authors = this.rdf.authors.split(",").map(name => {
-        return { name: name.trim() };
-      });
 
       if (!this.rdf.tags.includes("smlm")) this.rdf.tags.push("smlm");
 
@@ -236,11 +233,14 @@ export default {
       this.rdf.attachments = this.rdf.attachments || {};
       if (dataFiles.length > 0)
         this.rdf.attachments.datasets = dataFiles.map(file => {
-          return { name: file.name, size: file.size };
+          return {
+            name: file.convertFileName ? file.convertFileName : file.name,
+            size: file.size
+          };
         });
 
       this.rdf.config._files = editedFiles.filter(
-        file => file.type !== "remote"
+        file => file.type !== "remote" || file.convert
       );
       this.rdf.config._yaml = rdfYaml;
       this.$emit("submit", this.rdf);

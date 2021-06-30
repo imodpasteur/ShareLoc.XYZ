@@ -100,7 +100,7 @@
 
       <b-step-item label="Upload" icon="upload">
         <b-field
-          label="RDF content"
+          label="Upload Summary"
           style="height: 260px; overflow: auto;"
           v-if="rdfYaml"
         >
@@ -110,7 +110,11 @@
             :content="formatedModelYaml"
           ></markdown>
         </b-field>
-        <b-field v-if="editedFiles" label="Files">
+        <b-field
+          v-if="editedFiles"
+          label="Files"
+          message="The following files will be uploaded or updated"
+        >
           <b-taglist attached rounded>
             <b-tag v-for="file in editedFiles" :key="file.name" rounded>{{
               file.name
@@ -317,7 +321,6 @@ export default {
       });
     }
     if (this.updateDepositId) {
-      debugger;
       this.startFromDepositURL().catch(e => {
         alert(`Failed to load from deposit URL: ${e}`);
       });
@@ -410,7 +413,6 @@ export default {
     async loadRdfFromURL(url) {
       try {
         const doiURLRegex = doiRegex.resolvePath();
-        debugger;
         if (doiURLRegex.test(url)) {
           url = await resolveDOI(url.match(doiURLRegex)[4]);
         } else if (doiRegex().test(url)) {
@@ -562,6 +564,7 @@ export default {
         }
         this.rdf.config = this.rdf.config || {};
         this.rdf.config._deposit = depositionInfo;
+
         const metadata = rdfToMetadata(this.rdf, baseUrl, docstring);
         // this will send a email request to the admin of bioimgae-io team
         if (this.requestedJoinCommunity) {
@@ -582,7 +585,7 @@ export default {
           return depositionInfo;
         }
         const uploadFiles = this.editedFiles.filter(
-          file => file.type !== "remote"
+          file => file.type !== "remote" || file.convert
         );
         // sort the files so we will upload the covers in the end
         // this allows zenodo to display it as preview
@@ -605,7 +608,16 @@ export default {
 
         for (let i = 0; i < uploadFiles.length; i++) {
           let file = uploadFiles[i];
-          if (file.convert) file = await file.convert();
+          if (file.convert) {
+            const convertedFile = await file.convert();
+            // handle name change
+            for (let dataset of this.rdf.attachments.datasets) {
+              if (dataset.name === file.name) {
+                dataset.name = convertedFile.name;
+              }
+            }
+            file = convertedFile;
+          }
           await this.client.uploadFile(depositionInfo, file, size => {
             this.uploadProgress = Math.round((size / file.size) * 100);
             this.uploadStatus = `Uploading ${i + 1}/${uploadFiles.length}(${

@@ -231,6 +231,8 @@ export default {
         try {
           if (!this.fileCache[file.url]) {
             const newFile = await fetchFile(file.url, file.name);
+            // remember the remote file
+            newFile.remote = file;
             file = newFile;
             // replace the file with the actual one
             this.fileCache[file.url] = file;
@@ -287,12 +289,22 @@ export default {
           window_id: this.containerId,
           data: smlm.files
         });
+        let saveFileName = file.name;
+        if (!saveFileName.endsWith(".smlm"))
+          saveFileName = saveFileName + ".smlm";
+
         file.convert = async () => {
           const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
           const smlm = await smlmPlugin.load(file);
-          const zip = await smlm.save(file.name);
+
+          const zip = await smlm.save(saveFileName);
           return zip;
         };
+        file.convertFileName = saveFileName;
+        if (file.remote) {
+          file.remote.convert = file.convert;
+          file.remote.convertFileName = file.convertFileName;
+        }
         // add it for potentila conversion later
         if (!this.validConversions.includes(file))
           this.validConversions.push(file);

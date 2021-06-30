@@ -248,12 +248,17 @@ export default {
           window_id: this.containerId,
           data: smlm.files
         });
+        let saveFileName = file.name;
+        if (!saveFileName.endsWith(".smlm"))
+          saveFileName = saveFileName + ".smlm";
         file.convert = async () => {
           const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
           const smlm = await smlmPlugin.load(file);
-          const zip = await smlm.save(file.name);
+
+          const zip = await smlm.save(saveFileName);
           return zip;
         };
+        file.convertFileName = saveFileName;
         // add it for potentila conversion later
         if (!this.validConversions.includes(file))
           this.validConversions.push(file);
