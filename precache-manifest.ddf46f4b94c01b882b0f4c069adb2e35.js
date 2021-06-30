@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "c04256dd1f40aabb8ce0",
+    "revision": "b788705ea711dd39db2f",
     "url": "/css/app.de754e00.css"
   },
   {
@@ -56,12 +56,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/index.ejs"
   },
   {
-    "revision": "28dc2c97299b9c30c94f515e4bae9ce3",
+    "revision": "612dc81e0e6f1340169680616647a331",
     "url": "/index.html"
   },
   {
-    "revision": "c04256dd1f40aabb8ce0",
-    "url": "/js/app.d02f4176.js"
+    "revision": "b788705ea711dd39db2f",
+    "url": "/js/app.b4af24c8.js"
   },
   {
     "revision": "f8c07cb868b69fb2a795",
@@ -402,14 +402,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "2db3ab0e73df9d294027ab84a78a0a9a",
     "url": "/static/img/bg.jpg"
-  },
-  {
-    "revision": "c446d74a65b3651d63083570846c3b3b",
-    "url": "/static/img/bioimage-io-logo-transparent.png"
-  },
-  {
-    "revision": "917774a8febc2361a8c7481552e1e11a",
-    "url": "/static/img/bioimage-io-logo.png"
   },
   {
     "revision": "e1dd5654c3c8bcca4df6f56705b14a3c",
