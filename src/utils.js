@@ -238,8 +238,6 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
   return metadata;
 }
 
-const zenodoFileRegex = /.*zenodo.org\/record\/.*\/files\/(.*)/;
-
 export function depositionToRdf(deposition) {
   const metadata = deposition.metadata;
   let type = metadata.keywords.filter(k => k.startsWith("shareloc.xyz:"))[0];
@@ -258,6 +256,7 @@ export function depositionToRdf(deposition) {
   for (let idf of metadata.related_identifiers) {
     if (idf.relation === "isCompiledBy" && idf.scheme === "url") {
       rdfFile = idf.identifier;
+      const zenodoFileRegex = /.*zenodo.org\/.*\/files\/(.*)/;
       const matches = zenodoFileRegex.exec(rdfFile);
       if (matches) {
         const fileName = matches[1];
@@ -274,6 +273,7 @@ export function depositionToRdf(deposition) {
       if (url.startsWith("file://")) {
         url = url.replace("file://", deposition.links.bucket + "/");
       } else if (url.includes(`/files/`)) {
+        const zenodoFileRegex = /.*zenodo.org\/.*\/files\/(.*)/;
         const matches = zenodoFileRegex.exec(url);
         if (matches) {
           const fileName = matches[1];
@@ -292,6 +292,7 @@ export function depositionToRdf(deposition) {
     ) {
       let url = idf.identifier;
       if (url.includes(`/files/`)) {
+        const zenodoFileRegex = /.*zenodo.org\/.*\/files\/(.*)/;
         const matches = zenodoFileRegex.exec(url);
         if (matches) {
           let fileName = matches[1];
