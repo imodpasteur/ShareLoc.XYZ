@@ -26,8 +26,6 @@ const zenodoBaseURL = siteConfig.zenodo_config.use_sandbox
 
 function normalizeItem(item) {
   if (item.config && item.config._normalized) return;
-  item.id = item.id || randId();
-  item.id = item.id.toLowerCase();
   item.config = item.config || {};
   item.covers = item.covers || [];
   item.authors = item.authors || [];
@@ -243,6 +241,10 @@ export const store = new Vuex.Store({
       state.imjoy = imjoy;
     },
     addResourceItem(state, item) {
+      item.id = item.id || randId();
+      item.id = item.id.toLowerCase();
+      item.links = item.links || [];
+      item.links = item.links.map(link => link.toLowerCase());
       item.authors = item.authors || [];
       item.authors = item.authors.map(author =>
         typeof author === "string" ? { name: author } : author
@@ -286,7 +288,15 @@ export const store = new Vuex.Store({
           }
         }
       });
-      if (transform) state.resourceItems.map(transform);
+      state.resourceItems = state.resourceItems.map(item => {
+        // make sure the id and links are in lowercase
+        item.id = item.id || randId();
+        item.id = item.id.toLowerCase();
+        item.links = item.links || [];
+        item.links = item.links.map(link => link.toLowerCase());
+        if (transform) transform(item);
+        return item;
+      });
     }
   }
 });

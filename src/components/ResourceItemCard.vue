@@ -66,12 +66,12 @@
 
           <p class="resource-item-description" v-if="resourceItem.description">
             {{
-              resourceItem.description.slice(0, 100) +
-                (resourceItem.description.length > 100 ? "..." : "")
+              resourceItem.description.slice(0, 60) +
+                (resourceItem.description.length > 60 ? "..." : "")
             }}
           </p>
           <span style="margin-top:3px;display: block;">
-            <span v-for="t in resourceItem.tags" :key="t">
+            <span v-for="t in resourceItem.tags.slice(0, 4)" :key="t">
               <b-tag
                 style="cursor: pointer;"
                 rounded
