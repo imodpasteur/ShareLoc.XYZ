@@ -8,7 +8,7 @@
       >
         <b-upload
           v-model="value"
-          @input="updateFiles()"
+          @input="updateFiles($event)"
           multiple
           drag-drop
           expanded
@@ -17,7 +17,11 @@
             <div class="content has-text-centered">
               <b-icon icon="upload" size="is-large"></b-icon>
 
-              Drag and drop files here
+              <p>Drag and drop files here</p>
+              <p>
+                For multi-channel image, drag the files for all the channels
+                together.
+              </p>
             </div>
           </section>
         </b-upload>
@@ -92,7 +96,7 @@
         :key="index"
         class="tag is-primary"
         style="cursor: pointer"
-        @click="previewFile(file)"
+        @click="previewFile([file])"
       >
         {{ file.name.slice(0, 20) + (file.name.length > 20 ? "..." : "") }}
         <button
@@ -123,7 +127,7 @@ export default {
       value: undefined,
       screenshots: [],
       fileCache: {},
-      currentFile: null,
+      currentFiles: null,
       convertToSmlm: true,
       validConversions: null
     };
@@ -170,7 +174,7 @@ export default {
     async capture() {
       const img = await this.viewer.captureImage();
       const config = await this.viewer.getViewConfig();
-      config["_file"] = this.currentFile && this.currentFile.name;
+      config["_file"] = this.currentFiles && this.currentFiles.map(f => f.name);
       if (this.screenshots.filter(s => s.image === img).length <= 0)
         this.screenshots.push({ config, image: img });
       else
@@ -182,83 +186,62 @@ export default {
     },
     removeFile(index) {
       const file = this.value[index];
-      if (file === this.currentFile) this.currentFile = null;
+      // TODO remove one only?
+      if (this.currentFiles.includes(file)) this.currentFile = null;
       if (this.validConversions.includes(file))
         this.validConversions.splice(this.validConversions.indexOf(file), 1);
       this.value.splice(index, 1);
       this.$forceUpdate();
     },
-    updateFiles() {
-      this.$nextTick(async () => {
-        // we need this because otherwise we cannot update the list on the interface
-        this.$forceUpdate();
-        if (this.value && this.value.length > 0) {
-          try {
-            await this.previewFile(this.value[this.value.length - 1]);
-          } catch (e) {
-            await window.imjoy.api.showMessage(`Failed to preview file: ${e}`);
-            console.error(e);
-          }
-        }
-        this.commitValue();
-      });
+    async updateFiles(files) {
+      try {
+        await this.previewFile(files);
+      } catch (e) {
+        await window.imjoy.api.showMessage(`Failed to preview file: ${e}`);
+        console.error(e);
+      }
+      this.commitValue();
     },
     trimEllip(str, length) {
       if (!str) return str;
       if (typeof str === "object") str = str.toString();
       return str.length > length ? str.substring(0, length) + "..." : str;
     },
-    async previewFile(file) {
+    async previewFile(files) {
       const api = window.imjoy.api;
       const loadingComponent = this.$buefy.loading.open({
         container
       });
       const container = document.getElementById(this.containerId);
-      const fn = file.name.toLowerCase();
-
-      // fetch remote file
-      if (file.type === "remote") {
-        try {
-          if (!this.fileCache[file.url]) {
-            const newFile = await fetchFile(file.url, file.name);
-            file = newFile;
-            // replace the file with the actual one
-            this.fileCache[file.url] = file;
-          } else {
-            file = this.fileCache[file.url];
+      for (let file of files) {
+        // fetch remote file
+        if (file.type === "remote") {
+          try {
+            if (!this.fileCache[file.url]) {
+              const newFile = await fetchFile(file.url, file.name);
+              file = newFile;
+              // replace the file with the actual one
+              this.fileCache[file.url] = file;
+            } else {
+              file = this.fileCache[file.url];
+            }
+          } catch (e) {
+            console.error(e);
+            alert(`Failed to fetch file from ${file.url}: ${e}`);
+            return;
           }
-        } catch (e) {
-          console.error(e);
-          alert(`Failed to fetch file from ${file.url}: ${e}`);
-          return;
         }
       }
 
-      this.currentFile = file;
-      // display image
-      if (fn.endsWith(".png") || fn.endsWith(".jpeg") || fn.endsWith(".jpg")) {
+      this.currentFiles = files;
+      let smlmFiles = [];
+      const smlmPlugin = await api.getPlugin("SMLM File IO");
+      for (let file of files) {
+        // display SMLM file
         try {
-          this.viewer = await api.createWindow({
-            name: file.name.slice(0, 40),
-            src: "https://kaibu.org/#/app",
-            window_id: this.containerId,
-            config: { open_sidebar: false }
-          });
-          // encode the file using the FileReader API
-          const base64 = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              // use a regex to remove data url part
-              resolve(reader.result);
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          });
+          const smlm = await smlmPlugin.load(file);
+          smlmFiles = smlmFiles.concat(smlm.files);
           container.style.height = "calc( 100vh - 72px)";
-
-          await this.viewer.view_image(base64);
-
-          return;
         } catch (e) {
           console.error(e);
           throw e;
@@ -266,43 +249,13 @@ export default {
           loadingComponent.close();
         }
       }
-      // display SMLM file
-      try {
-        const smlmPlugin = await api.getPlugin("SMLM File IO");
-        const smlm = await smlmPlugin.load(file);
-        const baseUrl = window.location.origin + window.location.pathname;
-        this.viewer = await api.createWindow({
-          name: file.name.slice(0, 40),
-          src: baseUrl + "FairyDust.imjoy.html",
-          window_id: this.containerId,
-          data: smlm.files
-        });
-        let saveFileName = file.name;
-        if (!saveFileName.endsWith(".smlm"))
-          saveFileName = saveFileName + ".smlm";
-        file.convert = async () => {
-          const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
-          const smlm = await smlmPlugin.load(file);
-
-          const zip = await smlm.save(saveFileName);
-          return zip;
-        };
-        file.convertFileName = saveFileName;
-        // add it for potentila conversion later
-        if (!this.validConversions.includes(file))
-          this.validConversions.push(file);
-        container.style.height = "calc( 100vh - 72px)";
-        if (this.screenshots.length <= 0) {
-          setTimeout(() => {
-            this.capture();
-          }, 1000);
-        }
-      } catch (e) {
-        console.error(e);
-        throw e;
-      } finally {
-        loadingComponent.close();
-      }
+      const baseUrl = window.location.origin + window.location.pathname;
+      this.viewer = await api.createWindow({
+        name: "Fairy Dust",
+        src: baseUrl + "FairyDust.imjoy.html",
+        window_id: this.containerId,
+        data: smlmFiles
+      });
     },
     async init() {
       const loadingComponent = this.$buefy.loading.open();
@@ -347,7 +300,7 @@ export default {
           await api
             .getPlugin(baseUrl + "SMLM-File-IO.imjoy.html")
             .then(async () => {
-              await this.previewFile(file);
+              await this.previewFile([file]);
             });
         } catch (e) {
           alert("Failed to download file: " + resourceItem.download_url);

@@ -19,7 +19,7 @@
           <b-upload
             :id="item.label"
             v-model="value"
-            @input="updateFiles()"
+            @input="updateFiles($event)"
             multiple
             drag-drop
             expanded
@@ -28,7 +28,11 @@
               <div class="content has-text-centered">
                 <b-icon icon="upload" size="is-large"></b-icon>
 
-                Drag and drop files here
+                <p>Drag and drop files here</p>
+                <p>
+                  For multi-channel image, drag the files for all the channels
+                  together.
+                </p>
               </div>
             </section>
           </b-upload>
@@ -39,13 +43,13 @@
           :key="index"
           class="tag is-primary"
           style="cursor: pointer"
-          @click="previewFile(file)"
+          @click="previewFile(file, $event)"
         >
           {{ file.name.slice(0, 20) + (file.name.length > 20 ? "..." : "") }}
           <button
             class="delete is-small"
             type="button"
-            @click.prevent="removeFile(item.label, index)"
+            @click.stop="removeFile(item.label, index)"
           ></button>
         </div>
         <div :id="containerId"></div>
@@ -181,7 +185,7 @@ export default {
     async capture() {
       const img = await this.viewer.captureImage();
       const config = await this.viewer.getViewConfig();
-      config["_file"] = this.currentFile && this.currentFile.name;
+      config["_file"] = this.currentFiles && this.currentFiles.map(f => f.name);
       if (this.screenshots.filter(s => s.image === img).length <= 0)
         this.screenshots.push({ config, image: img });
       else
@@ -193,18 +197,18 @@ export default {
     },
     removeFile(label, index) {
       const file = this.value[index];
-      if (file === this.currentFile) this.currentFile = null;
+      if (this.currentFiles.includes(file)) this.currentFiles = null;
       if (this.validConversions.includes(file))
         this.validConversions.splice(this.validConversions.indexOf(file), 1);
       this.value.splice(index, 1);
       this.$forceUpdate();
     },
-    async updateFiles() {
+    async updateFiles(files) {
       // we need this because otherwise we cannot update the list on the interface
       this.$forceUpdate();
-      if (this.value && this.value.length > 0) {
+      if (files) {
         try {
-          await this.previewFile(this.value[this.value.length - 1]);
+          await this.previewFile(files);
         } catch (e) {
           await window.imjoy.api.showMessage(`Failed to preview file: ${e}`);
           console.error(e);
@@ -217,104 +221,149 @@ export default {
       if (typeof str === "object") str = str.toString();
       return str.length > length ? str.substring(0, length) + "..." : str;
     },
-    async previewFile(file) {
+    async displayImage(file) {
+      const loadingComponent = this.$buefy.loading.open();
+      try {
+        this.viewer = await window.imjoy.api.createWindow({
+          name: file.name.slice(0, 40),
+          src: "https://kaibu.org/#/app",
+          window_id: this.containerId,
+          config: { open_sidebar: false }
+        });
+        // encode the file using the FileReader API
+        const base64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            // use a regex to remove data url part
+            resolve(reader.result);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+
+        await this.viewer.view_image(base64);
+
+        return;
+      } catch (e) {
+        console.error(e);
+        throw e;
+      } finally {
+        loadingComponent.close();
+      }
+    },
+    async fetchRemoteFile(file) {
+      // fetch remote file
+      try {
+        if (!this.fileCache[file.url]) {
+          const newFile = await fetchFile(file.url, file.name);
+          // remember the remote file
+          newFile.remote = file;
+          file = newFile;
+          // replace the file with the actual one
+          this.fileCache[file.url] = file;
+        } else {
+          file = this.fileCache[file.url];
+        }
+      } catch (e) {
+        console.error(e);
+        alert(`Failed to fetch file from ${file.url}: ${e}`);
+      }
+      return file;
+    },
+    markFileConversion(file) {
+      let saveFileName = file.name;
+      if (!saveFileName.endsWith(".smlm"))
+        saveFileName = saveFileName + ".smlm";
+
+      file.convert = async () => {
+        const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
+        const smlm = await smlmPlugin.load(file);
+
+        const zip = await smlm.save(saveFileName);
+        return zip;
+      };
+      file.convertFileName = saveFileName;
+      if (file.remote) {
+        file.remote.convert = file.convert;
+        file.remote.convertFileName = file.convertFileName;
+      }
+      // add it for potentila conversion later
+      if (!this.validConversions.includes(file))
+        this.validConversions.push(file);
+    },
+    async previewFile(files, event) {
+      if (!Array.isArray(files)) {
+        files = [files];
+      }
+      if (event && event.shiftKey && Array.isArray(this.currentFiles)) {
+        for (let file of files) {
+          if (!this.currentFiles.includes(file)) {
+            this.currentFiles.push(file);
+          }
+        }
+        files = this.currentFiles;
+      }
       const api = window.imjoy.api;
       const loadingComponent = this.$buefy.loading.open({
         container
       });
       const container = document.getElementById(this.containerId);
       const w = container.getBoundingClientRect().width;
-      const fn = file.name.toLowerCase();
+      container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
 
-      // fetch remote file
-      if (file.type === "remote") {
-        try {
-          if (!this.fileCache[file.url]) {
-            const newFile = await fetchFile(file.url, file.name);
-            // remember the remote file
-            newFile.remote = file;
-            file = newFile;
-            // replace the file with the actual one
-            this.fileCache[file.url] = file;
-          } else {
-            file = this.fileCache[file.url];
-          }
-        } catch (e) {
-          console.error(e);
-          alert(`Failed to fetch file from ${file.url}: ${e}`);
-          return;
+      const normalizedFiles = [];
+      for (let file of files) {
+        if (file.type === "remote") {
+          normalizedFiles.push(await this.fetchRemoteFile(file));
+        } else {
+          normalizedFiles.push(file);
         }
       }
+      this.currentFiles = normalizedFiles;
 
-      this.currentFile = file;
       // display image
+      const fn = files[0].name.toLowerCase();
       if (fn.endsWith(".png") || fn.endsWith(".jpeg") || fn.endsWith(".jpg")) {
-        try {
-          this.viewer = await api.createWindow({
-            name: file.name.slice(0, 40),
-            src: "https://kaibu.org/#/app",
-            window_id: this.containerId,
-            config: { open_sidebar: false }
-          });
-          // encode the file using the FileReader API
-          const base64 = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              // use a regex to remove data url part
-              resolve(reader.result);
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          });
-          container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
-
-          await this.viewer.view_image(base64);
-
-          return;
-        } catch (e) {
-          console.error(e);
-          throw e;
-        } finally {
-          loadingComponent.close();
-        }
+        this.displayImage(files[0]);
+        return;
       }
+
       // display SMLM file
       try {
+        let smlmFiles = [];
         const smlmPlugin = await api.getPlugin("SMLM File IO");
-        const smlm = await smlmPlugin.load(file);
+        for (let file of files) {
+          // display SMLM file
+          try {
+            const smlm = await smlmPlugin.load(file);
+            smlmFiles = smlmFiles.concat(smlm.files);
+            // this will mark the file conversion
+            // the convert function will be called during upload
+            this.markFileConversion(file);
+          } catch (e) {
+            console.error(e);
+            throw e;
+          } finally {
+            loadingComponent.close();
+          }
+        }
         const baseUrl = window.location.origin + window.location.pathname;
         this.viewer = await api.createWindow({
-          name: file.name.slice(0, 40),
+          name: "Fairy Dust",
           src: baseUrl + "FairyDust.imjoy.html",
           window_id: this.containerId,
-          data: smlm.files
+          data: smlmFiles
         });
-        let saveFileName = file.name;
-        if (!saveFileName.endsWith(".smlm"))
-          saveFileName = saveFileName + ".smlm";
-
-        file.convert = async () => {
-          const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
-          const smlm = await smlmPlugin.load(file);
-
-          const zip = await smlm.save(saveFileName);
-          return zip;
-        };
-        file.convertFileName = saveFileName;
-        if (file.remote) {
-          file.remote.convert = file.convert;
-          file.remote.convertFileName = file.convertFileName;
-        }
-        // add it for potentila conversion later
-        if (!this.validConversions.includes(file))
-          this.validConversions.push(file);
+        await api.showMessage(
+          "Done! To add a new channel, hold the SHIFT key and click or drop another file."
+        );
         container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
         if (this.screenshots.length <= 0) {
           setTimeout(() => {
             this.capture();
           }, 1000);
         }
-        document.getElementById(this.containerId + "-files").scrollIntoView();
+        // document.getElementById(this.containerId + "-files").scrollIntoView();
       } catch (e) {
         console.error(e);
         throw e;
