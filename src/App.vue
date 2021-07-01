@@ -4,12 +4,10 @@
     <nav class="navbar is-link is-fixed-top" v-if="showNavbar">
       <div class="navbar-brand">
         <a href="#/">
-          <span class="site-title" style="cursor: pointer;">
-            <img
-              style="width: 264px"
-              src="/static/img/shareloc-logo-white.svg"
-            />
-          </span>
+          <img
+            style="width: 264px; margin-left:8px; margin-top: 6px;"
+            :src="siteConfig.site_logo"
+          />
         </a>
         <div
           class="navbar-burger burger"

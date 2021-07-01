@@ -402,7 +402,7 @@
                 }
 
                 console.log('loading...')
-                update_callback({ running: true, running_status: 'Loading...' })
+                update_callback({ running: true, running_status: `Loading ${file.name.slice(0, 32)}...` })
 
                 const callback = (data) => {
                     if (data.error) {
