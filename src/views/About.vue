@@ -64,7 +64,7 @@ export default {
 }
 .hero {
   max-width: 100%;
-  width: 600px;
+  width: 900px;
   margin-left: auto;
   margin-right: auto;
 }
