@@ -63,7 +63,7 @@ export default {
   background-position: bottom;
 }
 .hero {
-  max-width: 100%;
+  max-width: 90%;
   width: 900px;
   margin-left: auto;
   margin-right: auto;
