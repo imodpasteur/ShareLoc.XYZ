@@ -293,7 +293,7 @@ import { rdfToMetadata, resolveDOI, getFullRdfFromDeposit } from "../utils";
 import Markdown from "@/components/Markdown.vue";
 import TagInputField from "@/components/TagInputField.vue";
 import DropFilesField from "@/components/DropFilesField.vue";
-import Dataset from "./Dataset.vue";
+import Dataset from "./UploadForm.vue";
 import doiRegex from "doi-regex";
 import marked from "marked";
 import DOMPurify from "dompurify";

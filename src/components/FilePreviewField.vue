@@ -222,7 +222,10 @@ export default {
       return str.length > length ? str.substring(0, length) + "..." : str;
     },
     async displayImage(file) {
-      const loadingComponent = this.$buefy.loading.open();
+      const loadingComponent = this.$buefy.loading.open({
+        container: this.$el,
+        canCancel: true
+      });
       try {
         this.viewer = await window.imjoy.api.createWindow({
           name: file.name.slice(0, 40),
@@ -230,6 +233,7 @@ export default {
           window_id: this.containerId,
           config: { open_sidebar: false }
         });
+
         // encode the file using the FileReader API
         const base64 = await new Promise((resolve, reject) => {
           const reader = new FileReader();
@@ -305,7 +309,8 @@ export default {
       }
       const api = window.imjoy.api;
       const loadingComponent = this.$buefy.loading.open({
-        container
+        canCancel: true,
+        container: this.$el
       });
       const container = document.getElementById(this.containerId);
       const w = container.getBoundingClientRect().width;
@@ -325,6 +330,7 @@ export default {
       const fn = files[0].name.toLowerCase();
       if (fn.endsWith(".png") || fn.endsWith(".jpeg") || fn.endsWith(".jpg")) {
         this.displayImage(files[0]);
+        loadingComponent.close();
         return;
       }
 
