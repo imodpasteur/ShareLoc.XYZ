@@ -643,7 +643,7 @@ export default {
         this.stepIndex = 3;
       } catch (e) {
         console.error(e);
-        alert(`Failed to upload file: ${e}`);
+        alert(`Oops, failed to upload file: ${e}`);
       } finally {
         this.uploadProgress = 0;
         loadingComponent.close();
