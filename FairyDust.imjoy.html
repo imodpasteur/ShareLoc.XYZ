@@ -1029,7 +1029,7 @@
             scopeParams['x'] = 1;
             scopeParams['y'] = 1;
             scopeParams['z'] = 1;
-            scopeParams['point size'] = 6;
+            scopeParams['point size'] = 3;
             rerender = true;
         };
 
@@ -1060,7 +1060,7 @@
         clippingFolder.add(scopeParams, 'reset clipping');
 
         gui.add(scopeParams, 'Total # of locations').listen();
-
+        gui.add(scopeParams, 'point size', 0, 50).listen().onChange(setRerender);
         canvas = canvasElement; //document.getElementById("c");
         try {
             gl = canvas.getContext("webgl", { depth: false, preserveDrawingBuffer: true });
@@ -1381,11 +1381,11 @@
 
     var colors = [
         [255, 28, 14],
-        [0, 255, 0],
         [255, 0, 255],
+        [0, 255, 255],
+        [0, 255, 0],
         [0, 0, 255],
         [255, 255, 0],
-        [0, 255, 255],
     ];
 
     var files = [];
@@ -1504,7 +1504,6 @@
                     colorFolder.add(scopeParams, activN).onChange(setRerender);
                     colorFolder.addColor(scopeParams, colorN).onChange(setRerender);
                     colorFolder.add(scopeParams, alphaN, 0, 1).onChange(setRerender);
-                    colorFolder.add(scopeParams, 'point size', 0, 50).listen().onChange(setRerender);
                     colorFolder.open();
                 }
                 console.log(files, fileIDs);
@@ -1666,10 +1665,4 @@
         margin: 0;
     }
 
-    .title {
-        width: 200px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
 </style>
