@@ -127,6 +127,7 @@
     <br />
     <resource-item-list
       @show-resource-item-info="showResourceItemInfo"
+      @select-tag="searchTags = [$event]"
       v-if="selectedItems"
       :allItems="selectedItems"
       :displayMode="screenWidth > 700 ? displayMode : 'card'"

@@ -79,6 +79,14 @@
                 >{{ t }}</b-tag
               >
             </span>
+            <span v-if="resourceItem.tags.length > 4">
+              <b-tag
+                style="cursor: pointer;"
+                rounded
+                @click.native="showResourceItemInfo"
+                >...</b-tag
+              >
+            </span>
           </span>
           <badges class="badges" :badges="resourceItem.badges"></badges>
         </div>
@@ -198,6 +206,7 @@ export default {
   padding-top: 4px;
 }
 .resource-item-title {
+  margin-bottom: 2px;
   margin-top: 6px;
   font-size: 1.2em;
   font-weight: 400;

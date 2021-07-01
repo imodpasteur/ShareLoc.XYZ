@@ -13,6 +13,7 @@
       Zenodo at anytime without notice.
     </b-notification>
     <b-steps
+      style="margin-top: 20px;"
       class="width-limited"
       position="left"
       :has-navigation="false"
