@@ -71,7 +71,7 @@ import { mapState } from "vuex";
 import { dataURLtoFile, resizeImage } from "../utils";
 
 export default {
-  name: "dataset",
+  name: "upload-form",
   props: ["resourceId", "initRdf"],
   components: {
     "form-json": formJson,
@@ -267,6 +267,7 @@ export default {
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
       this.rdf.license = this.rdf.license || "CC-BY-4.0";
+      this.rdf.attachments = this.rdf.attachmentss || {};
       this.jsonFields = this.transformFields([
         {
           label: "Type",
