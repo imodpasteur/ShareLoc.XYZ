@@ -481,6 +481,7 @@ export class ZenodoClient {
         return null;
       }
     });
+    console.log("Get items from URL: ", resourceItems, url);
     return resourceItems.filter(item => !!item);
   }
 
