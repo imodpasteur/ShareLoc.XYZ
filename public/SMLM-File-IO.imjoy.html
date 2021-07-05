@@ -483,11 +483,12 @@
                                 const manifest = JSON.parse(meta_json)
                                 const format_version = manifest.format_version
                                 update_callback({ running_status: 'Manifest file loaded.' })
-                                const data = {}
+                                
                                 const load_files = async () => {
                                     //TODO: render the files with a different async loader
                                     for (let file_no = 0; file_no < manifest.files.length; file_no++) {
                                         await new Promise((resolve2, reject2) => {
+                                            const data = {}
                                             const file_info = manifest.files[file_no]
                                             if (file_info.type == "table") {
                                                 update_callback({ running_status: 'Loading smlm file...' })
@@ -501,8 +502,8 @@
                                                 const format = manifest.formats[format_key]
 
                                                 table_file.async("blob")
-                                                    .then((table_file) => {
-                                                        console.log(table_file)
+                                                    .then((blob) => {
+                                                        console.log(blob)
                                                         const fileReader = new FileReader();
                                                         fileReader.onload = (evt) => {
                                                             update_callback({ running_status: 'Location table loaded.' })
@@ -579,14 +580,15 @@
                                                             data.min = file_info.min
                                                             data.max = file_info.max
                                                             data.avg = file_info.avg
-                                                            data.file_name = file_info.name
-                                                            data.file_size = file.size
+                                                            //TODO: Fix hash
                                                             data.tableUint8Arrays = tableUint8Arrays
                                                             data.tableArrays = tableArrays
                                                             data.tableUint8Dict = tableUint8Dict
                                                             data.tableDict = tableDict
                                                             data.columns = columns
                                                             Object.assign(data, file_info)
+                                                            data.file_name = table_file.name
+                                                            data.file_size = blob.size
                                                             file_info.data = data
 
                                                             file_info.data.integrity_test = false
@@ -607,7 +609,7 @@
                                                         fileReader.onerror = (e) => {
                                                             reject2(e)
                                                         }
-                                                        fileReader.readAsArrayBuffer(table_file);
+                                                        fileReader.readAsArrayBuffer(blob);
                                                     })
                                                     .catch((e) => {
                                                         reject2(e)
@@ -1284,99 +1286,101 @@
             source.cancel('Operation canceled by the user.');
         }
 
-        async load(file) {
-            if(typeof file === 'string' && file.startsWith('http'))
-                file = await fetchFile(file, api.showMessage, api.showProgress)
-            // const blob2 = file.slice(0, 3)
-            // console.log(await blob2.text())
-            let data;
-            if (file.name.endsWith('.smlm')) {
-                data = await this.loadSmlmFile(file)
-            }
-            else {
-                data = await new Promise((resolve, reject) => {
-                    var r = new FileReader();
-                    var blob = file.slice(0, 100);
-                    r.onload = (evt) => {
-                        let textFormat = null;
-                        const sampleLines = evt.target.result.split('\n').slice(0, 2)
-                        if (sampleLines[0].includes('x [nm]') && sampleLines[0].includes('\t')) {
-                            textFormat = 'ThunderSTORM (xls)'
-                        }
-                        else if (sampleLines[0].includes('x [nm]') && sampleLines[0].includes(',')) {
-                            textFormat = 'ThunderSTORM (csv)'
-                        }
-                        else if (sampleLines[0].includes('Position X [nm]') && sampleLines[0].includes('\t')) {
-                            textFormat = 'ZEISS (txt)'
-                        }
-                        else if (sampleLines[0].includes('Position X [nm]') && sampleLines[0].includes(';')) {
-                            textFormat = 'ZEISSv1 (csv)'
-                        }
-                        else if (sampleLines[0].includes('x [nm]') && sampleLines[0].includes(';')) {
-                            textFormat = 'ZEISSv2 (csv)'
-                        }
-                        else if (sampleLines[0].startsWith('#') && sampleLines[0].includes('identifier=')) {
-                            textFormat = 'RapidSTORM (txt)'
-                        }
-                        else if (sampleLines[0].includes('x ') && sampleLines[0].includes('y ')) {
-                            textFormat = 'Space Seperated List (txt)'
-                        }
-                        else if (sampleLines[0].includes('X\t') && sampleLines[0].includes('\tY\t') && sampleLines[0].includes('Channel Name')) {
-                            textFormat = 'Nikon NSTORM (txt)'
-                        }
-                        // else if (file.name.endsWith('.png')) {
-                        //     textFormat = 'png'
-                        // }
-                        // else if (file.name.endsWith('.jpg')) {
-                        //     textFormat = 'jpg'
-                        // }
-                        // else if (file.name.endsWith('.jpeg')) {
-                        //     textFormat = 'jpeg'
-                        // }
-                        if (textFormat) {
-                            resolve(this.loadTextFile(file, textFormat))
-                        }
-                        else {
-                            reject('File format is not recognized: ' + file.name)
-                        }
+        async load(files) {
+            if(!Array.isArray(files)) files = [files];
+            const smlm = new smlmFile();
+            for(let file of files){
+                if(typeof file === 'string' && file.startsWith('http'))
+                    file = await fetchFile(file, api.showMessage, api.showProgress)
+                // const blob2 = file.slice(0, 3)
+                // console.log(await blob2.text())
+                if (file.name.endsWith('.smlm')) {
+                    await this._loadSmlmFile(smlm, file)
+                }
+                else {
+                    await new Promise((resolve, reject) => {
+                        var r = new FileReader();
+                        var blob = file.slice(0, 100);
+                        r.onload = (evt) => {
+                            let textFormat = null;
+                            const sampleLines = evt.target.result.split('\n').slice(0, 2)
+                            if (sampleLines[0].includes('x [nm]') && sampleLines[0].includes('\t')) {
+                                textFormat = 'ThunderSTORM (xls)'
+                            }
+                            else if (sampleLines[0].includes('x [nm]') && sampleLines[0].includes(',')) {
+                                textFormat = 'ThunderSTORM (csv)'
+                            }
+                            else if (sampleLines[0].includes('Position X [nm]') && sampleLines[0].includes('\t')) {
+                                textFormat = 'ZEISS (txt)'
+                            }
+                            else if (sampleLines[0].includes('Position X [nm]') && sampleLines[0].includes(';')) {
+                                textFormat = 'ZEISSv1 (csv)'
+                            }
+                            else if (sampleLines[0].includes('x [nm]') && sampleLines[0].includes(';')) {
+                                textFormat = 'ZEISSv2 (csv)'
+                            }
+                            else if (sampleLines[0].startsWith('#') && sampleLines[0].includes('identifier=')) {
+                                textFormat = 'RapidSTORM (txt)'
+                            }
+                            else if (sampleLines[0].includes('x ') && sampleLines[0].includes('y ')) {
+                                textFormat = 'Space Seperated List (txt)'
+                            }
+                            else if (sampleLines[0].includes('X\t') && sampleLines[0].includes('\tY\t') && sampleLines[0].includes('Channel Name')) {
+                                textFormat = 'Nikon NSTORM (txt)'
+                            }
+                            // else if (file.name.endsWith('.png')) {
+                            //     textFormat = 'png'
+                            // }
+                            // else if (file.name.endsWith('.jpg')) {
+                            //     textFormat = 'jpg'
+                            // }
+                            // else if (file.name.endsWith('.jpeg')) {
+                            //     textFormat = 'jpeg'
+                            // }
+                            if (textFormat) {
+                                resolve(this._loadTextFile(smlm, file, textFormat, true))
+                            }
+                            else {
+                                reject('File format is not recognized: ' + file.name)
+                            }
 
-                    };
-                    r.onerror = (e) => {
-                        console.error(e)
-                        reject(`Failed to read file: ${e}`)
-                    }
-                    r.readAsText(blob);
-                })
+                        };
+                        r.onerror = (e) => {
+                            console.error(e)
+                            reject(`Failed to read file: ${e}`)
+                        }
+                        r.readAsText(blob);
+                    })
+                }
             }
-            return {_rintf: true, files: data.files, manifest: data.manifest, save: data.save.bind(data) }
+           
+            return {_rintf: true, files: smlm.files, manifest: smlm.manifest, save: smlm.save.bind(smlm) }
 
         }
 
-        async loadTextFile(file, format) {
+        async _loadTextFile(smlm, file, format, is_append) {
             console.time('load text file', format);
-            const smlm = new smlmFile();
-            const file_info = await smlm.import_text_table(file, format, {}, false, (status) => {
+            const file_info = await smlm.import_text_table(file, format, {}, is_append, (status) => {
                 status.running_prgress && api.showProgress(status.running_prgress)
                 status.running_status && api.showStatus(status.running_status)
             })
             console.timeEnd('load text file');
             console.log(file_info)
             const metadata = file_info.metadata
-            return smlm
         }
 
-        async loadSmlmFile(selectedFile) {
-            const smlm = new smlmFile();
+        async _loadSmlmFile(smlm, selectedFile, is_append) {
+            
             console.time('import smlm')
-            await smlm.import_smlm(selectedFile, false, (status) => {
+            await smlm.import_smlm(selectedFile, is_append, (status) => {
                 status.running_prgress && api.showProgress(status.running_prgress)
                 status.running_status && api.showStatus(status.running_status)
             })
+            
             console.timeEnd('import smlm')
             console.time('plot histogram')
             console.log('smlm file loaded: ', smlm.files)
             console.log('manifest: ', smlm.manifest)
-            return smlm
         }
 
         async show(file, windowId) {
