@@ -107,4 +107,23 @@ body {
 .fa-search {
   margin-right: 0.5vw;
 }
+/* used in the upload preview */
+.snap-button {
+  left: 50%;
+  transform: translate(-50%, 0) !important;
+  background: #f0f8ff42 !important;
+  color: white !important;
+  position: absolute !important;
+  bottom: 0px;
+  font-weight: 400 !important;
+}
+
+.snap-button:hover {
+  background: white !important;
+  color: black !important;
+}
+
+.input-title > input {
+  box-shadow: none !important;
+}
 </style>

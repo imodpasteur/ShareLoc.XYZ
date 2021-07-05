@@ -125,11 +125,8 @@ export default {
           .substr(2, 9),
       viewer: null,
       value: undefined,
-      screenshots: [],
       fileCache: {},
-      currentFiles: null,
-      convertToSmlm: true,
-      validConversions: null
+      currentFiles: null
     };
   },
   mounted() {
@@ -146,18 +143,12 @@ export default {
   created() {
     this.resourceId = this.resourceId && this.resourceId.toLowerCase();
     this.value = [];
-    this.validConversions = [];
-    this.screenshots = [];
+    this.views = [];
     this.commitValue();
   },
   methods: {
     commitValue() {
-      if (this.convertToSmlm) {
-        this.value.conversions = this.validConversions;
-      } else {
-        this.value.conversions = null;
-      }
-      this.value.screenshots = this.screenshots;
+      this.value.views = this.views;
       this.$emit("input", this.value);
       // if(!this.value || this.value.length<=0){
       //   this.$store.dispatch("toggleNavbar", true);
@@ -166,30 +157,28 @@ export default {
       //   this.$store.dispatch("toggleNavbar", false);
       // }
     },
-    removeScreenshot(index) {
-      this.screenshots.splice(index, 1);
-      // this.selectedScreenshot = this.screenshots.length-1;
-      this.commitValue();
-    },
+    // removeScreenshot(index) {
+    //   this.views.splice(index, 1);
+    //   // this.selectedScreenshot = this.views.length-1;
+    //   this.commitValue();
+    // },
     async capture() {
       const img = await this.viewer.captureImage();
       const config = await this.viewer.getViewConfig();
       config["_file"] = this.currentFiles && this.currentFiles.map(f => f.name);
-      if (this.screenshots.filter(s => s.image === img).length <= 0)
-        this.screenshots.push({ config, image: img });
+      if (this.views.filter(s => s.image === img).length <= 0)
+        this.views.push({ config, image: img });
       else
         window.imjoy.api.showMessage(
           "Please change the image to another view and try again."
         );
-      // this.selectedScreenshot = this.screenshots.length-1;
+      // this.selectedScreenshot = this.views.length-1;
       this.commitValue();
     },
     removeFile(index) {
       const file = this.value[index];
       // TODO remove one only?
       if (this.currentFiles.includes(file)) this.currentFile = null;
-      if (this.validConversions.includes(file))
-        this.validConversions.splice(this.validConversions.indexOf(file), 1);
       this.value.splice(index, 1);
       this.$forceUpdate();
     },

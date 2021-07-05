@@ -91,11 +91,7 @@
 
       <b-step-item label="Edit" icon="pencil" :disabled="!rdfYaml">
         <section v-if="stepIndex == 1">
-          <dataset
-            @submit="submitRDF"
-            :init-rdf="rdf"
-            :files="rdfFiles"
-          ></dataset>
+          <upload-form @submit="submitRDF" :init-rdf="rdf"></upload-form>
         </section>
       </b-step-item>
 
@@ -288,12 +284,13 @@
 
 <script>
 import { mapState } from "vuex";
+import yaml from "js-yaml";
 
 import { rdfToMetadata, resolveDOI, getFullRdfFromDeposit } from "../utils";
 import Markdown from "@/components/Markdown.vue";
 import TagInputField from "@/components/TagInputField.vue";
 import DropFilesField from "@/components/DropFilesField.vue";
-import Dataset from "./UploadForm.vue";
+import UploadForm from "./UploadForm.vue";
 import doiRegex from "doi-regex";
 import marked from "marked";
 import DOMPurify from "dompurify";
@@ -307,7 +304,7 @@ export default {
     TagInputField,
     // eslint-disable-next-line vue/no-unused-components
     DropFilesField,
-    Dataset
+    UploadForm
   },
   mounted() {
     this.dropFiles = null;
@@ -358,7 +355,7 @@ export default {
   },
   data() {
     return {
-      rdfFiles: null,
+      // rdfFiles: null,
       dropFiles: null,
       uploadProgress: 0,
       uploadStatus: "",
@@ -395,13 +392,12 @@ export default {
     },
     startUpload() {
       this.rdf = {};
-      this.rdfFiles = [];
+      // this.rdfFiles = [];
       this.stepIndex = 1;
     },
     submitRDF(rdf) {
       this.$nextTick(async () => {
-        this.rdfYaml = rdf.config._yaml;
-        delete rdf.config._yaml;
+        this.rdfYaml = (await this.generateYamlFile(rdf)).text;
         this.editedFiles = rdf.config._files;
         delete rdf.config._files;
         this.rdf = rdf;
@@ -450,15 +446,15 @@ export default {
             };
           });
           // load files
-          this.rdfFiles = depositionInfo.files.map(item => {
-            return {
-              type: "remote",
-              name: item.filename || item.key, // depending on what api we use, it may be in two different format
-              size: item.filesize || item.size,
-              url: item.links.self,
-              checksum: item.checksum
-            };
-          });
+          // this.rdfFiles = depositionInfo.files.map(item => {
+          //   return {
+          //     type: "remote",
+          //     name: item.filename || item.key, // depending on what api we use, it may be in two different format
+          //     size: item.filesize || item.size,
+          //     url: item.links.self,
+          //     checksum: item.checksum
+          //   };
+          // });
           if (this.rdf.documentation) {
             const baseUrl = depositionInfo.links.bucket + "/";
             const docsUrl = this.rdf.documentation.startsWith("http")
@@ -506,6 +502,18 @@ export default {
       } catch (e) {
         alert(`Failed to login: ${e}`);
       }
+    },
+    async generateYamlFile(rdf) {
+      const rdfCopy = Object.assign({}, rdf);
+      // TODO: is there any field in the config we want to preserve?
+      delete rdfCopy.config;
+      const rdfYaml = yaml.dump(rdfCopy);
+      const blob = new Blob([rdfYaml], {
+        type: "application/yaml"
+      });
+      const file = new File([blob], "rdf.yaml", { type: "application/yaml" });
+      file.text = rdfYaml;
+      return file;
     },
     async createOrUpdateDeposit(depositId, skipUpload) {
       try {
@@ -596,8 +604,9 @@ export default {
           this.stepIndex = 3;
           return depositionInfo;
         }
+        console.log("Edited files", this.editedFiles);
         const uploadFiles = this.editedFiles.filter(
-          file => file.type !== "remote" || file.convert
+          file => file.type !== "remote"
         );
         // sort the files so we will upload the covers in the end
         // this allows zenodo to display it as preview
@@ -617,20 +626,32 @@ export default {
             else return 0;
           });
         }
-
         for (let i = 0; i < uploadFiles.length; i++) {
           let file = uploadFiles[i];
-          if (file.convert) {
-            const convertedFile = await file.convert();
-            // handle name change
-            for (let dataset of this.rdf.attachments.datasets) {
-              if (dataset.name === file.name) {
-                dataset.name = convertedFile.name;
-              }
+          if (file.type === "generator") {
+            // assuming we already have the generated name fixed
+            const generatedFile = await file.generate();
+            generatedFile.sampleName = file.sampleName;
+            file = generatedFile;
+            if (file.sampleName) {
+              // fix the converted file name and size in the attachments
+              const sample = this.rdf.attachments.samples.filter(
+                sample => sample.name === file.sampleName
+              )[0];
+              sample.files = [
+                {
+                  name: file.name,
+                  size: file.size,
+                  checksum: file.checksum
+                }
+              ];
             }
-            file = convertedFile;
           }
-          await this.client.uploadFile(depositionInfo, file, size => {
+
+          const newName = file.sampleName
+            ? file.sampleName + "/" + file.name
+            : file.name;
+          await this.client.uploadFile(depositionInfo, file, newName, size => {
             this.uploadProgress = Math.round((size / file.size) * 100);
             this.uploadStatus = `Uploading ${i + 1}/${uploadFiles.length}(${
               this.uploadProgress
@@ -638,6 +659,12 @@ export default {
             this.$forceUpdate();
           });
         }
+
+        // upload RDF file
+        const rdfFile = await this.generateYamlFile(this.rdf);
+        await this.client.uploadFile(depositionInfo, rdfFile);
+        this.rdfYaml = rdfFile.text;
+
         this.uploadProgress = 0;
         this.uploadStatus = `Successfully uploaded ${uploadFiles.length} files.`;
         this.uploaded = true;

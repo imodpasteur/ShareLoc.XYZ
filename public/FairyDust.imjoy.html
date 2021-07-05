@@ -1568,6 +1568,9 @@
 
         async run(ctx) {
             initGUI();
+            if (ctx.config && ctx.config.samples) {
+                ctx.config.files = ctx.config.samples[0].files;
+            }
             if (ctx.config && ctx.config.files) {
                 scopeParams.File = ctx.config.files[0].download_url;
                 const options = {}
@@ -1578,7 +1581,9 @@
                 gui.add(scopeParams, 'File', options).listen().onChange(async () => {
                     try {
                         const data = await smlmPlugin.load(scopeParams['File'])
-                        data.files.map(this.show);
+                        for(let file of data.files){
+                            await this.show(file)
+                        }
                     }
                     catch (e) {
                         api.showMessage(`Failed to load file: ${e}`)
@@ -1588,7 +1593,9 @@
                 try {
 
                     const data = await smlmPlugin.load(scopeParams['File'])
-                    data.files.map(this.show)
+                    for(let file of data.files){
+                        await this.show(file)
+                    }
                 }
                 catch (e) {
                     api.showMessage(`Failed to load file: ${e}`)
@@ -1599,7 +1606,10 @@
                 if (ctx.data && ctx.data.tableDict)
                     await this.show(ctx.data);
                 else if (ctx.data && Array.isArray(ctx.data)) {
-                    ctx.data.map(this.show)
+     
+                    for(let file of ctx.data){
+                            await this.show(file)
+                        }
                 }
             }
             else{
@@ -1610,7 +1620,9 @@
                         try {
                             if (fileElem.files[0]) {
                                 const data = await smlmPlugin.load(fileElem.files[0])
-                                data.files.map(this.show);
+                                for(let file of data.files){
+                            await this.show(file)
+                        }
                             }
                         }
                         catch (e) {

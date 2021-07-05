@@ -126,6 +126,40 @@ export async function getFullRdfFromDeposit(deposition) {
     const fullRdf = yaml.load(yamlStr);
     fullRdf.config = fullRdf.config || {};
     Object.assign(fullRdf.config, rdf.config);
+    const files = deposition.files.map(item => {
+      return {
+        type: "remote",
+        name: item.filename || item.key, // depending on what api we use, it may be in two different format
+        size: item.filesize || item.size,
+        url: item.links.self,
+        checksum: item.checksum
+      };
+    });
+    // fix samples
+    const samples = fullRdf.attachments.samples;
+
+    for (let sample of samples) {
+      for (let f of sample.files) {
+        const file = files.filter(
+          file => file.name === `${sample.name}/${f.name}`
+        )[0];
+        if (file) {
+          file.download_url = `${deposition.links.bucket}/${file.name}`; // <sample name>/ <file name>
+          Object.assign(f, file);
+        } else {
+          console.error(`Sample file does not exists ${sample.name}/${f.name}`);
+        }
+      }
+      for (let view of sample.views) {
+        if (!view.image) {
+          view.image = `${deposition.links.bucket}/${sample.name}/${
+            Array.isArray(view.image_name)
+              ? view.image_name[0]
+              : view.image_name
+          }`;
+        }
+      }
+    }
     return fullRdf;
   } else {
     throw new Error(`Failed to fetch RDF file.`);
@@ -179,19 +213,19 @@ export function rdfToMetadata(rdf, baseUrl, docstring) {
     });
   else throw new Error("`_rdf_file` key is not found in the RDF config");
 
-  if (rdf.attachments && rdf.attachments.datasets) {
-    const datasets = rdf.attachments.datasets.map(d =>
-      d.download_url ? d.download_url : new URL(d.name, baseUrl).href
-    );
-    datasets.forEach(dataset => {
-      related_identifiers.push({
-        relation: "hasPart", // is part of this upload
-        identifier: dataset,
-        resource_type: "dataset",
-        scheme: "url"
-      });
-    });
-  }
+  // if (rdf.attachments && rdf.attachments.samples) {
+  //   const samples = rdf.attachments.samples.map(d =>
+  //     d.download_url ? d.download_url : new URL(d.name, baseUrl).href
+  //   );
+  //   samples.forEach(dataset => {
+  //     related_identifiers.push({
+  //       relation: "hasPart", // is part of this upload
+  //       identifier: dataset,
+  //       resource_type: "dataset",
+  //       scheme: "url"
+  //     });
+  //   });
+  // }
   if (rdf.documentation) {
     if (rdf.documentation.includes("access_token="))
       throw new Error("Documentation URL should not contain access token");
@@ -248,7 +282,7 @@ export function depositionToRdf(deposition) {
   }
   type = type.replace("shareloc.xyz:", "");
   const covers = [];
-  const datasets = [];
+  const samples = [];
   const links = [];
   let rdfFile = null;
   let documentation = null;
@@ -285,27 +319,27 @@ export function depositionToRdf(deposition) {
         throw new Error("Invalid file identifier: " + idf.identifier);
       }
       covers.push(url);
-    } else if (
-      idf.relation === "hasPart" &&
-      idf.resource_type === "dataset" &&
-      idf.scheme === "url"
-    ) {
-      let url = idf.identifier;
-      if (url.includes(`/files/`)) {
-        const zenodoFileRegex = /.*zenodo.org\/.*\/files\/(.*)/;
-        const matches = zenodoFileRegex.exec(url);
-        if (matches) {
-          let fileName = matches[1];
-          // TODO: This is a hack for now, will need to fix in the upload part
-          // if(fileName.endsWith('.csv')) fileName = fileName.replace('.csv', '.smlm')
-          url = `${deposition.links.bucket}/${fileName}`;
-          datasets.push({ name: fileName, download_url: url });
-        } else {
-          throw new Error("Invalid file identifier: " + idf.identifier);
-        }
-      } else {
-        throw new Error("Invalid file identifier: " + idf.identifier);
-      }
+      // } else if (
+      //   idf.relation === "hasPart" &&
+      //   idf.resource_type === "dataset" &&
+      //   idf.scheme === "url"
+      // ) {
+      //   let url = idf.identifier;
+      //   if (url.includes(`/files/`)) {
+      //     const zenodoFileRegex = /.*zenodo.org\/.*\/files\/(.*)/;
+      //     const matches = zenodoFileRegex.exec(url);
+      //     if (matches) {
+      //       let fileName = matches[1];
+      //       // TODO: This is a hack for now, will need to fix in the upload part
+      //       // if(fileName.endsWith('.csv')) fileName = fileName.replace('.csv', '.smlm')
+      //       url = `${deposition.links.bucket}/${fileName}`;
+      //       samples.push({ name: fileName, download_url: url });
+      //     } else {
+      //       throw new Error("Invalid file identifier: " + idf.identifier);
+      //     }
+      //   } else {
+      //     throw new Error("Invalid file identifier: " + idf.identifier);
+      //   }
     } else if (
       idf.relation === "references" &&
       idf.scheme === "url" &&
@@ -343,7 +377,7 @@ export function depositionToRdf(deposition) {
     source: rdfFile, //TODO: fix for other RDF types
     links,
     attachments: {
-      datasets
+      samples
     },
     config: {
       _doi: metadata.doi,
@@ -665,9 +699,9 @@ export class ZenodoClient {
     }
   }
 
-  async uploadFile(depositionInfo, file, progressCallback) {
+  async uploadFile(depositionInfo, file, newName, progressCallback) {
     const bucketUrl = depositionInfo.links.bucket;
-    const fileName = file.name;
+    const fileName = newName || file.name;
     const url = `${bucketUrl}/${fileName}?access_token=${this.credential.access_token}`;
     if (typeof axios === "undefined") {
       if (progressCallback) progressCallback(0);

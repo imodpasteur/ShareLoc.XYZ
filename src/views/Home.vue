@@ -359,6 +359,7 @@ import Attachments from "@/components/Attachments.vue";
 // import CommentBox from "@/components/CommentBox.vue";
 import About from "@/views/About.vue";
 import Markdown from "@/components/Markdown.vue";
+import { getFullRdfFromDeposit } from "../utils";
 
 const DEFAULT_ICONS = {
   notebook: "notebook-outline",
@@ -425,12 +426,12 @@ function connectApps(self, item) {
       }
     });
 
-  if (item.attachments.datasets)
+  if (item.attachments.samples)
     item.apps.unshift({
-      name: "Datasets",
+      name: "Samples",
       icon: "download",
       run() {
-        self.showAttachmentsDialog(item, "datasets");
+        self.showAttachmentsDialog(item, "samples");
       }
     });
   if (item.type === "application") {
@@ -450,10 +451,18 @@ function connectApps(self, item) {
         item.apps.unshift({
           name: lit.name,
           icon: lit.icon || DEFAULT_ICONS[lit.type],
-          run() {
-            if (self.allApps[link_key])
-              runAppForItem(self, self.allApps[link_key], item);
-            else self.showResourceItemInfo(lit);
+          async run() {
+            if (self.allApps[link_key]) {
+              if (item.config._deposit && !item.config._rdf)
+                item.config._rdf = await getFullRdfFromDeposit(
+                  item.config._deposit
+                );
+              runAppForItem(
+                self,
+                self.allApps[link_key],
+                item.config._rdf || item
+              );
+            } else self.showResourceItemInfo(lit);
           }
         });
       }

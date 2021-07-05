@@ -1,11 +1,6 @@
 /*! bulmaswatch v0.8.1 | MIT License */
 /*! bulma.io v0.8.1 | MIT License | github.com/jgthms/bulma */
-@import url(
-  https://fonts.googleapis.com/css?family=Roboto:300,
-  400,
-  500,
-  700&display=swap
-);
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
 @-webkit-keyframes spinAround {
   0% {
     transform: rotate(0deg);
@@ -72,7 +67,7 @@
 .table:not(:last-child),
 .tabs:not(:last-child),
 .title:not(:last-child) {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 .delete,
 .modal-close {
@@ -1015,13 +1010,13 @@ a.has-text-danger:hover {
   background-color: #7a7a7a !important;
 }
 .has-text-grey-light {
-  color: #b5b5b5 !important;
+  color: #727272 !important;
 }
 .has-background-grey-light {
   background-color: #b5b5b5 !important;
 }
 .has-text-grey-lighter {
-  color: #dbdbdb !important;
+  color: #c2c2c2 !important;
 }
 .has-background-grey-lighter {
   background-color: #dbdbdb !important;
@@ -7023,6 +7018,7 @@ label.panel-block:hover {
   overflow: hidden;
   overflow-x: auto;
   white-space: nowrap;
+  margin: 0 !important;
 }
 .tabs a,
 .tabs ul {

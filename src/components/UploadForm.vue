@@ -67,12 +67,12 @@ import AuthorInputField from "@/components/AuthorInputField.vue";
 // import marked from "marked";
 // import DOMPurify from "dompurify";
 import { mapState } from "vuex";
-import yaml from "js-yaml";
-import { randId, dataURLtoFile, resizeImage } from "../utils";
+
+import { dataURLtoFile, resizeImage } from "../utils";
 
 export default {
   name: "dataset",
-  props: ["resourceId", "initRdf", "files"],
+  props: ["resourceId", "initRdf"],
   components: {
     "form-json": formJson,
     // markdown: Markdown,
@@ -107,16 +107,11 @@ export default {
       expandOnHover: false,
       expandWithDelay: false,
       reduce: false,
-      fileField: {},
       rdf: null
     };
   },
   mounted() {
-    this.initializeRdfForm(this.initRdf, this.files);
-    this.fileField = {
-      name: "Files",
-      value: this.files
-    };
+    this.initializeRdfForm(this.initRdf);
     this.$root.$on("formSubmitted", this.formSubmitted);
   },
   methods: {
@@ -135,6 +130,7 @@ export default {
       return fields;
     },
     async formSubmitted(result) {
+      const editedFiles = [];
       const rdfNameMapping = {
         type: "Type",
         name: "Name",
@@ -159,10 +155,10 @@ export default {
       this.rdf.config = this.rdf.config || {};
       this.rdf.config._rdf_file = "./" + rdfFileName;
       this.rdf.config._docstring = values["Documentation"];
+      const samples = values["Samples"];
 
       if (!this.rdf.tags.includes("smlm")) this.rdf.tags.push("smlm");
 
-      const editedFiles = values["Files"];
       // Add documentation
       if (this.rdf.config._docstring) {
         const blob = new Blob([this.rdf.config._docstring], {
@@ -173,94 +169,104 @@ export default {
         editedFiles.push(file);
         delete this.rdf.config._docstring;
       }
-      // Add screenshots
-      if (editedFiles.screenshots) {
+      // Add views and screenshots
+      if (samples && samples.length > 0) {
         this.rdf.covers = this.rdf.covers || [];
         this.rdf.config = this.rdf.config || {};
-        for (let screenshoot of editedFiles.screenshots) {
-          const { image, config } = screenshoot;
-          // skip adding remote screenshot
-          if (image.startsWith("http")) {
-            const tmp = image.split("?")[0].split("/");
-            this.rdf.covers.push("./" + tmp[tmp.length - 1]);
-            continue;
-          }
-          const blob = dataURLtoFile(image);
-          const fileName = "screenshot-" + randId();
-          const file = new File([blob], fileName + ".png", {
-            type: blob.type
-          });
-          editedFiles.push(file);
-
-          const resizedImage = await resizeImage({
-            file,
-            maxSize: 256
-          });
-
-          const fileSmall = new File(
-            [resizedImage],
-            fileName + "_thumbnail.png",
-            {
-              type: resizedImage.type
+        let maxScreenshotCount = 10;
+        for (let sample of samples) {
+          // we add a file generator
+          if (samples.enableConversion && sample.convert) {
+            editedFiles.push({
+              type: "generator",
+              name: sample.convertFileName,
+              sampleName: sample.name,
+              generate: sample.convert
+            });
+          } else
+            for (let file of sample.files) {
+              if (file.type !== "remote") {
+                editedFiles.push(file);
+              }
             }
-          );
-          editedFiles.push(fileSmall);
-          // save view config for screenshots
-          this.rdf.config.view_config = this.rdf.config.view_config || {};
-          this.rdf.config.view_config[fileName + "_thumbnail.png"] = config;
-          this.rdf.covers.push("./" + fileName + "_thumbnail.png");
+          let count = 0;
+          for (let screenshot of sample.views) {
+            const { image } = screenshot;
+            // skip adding remote screenshot
+            if (image.startsWith("http")) {
+              // extract file name from URL
+              const tmp = image.split("?")[0].split("/");
+              this.rdf.covers.push(`./${sample.name}/${tmp[tmp.length - 1]}`);
+              continue;
+            }
+            const blob = dataURLtoFile(image);
+            const fileName = "screenshot-" + count;
+            count++;
+            const file = new File([blob], fileName + ".png", {
+              type: blob.type
+            });
+            file.sampleName = sample.name;
+            editedFiles.push(file);
+
+            delete screenshot.image;
+            screenshot.image_name = fileName + ".png";
+
+            // limit the cover image number
+            if (maxScreenshotCount >= 0) {
+              // generate thumbnail for the cover
+              const resizedImage = await resizeImage({
+                file,
+                maxSize: 256
+              });
+
+              const fileSmall = new File(
+                [resizedImage],
+                fileName + "_thumbnail.png",
+                {
+                  type: resizedImage.type
+                }
+              );
+              fileSmall.sampleName = sample.name;
+              editedFiles.push(fileSmall);
+
+              this.rdf.covers.push(
+                `./${sample.name}/${fileName}_thumbnail.png`
+              );
+              maxScreenshotCount--;
+            }
+          }
         }
-        // TODO: handle removed screenshots
-        delete editedFiles.screenshots;
       }
+
+      this.rdf.attachments = this.rdf.attachments || {};
+      this.rdf.attachments.samples = samples.map(sample => {
+        return {
+          name: sample.name,
+          views: sample.views,
+          files: sample.files.map(file => {
+            return {
+              name: file.name,
+              size: file.size,
+              checksum: file.checksum
+            };
+          })
+        };
+      });
 
       // TODO: fix attachments.files for the packager
       const rdf = Object.assign({}, this.rdf);
       delete rdf._metadata;
       console.log("RDF: ", rdf);
-      const rdfYaml = yaml.dump(rdf);
-      // Add rdf.yaml
-      const blob = new Blob([rdfYaml], {
-        type: "application/yaml"
-      });
-      const file = new File([blob], rdfFileName);
-      editedFiles.push(file);
 
-      const dataFiles = editedFiles.filter(
-        file => file.name.endsWith(".smlm") || file.name.endsWith(".csv")
-      );
-      this.rdf.attachments = this.rdf.attachments || {};
-      if (dataFiles.length > 0)
-        this.rdf.attachments.datasets = dataFiles.map(file => {
-          return {
-            name: file.convertFileName ? file.convertFileName : file.name,
-            size: file.size
-          };
-        });
-
-      this.rdf.config._files = editedFiles.filter(
-        file => file.type !== "remote" || file.convert
-      );
-      this.rdf.config._yaml = rdfYaml;
+      this.rdf.config._files = editedFiles;
       this.$emit("submit", this.rdf);
     },
-    initializeRdfForm(rdf, files) {
+    initializeRdfForm(rdf) {
       this.rdf = rdf || {};
       this.rdf.type = this.rdf.type || "dataset";
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
       this.rdf.license = this.rdf.license || "CC-BY-4.0";
-      if (rdf.covers && this.rdf.config._deposit) {
-        files.screenshots = rdf.covers.map(c => {
-          const baseUrl = `${this.client.baseURL}/record/${this.rdf.config._deposit.id}/files/`;
-          const coverUrl = c.startsWith("http") ? c : new URL(c, baseUrl).href;
-          return {
-            image: coverUrl,
-            config:
-              this.rdf.config.view_config && this.rdf.config.view_config[c]
-          };
-        });
-      }
       this.jsonFields = this.transformFields([
         {
           label: "Type",
@@ -277,11 +283,11 @@ export default {
           })
         },
         {
-          label: "Files",
+          label: "Samples",
           type: "file-preview",
           help:
-            "Add one or multiple files to the dataset, the total file size should be less than 50GB, otherwise please split into several deposits.",
-          value: files,
+            "Add samples to the dataset. A dataset contains multiple samples, each sample may contain one or more files for the same field of view, with single or multiple channels. The total file size for one dataset should be less than 50GB, otherwise please split into several datasets.",
+          value: this.rdf.attachments.samples,
           isRequired: true
         },
         {
@@ -316,7 +322,14 @@ export default {
         //   value: this.rdf.version || "0.1.0"
         // },
         {
+          html: `<p class='label'>License<span
+        class="helpLabel has-text-grey-light is-size-7 is-italic"
+        style="margin-left: .5rem;font-weight: 400;"
+        >Choose the license that fits you most, we recommend to use <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a> (free to share and adapt under the condition of attribution). For other license options, please visit here <a target="_blank" href="https://spdx.org/licenses">https://spdx.org/licenses<a></span><sup class='has-text-grey-light is-size-7'> *</sup></p>`
+        },
+        {
           label: "License",
+          showLabel: false,
           type: "select",
           placeholder: "Select your license",
           options: Object.keys(spdxLicenseList).map(opt => {
@@ -325,9 +338,7 @@ export default {
               value: opt,
               selected: this.rdf.license === opt
             };
-          }),
-          help:
-            "Choose the license that fits you most, we recommend to use CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/). For other license options, please visit here https://spdx.org/licenses/"
+          })
         },
         {
           label: "Tags",
