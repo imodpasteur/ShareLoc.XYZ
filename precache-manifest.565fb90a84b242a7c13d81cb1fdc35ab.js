@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/CNAME"
   },
   {
-    "revision": "5da8f890a99e28c005a4fc586396dcfa",
+    "revision": "5e18e97f75fe2ae1e5c77c434d7415ad",
     "url": "/FairyDust.imjoy.html"
   },
   {
@@ -16,16 +16,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ITK-VTK-Viewer.imjoy.html"
   },
   {
-    "revision": "88f1614efbef41644465cefd5403257a",
+    "revision": "93c584b57f59a0841d89270245af9ec7",
     "url": "/SMLM-File-IO.imjoy.html"
   },
   {
-    "revision": "3e811b50c4f2b949122606cac5ab97f1",
+    "revision": "8c453c5fbbd6dea542efe9d7f3c1d637",
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "d4acbe6ae7c47527e136",
-    "url": "/css/app.e859a274.css"
+    "revision": "889e1ed08d4140aa5c88",
+    "url": "/css/app.dbc0e3e7.css"
   },
   {
     "revision": "f8c07cb868b69fb2a795",
@@ -56,12 +56,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/index.ejs"
   },
   {
-    "revision": "53347f9ad4cb86d409ad03f541e226a8",
+    "revision": "5555116e6e098720be631ab155d083e0",
     "url": "/index.html"
   },
   {
-    "revision": "d4acbe6ae7c47527e136",
-    "url": "/js/app.e25e7dad.js"
+    "revision": "889e1ed08d4140aa5c88",
+    "url": "/js/app.3b3a6615.js"
   },
   {
     "revision": "f8c07cb868b69fb2a795",
@@ -72,7 +72,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/manifest.json"
   },
   {
-    "revision": "8c8a18bab81c9b5abbd3a59581373bfb",
+    "revision": "baa6ed124ba64faea47f36f636edc0cd",
     "url": "/manifest.shareloc.json"
   },
   {
@@ -414,6 +414,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "a12d35d30ec0dcf10639bf24e3784aaf",
     "url": "/static/img/plus-sign.png"
+  },
+  {
+    "revision": "730a16064a4c49c789b0d8b4531138db",
+    "url": "/static/img/preview-screenshot.png"
   },
   {
     "revision": "bfaf019d6f7b6a23a75342d97a841ffb",

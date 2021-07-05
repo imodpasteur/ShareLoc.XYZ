@@ -49,13 +49,13 @@
                 const file = await fetchFile(ctx.data.download_url, api.showMessage, api.showProgress)
                 await this.previewFile(file);
             }
-            else if(ctx.data.attachments && ctx.data.attachments.datasets){
-                const files = ctx.data.attachments.datasets;
+            else if(ctx.data.attachments && ctx.data.attachments.samples){
+                const samples = ctx.data.attachments.samples;
                 this.viewer = await api.createWindow({
                     name: ctx.data.name.slice(0, 40),
                     type: "Fairy Dust",
                     config: {
-                        files
+                        samples
                     },
                 })
             }
