@@ -67,7 +67,7 @@
               <b-upload
                 v-if="!sample.files || sample.files.length <= 0"
                 v-model="sample.files"
-                @input="updateFiles($event, sample)"
+                @input="updateFiles(sample)"
                 multiple
                 drag-drop
                 expanded
@@ -135,7 +135,7 @@
   </div>
 </template>
 <script>
-import { fetchFile, randId } from "../utils";
+import { fetchFile, randId, longestCommonSubstring } from "../utils";
 export default {
   name: "file-preview",
   props: {
@@ -232,7 +232,13 @@ export default {
       files.splice(index, 1);
       this.$forceUpdate();
     },
-    async updateFiles() {
+    async updateFiles(sample) {
+      let comm = sample.files[0].name;
+      for (let i = 1; i < sample.files.length; i++) {
+        comm = longestCommonSubstring(comm, sample.files[i].name);
+      }
+      if (comm.length > 0) sample.name = comm;
+      else sample.name = "Sample-" + Date.now();
       this.commitValue();
     },
     trimEllip(str, length) {
@@ -296,7 +302,7 @@ export default {
       return file;
     },
     markFileConversion(sample) {
-      let saveFileName = sample.name;
+      let saveFileName = "data";
       if (!saveFileName.endsWith(".smlm"))
         saveFileName = saveFileName + ".smlm";
 
