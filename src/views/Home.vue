@@ -734,12 +734,14 @@ export default {
       document.getElementsByTagName("html")[0].style.overflow = "auto";
       document.body.style.overflow = "auto";
     },
-    showAttachmentsDialog(item, focus) {
+    async showAttachmentsDialog(item, focus) {
+      if (item.config._deposit && !item.config._rdf)
+        item.config._rdf = await getFullRdfFromDeposit(item.config._deposit);
       this.infoDialogTitle = focus
         ? item.name + ": " + focus
         : item.name + ": Attachments";
-      item._focus = focus;
-      this.selectedResourceItem = item;
+      this.selectedResourceItem = item.config._rdf || item;
+      this.selectedResourceItem._focus = focus;
       this.showInfoDialogMode = "attachments";
       if (this.screenWidth < 700) this.infoDialogFullscreen = true;
       this.$modal.show("info-dialog");
@@ -914,35 +916,24 @@ export default {
         });
       }
     },
-    showResourceItemInfo(mInfo, focus) {
-      // this.$router.push({
-      //   name: "ResourceItemInfo",
-      //   params: { resourceId: mInfo.id }
-      // });
+    async showResourceItemInfo(item, focus) {
+      this.$router.push({
+        name: "ResourceItemInfo",
+        params: { resourceId: item.id }
+      });
+      if (item.config._deposit && !item.config._rdf)
+        item.config._rdf = await getFullRdfFromDeposit(item.config._deposit);
       this.showInfoDialogMode = "item";
-      mInfo._focus = focus;
-      this.selectedResourceItem = mInfo;
+      item._focus = focus;
+      this.selectedResourceItem = item.config._rdf || item;
       this.infoDialogTitle = this.selectedResourceItem.name;
       this.infoDialogFullscreen = false;
       this.$modal.show("info-dialog");
-      if (mInfo.id) {
+      if (item.id) {
         const query = Object.assign({}, this.$route.query);
-        query.id = mInfo.id;
+        query.id = item.id;
         this.$router.replace({ query: query }).catch(() => {});
       }
-
-      // this.showInfoDialogMode = "viewer";
-      // mInfo._focus = focus;
-      // this.selectedResourceItem = mInfo;
-      // this.infoDialogTitle = this.selectedResourceItem.name;
-      // this.viewerUrl = `https://viewer.shareloc.xyz/#/?file=${mInfo.download_url}`;
-      // this.infoDialogFullscreen = true;
-      // this.$modal.show("info-dialog");
-      // if (mInfo.id) {
-      //   const query = Object.assign({}, this.$route.query);
-      //   query.id = mInfo.id;
-      //   this.$router.replace({ query: query }).catch(() => {});
-      // }
     },
     updateStatus(status) {
       if (status.loading === true) this.showMessage("Loading...");

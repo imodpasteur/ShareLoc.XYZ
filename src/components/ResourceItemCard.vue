@@ -25,6 +25,7 @@
         </b-carousel>
         <img
           v-else
+          loading="lazy"
           style="background-color: black;width: 100%;height:160px;"
           class="cover-image"
         />

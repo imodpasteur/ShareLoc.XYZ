@@ -27,8 +27,34 @@
             :sortable="col.sortable"
           >
             <template v-if="props.row[col.field]">
+              <div v-if="col.type === 'files'">
+                <a
+                  v-for="(file, i) in props.row[col.field] || []"
+                  :key="i"
+                  :class="col.class"
+                  :href="file.download_url"
+                  :download="props.row['name'] + file.name"
+                  target="_blank"
+                >
+                  {{ file.name }}
+                </a>
+              </div>
+              <div v-else-if="col.type === 'thumbnails'">
+                <div
+                  v-for="(view, i) in props.row[col.field] || []"
+                  :key="i"
+                  class="item"
+                >
+                  <img
+                    class="image"
+                    loading="lazy"
+                    :src="view.image"
+                    alt="Screenshot"
+                  />
+                </div>
+              </div>
               <a
-                v-if="col.type === 'url'"
+                v-else-if="col.type === 'url'"
                 :class="col.class"
                 :href="props.row[col.field]"
                 target="_blank"
@@ -174,4 +200,15 @@ export default {
   }
 };
 </script>
-<style scoped></style>
+<style scoped>
+.item {
+  flex: 1;
+  max-width: 150px;
+  margin: 3px;
+}
+
+.item > .image {
+  display: inline-flex;
+  border-radius: 6px;
+}
+</style>

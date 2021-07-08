@@ -58,10 +58,10 @@
     </p>
     <br />
 
-    <attachments
+    <!-- <attachments
       :attachments="resourceItem.attachments"
       :focusTarget="resourceItem._focus"
-    ></attachments>
+    ></attachments> -->
 
     <div class="markdown-body width-limited">
       <h1 v-if="resourceItem.docs">Documentation</h1>
@@ -95,7 +95,7 @@
 import { mapState } from "vuex";
 import Badges from "@/components/Badges.vue";
 import AppIcons from "@/components/AppIcons.vue";
-import Attachments from "@/components/Attachments.vue";
+// import Attachments from "@/components/Attachments.vue";
 import Markdown from "@/components/Markdown.vue";
 // import CommentBox from "@/components/CommentBox.vue";
 import { randId } from "../utils";
@@ -106,7 +106,7 @@ export default {
   components: {
     markdown: Markdown,
     badges: Badges,
-    attachments: Attachments,
+    // attachments: Attachments,
     "app-icons": AppIcons
     // "comment-box": CommentBox
   },

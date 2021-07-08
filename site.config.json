@@ -60,6 +60,21 @@
         "sortable": true
       },
       {
+        "field": "views",
+        "label": "Views",
+        "width": 180,
+        "type": "thumbnails",
+        "sortable": false
+      },
+      {
+        "field": "files",
+        "label": "Files",
+        "width": 80,
+        "type": "files",
+        "sortable": false
+      },
+      
+      {
         "field": "description",
         "label": "Description",
         "width": 100,
