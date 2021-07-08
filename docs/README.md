@@ -1,1 +1,0 @@
-# ShareLoc.xyz

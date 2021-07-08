@@ -616,6 +616,15 @@ export class ZenodoClient {
 
   login() {
     return new Promise((resolve, reject) => {
+      if (!this.lastUserId) {
+        if (
+          !confirm(
+            "Redirecting to Zenodo.org. If you failed to login, please come back here to try it again."
+          )
+        )
+          return;
+      }
+
       const randomState = randId();
       const loginWindow = window.open(
         `${this.baseURL}/oauth/authorize?scope=deposit%3Awrite+deposit%3Aactions&state=${randomState}&redirect_uri=${this.callbackUrl}&response_type=token&client_id=${this.clientId}`,
@@ -629,7 +638,7 @@ export class ZenodoClient {
         );
         return;
       }
-
+      this.credential = null;
       let countDown = 120;
       let loggedIn = false;
       const timer = setInterval(function() {
@@ -656,6 +665,10 @@ export class ZenodoClient {
           window.removeEventListener("message", handleLogin);
           clearInterval(timer);
           loginWindow.close();
+          loggedIn = true;
+
+          // already logged in
+          if (this.credential) return;
           if (event.data.error) {
             // make sure we closed the window
             setTimeout(() => {
@@ -663,7 +676,7 @@ export class ZenodoClient {
             }, 1);
             return;
           }
-          loggedIn = true;
+
           if (!event.data.access_token || event.data.state !== randomState) {
             reject(
               "Failed to obtain the access token, please make sure your account is valid and try it again."
