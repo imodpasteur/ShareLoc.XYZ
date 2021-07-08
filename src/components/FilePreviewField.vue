@@ -234,6 +234,7 @@ export default {
     },
     async updateFiles(sample) {
       let comm = sample.files[0].name;
+      comm = comm.split(".")[0];
       for (let i = 1; i < sample.files.length; i++) {
         comm = longestCommonSubstring(comm, sample.files[i].name);
       }
