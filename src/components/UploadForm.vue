@@ -132,12 +132,13 @@ export default {
     async formSubmitted(result) {
       const editedFiles = [];
       const rdfNameMapping = {
-        type: "Type",
+        // type: "Type",
         name: "Name",
         description: "Description",
         // version: "Version",
         license: "License",
         authors: "Authors",
+        contact_email: "Contact Email",
         // source: "Source",
         // git_repo: "Git Repository",
         tags: "Tags",
@@ -267,27 +268,27 @@ export default {
     },
     initializeRdfForm(rdf) {
       this.rdf = rdf || {};
-      this.rdf.type = this.rdf.type || "dataset";
+      this.rdf.type = "dataset";
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
       this.rdf.license = this.rdf.license || "CC-BY-4.0";
       this.rdf.attachments = this.rdf.attachments || {};
 
       this.jsonFields = this.transformFields([
-        {
-          label: "Type",
-          type: "select",
-          placeholder: "Select resource type",
-          help:
-            "If you want to upload data, choose `dataset`; For uploading tools, choose `application`.",
-          options: ["dataset", "application"].map(opt => {
-            return {
-              text: opt,
-              value: opt,
-              selected: this.rdf.type === opt
-            };
-          })
-        },
+        // {
+        //   label: "Type",
+        //   type: "select",
+        //   placeholder: "Select resource type",
+        //   help:
+        //     "If you want to upload data, choose `dataset`; For uploading tools, choose `application`.",
+        //   options: ["dataset", "application"].map(opt => {
+        //     return {
+        //       text: opt,
+        //       value: opt,
+        //       selected: this.rdf.type === opt
+        //     };
+        //   })
+        // },
         {
           label: "Samples",
           type: "file-preview",
@@ -301,19 +302,27 @@ export default {
           placeholder: "name",
           value: this.rdf.name,
           help:
-            "A human-readable descriptive name for your dataset or application to be uploaded"
+            "A human-readable descriptive name for your dataset to be uploaded. Example: `Xenopus NPC exmperiment-1`."
         },
         {
           label: "Description",
           placeholder: "description",
           value: this.rdf.description,
-          help: "A short description in one sentence"
+          help:
+            "A short description in one sentence. Example: `Nuclear pore protein gp120 in extracted nuclear envelope of Xenopus eggs.`"
         },
         {
           label: "Authors",
           type: "author",
           value: this.rdf.authors,
-          help: "The authors who contributed to this dataset or application"
+          help: "The authors who contributed to this dataset"
+        },
+        {
+          label: "Contact Email",
+          type: "email",
+          value: this.rdf.contact_email,
+          help:
+            "A contact email for anwsering enquiry of the dataset, or potential change request from the admin from ShareLoc team."
         },
         // {
         //   label: "Source",
@@ -355,7 +364,7 @@ export default {
           allow_new: true,
           icon: "label",
           help:
-            "Tags describing imaging modality, cell line, structure, fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc.",
+            "Tags describing imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. Example: `dSTORM`, `U373`, `microtubule`, `Alexa-647`, `secondary antibody`, `alpha-tub`,`2D`,`EM-CCD`,`GluOx`,`PFA+Gluta`, `ThunderSTORM`",
           isRequired: true
         },
         {

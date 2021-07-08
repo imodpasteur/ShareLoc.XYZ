@@ -10,7 +10,9 @@
       You are using the development mode of the upload feature, this means files
       will be uploaded to the sandbox version of Zenodo
       (https://sandbox.zenodo.org). The uploaded files can be removed from
-      Zenodo at anytime without notice.
+      Zenodo at any time without notice. This is temporary. In the future, the
+      upload feature will connect to the main Zenodo storage and allow permanent
+      storage of your data.
     </b-notification>
     <b-steps
       style="margin-top: 20px;"
@@ -23,8 +25,8 @@
       <b-step-item :disabled="rdfYaml" label="Start" icon="file">
         <b-field
           v-if="!client.credential"
-          label="Please login or signup to Zenodo.org"
-          message="ShareLoc.XYZ uses https://zenodo.org as storage service, you will need to sign up or login to Zenodo, and allow ShareLoc.XYZ to upload files to zenodo on behave of you."
+          label="Please login or sign up to Zenodo.org"
+          message="ShareLoc.XYZ uses https://zenodo.org as storage service, you will need to sign up or login to Zenodo, and allow ShareLoc.XYZ to upload files to zenodo on your behalf."
           expanded
         >
           <b-button
@@ -39,7 +41,7 @@
         <b-field
           v-else
           label="You have already logged in via Zenodo"
-          message="ShareLoc.XYZ uses https://zenodo.org as storage service, you will need to sign up or login to Zenodo, and allow ShareLoc.XYZ to upload files to zenodo on behave of you."
+          message="ShareLoc.XYZ uses https://zenodo.org as storage service, you will need to sign up or login to Zenodo, and allow ShareLoc.XYZ to upload files to zenodo on your behalf."
           expanded
         >
           <b-button
@@ -87,6 +89,26 @@
           :disabled="!client.credential"
           >Load</b-button
         >
+        <br />
+        <b-notification aria-close-label="Close notification">
+          <h1>
+            You can also create an application card for your software tool!
+          </h1>
+          <p>
+            If you developed a software tool for facilitating data acquisiton or
+            analysis of SMLM data, please consider adding an `application` card
+            to ShareLoc.XYZ so people who used your tool can link their datasets
+            to your tool. You can also make an
+            <a target="_blank" href="https://imjoy.io">ImJoy</a> plugin for your
+            tool so users can directly run it from within ShareLoc. For detailed
+            instructions on how to contribute an application, please
+            <a
+              target="_blank"
+              href="https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/docs/contribute-applications.md"
+              >read here</a
+            >.
+          </p>
+        </b-notification>
       </b-step-item>
 
       <b-step-item label="Edit" icon="pencil" :disabled="!rdfYaml">
@@ -264,8 +286,9 @@
             <a :href="prereserveUrl" target="_blank">{{ prereserveUrl }}</a>
           </h2>
           <p>
-            Note: Please check carefully before publishing, it won't be easy to
-            remove items after made public. New changes will be added as a new
+            Note: Please check carefully before publishing. It is generally not
+            possible to remove items after they have been published. Changes
+            will be added as a new version, but will not erase the previous
             version.
           </p>
         </b-notification>
@@ -480,12 +503,6 @@ export default {
     },
 
     async publishDeposition() {
-      if (
-        !confirm(
-          "Are you sure about publish your RDF now? Please note that after publishing you won't be able to remove it. Changes to existing published deposit can only be made by publishing new versions."
-        )
-      )
-        return;
       const loadingComponent = this.$buefy.loading.open({
         container: this.$el
       });
