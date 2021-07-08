@@ -38,7 +38,8 @@
   ],
   "zenodo_config": {
     "enabled": true,
-    "client_id": "mRJ0Q2ihVpuPhISMPKpFtGakv6LBaKMN8Ap2ruPZ",
+    "client_id": "LrUl7gtNg50dciX8wkXHCD7Sy75ZpEytUarkekWp",
+    "community": "shareloc",
     "use_sandbox": true
   },
   "rdf_root_repo": "imodpasteur/shareLoc.xyz",

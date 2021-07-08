@@ -183,7 +183,11 @@
           <b-switch v-model="requestedJoinCommunity">
             Apply for listing in the
             <a
-              :href="client.baseURL + '/communities/shareloc-xyz/'"
+              :href="
+                client.baseURL +
+                  '/communities/' +
+                  siteConfig.zenodo_config.community
+              "
               target="_blank"
               >ShareLoc.XYZ community list</a
             >
@@ -403,6 +407,7 @@ export default {
         this.rdf = rdf;
 
         this.similarDeposits = await this.client.getResourceItems({
+          community: this.siteConfig.zenodo_config.community,
           sort: "bestmatch",
           query: rdf.name
         });
@@ -436,6 +441,7 @@ export default {
           }
           console.log("orcid matched: " + this.depositId, depositionInfo);
           this.rdf = await getFullRdfFromDeposit(depositionInfo);
+          console.log("Full RDF:", this.rdf);
           this.files = depositionInfo.files.map(item => {
             return {
               type: "remote",
@@ -507,7 +513,14 @@ export default {
       const rdfCopy = Object.assign({}, rdf);
       // TODO: is there any field in the config we want to preserve?
       delete rdfCopy.config;
-      const rdfYaml = yaml.dump(rdfCopy);
+      let rdfYaml = yaml.dump(rdfCopy);
+      rdfYaml = yaml.load(rdfYaml);
+      rdfYaml.attachments.samples.forEach(sample => {
+        sample.views.forEach(screenshot => {
+          delete screenshot.image;
+        });
+      });
+      rdfYaml = yaml.dump(rdfYaml);
       const blob = new Blob([rdfYaml], {
         type: "application/yaml"
       });
@@ -588,7 +601,9 @@ export default {
         const metadata = rdfToMetadata(this.rdf, baseUrl, docstring);
         // this will send a email request to the admin of bioimgae-io team
         if (this.requestedJoinCommunity) {
-          metadata.communities.push({ identifier: "shareloc-xyz" });
+          metadata.communities.push({
+            identifier: this.siteConfig.zenodo_config.community
+          });
         }
         metadata.prereserve_doi = true; // we will generate the doi and store it in the model yaml file
         depositionInfo = await this.client.updateMetadata(

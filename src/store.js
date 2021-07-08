@@ -37,10 +37,10 @@ function normalizeItem(item) {
   if (item.icon === "extension") item.icon = "puzzle";
   item.cover_images = [];
   for (let cover of item.covers) {
-    if (cover.includes("(") || cover.includes(")")) {
-      console.error("cover image file name cannot contain brackets.");
-      continue;
-    }
+    // if (cover.includes("(") || cover.includes(")")) {
+    //   console.error("cover image file name cannot contain brackets.");
+    //   continue;
+    // }
     if (!cover.startsWith("http")) {
       item.cover_images.push(new URL(cover, item.root_url).href);
     } else {
@@ -203,8 +203,11 @@ export const store = new Vuex.Store({
         console.log("manifest already loaded");
         return;
       }
+      const siteConfig = context.state.siteConfig;
       try {
-        const items = await context.state.zenodoClient.getResourceItems({});
+        const items = await context.state.zenodoClient.getResourceItems({
+          community: siteConfig.zenodo_config.community
+        });
         items.map(item => context.commit("addResourceItem", item));
       } catch (e) {
         console.error(e);
@@ -212,7 +215,7 @@ export const store = new Vuex.Store({
           "It appears that we cannot reach to the Zenodo server (https://zenodo.org), please check whether you are connected to the internet, otherwise it might be because the Zenodo server is currently down."
         );
       }
-      const siteConfig = context.state.siteConfig;
+
       const response = await fetch(manifest_url + "?" + randId());
       const repo_manifest = JSON.parse(await response.text());
       if (repo_manifest.collections && siteConfig.partners) {
