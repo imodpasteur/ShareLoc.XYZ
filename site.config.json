@@ -60,13 +60,6 @@
         "sortable": true
       },
       {
-        "field": "views",
-        "label": "Views",
-        "width": 180,
-        "type": "thumbnails",
-        "sortable": false
-      },
-      {
         "field": "files",
         "label": "Files",
         "width": 80,
@@ -100,6 +93,13 @@
         "type": "url",
         "text": "Download",
         "class": "button is-small"
+      },
+      {
+        "field": "views",
+        "label": "Views",
+        "width": 180,
+        "type": "thumbnails",
+        "sortable": false
       }
     ],
     "detailed": true,
