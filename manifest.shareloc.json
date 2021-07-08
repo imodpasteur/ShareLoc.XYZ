@@ -39,6 +39,7 @@
             "source": "https://shareloc.xyz/ITK-VTK-Viewer.imjoy.html",
             "icon": "https://kitware.github.io/itk-vtk-viewer/app/favicon-32x32.png",
             "name": "ITK VTK Viewer",
+            "git_repo": "https://github.com/Kitware/itk-vtk-viewer",
             "version": "0.1.0",
             "api_version": "0.1.8",
             "description": "ITK VTK viewer for displaying point cloud data",

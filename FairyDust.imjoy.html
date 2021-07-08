@@ -992,11 +992,11 @@
     var rerender = false;
     function setRerender() {
         totalNumberOfChunks = 0;
-        scopeParams['Total # of locations'] = 0;
+        scopeParams['# of locs'] = 0;
         for (var i = 0; i < fileIDs.length; i++) {
             if (scopeParams['active ' + i] && scopeParams['alpha ' + i] > 0) {
                 totalNumberOfChunks += files[fileIDs[i]].locations.numChunks;
-                scopeParams['Total # of locations'] += files[fileIDs[i]].locations.rows;
+                scopeParams['# of locs'] += files[fileIDs[i]].locations.rows;
             }
             var color = scopeParams['color ' + i];
             if (typeof (color) == "string") {
@@ -1023,8 +1023,7 @@
 
         var customContainer = document.getElementById('gui-webgl');
         customContainer.appendChild(gui.domElement);
-        scopeParams['Total # of locations'] = 0;
-
+        scopeParams['# of locs'] = 0;
         scopeParams['reset scale'] = function () {
             scopeParams['x'] = 1;
             scopeParams['y'] = 1;
@@ -1037,7 +1036,7 @@
         var scaleFolder = gui.addFolder('Scale (x10)');
         scaleFolder.add(scopeParams, 'x', 0, 10).listen().onChange(setRerender);
         scaleFolder.add(scopeParams, 'y', 0, 10).listen().onChange(setRerender);
-        if (!is2D) scaleFolder.add(scopeParams, 'z', 0, 10).listen().onChange(setRerender);
+        scaleFolder.add(scopeParams, 'z', 0, 10).listen().onChange(setRerender);
         scaleFolder.add(scopeParams, 'reset scale');
 
         scopeParams['reset clipping'] = function () {
@@ -1059,7 +1058,7 @@
         if (!is2D) clippingFolder.add(scopeParams, 'z max', 0, 1).listen().onChange(setRerender);
         clippingFolder.add(scopeParams, 'reset clipping');
 
-        gui.add(scopeParams, 'Total # of locations').listen();
+        gui.add(scopeParams, '# of locs').listen();
         gui.add(scopeParams, 'point size', 0, 50).listen().onChange(setRerender);
         canvas = canvasElement; //document.getElementById("c");
         try {
@@ -1677,4 +1676,10 @@
         margin: 0;
     }
 
+    .title {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
