@@ -190,6 +190,10 @@ export default {
               }
             }
           let count = 0;
+          if (!sample.views) {
+            alert("Please take screenshots for " + sample.name);
+            throw new Error("No screenshot found for " + sample.name);
+          }
           for (let screenshot of sample.views) {
             const { image } = screenshot;
             // skip adding remote screenshot
@@ -208,7 +212,7 @@ export default {
             file.sampleName = sample.name;
             editedFiles.push(file);
 
-            delete screenshot.image;
+            // delete screenshot.image;
             screenshot.image_name = fileName + ".png";
 
             // limit the cover image number
@@ -267,7 +271,8 @@ export default {
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
       this.rdf.license = this.rdf.license || "CC-BY-4.0";
-      this.rdf.attachments = this.rdf.attachmentss || {};
+      this.rdf.attachments = this.rdf.attachments || {};
+
       this.jsonFields = this.transformFields([
         {
           label: "Type",

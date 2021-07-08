@@ -203,17 +203,23 @@ export async function getFullRdfFromDeposit(deposition) {
     });
     // fix samples
     const samples = fullRdf.attachments.samples;
-
     for (let sample of samples) {
       for (let f of sample.files) {
-        const file = files.filter(
+        let file = files.filter(
           file => file.name === `${sample.name}/${f.name}`
         )[0];
         if (file) {
+          // make a copy of it
+          file = Object.assign({}, file);
           file.download_url = `${deposition.links.bucket}/${file.name}`; // <sample name>/ <file name>
+          // fix the name
+          file.name = f.name;
           Object.assign(f, file);
         } else {
           console.error(`Sample file does not exists ${sample.name}/${f.name}`);
+          throw new Error(
+            `Sample file does not exists ${sample.name}/${f.name}`
+          );
         }
       }
       for (let view of sample.views) {
@@ -356,7 +362,9 @@ export function depositionToRdf(deposition) {
   for (let idf of metadata.related_identifiers) {
     if (idf.relation === "isCompiledBy" && idf.scheme === "url") {
       rdfFile = idf.identifier;
-      const zenodoFileRegex = /.*zenodo.org\/.*\/files\/(.*)/;
+      const zenodoFileRegex = rdfFile.includes("/api/files/")
+        ? /.*zenodo.org\/api\/files\/.*\/(.*)/
+        : /.*zenodo.org\/.*\/files\/(.*)/;
       const matches = zenodoFileRegex.exec(rdfFile);
       if (matches) {
         const fileName = matches[1];
@@ -373,7 +381,9 @@ export function depositionToRdf(deposition) {
       if (url.startsWith("file://")) {
         url = url.replace("file://", deposition.links.bucket + "/");
       } else if (url.includes(`/files/`)) {
-        const zenodoFileRegex = /.*zenodo.org\/.*\/files\/(.*)/;
+        const zenodoFileRegex = url.includes("/api/files/")
+          ? /.*zenodo.org\/api\/files\/.*\/(.*)/
+          : /.*zenodo.org\/.*\/files\/(.*)/;
         const matches = zenodoFileRegex.exec(url);
         if (matches) {
           const fileName = matches[1];
@@ -510,11 +520,18 @@ export class ZenodoClient {
     return this.credential;
   }
 
-  async getResourceItems({ page, type, keywords, query, sort, size }) {
+  async getResourceItems({
+    community,
+    page,
+    type,
+    keywords,
+    query,
+    sort,
+    size
+  }) {
     page = page || 1;
     type = type || "all";
     keywords = keywords || [];
-    const community = "shareloc-xyz";
     if (!keywords.includes("shareloc.xyz")) keywords.push("shareloc.xyz");
     size = size || 20;
     sort = sort || "mostviewed";
@@ -535,7 +552,15 @@ export class ZenodoClient {
     if (!results || !results.hits) {
       console.warn("Hitting rate limit, retrying in 1s");
       setTimeout(() => {
-        this.getResourceItems({ page, type, keywords, query, sort, size });
+        this.getResourceItems({
+          community,
+          page,
+          type,
+          keywords,
+          query,
+          sort,
+          size
+        });
       }, 1000);
     }
     const hits = results.hits.hits;
