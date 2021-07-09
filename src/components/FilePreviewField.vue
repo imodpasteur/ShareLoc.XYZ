@@ -135,6 +135,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import { fetchFile, randId, longestCommonSubstring } from "../utils";
 export default {
   name: "file-preview",
@@ -160,7 +161,6 @@ export default {
   created() {
     this.samples = this.item.value || [];
     this.commitValue();
-    // const api = window.imjoy.api;
     // const baseUrl = window.location.origin + window.location.pathname;
     // api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
   },
@@ -174,7 +174,11 @@ export default {
         }
       }
       return screenshots.length > 0;
-    }
+    },
+    ...mapState({
+      imjoyReady: state => state.imjoyReady,
+      imjoy: state => state.imjoy
+    })
   },
   watch: {
     activeSample(newVal) {
@@ -210,12 +214,12 @@ export default {
       if (this.currentSample.views.filter(s => s.image === img).length <= 0)
         this.currentSample.views.push({ config, image: img });
       else
-        window.imjoy.api.showMessage(
+        this.imjoy.api.showMessage(
           "Please change the image to another view and try again."
         );
       // this.selectedScreenshot = this.currentSample.views.length-1;
       this.commitValue();
-      window.imjoy.api.showMessage("New screenshot added!");
+      this.imjoy.api.showMessage("New screenshot added!");
       this.$forceUpdate();
     },
     removeSample(sample, index) {
@@ -253,7 +257,7 @@ export default {
         canCancel: true
       });
       try {
-        this.viewer = await window.imjoy.api.showDialog({
+        this.viewer = await this.imjoy.api.showDialog({
           name: file.name.slice(0, 40),
           src: "https://kaibu.org/#/app",
           w: 10,
@@ -287,7 +291,11 @@ export default {
       // fetch remote file
       try {
         if (!this.fileCache[file.url]) {
-          const newFile = await fetchFile(file.url, file.name);
+          const newFile = await fetchFile(
+            file.url,
+            file.name,
+            this.imjoy && this.imjoy.api.showMessage
+          );
           // remember the remote file
           newFile.remote = file;
           // replace the file with the actual one
@@ -308,7 +316,7 @@ export default {
         saveFileName = saveFileName + ".smlm";
 
       sample.convert = async () => {
-        const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
+        const smlmPlugin = await this.imjoy.api.getPlugin("SMLM File IO");
         const smlm = await smlmPlugin.load(locFiles);
         const zip = await smlm.save(saveFileName);
         zip.sampleName = sample.name;
@@ -321,7 +329,7 @@ export default {
       this.currentSample = sample;
       sample.files.forEach(file => (file.sampleName = sample.name));
       const files = sample.files;
-      const api = window.imjoy.api;
+      const api = this.imjoy.api;
       const loadingComponent = this.$buefy.loading.open({
         canCancel: true,
         container: this.$el

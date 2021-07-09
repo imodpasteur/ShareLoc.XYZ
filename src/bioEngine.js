@@ -27,8 +27,7 @@ export async function setupBioEngine() {
         app.imjoy.pm.default_base_frame = baseUrl + "default_base_frame.html";
         app.imjoy.pm.init();
         // get the api object from the root plugin
-        const api = app.imjoy.api;
-        window.imjoy = app.imjoy;
+        // const api = app.imjoy.api;
         store.commit("setImJoy", app.imjoy);
         app.$on("window-size-pos-changing", changing => {
           const iframes = document.querySelectorAll(".reveal iframe");
@@ -45,9 +44,9 @@ export async function setupBioEngine() {
           }
         });
         // expose global variables
-        window.api = api;
-        window.imjoy = app.imjoy;
-        window.app = app;
+        // window.api = api;
+        // window.imjoy = app.imjoy;
+        // window.app = app;
         // TODO: hacky solution, need further investigation
         // imjoy.event_bus.on("add_window", w => {
         //   if(imjoy.wm.windows.indexOf(w)<0){
@@ -106,7 +105,7 @@ export async function setupBioEngine() {
             window.open("https://github.com/imodpasteur/shareLoc.xyz");
           }
         });
-        resolve(app);
+        resolve(app.imjoy);
       })
       .catch(e => {
         console.error(e);

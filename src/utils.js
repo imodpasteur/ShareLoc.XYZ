@@ -76,7 +76,7 @@ export function longestCommonSubstring(string1, string2) {
   return longestSubstring;
 }
 
-export async function fetchFile(url, filename) {
+export async function fetchFile(url, filename, showMessage) {
   const response = await axios({
     url,
     method: "GET",
@@ -85,7 +85,7 @@ export async function fetchFile(url, filename) {
       const status = `Downloading file ${progressEvent.loaded /
         1000}kB (${progressEvent.total &&
         Math.round((progressEvent.loaded / progressEvent.total) * 100)}%)`;
-      if (window.imjoy) window.imjoy.api.showMessage(status);
+      if (showMessage) showMessage(status);
       else {
         console.log(status);
       }

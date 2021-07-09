@@ -135,6 +135,7 @@ export default {
   computed: {
     ...mapState({
       imjoyReady: state => state.imjoyReady,
+      imjoy: state => state.imjoy,
       siteConfig: state => state.siteConfig,
       loadedUrl: state => state.loadedUrl,
       resourceItems: state => state.resourceItems
@@ -169,7 +170,7 @@ export default {
       if (this.views.filter(s => s.image === img).length <= 0)
         this.views.push({ config, image: img });
       else
-        window.imjoy.api.showMessage(
+        this.imjoy.api.showMessage(
           "Please change the image to another view and try again."
         );
       // this.selectedScreenshot = this.views.length-1;
@@ -186,7 +187,7 @@ export default {
       try {
         await this.previewFile(files);
       } catch (e) {
-        await window.imjoy.api.showMessage(`Failed to preview file: ${e}`);
+        await this.imjoy.api.showMessage(`Failed to preview file: ${e}`);
         console.error(e);
       }
       this.commitValue();
@@ -197,7 +198,7 @@ export default {
       return str.length > length ? str.substring(0, length) + "..." : str;
     },
     async previewFile(files) {
-      const api = window.imjoy.api;
+      const api = this.imjoy.api;
       const loadingComponent = this.$buefy.loading.open({
         container
       });
@@ -207,7 +208,11 @@ export default {
         if (file.type === "remote") {
           try {
             if (!this.fileCache[file.url]) {
-              const newFile = await fetchFile(file.url, file.name);
+              const newFile = await fetchFile(
+                file.url,
+                file.name,
+                this.imjoy && this.imjoy.api.showMessage
+              );
               file = newFile;
               // replace the file with the actual one
               this.fileCache[file.url] = file;
@@ -250,8 +255,8 @@ export default {
       const loadingComponent = this.$buefy.loading.open();
       if (!this.resourceId) {
         this.imjoyReady
-          .then(() => {
-            const api = window.imjoy.api;
+          .then(imjoy => {
+            const api = imjoy.api;
             const baseUrl = window.location.origin + window.location.pathname;
             api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
           })
@@ -282,9 +287,10 @@ export default {
         try {
           const file = await fetchFile(
             resourceItem.download_url,
-            resourceItem.name
+            resourceItem.name,
+            this.imjoy && this.imjoy.api.showMessage
           );
-          const api = window.imjoy.api;
+          const api = this.imjoy.api;
           const baseUrl = window.location.origin + window.location.pathname;
           await api
             .getPlugin(baseUrl + "SMLM-File-IO.imjoy.html")
