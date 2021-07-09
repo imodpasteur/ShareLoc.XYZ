@@ -238,7 +238,7 @@ export default {
       for (let i = 1; i < sample.files.length; i++) {
         comm = longestCommonSubstring(comm, sample.files[i].name);
       }
-      if (comm.length > 0) sample.name = comm;
+      if (comm.length > 2) sample.name = comm;
       else sample.name = "Sample-" + Date.now();
       this.commitValue();
     },
