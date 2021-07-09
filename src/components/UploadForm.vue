@@ -151,6 +151,7 @@ export default {
         this.rdf[k] = values[rdfNameMapping[k]];
       }
       let rdfFileName = "rdf.yaml";
+      this.rdf.type = "dataset";
       this.rdf.links = this.rdf.links || [];
       this.rdf.tags = this.rdf.tags || [];
       this.rdf.config = this.rdf.config || {};
