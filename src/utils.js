@@ -472,7 +472,8 @@ export class ZenodoClient {
     this.callbackUrl = encodeURIComponent("https://imjoy.io/login-helper");
     this.credential = null;
     try {
-      this.lastUserId = parseInt(localStorage.getItem("zenodo_user_id"));
+      this.lastUserId = localStorage.getItem("zenodo_user_id");
+      if (this.lastUserId) this.lastUserId = parseInt(this.lastUserId);
       let lastCredential = localStorage.getItem("zenodo_credential");
       if (lastCredential) {
         this.credential = JSON.parse(lastCredential);
