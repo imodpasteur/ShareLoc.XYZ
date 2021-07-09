@@ -663,21 +663,23 @@ export default {
           let file = uploadFiles[i];
           if (file.type === "generator") {
             // assuming we already have the generated name fixed
-            const generatedFile = await file.generate();
-            generatedFile.sampleName = file.sampleName;
-            file = generatedFile;
+            file = await file.generate();
             if (file.sampleName) {
               // fix the converted file name and size in the attachments
               const sample = this.rdf.attachments.samples.filter(
                 sample => sample.name === file.sampleName
               )[0];
-              sample.files = [
-                {
-                  name: file.name,
-                  size: file.size,
-                  checksum: file.checksum
-                }
-              ];
+              const generatedNames = file.converted.map(f => f.name);
+              // remove the original files, e.g. the csv files
+              sample.files = sample.files.filter(
+                f => !generatedNames.includes(f.name)
+              );
+              // replace with converted files
+              sample.files.push({
+                name: file.name,
+                size: file.size,
+                checksum: file.checksum
+              });
             }
           }
 

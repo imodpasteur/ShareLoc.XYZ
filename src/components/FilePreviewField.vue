@@ -302,15 +302,17 @@ export default {
       }
       return file;
     },
-    markFileConversion(sample) {
+    markFileConversion(sample, locFiles) {
       let saveFileName = "data";
       if (!saveFileName.endsWith(".smlm"))
         saveFileName = saveFileName + ".smlm";
 
       sample.convert = async () => {
         const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
-        const smlm = await smlmPlugin.load(sample.files);
+        const smlm = await smlmPlugin.load(locFiles);
         const zip = await smlm.save(saveFileName);
+        zip.sampleName = sample.name;
+        zip.converted = locFiles;
         return zip;
       };
       sample.convertFileName = saveFileName;
@@ -383,7 +385,7 @@ export default {
 
         // this will mark the file conversion
         // the convert function will be called during upload
-        this.markFileConversion(sample);
+        this.markFileConversion(sample, locFiles);
         const baseUrl = window.location.origin + window.location.pathname;
         this.viewer = await api.showDialog({
           name: sample.name.slice(0, 40),
