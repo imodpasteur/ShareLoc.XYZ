@@ -89,6 +89,7 @@
     </div>
     <!-- <comment-box :title="resourceItem.name"></comment-box> -->
   </div>
+  <h2 v-else>Resource not found: {{ resourceId }}</h2>
 </template>
 
 <script>
@@ -172,7 +173,7 @@ export default {
       })[0];
       if (!resourceItem) {
         alert("Item not found: " + this.resourceId);
-        return;
+        throw new Error("Item not found: " + this.resourceId);
       }
       this.resourceItem = resourceItem;
       const focus = () => {

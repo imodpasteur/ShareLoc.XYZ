@@ -190,6 +190,8 @@ export async function getFullRdfFromDeposit(deposition) {
   if (response.ok) {
     const yamlStr = await response.text();
     const fullRdf = yaml.load(yamlStr);
+    // fix id;
+    fullRdf.id = deposition.conceptdoi;
     fullRdf.config = fullRdf.config || {};
     Object.assign(fullRdf.config, rdf.config);
     const files = deposition.files.map(item => {
