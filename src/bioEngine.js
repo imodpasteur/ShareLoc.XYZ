@@ -1,5 +1,6 @@
 import { store } from "./store";
 
+let api;
 export async function setupBioEngine() {
   return new Promise((resolve, reject) => {
     window
@@ -27,7 +28,7 @@ export async function setupBioEngine() {
         app.imjoy.pm.default_base_frame = baseUrl + "default_base_frame.html";
         app.imjoy.pm.init();
         // get the api object from the root plugin
-        // const api = app.imjoy.api;
+        api = app.imjoy.api;
         store.commit("setImJoy", app.imjoy);
         app.$on("window-size-pos-changing", changing => {
           const iframes = document.querySelectorAll(".reveal iframe");
@@ -119,10 +120,10 @@ export async function runAppForAllItems(context, config, allItems) {
   context.showLoader(true);
   try {
     if (config.passive) {
-      await window.api.createWindow({ src: config.source, passive: true });
+      await api.createWindow({ src: config.source, passive: true });
       return;
     }
-    const plugin = await window.api.getPlugin({ src: config.source });
+    const plugin = await api.getPlugin({ src: config.source });
     await plugin.run({
       config: {
         referer: window.location.href,
@@ -134,7 +135,7 @@ export async function runAppForAllItems(context, config, allItems) {
     context.showLoader(false);
   } catch (e) {
     console.error(e);
-    window.api.showMessage(`${e.message}`);
+    api.showMessage(`${e.message}`);
   } finally {
     context.showLoader(false);
   }
@@ -146,7 +147,7 @@ export async function runAppForItem(context, config, item) {
   context.showLoader(true);
   try {
     if (config.passive) {
-      const plugin = await window.api.createWindow({
+      const plugin = await api.createWindow({
         src: config.source,
         passive: true
       });
@@ -158,7 +159,7 @@ export async function runAppForItem(context, config, item) {
       return;
     }
 
-    const plugin = await window.api.getPlugin({ src: config.source });
+    const plugin = await api.getPlugin({ src: config.source });
     context.showLoader(false);
     if (plugin.cancel) {
       context.showLoader(true, () => {
@@ -177,7 +178,7 @@ export async function runAppForItem(context, config, item) {
     });
   } catch (e) {
     console.error(e);
-    window.api.showMessage(`${e.message}`);
+    api.showMessage(`${e.message}`);
   } finally {
     context.showLoader(false);
   }
