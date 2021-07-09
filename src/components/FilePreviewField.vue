@@ -338,20 +338,37 @@ export default {
       }
       this.currentFiles = normalizedFiles;
 
-      // display image
-      // TODO: how to display the image sample with multiple images
-      const fn = normalizedFiles[0].name.toLowerCase();
-      if (fn.endsWith(".png") || fn.endsWith(".jpeg") || fn.endsWith(".jpg")) {
-        this.displayImage(normalizedFiles[0], dialogID);
-        loadingComponent.close();
-        return;
-      }
-
       // display SMLM file
       try {
         let smlmFiles = [];
+        const locFiles = normalizedFiles.filter(
+          file =>
+            file.name.endsWith(".smlm") ||
+            file.name.endsWith(".csv") ||
+            file.name.endsWith(".tsv") ||
+            file.name.endsWith(".xls") ||
+            file.name.endsWith(".txt")
+        );
+        if (locFiles.length <= 0) {
+          // display image
+          // TODO: how to display the image sample with multiple images
+          const fn = normalizedFiles[0].name.toLowerCase();
+          if (
+            fn.endsWith(".png") ||
+            fn.endsWith(".jpeg") ||
+            fn.endsWith(".jpg")
+          ) {
+            this.displayImage(normalizedFiles[0], dialogID);
+            loadingComponent.close();
+            return;
+          } else
+            alert(
+              "No localization file found (only support .csv, .tsv, .txt files)"
+            );
+          return;
+        }
         const smlmPlugin = await api.getPlugin("SMLM File IO");
-        for (let file of normalizedFiles) {
+        for (let file of locFiles) {
           // display SMLM file
           try {
             const smlm = await smlmPlugin.load(file);
