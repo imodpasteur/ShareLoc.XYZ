@@ -491,14 +491,14 @@ function connectApps(self, item) {
     }
   }
 
-  if (item.config && item.config._doi) {
+  if (item.config && item.config._conceptdoi) {
     item.badges.unshift({
-      label: item.config._doi,
+      label: item.config._conceptdoi,
       label_type: "is-dark",
       label_short: self.zenodoClient.isSandbox ? "Zenodo" : "DOI",
       url: self.zenodoClient.isSandbox
         ? `${item.config._deposit.links.html}`
-        : `https://doi.org/${item.config._doi}`
+        : `https://doi.org/${item.config._conceptdoi}`
     });
   }
   item.config._linked = true;
@@ -617,7 +617,8 @@ export default {
             item =>
               item.config &&
               item.config._deposit &&
-              item.config._deposit.id === zenodoId
+              (item.config._deposit.id === zenodoId ||
+                item.config._deposit.conceptrecid === zenodoId)
           )[0];
           if (matchedItem) this.$route.query.id = matchedItem.id;
           else {

@@ -436,7 +436,7 @@ export function depositionToRdf(deposition) {
     );
   }
   return {
-    id: metadata.doi,
+    id: deposition.conceptdoi,
     name: metadata.title,
     type,
     authors: metadata.creators,
@@ -456,7 +456,8 @@ export function depositionToRdf(deposition) {
       samples
     },
     config: {
-      _doi: metadata.doi,
+      _doi: deposition.doi,
+      _conceptdoi: deposition.conceptdoi,
       _deposit: deposition,
       _rdf_file: rdfFile
     }
@@ -584,6 +585,11 @@ export class ZenodoClient {
   logout() {
     return new Promise((resolve, reject) => {
       this.credential = null;
+      try {
+        localStorage.removeItem("zenodo_credential");
+      } catch (e) {
+        console.error("Failed to reset zenodo_credential");
+      }
       const loginWindow = window.open(`${this.baseURL}/logout`, "Logout");
       try {
         loginWindow.focus();
