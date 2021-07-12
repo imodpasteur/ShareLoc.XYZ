@@ -135,6 +135,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import { fetchFile, randId, longestCommonSubstring } from "../utils";
 export default {
   name: "file-preview",
@@ -160,7 +161,6 @@ export default {
   created() {
     this.samples = this.item.value || [];
     this.commitValue();
-    // const api = window.imjoy.api;
     // const baseUrl = window.location.origin + window.location.pathname;
     // api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
   },
@@ -174,7 +174,11 @@ export default {
         }
       }
       return screenshots.length > 0;
-    }
+    },
+    ...mapState({
+      imjoyReady: state => state.imjoyReady,
+      imjoy: state => state.imjoy
+    })
   },
   watch: {
     activeSample(newVal) {
@@ -210,12 +214,12 @@ export default {
       if (this.currentSample.views.filter(s => s.image === img).length <= 0)
         this.currentSample.views.push({ config, image: img });
       else
-        window.imjoy.api.showMessage(
+        this.imjoy.api.showMessage(
           "Please change the image to another view and try again."
         );
       // this.selectedScreenshot = this.currentSample.views.length-1;
       this.commitValue();
-      window.imjoy.api.showMessage("New screenshot added!");
+      this.imjoy.api.showMessage("New screenshot added!");
       this.$forceUpdate();
     },
     removeSample(sample, index) {
@@ -238,7 +242,7 @@ export default {
       for (let i = 1; i < sample.files.length; i++) {
         comm = longestCommonSubstring(comm, sample.files[i].name);
       }
-      if (comm.length > 0) sample.name = comm;
+      if (comm.length > 2) sample.name = comm;
       else sample.name = "Sample-" + Date.now();
       this.commitValue();
     },
@@ -253,7 +257,7 @@ export default {
         canCancel: true
       });
       try {
-        this.viewer = await window.imjoy.api.showDialog({
+        this.viewer = await this.imjoy.api.showDialog({
           name: file.name.slice(0, 40),
           src: "https://kaibu.org/#/app",
           w: 10,
@@ -287,7 +291,11 @@ export default {
       // fetch remote file
       try {
         if (!this.fileCache[file.url]) {
-          const newFile = await fetchFile(file.url, file.name);
+          const newFile = await fetchFile(
+            file.url,
+            file.name,
+            this.imjoy && this.imjoy.api.showMessage
+          );
           // remember the remote file
           newFile.remote = file;
           // replace the file with the actual one
@@ -302,15 +310,17 @@ export default {
       }
       return file;
     },
-    markFileConversion(sample) {
+    markFileConversion(sample, locFiles) {
       let saveFileName = "data";
       if (!saveFileName.endsWith(".smlm"))
         saveFileName = saveFileName + ".smlm";
 
       sample.convert = async () => {
-        const smlmPlugin = await window.imjoy.api.getPlugin("SMLM File IO");
-        const smlm = await smlmPlugin.load(sample.files);
+        const smlmPlugin = await this.imjoy.api.getPlugin("SMLM File IO");
+        const smlm = await smlmPlugin.load(locFiles);
         const zip = await smlm.save(saveFileName);
+        zip.sampleName = sample.name;
+        zip.converted = locFiles;
         return zip;
       };
       sample.convertFileName = saveFileName;
@@ -319,7 +329,7 @@ export default {
       this.currentSample = sample;
       sample.files.forEach(file => (file.sampleName = sample.name));
       const files = sample.files;
-      const api = window.imjoy.api;
+      const api = this.imjoy.api;
       const loadingComponent = this.$buefy.loading.open({
         canCancel: true,
         container: this.$el
@@ -338,20 +348,37 @@ export default {
       }
       this.currentFiles = normalizedFiles;
 
-      // display image
-      // TODO: how to display the image sample with multiple images
-      const fn = normalizedFiles[0].name.toLowerCase();
-      if (fn.endsWith(".png") || fn.endsWith(".jpeg") || fn.endsWith(".jpg")) {
-        this.displayImage(normalizedFiles[0], dialogID);
-        loadingComponent.close();
-        return;
-      }
-
       // display SMLM file
       try {
         let smlmFiles = [];
+        const locFiles = normalizedFiles.filter(
+          file =>
+            file.name.endsWith(".smlm") ||
+            file.name.endsWith(".csv") ||
+            file.name.endsWith(".tsv") ||
+            file.name.endsWith(".xls") ||
+            file.name.endsWith(".txt")
+        );
+        if (locFiles.length <= 0) {
+          // display image
+          // TODO: how to display the image sample with multiple images
+          const fn = normalizedFiles[0].name.toLowerCase();
+          if (
+            fn.endsWith(".png") ||
+            fn.endsWith(".jpeg") ||
+            fn.endsWith(".jpg")
+          ) {
+            this.displayImage(normalizedFiles[0], dialogID);
+            loadingComponent.close();
+            return;
+          } else
+            alert(
+              "No localization file found (only support .csv, .tsv, .txt files)"
+            );
+          return;
+        }
         const smlmPlugin = await api.getPlugin("SMLM File IO");
-        for (let file of normalizedFiles) {
+        for (let file of locFiles) {
           // display SMLM file
           try {
             const smlm = await smlmPlugin.load(file);
@@ -366,7 +393,7 @@ export default {
 
         // this will mark the file conversion
         // the convert function will be called during upload
-        this.markFileConversion(sample);
+        this.markFileConversion(sample, locFiles);
         const baseUrl = window.location.origin + window.location.pathname;
         this.viewer = await api.showDialog({
           name: sample.name.slice(0, 40),

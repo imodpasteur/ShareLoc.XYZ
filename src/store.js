@@ -161,8 +161,8 @@ const imjoyReady = new Promise((resolve, reject) => {
 
 export async function init() {
   try {
-    await setupBioEngine();
-    notifyImJoyReady();
+    const imjoy = await setupBioEngine();
+    notifyImJoyReady(imjoy);
   } catch (e) {
     notifyImJoyFailed(e);
     console.error(e);

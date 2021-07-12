@@ -1,5 +1,6 @@
 import { store } from "./store";
 
+let api;
 export async function setupBioEngine() {
   return new Promise((resolve, reject) => {
     window
@@ -27,8 +28,7 @@ export async function setupBioEngine() {
         app.imjoy.pm.default_base_frame = baseUrl + "default_base_frame.html";
         app.imjoy.pm.init();
         // get the api object from the root plugin
-        const api = app.imjoy.api;
-        window.imjoy = app.imjoy;
+        api = app.imjoy.api;
         store.commit("setImJoy", app.imjoy);
         app.$on("window-size-pos-changing", changing => {
           const iframes = document.querySelectorAll(".reveal iframe");
@@ -45,9 +45,9 @@ export async function setupBioEngine() {
           }
         });
         // expose global variables
-        window.api = api;
-        window.imjoy = app.imjoy;
-        window.app = app;
+        // window.api = api;
+        // window.imjoy = app.imjoy;
+        // window.app = app;
         // TODO: hacky solution, need further investigation
         // imjoy.event_bus.on("add_window", w => {
         //   if(imjoy.wm.windows.indexOf(w)<0){
@@ -106,7 +106,7 @@ export async function setupBioEngine() {
             window.open("https://github.com/imodpasteur/shareLoc.xyz");
           }
         });
-        resolve(app);
+        resolve(app.imjoy);
       })
       .catch(e => {
         console.error(e);
@@ -120,10 +120,10 @@ export async function runAppForAllItems(context, config, allItems) {
   context.showLoader(true);
   try {
     if (config.passive) {
-      await window.api.createWindow({ src: config.source, passive: true });
+      await api.createWindow({ src: config.source, passive: true });
       return;
     }
-    const plugin = await window.api.getPlugin({ src: config.source });
+    const plugin = await api.getPlugin({ src: config.source });
     await plugin.run({
       config: {
         referer: window.location.href,
@@ -135,7 +135,7 @@ export async function runAppForAllItems(context, config, allItems) {
     context.showLoader(false);
   } catch (e) {
     console.error(e);
-    window.api.showMessage(`${e.message}`);
+    api.showMessage(`${e.message}`);
   } finally {
     context.showLoader(false);
   }
@@ -147,7 +147,7 @@ export async function runAppForItem(context, config, item) {
   context.showLoader(true);
   try {
     if (config.passive) {
-      const plugin = await window.api.createWindow({
+      const plugin = await api.createWindow({
         src: config.source,
         passive: true
       });
@@ -159,7 +159,7 @@ export async function runAppForItem(context, config, item) {
       return;
     }
 
-    const plugin = await window.api.getPlugin({ src: config.source });
+    const plugin = await api.getPlugin({ src: config.source });
     context.showLoader(false);
     if (plugin.cancel) {
       context.showLoader(true, () => {
@@ -178,7 +178,7 @@ export async function runAppForItem(context, config, item) {
     });
   } catch (e) {
     console.error(e);
-    window.api.showMessage(`${e.message}`);
+    api.showMessage(`${e.message}`);
   } finally {
     context.showLoader(false);
   }
