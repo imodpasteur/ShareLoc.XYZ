@@ -368,7 +368,11 @@ export default {
             fn.endsWith(".jpeg") ||
             fn.endsWith(".jpg")
           ) {
-            this.displayImage(normalizedFiles[0], dialogID);
+            try {
+              await this.displayImage(normalizedFiles[0], dialogID);
+            } catch (e) {
+              alert(`${e}`);
+            }
             loadingComponent.close();
             return;
           } else
@@ -385,7 +389,7 @@ export default {
             smlmFiles = smlmFiles.concat(smlm.files);
           } catch (e) {
             console.error(e);
-            throw e;
+            alert(`${e}`);
           } finally {
             loadingComponent.close();
           }
@@ -426,7 +430,7 @@ export default {
         // document.getElementById(this.containerId + "-files").scrollIntoView();
       } catch (e) {
         console.error(e);
-        throw e;
+        alert(`${e}`);
       } finally {
         loadingComponent.close();
       }
