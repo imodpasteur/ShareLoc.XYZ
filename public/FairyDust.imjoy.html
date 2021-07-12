@@ -1568,13 +1568,11 @@
         async run(ctx) {
             initGUI();
             if (ctx.config && ctx.config.samples) {
-                ctx.config.files = ctx.config.samples[0].files;
-            }
-            if (ctx.config && ctx.config.files) {
-                scopeParams.File = ctx.config.files[0].download_url;
+                scopeParams.File = ctx.config.samples[0].files[0].download_url;
                 const options = {}
-                for (let f of ctx.config.files) {
-                    options[f.name] = f.download_url;
+                for(let sample of ctx.config.samples)
+                for (let f of sample.files) {
+                    options[sample.name + '/' + f.name] = f.download_url;
                 }
                 const smlmPlugin = await api.getPlugin("SMLM File IO");
                 gui.add(scopeParams, 'File', options).listen().onChange(async () => {
