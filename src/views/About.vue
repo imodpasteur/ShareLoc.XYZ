@@ -80,6 +80,6 @@ export default {
 .version-number {
   text-align: right;
   font-size: 20px !important;
-  margin: 10px;
+  margin: 30px;
 }
 </style>
