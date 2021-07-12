@@ -185,12 +185,14 @@ export default {
               sampleName: sample.name,
               generate: sample.convert
             });
-          } else
-            for (let file of sample.files) {
-              if (file.type !== "remote") {
-                editedFiles.push(file);
-              }
+          }
+          // we will also add all the files here
+          // note that after conversion, some files will be removed
+          for (let file of sample.files) {
+            if (file.type !== "remote") {
+              editedFiles.push(file);
             }
+          }
           let count = 0;
           if (!sample.views) {
             alert("Please take screenshots for " + sample.name);
@@ -206,8 +208,15 @@ export default {
               continue;
             }
             const blob = dataURLtoFile(image);
+            const existingNames = editedFiles.map(f => f.name);
+            // check for naming colision
+            while (
+              existingNames.includes("screenshot-" + count + ".png") ||
+              existingNames.includes("screenshot-" + count + "_thumbnail.png")
+            ) {
+              count++;
+            }
             const fileName = "screenshot-" + count;
-            count++;
             const file = new File([blob], fileName + ".png", {
               type: blob.type
             });
