@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/CNAME"
   },
   {
-    "revision": "96070ed79119044b7206690af511391f",
+    "revision": "9656cd1b8c5914c8f135e70140cad9fa",
     "url": "/FairyDust.imjoy.html"
   },
   {
