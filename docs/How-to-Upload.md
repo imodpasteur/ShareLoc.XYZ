@@ -1,12 +1,15 @@
 # Upload SMLM data on [Shareloc.xyz](https://shareloc.xyz)
-Please make sure you are navigating the latest version `v0.3.6`
-
-![aboutversion](https://user-images.githubusercontent.com/56833522/125286732-6c454300-e31c-11eb-86ff-5eb3e2b98a76.gif)
+Please make sure you are navigating the latest version `v0.X.X`
+![aboutversion](https://user-images.githubusercontent.com/56833522/125454777-925bc61e-ab72-4e8d-b6bb-34d66911fe68.gif)
 
 ## Authorization
 1. Sign up for a [Zenodo](https://sandbox.zenodo.org) account if you don't have one
 2. Click on the "+ Upload" button
-3. Login to Zenodo and authorize ShareLoc.XYZ to upload files to zenodo on your behalf
+![UploadButton](https://user-images.githubusercontent.com/56833522/125454254-6e675ab8-06e3-410f-90ff-03424d086e4d.gif)
+
+3. Login to Zenodo
+
+4. Authorize ShareLoc.XYZ to upload files to zenodo on your behalf
 ![authorize](https://user-images.githubusercontent.com/56833522/125290750-f0012e80-e320-11eb-8e2d-93bf194fc4ca.gif)
 
 ## Add Samples
