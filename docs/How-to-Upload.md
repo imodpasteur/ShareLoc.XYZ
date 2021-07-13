@@ -38,7 +38,7 @@ Please make sure you are navigating the latest version `v0.X.X`
 __You can take many and choose the best one__
 
 ### 5. Repeat step 2-4 if you have more than 1 sample for the same experiment
-__Click on "+ NEW SAMPLE" >> Drag and drop file/files >> Take a screenshot__
+__[Click on "+ NEW SAMPLE"](https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/docs/How-to-Upload.md#2-click-on--new-sample-to-add-sample-to-the-dataset) >> Drag and drop file/files >> Take a screenshot__
 
 __If the total size exceeds 50 GB, please separate the dataset into serval deposits__ 
 
