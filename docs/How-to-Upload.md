@@ -50,7 +50,7 @@ __You could take many screenshots and choose the best one__
 ![selectScreenShoot](https://user-images.githubusercontent.com/56833522/125481864-be819680-4510-405b-a510-fcf193a10016.gif)
 
 ### 6. Repeat step 2-4 if you have more than 1 sample for the same experiment
-__[Click on "+ NEW SAMPLE"](#2-click-on--new-sample-to-add-sample-to-the-dataset) >> [Drag and drop file/files](#2-click-on--new-sample-to-add-sample-to-the-dataset) >> [Take a screenshot](#4-click-on-preview--screenshot)__
+__[Click on "+ NEW SAMPLE"](2-click-on--new-sample-to-add-sample-to-the-deposit) >> [Drag and drop file/files](#3-drag-and-drop-filefiles) >> [Take a screenshot](#4-click-on-preview--screenshot)__
 ![redo2to4x2](https://user-images.githubusercontent.com/56833522/125484624-51039a23-64ba-410f-b61b-00d38538caaa.gif)
 
 ###  :exclamation: If the total size exceeds 50 GB, please separate the dataset into serval deposits, [and link to uploaded datasets](#)
