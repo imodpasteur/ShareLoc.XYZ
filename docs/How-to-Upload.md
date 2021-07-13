@@ -1,15 +1,19 @@
 # Upload SMLM data on [Shareloc.xyz](https://shareloc.xyz)
 ### How to:
 - [__Check version__](#Check-version)
-- __Sign up on Zenodo__
-        
-- __Enter the information__
-- 
+- [__Login and authorize shareLoc.xyz to upload files to zenodo on your behalf__](#Login-and-authorize-shareLoc.xyz-to-upload-files-to-zenodo-on-your-behalf)
+- [__Upload samples__](#Upload-samples)    
+- [__Enter the information__](#Enter-the-information)
+- [__Publish Deposit__](#Publish-Deposit)
+- [__Link one deposit to another one__](#)
+
+
+
 ## Check version
 Please make sure you are navigating the latest version `v0.X.X`
 ![aboutversion](https://user-images.githubusercontent.com/56833522/125454777-925bc61e-ab72-4e8d-b6bb-34d66911fe68.gif)
 
-## Login and Authorization
+## Login and authorize shareLoc.xyz to upload files to zenodo on your behalf
 ### 1. Sign up for a [Zenodo](https://sandbox.zenodo.org) account if you don't have one
 ### 2. Click on the "+ Upload" button
 ![UploadButton](https://user-images.githubusercontent.com/56833522/125454254-6e675ab8-06e3-410f-90ff-03424d086e4d.gif)
@@ -20,7 +24,7 @@ Please make sure you are navigating the latest version `v0.X.X`
 ### 4. Go back to shareloc.xyz tab and click again on "Login to Zenodo", authorize shareLoc.xyz to upload files to zenodo on your behalf
 ![authorize](https://user-images.githubusercontent.com/56833522/125457536-e8fc428d-6879-4456-8686-9b1662f2afa1.gif)
 
-## Upload sample
+## Upload samples
 ### 1. Click on "+ Start Upload" to create a new deposit
 ![newdeposit](https://user-images.githubusercontent.com/56833522/125461318-cd9d4012-1b57-49e2-97bf-c158072debcc.gif)
 
@@ -90,6 +94,20 @@ You can create your description from this [template](https://github.com/imodpast
 Indicate how this dataset should be cited.
 
 ### Links 
-You can [link to other uploaded datasets](#) or applications.
+You can [link to other uploaded datasets](#Link-one-deposit-to-another-one) or applications.
 For example when you have many sample from one experiment however the deposit size exceeds 50 GB
 
+## Publish Deposit
+After you [enter the information of deposit](#Enter-the-information):
+### 1. Click on "OK"
+![OktoUpload](https://user-images.githubusercontent.com/56833522/125510034-b23446aa-e104-4a6d-8145-71120ae02304.gif)
+
+### 2. Click on "+ UPLOAD AS NEW DEPOSIT"
+This may take long time
+![upload-as-new-depositx2](https://user-images.githubusercontent.com/56833522/125514526-15f92b7e-ffc2-49bb-8a72-08d5e2536fa5.gif)
+
+### 3. Click on ""
+
+
+## Link one deposit to another one
+After upload a new [deposit](#Upload-samples), enter the doi of other related deposit(example: `xx.xxxx/zenodo.xxxxxx`) in [`Links`](#Links)
