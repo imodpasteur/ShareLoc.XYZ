@@ -106,7 +106,7 @@ After you [enter the information of deposit](#Enter-the-information):
 This may take long time
 ![upload-as-new-depositx2](https://user-images.githubusercontent.com/56833522/125514526-15f92b7e-ffc2-49bb-8a72-08d5e2536fa5.gif)
 
-### 3. Click on ""
+### 3. Click on "PUBLISH"
 
 
 ## Link one deposit to another one
