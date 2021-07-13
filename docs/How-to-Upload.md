@@ -35,12 +35,15 @@ Please make sure you are navigating the latest version `v0.X.X`
 ### 5. Click on "Take a screenshot", the screenshot will be displayed on shareloc.xyz as the cover of sample
 ![Screenshot](https://user-images.githubusercontent.com/56833522/125472521-689366b9-b989-4fa2-a365-d1644e6b21fa.gif)
 
-__You can take many and choose the best one__
+__You could take many screenshots and choose the best one__
+![selectScreenShoot](https://user-images.githubusercontent.com/56833522/125481864-be819680-4510-405b-a510-fcf193a10016.gif)
 
 ### 5. Repeat step 2-4 if you have more than 1 sample for the same experiment
-__[Click on "+ NEW SAMPLE"](https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/docs/How-to-Upload.md#2-click-on--new-sample-to-add-sample-to-the-dataset) >> Drag and drop file/files >> Take a screenshot__
+__[Click on "+ NEW SAMPLE"](#2-click-on--new-sample-to-add-sample-to-the-dataset) >> [Drag and drop file/files](#2-click-on--new-sample-to-add-sample-to-the-dataset) >> [Take a screenshot](#4-click-on-preview--screenshot)__
+![redo2to4x2](https://user-images.githubusercontent.com/56833522/125484624-51039a23-64ba-410f-b61b-00d38538caaa.gif)
 
-__If the total size exceeds 50 GB, please separate the dataset into serval deposits__ 
+
+__If the total size exceeds 50 GB, please [separate the dataset into serval deposits](#)__ 
 
 
 
