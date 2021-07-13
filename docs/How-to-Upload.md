@@ -107,8 +107,8 @@ This may take long time
 ![upload-as-new-depositx2](https://user-images.githubusercontent.com/56833522/125514526-15f92b7e-ffc2-49bb-8a72-08d5e2536fa5.gif)
 
 ### 3. Click on "PUBLISH"
+A doi like `xx.xxxx/zenodo.xxxxxx` will be generated, this doi could also be used to link deposits
 ![Publish](https://user-images.githubusercontent.com/56833522/125517947-7fa785ab-8dc5-4afd-b901-96641d7eef66.gif)
-
 
 ## Link one deposit to another one
 After upload a new [deposit](#Upload-samples), enter the doi of other related deposit(example: `xx.xxxx/zenodo.xxxxxx`) in [`Links`](#Links)
