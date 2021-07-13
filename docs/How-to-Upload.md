@@ -1,11 +1,11 @@
 # Upload SMLM data on [Shareloc.xyz](https://shareloc.xyz)
 ### How to:
 - [__Check version__](#Check-version)
-- [__Login and authorize shareLoc.xyz to upload files to zenodo on your behalf__](#Login-and-authorize-shareLoc.xyz-to-upload-files-to-zenodo-on-your-behalf)
+- [__Login and authorize shareLoc.xyz to upload files to zenodo on your behalf__](#login-and-authorize-sharelocxyz-to-upload-files-to-zenodo-on-your-behalf)
 - [__Upload samples__](#Upload-samples)    
 - [__Enter the information__](#Enter-the-information)
 - [__Publish Deposit__](#Publish-Deposit)
-- [__Link one deposit to another one__](#)
+- [__Link one deposit to another one__](#Link-one-deposit-to-anothe-one)
 
 
 
