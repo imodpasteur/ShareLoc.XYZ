@@ -1,8 +1,15 @@
 # Upload SMLM data on [Shareloc.xyz](https://shareloc.xyz)
+### How to:
+- [__Check version__](#Check-version)
+- __Sign up on Zenodo__
+        
+- __Enter the information__
+- 
+## Check version
 Please make sure you are navigating the latest version `v0.X.X`
 ![aboutversion](https://user-images.githubusercontent.com/56833522/125454777-925bc61e-ab72-4e8d-b6bb-34d66911fe68.gif)
 
-## Authorization
+## Login and Authorization
 ### 1. Sign up for a [Zenodo](https://sandbox.zenodo.org) account if you don't have one
 ### 2. Click on the "+ Upload" button
 ![UploadButton](https://user-images.githubusercontent.com/56833522/125454254-6e675ab8-06e3-410f-90ff-03424d086e4d.gif)
@@ -13,11 +20,11 @@ Please make sure you are navigating the latest version `v0.X.X`
 ### 4. Go back to shareloc.xyz tab and click again on "Login to Zenodo", authorize shareLoc.xyz to upload files to zenodo on your behalf
 ![authorize](https://user-images.githubusercontent.com/56833522/125457536-e8fc428d-6879-4456-8686-9b1662f2afa1.gif)
 
-## Creat a new deposit
+## Upload sample
 ### 1. Click on "+ Start Upload" to create a new deposit
 ![newdeposit](https://user-images.githubusercontent.com/56833522/125461318-cd9d4012-1b57-49e2-97bf-c158072debcc.gif)
 
-### 2. Click on "+ NEW SAMPLE" to add sample to the dataset
+### 2. Click on "+ NEW SAMPLE" to add sample to the deposit
 ![NewSample](https://user-images.githubusercontent.com/56833522/125461773-7d629ac3-2a95-4809-b408-42d17669e302.gif)
 
 ### 3. Drag and drop file/files     
@@ -38,12 +45,51 @@ Please make sure you are navigating the latest version `v0.X.X`
 __You could take many screenshots and choose the best one__
 ![selectScreenShoot](https://user-images.githubusercontent.com/56833522/125481864-be819680-4510-405b-a510-fcf193a10016.gif)
 
-### 5. Repeat step 2-4 if you have more than 1 sample for the same experiment
+### 6. Repeat step 2-4 if you have more than 1 sample for the same experiment
 __[Click on "+ NEW SAMPLE"](#2-click-on--new-sample-to-add-sample-to-the-dataset) >> [Drag and drop file/files](#2-click-on--new-sample-to-add-sample-to-the-dataset) >> [Take a screenshot](#4-click-on-preview--screenshot)__
 ![redo2to4x2](https://user-images.githubusercontent.com/56833522/125484624-51039a23-64ba-410f-b61b-00d38538caaa.gif)
 
+###  :exclamation: If the total size exceeds 50 GB, please separate the dataset into serval deposits, [and link to uploaded datasets](#)
 
-__If the total size exceeds 50 GB, please [separate the dataset into serval deposits](#)__ 
+## Enter the information
+Once you drop and drag all the files, enter the related information below
+![image](https://user-images.githubusercontent.com/56833522/125502838-5cee131f-6006-462d-83b2-ae200727608c.png)
 
+### 1. Dataset name (mandatory)
+Your dataset name that will appear in the gallery while you browse SMLM data on shareloc.xyz. 
 
+Example: `fixed microtubules Alexa647 MSINGH exmperiment-1`
+
+### 2. Description (mandatory)
+A short description in one sentence. 
+
+Example: `dSTORM images of microtubules with widefield images, Alpha-tubulin immuno-labeled with Alexa 647 in U373 cells, reconstructed by ThunderSTORM plugin.`
+
+### 3. Authors (mandatory)
+The authors who contributed to this dataset.
+
+### 4. Contact Email (mandatory)
+A contact email for anwsering enquiry of the dataset, or potential change request from the admin from ShareLoc team.
+
+### 5. License (mandatory)
+Choose the license that fits you most, we recommend to use `CC-BY-4.0` (free to share and adapt under the condition of attribution). 
+For other license options, please visit [here](https://spdx.org/licenses)
+
+### 6. Tags (mandatory)
+Tags describing imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. 
+
+Example: `dSTORM`, `U373`, `microtubule`, `Alexa-647`, `secondary antibody`, `alpha-tub`,`2D`,`EM-CCD`,`GluOx`,`PFA+Gluta`, `ThunderSTORM`.
+
+You can also enter your customized tag and press `Enter` to confirm.
+
+### Documentation (Change to Description ?)
+In [markdown](https://guides.github.com/features/mastering-markdown/) format, covering how the dataset is obtained and link to publications etc.
+You can create your description from this [template](https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/docs/Template-description.md#dstorm-images-of-microtubules-with-widefield-images).
+
+### Citation 
+Indicate how this dataset should be cited.
+
+### Links 
+You can [link to other uploaded datasets](#) or applications.
+For example when you have many sample from one experiment however the deposit size exceeds 50 GB
 
