@@ -47,6 +47,7 @@ __60,000 frames__
 
 - ## Filters
 100 < sigma < 200
+
 0 < uncertainty < 75
     
 - ## Drift correction
