@@ -135,9 +135,12 @@
           message="These files will be uploaded or updated"
         >
           <b-taglist attached rounded>
-            <b-tag v-for="file in editedFiles" :key="file.name" rounded>{{
-              file.name
-            }}</b-tag>
+            <b-tag
+              v-for="file in editedFiles"
+              :key="file.sampleName + '/' + file.name"
+              rounded
+              >{{ file.sampleName + "/" + file.name }}</b-tag
+            >
           </b-taglist>
         </b-field>
         <br />
@@ -313,7 +316,12 @@
 import { mapState } from "vuex";
 import yaml from "js-yaml";
 
-import { rdfToMetadata, resolveDOI, getFullRdfFromDeposit } from "../utils";
+import {
+  rdfToMetadata,
+  resolveDOI,
+  getFullRdfFromDeposit,
+  fetchFile
+} from "../utils";
 import Markdown from "@/components/Markdown.vue";
 import TagInputField from "@/components/TagInputField.vue";
 import DropFilesField from "@/components/DropFilesField.vue";
@@ -345,7 +353,13 @@ export default {
         manifest_url
       });
     }
-    if (this.updateDepositId) {
+    if (this.updateDepositId === "bookmarks") {
+      this.imjoyReady.then(imjoy => {
+        this.startFromBookmarks(imjoy).catch(e => {
+          alert(`Failed to load from deposit URL: ${e}`);
+        });
+      });
+    } else if (this.updateDepositId) {
       this.startFromDepositURL().catch(e => {
         alert(`Failed to load from deposit URL: ${e}`);
       });
@@ -372,12 +386,14 @@ export default {
       return this.client && this.client.getUserId();
     },
     ...mapState({
+      imjoyReady: state => state.imjoyReady,
       imjoy: state => state.imjoy,
       siteConfig: state => state.siteConfig,
       loadedUrl: state => state.loadedUrl,
       resourceItems: state => state.resourceItems,
       client: state => state.zenodoClient,
-      zenodoBaseURL: state => state.zenodoBaseURL
+      zenodoBaseURL: state => state.zenodoBaseURL,
+      bookmarks: state => state.bookmarks
     })
   },
   data() {
@@ -403,6 +419,60 @@ export default {
     };
   },
   methods: {
+    async startFromBookmarks(imjoy) {
+      this.rdf = (await this.generateYamlFile(this.bookmarks[0])).rdf;
+      let samples = [];
+      for (let item of this.bookmarks) {
+        if (item?.attachments?.samples) {
+          samples = samples.concat(item.attachments.samples);
+        }
+        // add all the tags
+        item.tags.forEach(tag => {
+          if (!this.rdf.tags.includes(tag)) this.rdf.tags.push(tag);
+        });
+        if (item.download_url) {
+          const filename = item.download_url
+            .split("?")[0]
+            .split("/")
+            .pop();
+          samples.push({
+            name: item.name,
+            files: [
+              {
+                type: "generator",
+                async generate() {
+                  const file = await fetchFile(
+                    item.download_url,
+                    filename,
+                    msg => {
+                      imjoy.api.showMessage(msg);
+                    }
+                  );
+                  file.converted = [file];
+                  file.sampleName = item.name;
+                  return file;
+                },
+                sampleName: item.name,
+                name: filename,
+                url: item.download_url
+              }
+            ],
+            views: item.covers.map(cover => {
+              return {
+                image: cover,
+                image_name: cover
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+              };
+            })
+          });
+        }
+      }
+      this.rdf.attachments = this.rdf.attachments || {};
+      this.rdf.attachments.samples = samples;
+      this.stepIndex = 1;
+    },
     async startFromDepositURL() {
       const loadingComponent = this.$buefy.loading.open({
         container: this.$el
@@ -465,15 +535,15 @@ export default {
           console.log("orcid matched: " + this.depositId, depositionInfo);
           this.rdf = await getFullRdfFromDeposit(depositionInfo);
           console.log("Full RDF:", this.rdf);
-          this.files = depositionInfo.files.map(item => {
-            return {
-              type: "remote",
-              name: item.filename || item.key, // depending on what api we use, it may be in two different format
-              size: item.filesize || item.size,
-              url: item.links.self,
-              checksum: item.checksum
-            };
-          });
+          // this.files = depositionInfo.files.map(item => {
+          //   return {
+          //     type: "remote",
+          //     name: item.filename || item.key, // depending on what api we use, it may be in two different format
+          //     size: item.filesize || item.size,
+          //     url: item.links.self,
+          //     checksum: item.checksum
+          //   };
+          // });
           // load files
           // this.rdfFiles = depositionInfo.files.map(item => {
           //   return {
@@ -532,17 +602,19 @@ export default {
       delete rdfCopy.config;
       let rdfYaml = yaml.dump(rdfCopy);
       rdfYaml = yaml.load(rdfYaml);
-      rdfYaml.attachments.samples.forEach(sample => {
-        sample.views.forEach(screenshot => {
-          delete screenshot.image;
+      if (rdfYaml?.attachments?.samples)
+        rdfYaml.attachments.samples.forEach(sample => {
+          sample.views.forEach(screenshot => {
+            delete screenshot.image;
+          });
         });
-      });
       rdfYaml = yaml.dump(rdfYaml);
       const blob = new Blob([rdfYaml], {
         type: "application/yaml"
       });
       const file = new File([blob], "rdf.yaml", { type: "application/yaml" });
       file.text = rdfYaml;
+      file.rdf = rdfCopy;
       return file;
     },
     async createOrUpdateDeposit(depositId, skipUpload) {

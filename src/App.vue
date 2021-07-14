@@ -27,6 +27,63 @@
         class="navbar-menu"
       >
         <div class="navbar-end">
+          <b-dropdown
+            style="margin-top: 6px;"
+            v-if="bookmarks && bookmarks.length > 0"
+            class="navbar-item"
+            :scrollable="true"
+            :max-height="200"
+            aria-role="list"
+          >
+            <template #trigger>
+              <a class="navbar-item">
+                <b-icon style="color:white;" icon="bookmark"></b-icon>
+              </a>
+            </template>
+
+            <b-dropdown-item
+              v-for="(rdf, index) in bookmarks"
+              :key="index"
+              aria-role="listitem"
+              @click="showResourceItemInfo(rdf)"
+            >
+              <div class="media">
+                <b-icon class="media-left" icon="database"></b-icon>
+                <div class="media-content">
+                  <h3>{{ rdf.name }}</h3>
+                </div>
+              </div>
+            </b-dropdown-item>
+            <b-dropdown-item aria-role="listitem" @click="uploadBookmarks()">
+              <div class="media">
+                <b-icon class="media-left" icon="upload"></b-icon>
+                <div class="media-content">
+                  <h3>Upload All</h3>
+                </div>
+              </div>
+            </b-dropdown-item>
+            <b-dropdown-item
+              :disabled="true"
+              aria-role="listitem"
+              @click="downloadBookmarks()"
+            >
+              <div class="media">
+                <b-icon class="media-left" icon="cloud-download"></b-icon>
+                <div class="media-content">
+                  <h3>Download All</h3>
+                </div>
+              </div>
+            </b-dropdown-item>
+            <b-dropdown-item aria-role="listitem" @click="clearBookmarks()">
+              <div class="media">
+                <b-icon class="media-left" icon="close"></b-icon>
+                <div class="media-content">
+                  <h3>Clear All</h3>
+                </div>
+              </div>
+            </b-dropdown-item>
+          </b-dropdown>
+
           <a
             class="navbar-item"
             v-if="siteConfig.contribute_url && $route.name !== 'Upload'"
@@ -68,8 +125,43 @@ export default {
   computed: {
     ...mapState({
       showNavbar: state => state.showNavbar,
-      siteConfig: state => state.siteConfig
+      siteConfig: state => state.siteConfig,
+      bookmarks: state => state.bookmarks,
+      eventBus: state => state.eventBus
     })
+  },
+  methods: {
+    showResourceItemInfo(item) {
+      this.eventBus.$emit("showResourceItemInfo", item);
+    },
+    clearBookmarks() {
+      this.$store.commit("clearBookmarks");
+    },
+    uploadBookmarks() {
+      this.$router.push({
+        name: "Update",
+        params: { updateDepositId: "bookmarks" }
+      });
+    },
+    async downloadBookmarks() {
+      for (let item of this.bookmarks) {
+        try {
+          if (typeof item.download === "function") {
+            await item.download();
+            this.eventBus.$emit(
+              "showMessage",
+              "Successfully downloaded " + item.name
+            );
+          } else this.eventBus.$emit("showMessage", "Skipping " + item.name);
+        } catch (e) {
+          console.error(e);
+          this.eventBus.$emit(
+            "showMessage",
+            `Failed to download ${item.name}: ${e}`
+          );
+        }
+      }
+    }
   }
 };
 </script>

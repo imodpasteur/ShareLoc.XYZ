@@ -391,10 +391,12 @@ export function depositionToRdf(deposition) {
           const fileName = matches[1];
           url = `${deposition.links.bucket}/${fileName}`;
         } else {
-          throw new Error("Invalid file identifier: " + idf.identifier);
+          console.error(
+            "Invalid cover image file identifier: " + idf.identifier
+          );
         }
       } else {
-        throw new Error("Invalid file identifier: " + idf.identifier);
+        console.error("Invalid cover image file identifier: " + idf.identifier);
       }
       covers.push(url);
       // } else if (

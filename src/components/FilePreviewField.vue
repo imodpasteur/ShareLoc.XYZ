@@ -98,7 +98,6 @@
                     size="is-small"
                     class="close-button"
                     icon-left="close"
-                    v-if="!view.image || !view.image.startsWith('http')"
                     @click="removeScreenshot(sample.views, i)"
                   >
                   </b-button>
@@ -342,6 +341,8 @@ export default {
       for (let file of files) {
         if (file.type === "remote") {
           normalizedFiles.push(await this.fetchRemoteFile(file));
+        } else if (file.type === "generator") {
+          normalizedFiles.push(await file.generate());
         } else {
           normalizedFiles.push(file);
         }
@@ -377,7 +378,7 @@ export default {
             return;
           } else
             alert(
-              "No localization file found (only support .csv, .tsv, .txt files)"
+              "No localization file found (only support .smlm, .csv, .tsv, .xls and .txt files)"
             );
           return;
         }
@@ -419,7 +420,7 @@ export default {
           windowContainer.appendChild(snapButton);
         }
         await api.showMessage(
-          "Done! To add a new channel, hold the SHIFT key and click or drop another file."
+          "Done! Please use the 'Take a screenshot' button to create more cover images."
         );
         // container.style.height = w / 2 + 111 + "px"; // add 111px for the plane slider
         if (!this.currentSample.views || this.currentSample.views.length <= 0) {

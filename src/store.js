@@ -185,7 +185,9 @@ export const store = new Vuex.Store({
     zenodoBaseURL,
     siteConfig,
     imjoyReady,
-    showNavbar: true
+    showNavbar: true,
+    bookmarks: [],
+    eventBus: new Vue()
   },
   actions: {
     async toggleNavbar(context, enable) {
@@ -242,11 +244,54 @@ export const store = new Vuex.Store({
         // for the viewer, the items won't be transformed
         context.state.loadedUrl = manifest_url;
       }
+      // try to restore bookmarks
+      try {
+        const bookmarkstr = localStorage.getItem("bookmarks");
+        if (bookmarkstr) {
+          const bookmarkIds = JSON.parse(bookmarkstr);
+          context.state.bookmarks = context.state.resourceItems.filter(item => {
+            return bookmarkIds.includes(item.id);
+          });
+          console.log("bookmarks restored", context.state.bookmarks);
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   },
   mutations: {
     setImJoy(state, imjoy) {
       state.imjoy = imjoy;
+    },
+    addBookmark(state, item) {
+      const ids = state.bookmarks.map(item => item.id);
+      if (!ids.includes(item.id)) state.bookmarks.push(item);
+      try {
+        localStorage.setItem("bookmarks", JSON.stringify(ids));
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    removeBookmark(state, item) {
+      const ids = state.bookmarks.map(item => item.id);
+      const index = ids.indexOf(item.id);
+      if (index >= 0) {
+        state.bookmarks.splice(index, 1);
+      }
+      try {
+        localStorage.setItem("bookmarks", JSON.stringify(ids));
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    clearBookmarks(state) {
+      state.bookmarks = [];
+      const ids = state.bookmarks.map(item => item.id);
+      try {
+        localStorage.setItem("bookmarks", JSON.stringify(ids));
+      } catch (e) {
+        console.error(e);
+      }
     },
     addResourceItem(state, item) {
       item.id = item.id || randId();

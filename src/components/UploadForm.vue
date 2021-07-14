@@ -207,16 +207,28 @@ export default {
             alert("Please take screenshots for " + sample.name);
             throw new Error("No screenshot found for " + sample.name);
           }
+          const baseURL = this.rdf.config?._deposit?.links?.bucket;
           for (let screenshot of sample.views) {
             const { image } = screenshot;
+            let blob;
             // skip adding remote screenshot
             if (image.startsWith("http")) {
               // extract file name from URL
-              const tmp = image.split("?")[0].split("/");
-              this.rdf.covers.push(`./${sample.name}/${tmp[tmp.length - 1]}`);
-              continue;
-            }
-            const blob = dataURLtoFile(image);
+              const filename = image
+                .split("?")[0]
+                .split("/")
+                .pop();
+
+              if (
+                baseURL &&
+                image === `${baseURL}/${sample.name}/${filename}`
+              ) {
+                this.rdf.covers.push(`./${sample.name}/${filename}`);
+                continue;
+              } else {
+                blob = await (await fetch(image)).blob();
+              }
+            } else blob = dataURLtoFile(image);
             const existingNames = editedFiles.map(f => f.name);
             // check for naming colision
             while (
@@ -301,6 +313,9 @@ export default {
       } catch (e) {
         // eslint-disable-next-line no-empty
       }
+      // clear license if not valid
+      if (!Object.keys(spdxLicenseList).includes(this.rdf.license))
+        this.rdf.license = null;
       this.rdf.license = this.rdf.license || "CC-BY-4.0";
       this.jsonFields = this.transformFields([
         // {
