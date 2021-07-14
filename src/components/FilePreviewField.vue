@@ -98,7 +98,6 @@
                     size="is-small"
                     class="close-button"
                     icon-left="close"
-                    v-if="!view.image || !view.image.startsWith('http')"
                     @click="removeScreenshot(sample.views, i)"
                   >
                   </b-button>

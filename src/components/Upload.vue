@@ -354,8 +354,10 @@ export default {
       });
     }
     if (this.updateDepositId === "bookmarks") {
-      this.startFromBookmarks().catch(e => {
-        alert(`Failed to load from deposit URL: ${e}`);
+      this.imjoyReady.then(imjoy => {
+        this.startFromBookmarks(imjoy).catch(e => {
+          alert(`Failed to load from deposit URL: ${e}`);
+        });
       });
     } else if (this.updateDepositId) {
       this.startFromDepositURL().catch(e => {
@@ -417,8 +419,7 @@ export default {
     };
   },
   methods: {
-    async startFromBookmarks() {
-      await this.imjoyReady;
+    async startFromBookmarks(imjoy) {
       this.rdf = (await this.generateYamlFile(this.bookmarks[0])).rdf;
       let samples = [];
       for (let item of this.bookmarks) {
@@ -443,7 +444,9 @@ export default {
                   const file = await fetchFile(
                     item.download_url,
                     filename,
-                    this.imjoy && this.imjoy.api.showMessage
+                    msg => {
+                      imjoy.api.showMessage(msg);
+                    }
                   );
                   file.converted = [file];
                   file.sampleName = item.name;
