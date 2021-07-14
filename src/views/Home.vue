@@ -314,10 +314,10 @@
         v-else-if="showInfoDialogMode === 'markdown'"
       >
         <markdown :url="infoMarkdownUrl"></markdown>
-        <comment-box
+        <!-- <comment-box
           v-if="infoDialogTitle"
           :title="infoDialogTitle"
-        ></comment-box>
+        ></comment-box> -->
       </div>
       <div
         class="markdown-container"

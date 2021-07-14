@@ -28,16 +28,22 @@
           >
             <template v-if="props.row[col.field]">
               <div v-if="col.type === 'files'">
-                <a
-                  v-for="(file, i) in props.row[col.field] || []"
-                  :key="i"
-                  :class="col.class"
-                  :href="file.download_url"
-                  :download="props.row['name'] + file.name"
-                  target="_blank"
-                >
-                  {{ file.name }}
-                </a>
+                <ul>
+                  <li
+                    v-for="(file, i) in props.row[col.field] || []"
+                    :key="i"
+                    style="list-style: disc;"
+                  >
+                    <a
+                      :class="col.class"
+                      :href="file.download_url"
+                      :download="props.row['name'] + file.name"
+                      target="_blank"
+                    >
+                      {{ file.name }}
+                    </a>
+                  </li>
+                </ul>
               </div>
               <div v-else-if="col.type === 'thumbnails'">
                 <div
