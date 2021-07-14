@@ -87,11 +87,19 @@ export default {
   },
   created() {
     this.value = this.item.value;
+    if (this.value && Array.isArray(this.value)) this.value = [this.value];
     this.value = this.value || [];
+
+    this.value = this.value
+      .map(v => {
+        return { text: v.text, doi: v.doi, url: v.url };
+      })
+      .filter(v => v.text && v.text != "");
+    this.commitValue();
+
     if (this.value.length <= 0) {
       this.value.push({});
     }
-    this.commitValue();
   },
   methods: {
     commitValue() {
