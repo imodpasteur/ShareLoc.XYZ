@@ -345,7 +345,9 @@ export default {
         manifest_url
       });
     }
-    if (this.updateDepositId) {
+    if (this.updateDepositId === "bookmarks") {
+      alert("start from bookmarks");
+    } else if (this.updateDepositId) {
       this.startFromDepositURL().catch(e => {
         alert(`Failed to load from deposit URL: ${e}`);
       });

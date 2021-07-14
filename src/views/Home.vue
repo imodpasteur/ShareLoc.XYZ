@@ -426,6 +426,16 @@ function connectApps(self, item) {
       }
     });
 
+  item.apps.unshift({
+    name: "Add bookmark",
+    icon: "bookmark-plus",
+    show_on_hover: true,
+    run() {
+      self.$store.commit("addBookmark", item);
+      self.showMessage(item.name + " added to the bookmarks!");
+    }
+  });
+
   if (item.attachments.samples)
     item.apps.unshift({
       name: "Samples",
@@ -551,6 +561,7 @@ export default {
     };
   },
   mounted: async function() {
+    this.eventBus.$on("showResourceItemInfo", this.showResourceItemInfo);
     this.resourceId = this.resourceId && this.resourceId.toLowerCase();
     // this.$buefy.dialog.alert({
     //   title: "Site under construction",
@@ -690,6 +701,7 @@ export default {
       }
     },
     ...mapState({
+      eventBus: state => state.eventBus,
       allApps: state => state.allApps,
       zenodoClient: state => state.zenodoClient,
       siteConfig: state => state.siteConfig,
@@ -697,6 +709,7 @@ export default {
     })
   },
   beforeDestroy() {
+    this.eventBus.$off("showResourceItemInfo", this.showResourceItemInfo);
     window.removeEventListener("resize", this.updateSize);
   },
   methods: {
