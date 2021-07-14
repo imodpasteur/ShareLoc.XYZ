@@ -138,6 +138,7 @@ export default {
         // version: "Version",
         license: "License",
         authors: "Authors",
+        uploaded_by: "Uploaded by",
         contact_email: "Contact Email",
         // source: "Source",
         // git_repo: "Git Repository",
@@ -149,6 +150,14 @@ export default {
       this.rdf = {};
       for (let k in rdfNameMapping) {
         this.rdf[k] = values[rdfNameMapping[k]];
+      }
+      try {
+        // save it for next time
+        localStorage.setItem("license", this.rdf.license);
+        localStorage.setItem("uploaded_by", this.rdf.uploaded_by);
+        localStorage.setItem("contact_email", this.rdf.contact_email);
+      } catch (e) {
+        console.error(e);
       }
       let rdfFileName = "rdf.yaml";
       this.rdf.type = "dataset";
@@ -281,9 +290,18 @@ export default {
       this.rdf.type = "dataset";
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
-      this.rdf.license = this.rdf.license || "CC-BY-4.0";
-      this.rdf.attachments = this.rdf.attachments || {};
 
+      this.rdf.attachments = this.rdf.attachments || {};
+      try {
+        this.rdf.license = this.rdf.license || localStorage.getItem("license");
+        this.rdf.uploaded_by =
+          this.rdf.uploaded_by || localStorage.getItem("uploaded_by");
+        this.rdf.contact_email =
+          this.rdf.contact_email || localStorage.getItem("contact_email");
+      } catch (e) {
+        // eslint-disable-next-line no-empty
+      }
+      this.rdf.license = this.rdf.license || "CC-BY-4.0";
       this.jsonFields = this.transformFields([
         // {
         //   label: "Type",
@@ -300,6 +318,13 @@ export default {
         //   })
         // },
         {
+          label: "Dataset Name",
+          placeholder: "dataset name",
+          value: this.rdf.name,
+          help:
+            "A human-readable descriptive name for your dataset to be uploaded. Example: `Xenopus NPC exmperiment-1`."
+        },
+        {
           label: "Samples",
           type: "file-preview",
           help:
@@ -308,15 +333,8 @@ export default {
           isRequired: true
         },
         {
-          label: "Dataset Name",
-          placeholder: "dataset name",
-          value: this.rdf.name,
-          help:
-            "A human-readable descriptive name for your dataset to be uploaded. Example: `Xenopus NPC exmperiment-1`."
-        },
-        {
           label: "Description",
-          placeholder: "description",
+          placeholder: "description of the dataset",
           value: this.rdf.description,
           help:
             "A short description in one sentence. Example: `Nuclear pore protein gp120 in extracted nuclear envelope of Xenopus eggs.`"
@@ -326,6 +344,12 @@ export default {
           type: "author",
           value: this.rdf.authors,
           help: "The authors who contributed to this dataset"
+        },
+        {
+          label: "Uploaded by",
+          value: this.rdf.uploaded_by,
+          placeholder: "Full Name",
+          help: "The name of person who is uploading this dataset"
         },
         {
           label: "Contact Email",
