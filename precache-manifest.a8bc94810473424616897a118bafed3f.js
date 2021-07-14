@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/CNAME"
   },
   {
-    "revision": "9656cd1b8c5914c8f135e70140cad9fa",
+    "revision": "950e299750ca9e2dc9ca9fb0cda0fd72",
     "url": "/FairyDust.imjoy.html"
   },
   {
@@ -24,8 +24,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "1354a4db29350bffd5b6",
-    "url": "/css/app.ae4ccfbd.css"
+    "revision": "e67da9f8abd65108c26b",
+    "url": "/css/app.16a67167.css"
   },
   {
     "revision": "93ec62ba299599a9116e",
@@ -56,12 +56,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/index.ejs"
   },
   {
-    "revision": "80195908709761e200f7f506763d9641",
+    "revision": "de53e1096ebc5a034cdaec8628c7f720",
     "url": "/index.html"
   },
   {
-    "revision": "1354a4db29350bffd5b6",
-    "url": "/js/app.9b6c4c02.js"
+    "revision": "e67da9f8abd65108c26b",
+    "url": "/js/app.8677a845.js"
   },
   {
     "revision": "93ec62ba299599a9116e",

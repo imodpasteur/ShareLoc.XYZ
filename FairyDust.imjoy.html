@@ -1568,7 +1568,16 @@
         async run(ctx) {
             initGUI();
             if (ctx.config && ctx.config.samples) {
-                scopeParams.File = ctx.config.samples[0].files[0].download_url;
+                // scopeParams.File = ctx.config.samples[0].files[0].download_url;
+                const initFiles = ctx.config.samples[0].files
+                scopeParams.File = initFiles.filter(
+                    file =>
+                    (file.name.endsWith('.smlm')||
+                    file.name.endsWith('.csv')||
+                    file.name.endsWith('.tsv')||
+                    file.name.endsWith('.xls')||
+                    file.name.endsWith('.txt'))
+                    )[0].download_url;
                 const options = {}
                 for(let sample of ctx.config.samples)
                 for (let f of sample.files) {
