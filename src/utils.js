@@ -540,7 +540,7 @@ export class ZenodoClient {
     keywords = keywords || [];
     if (!keywords.includes("shareloc.xyz")) keywords.push("shareloc.xyz");
     size = size || 20;
-    sort = sort || "mostviewed";
+    sort = sort || "mostrecent";
     const typeKeywords = type !== "all" ? "&keywords=shareloc.xyz:" + type : "";
     const additionalKeywords =
       typeKeywords +
