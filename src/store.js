@@ -50,6 +50,11 @@ function normalizeItem(item) {
     }
   }
 
+  // if no cover image added, use the icon image
+  if (item.cover_images.length <= 0 && item?.icon?.startsWith("http")) {
+    item.cover_images.push(item.icon);
+  }
+
   item.allLabels = item.labels || [];
   if (item.license) {
     item.allLabels.push(item.license);
@@ -310,7 +315,8 @@ export const store = new Vuex.Store({
         }
       }
       item.config._rdf_file = item.config._rdf_file || item.source; // TODO: some resources current doesn't have a dedicated rdf_file
-      if (item.type === "application") state.allApps[item.id] = item;
+      if (item.type === "application" && item?.source?.endsWith(".imjoy.html"))
+        state.allApps[item.id] = item;
       state.resourceItems.push(item);
       // index tags
       if (item.tags && item.tags.length > 0)

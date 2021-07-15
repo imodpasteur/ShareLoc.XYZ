@@ -59,11 +59,15 @@
             "type": "application",
             "source": "https://raw.githubusercontent.com/imjoy-team/bioimage-io-models/master/src/imagej-js.imjoy.html",
             "passive": false,
+            "icon": "https://raw.githubusercontent.com/imjoy-team/imagej.js/master/src/assets/icons/chrome/chrome-installprocess-128-128.png",
             "name": "ImageJ.JS",
             "version": "0.1.6",
             "api_version": "0.2.3",
             "description": "ImageJ running in the browser",
-            "tags": [],
+            "tags": [
+              "software",
+              "bioengine"
+            ],
             "documentation": "https://raw.githubusercontent.com/imjoy-team/imagej.js/master/README.md",
             "covers": [],
             "badges": [],

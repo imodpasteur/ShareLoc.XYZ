@@ -445,15 +445,38 @@ function connectApps(self, item) {
       }
     });
   if (item.type === "application") {
-    item.apps.unshift({
-      name: "Run",
-      icon: "play",
-      run() {
-        if (self.allApps[item.id])
+    if (self.allApps[item.id]) {
+      item.apps.unshift({
+        name: "Run",
+        icon: "play",
+        run() {
           runAppForAllItems(self, self.allApps[item.id], self.resourceItems);
-        else alert("This application is not ready or unavailable.");
+        }
+      });
+    } else if (item.tags.includes("colab") && item.source.endsWith(".ipynb")) {
+      // convert github raw url to colab url
+      item.config = item.config || {};
+
+      if (item.source.startsWith("https://raw.githubusercontent.com/")) {
+        const b = item.source.split("/");
+        item.config._colab_url = `https://colab.research.google.com/github/${
+          b[3]
+        }/${b[4]}/blob/${b[5]}/${b.slice(6).join("/")}`;
+        item.apps.unshift({
+          name: "Run",
+          icon: "play",
+          run() {
+            window.open(item.config._colab_url);
+          }
+        });
+      } else {
+        console.warn(
+          "Invalid colab source URL: " +
+            item.source +
+            " (the URL must be a raw github URL starts with https://raw.githubusercontent.com/)"
+        );
       }
-    });
+    }
   } else if (item.links) {
     for (let link_key of item.links) {
       const linked = self.resourceItems.filter(item => item.id === link_key);
