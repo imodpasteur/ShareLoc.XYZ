@@ -477,7 +477,9 @@ function connectApps(self, item) {
         );
       }
     }
-  } else if (item.links) {
+  }
+
+  if (item.links) {
     for (let link_key of item.links) {
       const linked = self.resourceItems.filter(item => item.id === link_key);
       for (let lit of linked) {
