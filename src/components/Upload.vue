@@ -296,6 +296,19 @@
           </p>
         </b-notification>
 
+        <b-notification
+          v-if="uploadMode === 'update'"
+          has-icon
+          type="is-info"
+          aria-close-label="Close notification"
+        >
+          <p>
+            Note: After publishing the updated deposit, you may see the item
+            disappear from the website, this is normal because Zenodo need some
+            time to index the new version. It should combe back in a while.
+          </p>
+        </b-notification>
+
         <b-button
           v-if="client && client.credential && uploaded && !publishedUrl"
           @click="publishDeposition()"
@@ -415,7 +428,8 @@ export default {
       prereserveDOI: null,
       URI4Load: null,
       similarDeposits: null,
-      depositId: null
+      depositId: null,
+      uploadMode: null
     };
   },
   methods: {
@@ -632,6 +646,7 @@ export default {
       try {
         this.uploadProgress = 1;
         let depositionInfo;
+        this.uploadMode = "new";
         if (depositId) {
           try {
             depositionInfo = await this.client.retrieve(depositId);
@@ -655,6 +670,7 @@ export default {
               depositionInfo.state !== "unsubmitted"
             )
               await this.client.edit(depositId);
+            this.uploadMode = "new";
           } catch (e) {
             console.error(e);
             if (
