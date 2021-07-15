@@ -1,17 +1,11 @@
 # Upload SMLM data on [Shareloc.xyz](https://shareloc.xyz)
 ### How to:
-- [__Check version__](#Check-version)
 - [__Login and authorize shareLoc.xyz to upload files to zenodo on your behalf__](#login-and-authorize-sharelocxyz-to-upload-files-to-zenodo-on-your-behalf)
 - [__Upload samples__](#Upload-samples)    
 - [__Enter the information__](#Enter-the-information)
 - [__Publish Deposit__](#Publish-Deposit)
 - [__Link one deposit to another one__](#link-one-deposit-to-another-one)
 
-
-
-## Check version
-Please make sure you are navigating the latest version `v0.X.X`
-![aboutversion](https://user-images.githubusercontent.com/56833522/125454777-925bc61e-ab72-4e8d-b6bb-34d66911fe68.gif)
 
 ## Login and authorize shareLoc.xyz to upload files to zenodo on your behalf
 ### 1. Sign up for a [Zenodo](https://sandbox.zenodo.org) account if you don't have one
@@ -110,5 +104,5 @@ This may take long time
 A doi like `xx.xxxx/zenodo.xxxxxx` will be generated, this doi could also be used to link deposits
 ![Publish](https://user-images.githubusercontent.com/56833522/125517947-7fa785ab-8dc5-4afd-b901-96641d7eef66.gif)
 
-## Link one deposit to another one
+## Link one dataset to another dataset or application
 After upload a new [deposit](#Upload-samples), enter the doi of other related deposit(example: `xx.xxxx/zenodo.xxxxxx`) in [`Links`](#Links)
