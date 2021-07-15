@@ -738,7 +738,8 @@ export default {
       const query = Object.assign({}, this.$route.query);
       query.partner = partner.id;
       query.tags = partner.tags;
-      this.$router.replace({ query: query }).catch(() => {});
+      if (this.initialized)
+        this.$router.replace({ query: query }).catch(() => {});
     },
     preventPageScroll() {
       document.getElementsByTagName("html")[0].style.overflow = "hidden";
@@ -768,7 +769,6 @@ export default {
     },
     updateQueryTags(newTags) {
       if (!this.initialized) {
-        this.initialized = true;
         return;
       }
       this.searchTags = newTags;
@@ -861,7 +861,8 @@ export default {
       this.$modal.show("info-dialog");
       const query = Object.assign({}, this.$route.query);
       query.show = "about";
-      this.$router.replace({ query: query }).catch(() => {});
+      if (this.initialized)
+        this.$router.replace({ query: query }).catch(() => {});
     },
     showUploadDialog() {
       this.infoDialogTitle = `Uploading data to ${this.siteConfig.site_name}`;
@@ -871,7 +872,8 @@ export default {
       this.$modal.show("info-dialog");
       const query = Object.assign({}, this.$route.query);
       query.show = "upload";
-      this.$router.replace({ query: query }).catch(() => {});
+      if (this.initialized)
+        this.$router.replace({ query: query }).catch(() => {});
     },
     showEditDialog() {
       this.infoDialogTitle = `Updating metadata`;
@@ -881,7 +883,8 @@ export default {
       this.$modal.show("info-dialog");
       const query = Object.assign({}, this.$route.query);
       query.show = "edit";
-      this.$router.replace({ query: query }).catch(() => {});
+      if (this.initialized)
+        this.$router.replace({ query: query }).catch(() => {});
     },
     showAboutPartner(partner) {
       if (partner.about_url.startsWith("http")) {
@@ -1017,9 +1020,13 @@ export default {
       }
 
       if (this.$route.query.tags) {
+        let tags = null;
         if (typeof this.$route.query.tags === "string")
-          this.searchTags = this.$route.query.tags.split(",");
-        else this.searchTags = this.$route.query.tags;
+          tags = this.$route.query.tags.split(",");
+        else tags = this.$route.query.tags;
+        setTimeout(() => {
+          this.searchTags = tags;
+        }, 0);
         hasQuery = true;
       }
 
@@ -1056,6 +1063,7 @@ export default {
       if (hasQuery) {
         this.enter();
       }
+      this.initialized = true;
     },
     showProgress(p) {
       this.progress = p;
