@@ -77,7 +77,7 @@ Choose the license that fits you most, we recommend to use `CC-BY-4.0` (free to 
 For other license options, please visit [here](https://spdx.org/licenses)
 
  * Tags (mandatory)
-Tags describing imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. 
+Tags describing imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, Target molecule, dimension, camera, buffer, fixation etc. 
 
 Example: `dSTORM`, `U373`, `microtubule`, `Alexa-647`, `secondary antibody`, `alpha-tub`,`2D`,`EM-CCD`,`GluOx`,`PFA+Gluta`, `ThunderSTORM`.
 
