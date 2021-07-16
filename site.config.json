@@ -147,7 +147,6 @@
           "DNA",
           "plasma membrane",
           "neuronal synapse",
-          "neuronal axon",
           "vimentin"
         ],
         "4.fluorophore": [
@@ -176,14 +175,14 @@
         "5.labeling strategy":[
           "transient transfection",
           "stable knock-in",
-          "endogenous labeling CRISPR",
-          "primary antibody",
-          "secondary antibody",
+          "endogenous CRISPR labeling",
+          "direct immuno-labeling",
+          "indirect immuno-labeling",
           "HaloTag",
           "SNAP-tag",
           "Tetracysteine Tag"     
         ],
-        "6.target protein":[
+        "6.target molecule":[
           "NUP133",
           "NUP96",
           "TOM22",
@@ -192,6 +191,7 @@
           "FtsZ",
           "alpha-tub",
           "beta-tub",
+          'actin',
           "H2",
           "H3",
           "H1",
