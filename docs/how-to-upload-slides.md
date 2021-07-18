@@ -1,10 +1,14 @@
 ## How to Upload SMLM Data to [ShareLoc.XYZ](https://shareloc.xyz/)
 
 -----
+## Overview
+
  * Login and authorize with Zenodo
  * Select files and enter detailed information
  * Upload and publish
  * Wait for approval
+
+(TIP: Press esc key to see all the slides)
 
 -----
 ## Sign up for a Zenodo account if you don't have one
