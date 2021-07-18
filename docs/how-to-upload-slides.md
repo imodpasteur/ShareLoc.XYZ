@@ -1,17 +1,23 @@
 ## How to Upload SMLM Data to [ShareLoc.XYZ](https://shareloc.xyz/)
 
 -----
-## 1. Sign up for a Zenodo account if you don't have one
+ * Login and authorize with Zenodo
+ * Select files and enter detailed information
+ * Upload and publish
+ * Wait for approval
+
+-----
+## Sign up for a Zenodo account if you don't have one
 
 <button class="button" onclick=" window.open('https://sandbox.zenodo.org/signup/','_blank')">Sign up</button>
 
 -----
-## 2. Click "Login to Zenodo"
+## Click "Login to Zenodo"
 
 ![LoginZenodo](https://user-images.githubusercontent.com/56833522/125955630-674beae5-6244-4b19-a3a6-773f8e588827.png)
 
 -----
-## 3. Go back to shareloc.xyz tab
+## Go back to shareloc.xyz tab
 
 * Click again on "Login to Zenodo"
 
@@ -21,23 +27,19 @@
 
 
 -----
-## Upload samples
-
-
------
-## 1. Click "+ Start Upload" 
+## Click "+ Start Upload" 
 
 ![StartUploaf](https://user-images.githubusercontent.com/56833522/125957037-559f98c4-0e4f-4a09-8435-0a1a163c2e71.png)
 
 
 -----
-## 2. Click "+ NEW SAMPLE" 
+## Click "+ NEW SAMPLE" 
 
 ![NewSample](https://user-images.githubusercontent.com/56833522/125957398-ef3bd589-4f20-4c8f-9934-a757e34d28cb.png)
 
 
 -----
-## 3. Drag and drop the files  
+## Drag and drop the files  
 
 ![DragDrop](https://user-images.githubusercontent.com/56833522/125959033-2cad304e-8290-4ce8-a8b8-dd5c9df32d98.png)
 
@@ -45,14 +47,14 @@
  If you want to upload data with **multiple channels or modalities** (e.g. with widefield image) for the field of view, drag and drop the file all together.
 
 -----
-## 4. Take a screenshot
+## Take a screenshot
 
 The screenshot will be displayed on shareloc.xyz as the cover of sample
 
 ![Screenshots](https://user-images.githubusercontent.com/56833522/125961151-b7b03560-6fc5-4284-961a-913dec206935.png)
 
 -----
-## 5. You can repeat the above steps if you have more samples for the dataset
+## You can repeat the above steps if you have more samples for the dataset
 
 ![Samples](https://user-images.githubusercontent.com/56833522/125964728-95ace040-6727-48b9-94d9-b1124c2fde74.png)
 
@@ -93,6 +95,12 @@ After publishing the dataset to Zenodo, a notification will be sent to us.
 
 If the uploaded dataset met our requirements, we will approve it and add it to the website shortly. Otherwise we might contact you via email and ask for further modification.
 
+## Further updates
+Your dataset will be listed in the ShareLoc website (note it may take a while).
+
+You can make further modification to the datasets you uploaded. The easiest way is to click the "Edit" icon (a pencil) shown on top of your dataset card.
+
+-----
 ## Thank you!
 
 <button class="button" onclick=" window.open('https://github.com/imodpasteur/ShareLoc.XYZ/issues','_blank')">Report issues</button>

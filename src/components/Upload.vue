@@ -24,12 +24,14 @@
     >
       <b-step-item :disabled="rdfYaml" label="Start" icon="file">
          <b-button
+            v-if="imjoy"
             style="text-transform:none;"
             class="button is-fullwidth"
             @click="gettingStarted"
             expanded
             >New to ShareLoc.XYZ? Watch the Step-by-step Guide</b-button
           >
+          <br>
         <b-field
           v-if="!client.credential"
           label="Please login or sign up to Zenodo.org"
