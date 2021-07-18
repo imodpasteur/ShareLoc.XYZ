@@ -3,22 +3,15 @@
 -----
 ## 1. Sign up for a Zenodo account if you don't have one
 
-![SignUp](https://user-images.githubusercontent.com/56833522/125953132-bc78a816-f188-4f3e-9baf-da1f01241637.png)
-
 <button class="button" onclick=" window.open('https://sandbox.zenodo.org/signup/','_blank')">Sign up</button>
 
 -----
-## 2. Click the "+ Upload" button
-
-![UploadButton](https://user-images.githubusercontent.com/56833522/125954526-35af5e75-d703-4e7d-9595-10b6b49b0134.png)
-
------
-## 3. Click "Login to Zenodo"
+## 2. Click "Login to Zenodo"
 
 ![LoginZenodo](https://user-images.githubusercontent.com/56833522/125955630-674beae5-6244-4b19-a3a6-773f8e588827.png)
 
 -----
-## 4. Go back to shareloc.xyz tab
+## 3. Go back to shareloc.xyz tab
 
 * Click again on "Login to Zenodo"
 
@@ -59,7 +52,7 @@ The screenshot will be displayed on shareloc.xyz as the cover of sample
 ![Screenshots](https://user-images.githubusercontent.com/56833522/125961151-b7b03560-6fc5-4284-961a-913dec206935.png)
 
 -----
-## 6. You can repeat the above steps if you have more samples for the dataset
+## 5. You can repeat the above steps if you have more samples for the dataset
 
 ![Samples](https://user-images.githubusercontent.com/56833522/125964728-95ace040-6727-48b9-94d9-b1124c2fde74.png)
 
