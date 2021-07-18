@@ -23,6 +23,13 @@
       label-position="right"
     >
       <b-step-item :disabled="rdfYaml" label="Start" icon="file">
+         <b-button
+            style="text-transform:none;"
+            class="button is-fullwidth"
+            @click="gettingStarted"
+            expanded
+            >New to ShareLoc.XYZ? Watch the Step-by-step Guide</b-button
+          >
         <b-field
           v-if="!client.credential"
           label="Please login or sign up to Zenodo.org"
@@ -433,6 +440,9 @@ export default {
     };
   },
   methods: {
+    async gettingStarted(){
+      await this.imjoy.api.showDialog({src: "https://slides.imjoy.io/?slides=https://raw.githubusercontent.com/imodpasteur/ShareLoc.XYZ/main/docs/how-to-upload-slides.md", passive:true, name:"Getting Started", fullscreen: true})
+    },
     async startFromBookmarks(imjoy) {
       this.rdf = (await this.generateYamlFile(this.bookmarks[0])).rdf;
       let samples = [];

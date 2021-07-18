@@ -1,6 +1,4 @@
 ## How to Upload SMLM Data to [ShareLoc.XYZ](https://shareloc.xyz/)
------
-## Login and authorize shareLoc.xyz to upload files to zenodo on your behalf
 
 -----
 ## 1. Sign up for a Zenodo account if you don't have one
@@ -24,7 +22,7 @@
 
 * Click again on "Login to Zenodo"
 
-* Authorize shareLoc.xyz to upload files to zenodo on your behalf
+* Authorize shareLoc.xyz to upload files to Zenodo on your behalf
 
 ![Autorization](https://user-images.githubusercontent.com/56833522/125964039-8ea981ec-f64c-4ec4-b824-7137f46d1c33.png)
 
@@ -34,15 +32,13 @@
 
 
 -----
-## 1. Create a new deposit
-Click "+ Start Upload" 
+## 1. Click "+ Start Upload" 
 
 ![StartUploaf](https://user-images.githubusercontent.com/56833522/125957037-559f98c4-0e4f-4a09-8435-0a1a163c2e71.png)
 
 
 -----
-## 2. Add sample to the deposit
-Click "+ NEW SAMPLE" 
+## 2. Click "+ NEW SAMPLE" 
 
 ![NewSample](https://user-images.githubusercontent.com/56833522/125957398-ef3bd589-4f20-4c8f-9934-a757e34d28cb.png)
 
@@ -67,7 +63,7 @@ The screenshot will be displayed on shareloc.xyz as the cover of sample
 ![Screenshots](https://user-images.githubusercontent.com/56833522/125961151-b7b03560-6fc5-4284-961a-913dec206935.png)
 
 -----
-## 6. You can repeat the above steps if you have more samples for the same experiment
+## 6. You can repeat the above steps if you have more samples for the dataset
 
 ![Samples](https://user-images.githubusercontent.com/56833522/125964728-95ace040-6727-48b9-94d9-b1124c2fde74.png)
 
@@ -169,14 +165,13 @@ Select the DOI of another deposit in [`Links`](#Links)
 ## Publish the dataset
 
 -----
-## 1. After you [enter the information of deposit](#Enter-the-information), Click "OK"
+## 1. After entering the information of the dataset, click "OK"
 
 ![OkToUpload](https://user-images.githubusercontent.com/56833522/125968206-8b45a726-e09e-4077-9412-7f282a4d4832.png)
 
 
 -----
 ## 2. Click "+ UPLOAD AS NEW DEPOSIT"
-This may take long time
 
 ![UploadAsNewDeposit](https://user-images.githubusercontent.com/56833522/125969201-4e221879-d81f-4608-8853-f9df7bd4ff1b.png)
 
@@ -188,11 +183,13 @@ A DOI(e.g. `10.5072/zenodo.881826`) will be generated.
 ![Publish](https://user-images.githubusercontent.com/56833522/125970391-c132d758-fb01-4d67-89a3-ea7a89c9f0d6.png)
 
 
-
-
 -----
-## Thank you!
+## Waiting for approval
+After publishing the dataset to Zenodo, a notification will be sent to us.
 
+If the uploaded dataset met our requirements, we will approve it and add it to the website shortly. Otherwise we might contact you via email and ask for further modification.
+
+## Thank you!
 
 <button class="button" onclick=" window.open('https://github.com/imodpasteur/ShareLoc.XYZ/issues','_blank')">Report issues</button>
 <button class="button" onclick=" window.open('https://oeway.typeform.com/to/rdkPmd','_blank')">Contact us</button>
