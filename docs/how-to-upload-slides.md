@@ -93,7 +93,7 @@ Now please add information about your data, including:
  * Documentation
  * Citation
  * Links 
- * 
+ 
 -----
 
 ## Click "OK" to submit the form
