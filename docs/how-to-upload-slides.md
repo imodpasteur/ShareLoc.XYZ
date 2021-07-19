@@ -11,6 +11,14 @@
 (TIP: Press esc key to see all the slides)
 
 -----
+## Overview
+
+ * **Login and authorize with Zenodo**
+ * Select files and enter detailed information
+ * Upload and publish
+ * Wait for approval
+
+-----
 ## Sign up for a Zenodo account if you don't have one
 
 <button class="button" onclick=" window.open('https://sandbox.zenodo.org/signup/','_blank')">Sign up</button>
@@ -21,7 +29,7 @@
 ![LoginZenodo](https://user-images.githubusercontent.com/56833522/125955630-674beae5-6244-4b19-a3a6-773f8e588827.png)
 
 -----
-## Go back to shareloc.xyz tab
+## Go back to the shareloc.xyz tab
 
 * Click again on "Login to Zenodo"
 
@@ -35,6 +43,14 @@
 
 ![StartUploaf](https://user-images.githubusercontent.com/56833522/125957037-559f98c4-0e4f-4a09-8435-0a1a163c2e71.png)
 
+-----
+## Overview
+
+ * Login and authorize with Zenodo
+ * **Select files and enter detailed information**
+ * Upload and publish
+ * Wait for approval
+
 
 -----
 ## Click "+ NEW SAMPLE" 
@@ -43,36 +59,40 @@
 
 
 -----
-## Drag and drop the files  
+## Drag and drop the files for one sample
 
-![DragDrop](https://user-images.githubusercontent.com/56833522/125959033-2cad304e-8290-4ce8-a8b8-dd5c9df32d98.png)
+![DragandDrop](https://user-images.githubusercontent.com/56833522/126210513-ddcc2398-71cc-48bc-8c62-588030fa38bd.png)
 
-
- If you want to upload data with **multiple channels or modalities** (e.g. with widefield image) for the field of view, drag and drop the file all together.
+Multiple files corresponding to the same fields of view (e.g. **multiple channels or modalities**) should be selected together
 
 -----
 ## Take a screenshot
 
-The screenshot will be displayed on shareloc.xyz as the cover of sample
+The screenshot will be displayed on shareloc.xyz as the cover of the sample
 
-![Screenshots](https://user-images.githubusercontent.com/56833522/125961151-b7b03560-6fc5-4284-961a-913dec206935.png)
+![Screenshot](https://user-images.githubusercontent.com/56833522/126209019-d950374f-6885-46b3-9814-ab5ac19c7483.png)
 
 -----
-## You can repeat the above steps if you have more samples for the dataset
+## Repeat the above steps if you have several samples from the same experiment
 
 ![Samples](https://user-images.githubusercontent.com/56833522/125964728-95ace040-6727-48b9-94d9-b1124c2fde74.png)
 
 
 -----
-## Enter the information
+## Annotate your data
 
-Once you drop and drag all the files, enter other detailed information including:
+Now please add information about your data, including:
  
-    * Dataset name (mandatory)
-    * Description (mandatory)
-    * Authors (mandatory)
-    * Uploaded by
-    * ...
+ * Dataset name (mandatory)
+ * Description (mandatory)
+ * Authors (mandatory)
+ * Uploaded by (mandatory)
+ * Contact Email (mandatory)
+ * License (mandatory)
+ * Tags (mandatory)
+ * Documentation
+ * Citation
+ * Links 
 
 
 ## Click "OK" to submit the form
@@ -81,28 +101,51 @@ Once you drop and drag all the files, enter other detailed information including
 
 
 -----
+## Overview
+
+ * Login and authorize with Zenodo
+ * Select files and annotate your data
+ * **Upload and publish**
+ * Wait for approval
+
+
+-----
 ## Upload the dataset
-Click "+ UPLOAD AS NEW DEPOSIT"
+* Verify that the files and annotations are correct 
+* Click "+ UPLOAD AS NEW DEPOSIT"
 
 ![UploadAsNewDeposit](https://user-images.githubusercontent.com/56833522/125969201-4e221879-d81f-4608-8853-f9df7bd4ff1b.png)
 
 
 -----
 ## Publish the dataset
-After publishing the dataset, a DOI(e.g. `10.5072/zenodo.881826`) will be generated.
-
+* Once data is uploaded, request to publish data by pressing 'PUBLISH'
 ![Publish](https://user-images.githubusercontent.com/56833522/125970391-c132d758-fb01-4d67-89a3-ea7a89c9f0d6.png)
+
+* A DOI (e.g. `10.5072/zenodo.881826`) will be generated
+* The data will be published when the request is accepted by the Shareloc team
+
+-----
+## Overview
+
+ * Login and authorize with Zenodo
+ * Select files and annotate your data
+ * Upload and publish
+ * **Wait for approval**
 
 -----
 ## Waiting for approval
-After publishing the dataset to Zenodo, a notification will be sent to us.
+After your publication request, we will receive a notification.
 
-If the uploaded dataset met our requirements, we will approve it and add it to the website shortly. Otherwise we might contact you via email and ask for further modification.
+If the data meet our requirements, we will approve your request. Otherwise, we might contact you via email and ask for modifications.
 
-## Further updates
-Your dataset will be listed in the ShareLoc website (note it may take a while).
 
-You can make further modification to the datasets you uploaded. The easiest way is to click the "Edit" icon (a pencil) shown on top of your dataset card.
+-----
+## Editing uploaded data
+* Your dataset will be listed in the ShareLoc website (note that this may take a while).
+* You can make modifications to the datasets you uploaded. The easiest way is to click the "Edit" icon, make sure you logged in zenodo.
+
+![Edit](https://user-images.githubusercontent.com/56833522/126211254-0a31fc96-6a3d-434f-aab8-27246f543677.png)
 
 -----
 ## Thank you!
