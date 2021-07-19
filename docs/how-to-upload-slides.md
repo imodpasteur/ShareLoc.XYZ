@@ -93,7 +93,8 @@ Now please add information about your data, including:
  * Documentation
  * Citation
  * Links 
-
+ * 
+-----
 
 ## Click "OK" to submit the form
 
@@ -120,9 +121,13 @@ Now please add information about your data, including:
 -----
 ## Publish the dataset
 * Once data is uploaded, request to publish data by pressing 'PUBLISH'
-![Publish](https://user-images.githubusercontent.com/56833522/125970391-c132d758-fb01-4d67-89a3-ea7a89c9f0d6.png)
+* 
+![Publish](https://user-images.githubusercontent.com/56833522/126212290-77efa0d4-21fd-4652-9709-7a315dca9093.png)
 
 * A DOI (e.g. `10.5072/zenodo.881826`) will be generated
+* 
+![DOI](https://user-images.githubusercontent.com/56833522/126212309-08239a88-b204-4b0c-a761-2674bbdb3304.png)
+
 * The data will be published when the request is accepted by the Shareloc team
 
 -----
