@@ -142,9 +142,10 @@ If the data meet our requirements, we will approve your request. Otherwise, we m
 
 -----
 ## Editing uploaded data
-Your dataset will be listed in the ShareLoc website (note that this may take a while).
+* Your dataset will be listed in the ShareLoc website (note that this may take a while).
+* You can make modifications to the datasets you uploaded. The easiest way is to click the "Edit" icon, make sure you logged in zenodo.
 
-You can make modifications to the datasets you uploaded. The easiest way is to click the "Edit" icon, make sure you logged in zenodo.
+![Edit](https://user-images.githubusercontent.com/56833522/126211254-0a31fc96-6a3d-434f-aab8-27246f543677.png)
 
 -----
 ## Thank you!
