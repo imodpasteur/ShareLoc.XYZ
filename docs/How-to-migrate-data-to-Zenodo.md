@@ -1,4 +1,4 @@
-## How to Upload SMLM Data to [ShareLoc.XYZ](https://shareloc.xyz/)
+## How to Migrate SMLM Data to [ShareLoc.XYZ](https://shareloc.xyz/)
 
 -----
 ## Overview
