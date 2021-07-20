@@ -4,7 +4,7 @@
 ## Overview
 
  * Login and authorize with Zenodo
- * Select files and enter detailed information
+ * Select files and annotate your data
  * Upload and publish
  * Wait for approval
 
@@ -40,7 +40,7 @@
 ## Overview
 
  * ~~Login and authorize with Zenodo~~
- * **Select files and enter detailed information**
+ * **Select files and annotate your data**
  * Upload and publish
  * Wait for approval
 
