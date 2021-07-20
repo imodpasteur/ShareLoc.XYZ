@@ -32,9 +32,9 @@
 
 
 -----
-## Click "+ Start Upload" 
+## Click "Start Upload" 
 
-![StartUploaf](https://user-images.githubusercontent.com/56833522/125957037-559f98c4-0e4f-4a09-8435-0a1a163c2e71.png)
+![StartUpload](https://user-images.githubusercontent.com/56833522/126281537-56e2966f-a139-46d3-bd5f-da4cd4bdd9f4.png)
 
 -----
 ## Overview
