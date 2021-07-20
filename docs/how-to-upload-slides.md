@@ -117,11 +117,11 @@ Asterisk(*): Mandatory field
 ## Publish the dataset
 * Once data is uploaded, request to publish data by pressing 'PUBLISH'
 
-![Publish](https://user-images.githubusercontent.com/56833522/126212290-77efa0d4-21fd-4652-9709-7a315dca9093.png)
+![Publish](https://user-images.githubusercontent.com/56833522/126274928-4505abea-b676-4fae-8776-f407160a138f.png)
 
 * A DOI (e.g. `10.5072/zenodo.881826`) will be generated
 
-![DOI](https://user-images.githubusercontent.com/56833522/126212309-08239a88-b204-4b0c-a761-2674bbdb3304.png)
+![DOI](https://user-images.githubusercontent.com/56833522/126274960-37cac052-d611-4b3c-9816-a45c4aa0ad5b.png)
 
 * The data will be published when the request is accepted by the Shareloc team
 
@@ -145,8 +145,7 @@ If the data meet our requirements, we will approve your request. Otherwise, we m
 * Your dataset will be listed in the ShareLoc website (note that this may take a while).
 * You can make modifications to the datasets you uploaded. The easiest way is to click the "Edit" icon, make sure you logged in zenodo.
 
-![Edit](https://user-images.githubusercontent.com/56833522/126211254-0a31fc96-6a3d-434f-aab8-27246f543677.png)
-
+![Edit](https://user-images.githubusercontent.com/56833522/126275073-1771adb8-f8fe-4741-9caf-b4be877a1039.png)
 -----
 ## Thank you!
 
