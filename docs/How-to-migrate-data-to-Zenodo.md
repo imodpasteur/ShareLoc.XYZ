@@ -1,10 +1,10 @@
-## How to Upload SMLM Data to [ShareLoc.XYZ](https://shareloc.xyz/)
+## How to Migrate SMLM Data to [ShareLoc.XYZ](https://shareloc.xyz/)
 
 -----
 ## Overview
 
- * Login and authorize with Zenodo
- * Select files and annotate your data
+ * Mark the data that you want to migrate
+ * Annotate your data
  * Upload and publish
  * Wait for approval
 
@@ -12,63 +12,23 @@
 (TIP: Press esc key to see all the slides)
 
 -----
-## Sign up for a Zenodo account if you don't have one
+## Mark the data that you want to migrate 
+* Select all the data you want to migrate on zenodo by clicking 'bookmark' icon 
 
-<button class="button" onclick=" window.open('https://sandbox.zenodo.org/signup/','_blank')">Sign up</button>
+![bookmark](https://user-images.githubusercontent.com/56833522/126280529-8d05dac6-ca59-4683-9898-4b02ff4a42c3.png)
 
------
-## Click "Login to Zenodo"
+* Click 'Upload All' to start the migration
 
-![LoginZenodo](https://user-images.githubusercontent.com/56833522/125955630-674beae5-6244-4b19-a3a6-773f8e588827.png)
+![UploadAll](https://user-images.githubusercontent.com/56833522/126283365-3f381889-e19c-41d0-bd45-7f0b8ed2fbbb.png)
 
------
-## Go back to the shareloc.xyz tab
-
-* Click again on "Login to Zenodo"
-
-* Authorize shareLoc.xyz to upload files to Zenodo on your behalf
-
-![Autorization](https://user-images.githubusercontent.com/56833522/125964039-8ea981ec-f64c-4ec4-b824-7137f46d1c33.png)
-
-
------
-## Click "Start Upload" 
-
-![StartUpload](https://user-images.githubusercontent.com/56833522/126281537-56e2966f-a139-46d3-bd5f-da4cd4bdd9f4.png)
 
 -----
 ## Overview
 
- * ~~Login and authorize with Zenodo~~
- * **Select files and annotate your data**
+ * ~~Mark the data that you want to migratedo~~
+ * **Annotate your data**
  * Upload and publish
  * Wait for approval
-
-
------
-## Click "+ NEW SAMPLE" 
-
-![NewSample](https://user-images.githubusercontent.com/56833522/125957398-ef3bd589-4f20-4c8f-9934-a757e34d28cb.png)
-
-
------
-## Drag and drop the files for one sample
-
-![DragandDrop](https://user-images.githubusercontent.com/56833522/126210513-ddcc2398-71cc-48bc-8c62-588030fa38bd.png)
-
-Multiple files corresponding to the same fields of view (e.g. **multiple channels or modalities**) should be selected together
-
------
-## Take a screenshot
-
-The screenshot will be displayed on shareloc.xyz as the cover of the sample
-
-![Screenshot](https://user-images.githubusercontent.com/56833522/126209019-d950374f-6885-46b3-9814-ab5ac19c7483.png)
-
------
-## Repeat the above steps if you have several samples from the same experiment
-
-![Samples](https://user-images.githubusercontent.com/56833522/125964728-95ace040-6727-48b9-94d9-b1124c2fde74.png)
 
 
 -----
@@ -99,8 +59,8 @@ Asterisk(*): Mandatory field
 -----
 ## Overview
 
- * ~~Login and authorize with Zenodo~~
- * ~~Select files and annotate your data~~
+ * ~~Mark the data that you want to migratedo~~
+ * ~~Annotate your data~~
  * **Upload and publish**
  * Wait for approval
 
@@ -112,6 +72,20 @@ Asterisk(*): Mandatory field
 
 ![UploadAsNewDeposit](https://user-images.githubusercontent.com/56833522/125969201-4e221879-d81f-4608-8853-f9df7bd4ff1b.png)
 
+
+-----
+## Login to Zenodo
+
+* Sign up for a Zenodo account if you don't have one
+
+
+<button class="button" onclick=" window.open('https://sandbox.zenodo.org/signup/','_blank')">Sign up</button>
+
+* Go back to the shareloc.xyz tab
+
+* Click again "+ UPLOAD AS NEW DEPOSIT"
+
+* Authorize shareLoc.xyz to upload files to Zenodo on your behalf
 
 -----
 ## Publish the dataset
