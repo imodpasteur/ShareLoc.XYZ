@@ -124,7 +124,7 @@
         </b-field>
       </section>
       <p v-if="isDatasetValid" class="help is-danger">
-        You should add at least one same and take some screenshots for the
+        You should add at least one sample and take some screenshots for the
         cover.
       </p>
       <p v-if="error" class="help is-danger">
