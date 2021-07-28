@@ -413,7 +413,7 @@ export default {
           allow_new: true,
           icon: "label",
           help:
-            "Tags describing imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. Example: `dSTORM`, `U373`, `microtubule`, `Alexa-647`, `secondary antibody`, `alpha-tub`,`2D`,`EM-CCD`,`GluOx`,`PFA+Gluta`, `ThunderSTORM`",
+            "Tags describing imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. Example: `dSTORM`, `U373`, `microtubule`, `Alexa-647`, `secondary antibody`, `alpha-tubulin`,`2D`,`EM-CCD`,`GluOx`,`PFA+Gluta`, `ThunderSTORM`",
           isRequired: true
         },
         {
