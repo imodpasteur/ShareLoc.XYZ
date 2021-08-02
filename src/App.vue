@@ -175,7 +175,9 @@ body {
   background: #dcdcdc;
   overscroll-behavior-y: none;
 }
-
+.vm--modal {
+  overflow: auto !important;
+}
 .card {
   margin-bottom: 3rem;
 }
