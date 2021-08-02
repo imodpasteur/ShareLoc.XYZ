@@ -68,15 +68,8 @@
       <markdown
         v-if="resourceItem.docs"
         :baseUrl="resourceItem.baseUrl"
-        :content="resourceItem.docs.slice(0, maxDocsLetters)"
+        :content="resourceItem.docs"
       ></markdown>
-
-      <a
-        v-if="resourceItem.docs && resourceItem.docs.length > maxDocsLetters"
-        style="color: #0366d6;"
-        @click="maxDocsLetters = resourceItem.docs.length"
-        >+ click here to see the full documentation</a
-      >
 
       <br />
       <h3 v-if="formatedCitation" id="citation">Citation</h3>
@@ -115,7 +108,6 @@ export default {
     return {
       resourceItem: null,
       maxDescriptionLetters: 100,
-      maxDocsLetters: 500,
       showSource: false
     };
   },
@@ -226,12 +218,6 @@ export default {
       } catch (e) {
         resourceItem.docs = null;
         this.$forceUpdate();
-      } finally {
-        if (this.resourceItem.docs)
-          this.maxDocsLetters = this.resourceItem.docs
-            .split("\n")
-            .slice(0, 5)
-            .join("\n").length;
       }
     }
   }

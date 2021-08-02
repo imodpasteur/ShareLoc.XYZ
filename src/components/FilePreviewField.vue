@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label :for="item.label" class="label">
+    <label v-if="item.showLabel" :for="item.label" class="label">
       {{ item.label }}
       <span
         class="helpLabel has-text-grey-light is-size-7 is-italic"
@@ -236,7 +236,12 @@ export default {
       this.$forceUpdate();
     },
     async updateFiles(sample) {
-      let comm = sample.files[0].name;
+      // If the user drag and drop a samba shared file, it won't work
+      if(!sample.files[0] || !sample.files[0].name){
+        alert("Invalid file(s)! If you are uploading network shared files, please copy them to a local folder.")
+        return;
+      }
+      let comm = sample.files[0].name; // FIXME:
       comm = comm.split(".")[0];
       for (let i = 1; i < sample.files.length; i++) {
         comm = longestCommonSubstring(comm, sample.files[i].name);

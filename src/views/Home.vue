@@ -480,6 +480,7 @@ function connectApps(self, item) {
   }
 
   if (item.links) {
+    item.links= [...new Set(item.links)]
     for (let link_key of item.links) {
       const linked = self.resourceItems.filter(item => item.id === link_key);
       for (let lit of linked) {

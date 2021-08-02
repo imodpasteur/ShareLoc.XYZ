@@ -62,7 +62,11 @@ function normalizeItem(item) {
   if (item.applications) {
     item.allLabels = item.allLabels.concat(item.applications);
   }
+  if(item.uploaded_by){
+    item.allLabels.push(item.uploaded_by);
+  }
   if (item.tags) {
+    item.tags = item.tags.map(tag=>tag.toLowerCase())
     item.tags = item.tags.filter(
       tag => typeof tag === "string" && !siteConfig.excluded_tags.includes(tag)
     );
@@ -335,13 +339,13 @@ export const store = new Vuex.Store({
       // add default links
       state.resourceItems.map(item => {
         normalizeItem(item);
-        const setting = siteConfig.resource_categories.filter(
+        const setting = siteConfig.resource_categories.find(
           cat => cat.type === item.type
-        )[0];
+        );
         if (setting && setting.default_links) {
           item.links = item.links || [];
           for (let link of setting.default_links) {
-            if (state.resourceItems.filter(item => item.id === link)[0])
+            if (state.resourceItems.find(item => item.id === link))
               item.links.push(link);
             else console.warn("Default link item not foud: " + link);
           }

@@ -340,10 +340,15 @@ export default {
             "A human-readable descriptive name for your dataset to be uploaded. Example: `Xenopus NPC exmperiment-1`."
         },
         {
+          html: `<p class='label'>Samples<span
+        class="helpLabel has-text-grey-light is-size-7 is-italic"
+        style="margin-left: .5rem;font-weight: 400;"
+        >Add samples to the dataset. A dataset contains multiple samples, each sample may contain one or more files for the same field of view, with single or multiple channels. The total file size for one dataset should be less than 50GB, otherwise please split into several datasets. Each sample should contain at lease one supported localization file (.smlm, .csv, .tsv, .xls and .txt), and you can test whether they are supported with the preview button. If you have other localization file format which is not supported yet, please <a href="https://www.dropbox.com/request/IyZ7HkzHUpB0t5Mkp46l" target="_blank">upload a sample file</a>, and <a href="https://oeway.typeform.com/to/rdkPmd" target="_blank">send us a message</a> to describe your file format, we will try to support your file format.</span><sup class='has-text-grey-light is-size-7'> *</sup></p>`
+        },
+        {
           label: "Samples",
           type: "file-preview",
-          help:
-            "Add samples to the dataset. A dataset contains multiple samples, each sample may contain one or more files for the same field of view, with single or multiple channels. The total file size for one dataset should be less than 50GB, otherwise please split into several datasets.",
+          showLabel: false,
           value: this.rdf.attachments.samples,
           isRequired: true
         },
@@ -408,12 +413,13 @@ export default {
           label: "Tags",
           type: "tags",
           value: this.rdf.tags,
-          placeholder: "Add a tag and press enter to confirm",
+          placeholder: "Add a tag and press ENTER to confirm (lower case, no space, numbers, or any of +*#;./%@)",
           options: this.allTags,
           allow_new: true,
+          pattern: /^[-0-9a-z+*#;./%@:]*$/,
           icon: "label",
           help:
-            "Tags describing imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. Example: `dSTORM`, `U373`, `microtubule`, `Alexa-647`, `secondary antibody`, `alpha-tub`,`2D`,`EM-CCD`,`GluOx`,`PFA+Gluta`, `ThunderSTORM`",
+            "Tags should contain only lower case letters with no space, numbers, or the following characters: +*#;./%@, please use multiple tags to describe imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. Here are some examples: `dstorm`, `u373`, `microtubule`, `alexa-647`, `secondary-antibody`, `alpha-tubulin`,`2d`,`em-ccd`,`pfa+gluta`, `thunderstorm`. ",
           isRequired: true
         },
         {
