@@ -2,7 +2,7 @@
   <div class="home">
     <section
       class="hero is-link is-fullheight is-fullheight-with-navbar"
-      style="max-height: 1024px!important;height:100%;min-height:380px;background-image:url(/static/img/bg.jpg)"
+      style="max-height: 1024px!important;min-height:380px;background-image:url(/static/img/bg.jpg)"
     >
       <div class="hero-body" style="position: relative;">
         <img
@@ -160,8 +160,6 @@
     </footer>
     <modal
       name="window-modal-dialog"
-      @opened="preventPageScroll"
-      @closed="restorePageScroll"
       :resizable="!dialogWindowConfig.fullscreen"
       :width="dialogWindowConfig.width"
       height="auto"
@@ -234,7 +232,7 @@
         <div
           :key="wdialog.window_id"
           v-show="wdialog === selectedDialogWindow"
-          style="height: calc(100% - 18px);"
+          style="height: calc(100% - 40px);overflow:auto;"
         >
           <div
             :id="wdialog.window_id"
@@ -246,8 +244,6 @@
     </modal>
     <modal
       name="info-dialog"
-      @opened="preventPageScroll"
-      @closed="restorePageScroll"
       :resizable="true"
       :minWidth="200"
       :minHeight="150"
@@ -282,69 +278,73 @@
         </div>
         <span class="noselect dialog-title"> {{ infoDialogTitle }}</span>
       </div>
-      <about
-        v-if="showInfoDialogMode === 'about'"
-        @contribute="showUploadDialog"
-      ></about>
-      <upload
-        v-else-if="showInfoDialogMode === 'upload'"
-        :site-config="siteConfig"
-        :deposition-id="null"
-      ></upload>
-      <iframe
-        v-else-if="showInfoDialogMode === 'viewer'"
-        style="padding-bottom: 64px;width: 100%;
-    height: 100%;"
-        :src="viewerUrl"
-        width="640"
-        height="852"
-        frameborder="0"
-        marginheight="0"
-        marginwidth="0"
-        >Loading…</iframe
-      >
-      <div v-else-if="showInfoDialogMode === 'edit'">
+      <div class="modal-dialog-content">
+        <about
+          v-if="showInfoDialogMode === 'about'"
+          @contribute="showUploadDialog"
+        ></about>
         <upload
+          v-else-if="showInfoDialogMode === 'upload'"
           :site-config="siteConfig"
-          :deposition-id="currentDepositionId"
+          :deposition-id="null"
         ></upload>
-      </div>
-      <div
-        class="markdown-container"
-        v-else-if="showInfoDialogMode === 'markdown'"
-      >
-        <markdown :url="infoMarkdownUrl"></markdown>
-        <!-- <comment-box
+        <iframe
+          v-else-if="showInfoDialogMode === 'viewer'"
+          style="padding-bottom: 64px;width: 100%;
+    height: 100%;"
+          :src="viewerUrl"
+          width="640"
+          height="852"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          >Loading…</iframe
+        >
+        <div v-else-if="showInfoDialogMode === 'edit'">
+          <upload
+            :site-config="siteConfig"
+            :deposition-id="currentDepositionId"
+          ></upload>
+        </div>
+        <div
+          class="markdown-container"
+          v-else-if="showInfoDialogMode === 'markdown'"
+        >
+          <markdown :url="infoMarkdownUrl"></markdown>
+          <!-- <comment-box
           v-if="infoDialogTitle"
           :title="infoDialogTitle"
         ></comment-box> -->
-      </div>
-      <div
-        class="markdown-container"
-        v-else-if="showInfoDialogMode === 'attachments' && selectedResourceItem"
-      >
-        <attachments
-          :attachments="selectedResourceItem.attachments"
-          :focusTarget="selectedResourceItem._focus"
-        ></attachments>
-      </div>
+        </div>
+        <div
+          class="markdown-container"
+          v-else-if="
+            showInfoDialogMode === 'attachments' && selectedResourceItem
+          "
+        >
+          <attachments
+            :attachments="selectedResourceItem.attachments"
+            :focusTarget="selectedResourceItem._focus"
+          ></attachments>
+        </div>
 
-      <iframe
-        v-else-if="showInfoDialogMode === 'subscribe'"
-        style="padding-bottom: 64px;width: 100%;
+        <iframe
+          v-else-if="showInfoDialogMode === 'subscribe'"
+          style="padding-bottom: 64px;width: 100%;
     height: 100%;"
-        :src="siteConfig.subscribe_url"
-        width="640"
-        height="852"
-        frameborder="0"
-        marginheight="0"
-        marginwidth="0"
-        >Loading…</iframe
-      >
-      <resource-item-info
-        v-else-if="showInfoDialogMode === 'item' && selectedResourceItem"
-        :resource-id="selectedResourceItem.id"
-      ></resource-item-info>
+          :src="siteConfig.subscribe_url"
+          width="640"
+          height="852"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          >Loading…</iframe
+        >
+        <resource-item-info
+          v-else-if="showInfoDialogMode === 'item' && selectedResourceItem"
+          :resource-id="selectedResourceItem.id"
+        ></resource-item-info>
+      </div>
     </modal>
   </div>
 </template>
@@ -767,14 +767,6 @@ export default {
       if (this.initialized)
         this.$router.replace({ query: query }).catch(() => {});
     },
-    preventPageScroll() {
-      document.getElementsByTagName("html")[0].style.overflow = "hidden";
-      document.body.style.overflow = "hidden";
-    },
-    restorePageScroll() {
-      document.getElementsByTagName("html")[0].style.overflow = "auto";
-      document.body.style.overflow = "auto";
-    },
     async showAttachmentsDialog(item, focus) {
       if (item.config._deposit && !item.config._rdf)
         item.config._rdf = await getFullRdfFromDeposit(item.config._deposit);
@@ -947,6 +939,7 @@ export default {
         this.showInfoDialogMode = "markdown";
         if (this.screenWidth < 700) this.infoDialogFullscreen = true;
         this.$modal.show("info-dialog");
+        this.$forceUpdate();
       } else if (item.source.startsWith("http")) {
         window.open(item.source);
       } else {
@@ -1121,6 +1114,11 @@ export default {
 </script>
 
 <style>
+.modal-dialog-content {
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  min-height: 200px;
+}
 .pagination-list {
   list-style: none;
 }

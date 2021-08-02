@@ -109,7 +109,10 @@
       </div>
     </nav>
     <!-- Header -->
-    <router-view :style="{ marginTop: showNavbar ? '72px' : '0px' }" />
+    <router-view
+      :style="{ marginTop: showNavbar ? '72px' : '0px' }"
+      class="router-view"
+    />
   </div>
 </template>
 <script>
@@ -175,9 +178,6 @@ body {
   background: #dcdcdc;
   overscroll-behavior-y: none;
 }
-.vm--modal {
-  overflow: auto !important;
-}
 .card {
   margin-bottom: 3rem;
 }
@@ -219,5 +219,10 @@ body {
 
 .input-title > input {
   box-shadow: none !important;
+}
+
+.router-view {
+  overflow: auto;
+  height: calc(100vh - 72px);
 }
 </style>
