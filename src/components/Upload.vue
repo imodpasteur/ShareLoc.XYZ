@@ -826,7 +826,6 @@ export default {
   padding: 10px;
   width: 100%;
   overflow: auto;
-  height: calc(100% - 48px);
   display: block;
 }
 .width-limited {
