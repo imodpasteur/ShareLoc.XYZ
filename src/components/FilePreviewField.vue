@@ -237,8 +237,10 @@ export default {
     },
     async updateFiles(sample) {
       // If the user drag and drop a samba shared file, it won't work
-      if(!sample.files[0] || !sample.files[0].name){
-        alert("Invalid file(s)! If you are uploading network shared files, please copy them to a local folder.")
+      if (!sample.files[0] || !sample.files[0].name) {
+        alert(
+          "Invalid file(s)! If you are uploading network shared files, please copy them to a local folder."
+        );
         return;
       }
       let comm = sample.files[0].name; // FIXME:

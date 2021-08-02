@@ -62,11 +62,11 @@ function normalizeItem(item) {
   if (item.applications) {
     item.allLabels = item.allLabels.concat(item.applications);
   }
-  if(item.uploaded_by){
+  if (item.uploaded_by) {
     item.allLabels.push(item.uploaded_by);
   }
   if (item.tags) {
-    item.tags = item.tags.map(tag=>tag.toLowerCase())
+    item.tags = item.tags.map(tag => tag.toLowerCase());
     item.tags = item.tags.filter(
       tag => typeof tag === "string" && !siteConfig.excluded_tags.includes(tag)
     );

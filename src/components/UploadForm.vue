@@ -413,7 +413,8 @@ export default {
           label: "Tags",
           type: "tags",
           value: this.rdf.tags,
-          placeholder: "Add a tag and press ENTER to confirm (lower case, no space, numbers, or any of +*#;./%@)",
+          placeholder:
+            "Add a tag and press ENTER to confirm (lower case, no space, numbers, or any of +*#;./%@)",
           options: this.allTags,
           allow_new: true,
           pattern: /^[-0-9a-z+*#;./%@:]*$/,
