@@ -2286,7 +2286,7 @@
             "hash": "059917b48293e1b1597ea258094fe259",
             "tags": [
                 "REF52",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "storm",
                 "microtubules",
                 "alexa fluor 647"
@@ -2314,7 +2314,7 @@
                 "storm",
                 "alexa fluor 647",
                 "REF52",
-                "alpha tubulin"
+                "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T09:31:41.489917",
@@ -2339,7 +2339,7 @@
                 "alexa fluor 647",
                 "ref52",
                 "storm",
-                "alpha tubulin"
+                "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T09:40:19.536918",
@@ -2363,7 +2363,7 @@
                 "REF52",
                 "storm",
                 "alexa fluor 647",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "microtubule"
             ],
             "license": "CC BY 4.0",
@@ -2388,7 +2388,7 @@
                 "microtubule",
                 "alexa fluor 647",
                 "storm",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "REF52"
             ],
             "license": "CC BY 4.0",
@@ -2414,7 +2414,7 @@
                 "storm",
                 "ref52",
                 "alexa fluor 647",
-                "alpha tubulin"
+                "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T10:37:39.014963",
@@ -2438,7 +2438,7 @@
                 "microtubule",
                 "storm",
                 "alexa fluor 647",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "ref52"
             ],
             "license": "CC BY 4.0",
@@ -2462,7 +2462,7 @@
             "tags": [
                 "microtubule",
                 "alexa fluor 647",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "storm",
                 "ref52"
             ],
@@ -2488,7 +2488,7 @@
                 "microtubule",
                 "alexa fluor 647",
                 "ref52",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "storm"
             ],
             "license": "CC BY 4.0",
@@ -2514,7 +2514,7 @@
                 "alexa fluor 647",
                 "storm",
                 "ref52",
-                "alpha tubulin"
+                "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T03:45:18.850014",
@@ -2538,7 +2538,7 @@
                 "microbtubules",
                 "alexa fluor 647",
                 "storm",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "ref52"
             ],
             "license": "CC BY 4.0",
@@ -2563,7 +2563,7 @@
                 "microtubule",
                 "alexa fluor 647",
                 "storm",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "mdck"
             ],
             "license": "CC BY 4.0",
@@ -2589,7 +2589,7 @@
                 "alexa fluor 647",
                 "storm",
                 "mdck",
-                "alpha tubulin"
+                "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T07:51:39.014736",
@@ -2614,7 +2614,7 @@
                 "storm",
                 "alexa fluor 647",
                 "mdck",
-                "alpha tubulin"
+                "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T08:04:29.077548",
@@ -2638,7 +2638,7 @@
                 "microtubule",
                 "storm",
                 "alexa fluor 647",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "ref52"
             ],
             "license": "CC BY 4.0",
@@ -2662,7 +2662,7 @@
             "tags": [
                 "microtubule",
                 "storm",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "ref52",
                 "alexa fluor 647"
             ],
@@ -2689,7 +2689,7 @@
                 "ref52",
                 "alexa fluor 647",
                 "storm",
-                "alpha tubulin"
+                "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-06T09:46:18.683243",
@@ -2713,7 +2713,7 @@
                 "microtubule",
                 "alexa fluor 647",
                 "storm",
-                "alpha tubulin",
+                "alpha-tubulin",
                 "ref52"
             ],
             "license": "CC BY 4.0",
