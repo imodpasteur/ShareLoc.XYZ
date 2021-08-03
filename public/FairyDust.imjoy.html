@@ -1584,7 +1584,7 @@
                     options[sample.name + '/' + f.name] = f.download_url;
                 }
                 const smlmPlugin = await api.getPlugin("SMLM File IO");
-                gui.add(scopeParams, 'File', options).onChange(async () => {
+                gui.add(scopeParams, 'File', options).listen().onChange(async () => {
                     try {
                         const data = await smlmPlugin.load(scopeParams['File'])
                         for(let file of data.files){
