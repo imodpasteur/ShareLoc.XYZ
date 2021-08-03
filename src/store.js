@@ -7,6 +7,23 @@ import { setupBioEngine } from "./bioEngine";
 
 Vue.use(Vuex);
 
+const params = (location.href.includes("#")
+  ? location.href.split("#")[1]
+  : location.href
+).split("?")[1];
+if (params) {
+  const paramsObj = Object.fromEntries(new URLSearchParams(params).entries());
+  if (siteConfig.zenodo_config.use_sandbox) {
+    if (paramsObj && paramsObj["production"]) {
+      siteConfig.zenodo_config.use_sandbox = false;
+    }
+  } else {
+    if (paramsObj && paramsObj["sandbox"]) {
+      siteConfig.zenodo_config.use_sandbox = true;
+    }
+  }
+}
+
 // set default values for table_view
 siteConfig.table_view = siteConfig.table_view || {
   columns: ["name", "authors", "badges", "apps"]
@@ -178,6 +195,9 @@ export async function init() {
     console.error(e);
   }
 }
+const client_id = siteConfig.zenodo_config.use_sandbox
+  ? siteConfig.zenodo_config.sandbox_client_id
+  : siteConfig.zenodo_config.production_client_id;
 export const store = new Vuex.Store({
   state: {
     loadedUrl: null,
@@ -188,7 +208,7 @@ export const store = new Vuex.Store({
     zenodoClient: siteConfig.zenodo_config.enabled
       ? new ZenodoClient(
           zenodoBaseURL,
-          siteConfig.zenodo_config.client_id,
+          client_id,
           siteConfig.zenodo_config.use_sandbox
         )
       : null,
@@ -359,6 +379,7 @@ export const store = new Vuex.Store({
         item.id = item.id.toLowerCase();
         item.links = item.links || [];
         item.links = item.links.map(link => link.toLowerCase());
+        item.links = [...new Set(item.links)];
         if (transform) transform(item);
         return item;
       });

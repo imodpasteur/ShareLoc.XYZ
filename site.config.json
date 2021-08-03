@@ -38,7 +38,8 @@
   ],
   "zenodo_config": {
     "enabled": true,
-    "client_id": "LrUl7gtNg50dciX8wkXHCD7Sy75ZpEytUarkekWp",
+    "sandbox_client_id": "LrUl7gtNg50dciX8wkXHCD7Sy75ZpEytUarkekWp",
+    "production_client_id": "hi4F8IWRtlIoZsAg3fJGF5lsHXAFr30NuYz8YHot",
     "community": "shareloc",
     "use_sandbox": true
   },
