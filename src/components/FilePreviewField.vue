@@ -23,6 +23,16 @@
         >
           New Sample
         </b-button>
+
+        <b-button
+          style="margin-left:10px;"
+          v-if="samples && samples.length > 0"
+          size="is-small"
+          icon-left="plus"
+          @click="addNewChannel()"
+        >
+          Add Channel or Modality
+        </b-button>
         <b-tabs
           v-model="activeSample"
           @input="currentSample = samples[activeSample]"
@@ -47,8 +57,8 @@
                   @click.stop="removeSample(sample, k)"
                 ></button>
               </template>
-              <p>Files</p>
-              <div
+              <!-- <p>Files</p> -->
+              <!-- <div
                 v-for="(file, index) in sample.files"
                 :key="index"
                 class="tag is-info"
@@ -63,16 +73,69 @@
                   type="button"
                   @click.stop="removeFile(sample.files, index)"
                 ></button>
-              </div>
-              <b-upload
-                v-if="!sample.files || sample.files.length <= 0"
+              </div> -->
+              <b-table :data="sample.channels" checkbox-position="left">
+                <template slot-scope="props">
+                  <b-table-column field="name" label="Channel/Modality">
+                    <span>{{ props.row.name }}</span>
+                  </b-table-column>
+                  <b-table-column field="files" label="Files">
+                    <span
+                      style="color: #f39f07;"
+                      v-if="!props.row.files || props.row.files.length <= 0"
+                      >Not selected</span
+                    >
+                    <span v-else
+                      >{{ props.row.files.length }} files ({{
+                        totalSize(props.row.files)
+                      }}MB)</span
+                    >
+                  </b-table-column>
+                  <b-table-column field="actions" label="Actions">
+                    <span
+                      class="file-cta"
+                      style="display: inline-block;width: 50px;"
+                      @click.stop="props.row.files = []"
+                    >
+                      <b-icon
+                        class="file-icon"
+                        style="margin-top: 4px;"
+                        icon="close"
+                      ></b-icon>
+                    </span>
+                    <b-upload
+                      v-model="props.row.files"
+                      multiple
+                      style="display: inline-block;"
+                      class="file-label"
+                      @input="fileSelected(sample, props.row, $event)"
+                    >
+                      <span class="file-cta">
+                        <b-icon class="file-icon" icon="upload"></b-icon>
+                        <span
+                          class="file-label"
+                          v-if="!props.row.files || props.row.files.length <= 0"
+                          >Select File(s)</span
+                        >
+                        <span class="file-label" v-else>Add File(s)</span>
+                      </span>
+                    </b-upload>
+                  </b-table-column>
+                </template>
+
+                <template #empty>
+                  <div class="has-text-centered">No file selected</div>
+                </template>
+              </b-table>
+
+              <!-- <b-upload
+                :drag-drop="!sample.files || sample.files.length <= 0"
                 v-model="sample.files"
                 @input="updateFiles(sample)"
                 multiple
-                drag-drop
                 expanded
               >
-                <section class="section">
+                <section v-if="!sample.files || sample.files.length <= 0" class="section">
                   <div class="content has-text-centered">
                     <b-icon icon="upload" size="is-large"></b-icon>
 
@@ -83,8 +146,14 @@
                     </p>
                   </div>
                 </section>
-              </b-upload>
-              <p v-if="sample.files && sample.files.length > 0">Screenshots</p>
+                <span v-else class="file-cta">
+                    <b-icon class="file-icon" icon="upload"></b-icon>
+                    <span class="file-label">Add new file</span>
+                </span>
+              </b-upload> -->
+              <p v-if="sample.files && sample.files.length > 0">
+                Screenshots
+              </p>
               <div
                 class="snapshot-container"
                 v-if="sample.files && sample.files.length > 0"
@@ -135,7 +204,25 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { fetchFile, randId, longestCommonSubstring } from "../utils";
+import { fetchFile, randId } from "../utils";
+function getSampleFiles(sample) {
+  const files = [];
+  for (let ch of sample.channels) {
+    for (let fn = 0; fn < ch.files.length; fn++) {
+      const file = ch.files[fn];
+      const newFile = new File(
+        [file],
+        (ch.files.length > 1 ? ch.name + "-" + fn : ch.name) +
+          "." +
+          file.name.split(".")[1],
+        { type: file.type, lastModified: file.lastModified }
+      );
+      newFile.sampleName = sample.name;
+      files.push(newFile);
+    }
+  }
+  return files;
+}
 export default {
   name: "file-preview",
   props: {
@@ -155,11 +242,13 @@ export default {
     fileCache: {},
     currentFile: null,
     enableConversion: true,
-    currentSample: null
+    currentSample: null,
+    sampleChannels: []
   }),
   created() {
     this.samples = this.item.value || [];
     this.commitValue();
+
     // const baseUrl = window.location.origin + window.location.pathname;
     // api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
   },
@@ -186,12 +275,74 @@ export default {
     }
   },
   methods: {
+    fileSelected(sample, channel, files) {
+      if (!files[0] || !files[0].name) {
+        alert(
+          "Invalid file(s)! If you are uploading network shared files, please copy them to a local folder."
+        );
+        channel.files = [];
+        return;
+      }
+      if (sample.name.match(/$sample-[0-9]+/)) {
+        sample.name = files[0].name.split(/[-, .|:_]+/)[0];
+        if (sample.name.length < 3) {
+          sample.name = sample.name + "-" + this.samples.length;
+        }
+      }
+      this.commitValue();
+    },
+    totalSize(files) {
+      return Math.round(
+        files.reduce((size, file) => size + file.size, 0) / 1024 / 1024
+      ); // unit: MB
+    },
+    addNewChannel(name) {
+      if (!name) {
+        name = prompt(
+          "Please give a unique name for the new channel or modality in lower case, e.g. smlm, raw, actin, widefield, alpha-tubulin.",
+          "default"
+        );
+        if (name && this.sampleChannels.includes(name.toLowerCase())) {
+          alert(
+            `"${name.toLowerCase()}" already exists, please choose another name.`
+          );
+          return;
+        }
+      }
+      if (name) {
+        name = name.toLowerCase();
+        if (this.sampleChannels.includes(name)) {
+          alert(`"${name}" already exists, please choose another name.`);
+          return;
+        }
+        this.sampleChannels.push(name);
+        for (let sample of this.samples) {
+          sample.channels = sample.channels || [];
+          if (!sample.channels.find(ch => ch.name === name))
+            sample.channels.push({ name, files: [] });
+        }
+      } else {
+        throw new Error("Empty channel name");
+      }
+    },
     addNewSample() {
-      this.samples.push({ name: "Untitled Sample" });
+      if (!this.sampleChannels || this.sampleChannels.length <= 0) {
+        this.addNewChannel();
+      }
+      this.samples.push({
+        name: "sample-" + this.samples.length,
+        channels: this.sampleChannels.map(ch => {
+          return { name: ch, files: [] };
+        })
+      });
       this.activeSample = this.samples.length - 1;
       this.currentSample = this.samples[this.samples.length - 1];
     },
     commitValue() {
+      for (let sample of this.samples) {
+        sample.files = getSampleFiles(sample);
+      }
+
       const samples = this.samples.filter(
         sample => sample.files && sample.files.length > 0
       );
@@ -235,23 +386,23 @@ export default {
       files.splice(index, 1);
       this.$forceUpdate();
     },
-    async updateFiles(sample) {
-      // If the user drag and drop a samba shared file, it won't work
-      if (!sample.files[0] || !sample.files[0].name) {
-        alert(
-          "Invalid file(s)! If you are uploading network shared files, please copy them to a local folder."
-        );
-        return;
-      }
-      let comm = sample.files[0].name; // FIXME:
-      comm = comm.split(".")[0];
-      for (let i = 1; i < sample.files.length; i++) {
-        comm = longestCommonSubstring(comm, sample.files[i].name);
-      }
-      if (comm.length > 2) sample.name = comm;
-      else sample.name = "Sample-" + Date.now();
-      this.commitValue();
-    },
+    // async updateFiles(sample) {
+    //   // If the user drag and drop a samba shared file, it won't work
+    //   if (!sample.files[0] || !sample.files[0].name) {
+    //     alert(
+    //       "Invalid file(s)! If you are uploading network shared files, please copy them to a local folder."
+    //     );
+    //     return;
+    //   }
+    //   let comm = sample.files[0].name; // FIXME:
+    //   comm = comm.split(".")[0];
+    //   for (let i = 1; i < sample.files.length; i++) {
+    //     comm = longestCommonSubstring(comm, sample.files[i].name);
+    //   }
+    //   if (comm.length > 2) sample.name = comm;
+    //   else sample.name = "sample-" + this.samples.length;
+    //   this.commitValue();
+    // },
     trimEllip(str, length) {
       if (!str) return str;
       if (typeof str === "object") str = str.toString();
@@ -333,8 +484,8 @@ export default {
     },
     async previewSample(sample) {
       this.currentSample = sample;
-      sample.files.forEach(file => (file.sampleName = sample.name));
-      const files = sample.files;
+      const files = getSampleFiles(sample);
+      files.forEach(file => (file.sampleName = sample.name));
       const api = this.imjoy.api;
       const loadingComponent = this.$buefy.loading.open({
         canCancel: true,

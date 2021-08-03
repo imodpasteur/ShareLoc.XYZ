@@ -148,7 +148,9 @@
               v-for="file in editedFiles"
               :key="file.sampleName + '/' + file.name"
               rounded
-              >{{ file.sampleName + "/" + file.name }}</b-tag
+              >{{
+                (file.sampleName ? file.sampleName + "/" : "") + file.name
+              }}</b-tag
             >
           </b-taglist>
         </b-field>
