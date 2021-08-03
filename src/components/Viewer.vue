@@ -1,6 +1,6 @@
 <template>
   <div class="viewer">
-    <section>
+    <section class="width-limited">
       <h1
         v-if="!value || value.length <= 0"
         style="    text-align: center;
@@ -8,7 +8,7 @@
     font-size: 2rem;
     margin-top: 20px;"
       >
-        SMLM file viewer
+        SMLM File Viewer
       </h1>
       <b-field
         v-if="!value || value.length <= 0"
@@ -26,6 +26,10 @@
               <b-icon icon="upload" size="is-large"></b-icon>
 
               <p>Drag and drop files here</p>
+              <p>
+                Your data will stay locally in your browser, no data will be
+                sent or uploaded to the server.
+              </p>
               <p>
                 For multi-channel image, drag the files for all the channels
                 together.
@@ -69,11 +73,11 @@
           </a>
         </div> -->
     </section>
-    <div v-if="!value || value.length <= 0" style="margin:20px;">
-      <p>
-        NOTE: Your data will stay locally in your browser, no data will be sent
-        or uploaded to a server, unless you use the upload feature explcitly.
-      </p>
+    <div
+      v-if="!value || value.length <= 0"
+      style="margin:20px;padding:20px;"
+      class="width-limited"
+    >
       <br />
       <p>
         You can load files with the following formats:
@@ -348,5 +352,11 @@ export default {
   color: #9e9a9a;
   background-color: black;
   height: 100vh;
+}
+.width-limited {
+  max-width: 1080px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
 }
 </style>
