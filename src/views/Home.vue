@@ -557,6 +557,14 @@ function connectApps(self, item) {
         ? `${item.config._deposit.links.html}`
         : `https://doi.org/${item.config._conceptdoi}`
     });
+  } else if (item.type === "dataset") {
+    item.badges.unshift({
+      label: "MIGRATION REQUIRED",
+      label_type: "is-danger",
+      run() {
+        alert("Please migrate this item to Zenodo!");
+      }
+    });
   }
   item.config._linked = true;
 }
