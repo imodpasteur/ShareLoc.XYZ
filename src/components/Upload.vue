@@ -7,12 +7,23 @@
       aria-close-label="Close notification"
       role="alert"
     >
-      You are using the development mode of the upload feature, this means files
-      will be uploaded to the sandbox version of Zenodo
-      (https://sandbox.zenodo.org). The uploaded files can be removed from
-      Zenodo at any time without notice. This is temporary. In the future, the
-      upload feature will connect to the main Zenodo storage and allow permanent
-      storage of your data.
+      You are using the SANDBOX mode for testing purposes. This means files will
+      be uploaded to the sandbox version of Zenodo (https://sandbox.zenodo.org)
+      and the uploaded files can be removed from Zenodo at any time without
+      notice. If you are ready to publish your dataset, please
+      <a @click="switchToProduction()">switch to the production mode</a>.
+    </b-notification>
+    <b-notification
+      v-else
+      type="is-info"
+      has-icon
+      aria-close-label="Close notification"
+      role="alert"
+    >
+      You are using the PRODUCTION mode, this means files will be uploaded to
+      Zenodo (https://zenodo.org) and they will be permanently stored. If you
+      want to test the upload feature, please
+      <a @click="switchToSandbox()">switch to the sanbox mode</a>.
     </b-notification>
     <b-steps
       style="margin-top: 20px;"
@@ -444,6 +455,20 @@ export default {
     };
   },
   methods: {
+    switchToSandbox() {
+      const query = Object.assign({}, this.$route.query);
+      query.sandbox = 1;
+      delete query.production;
+      this.$router.replace({ query: query });
+      this.$router.go(this.$router.currentRoute);
+    },
+    switchToProduction() {
+      const query = Object.assign({}, this.$route.query);
+      query.production = 1;
+      delete query.sandbox;
+      this.$router.replace({ query: query });
+      this.$router.go(this.$router.currentRoute);
+    },
     async gettingStarted() {
       await this.imjoy.api.showDialog({
         src:

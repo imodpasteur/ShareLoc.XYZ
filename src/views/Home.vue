@@ -4,6 +4,27 @@
       class="hero is-link is-fullheight is-fullheight-with-navbar"
       style="max-height: 1024px!important;min-height:380px;background-image:url(/static/img/bg.jpg)"
     >
+      <b-notification
+        v-if="zenodoClient.isSandbox"
+        type="is-warning"
+        has-icon
+        aria-close-label="Close notification"
+        role="alert"
+      >
+        You are using the SANDBOX mode for testing purposes. You can also
+        <a @click="switchToProduction()">switch to the production mode</a>.
+      </b-notification>
+      <b-notification
+        v-else
+        type="is-info"
+        has-icon
+        aria-close-label="Close notification"
+        role="alert"
+      >
+        You are using the PRODUCTION mode, if you want to test the website
+        features, please
+        <a @click="switchToSandbox()">switch to the sanbox mode</a>.
+      </b-notification>
       <div class="hero-body" style="position: relative;">
         <img
           class="background-img"
@@ -739,6 +760,20 @@ export default {
     window.removeEventListener("resize", this.updateSize);
   },
   methods: {
+    switchToSandbox() {
+      const query = Object.assign({}, this.$route.query);
+      query.sandbox = 1;
+      delete query.production;
+      this.$router.replace({ query: query });
+      this.$router.go(this.$router.currentRoute);
+    },
+    switchToProduction() {
+      const query = Object.assign({}, this.$route.query);
+      query.production = 1;
+      delete query.sandbox;
+      this.$router.replace({ query: query });
+      this.$router.go(this.$router.currentRoute);
+    },
     goHome() {
       this.selectedPartner = null;
       this.searchTags = [];
