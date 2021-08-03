@@ -105,11 +105,11 @@
             "description": "2D STORM imaging of microtubules labeled with Alexa 647 in U373 cells.",
             "hash": "04cb0d658f351d47446b351dca89ef4c",
             "tags": [
-                "Alexa-647",
+                "alexa-647",
                 "microtubules",
-                "STORM",
-                "U373",
-                "2D"
+                "storm",
+                "u373",
+                "2d"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-01-31T00:17:42.049511",
@@ -133,7 +133,7 @@
             "description": "2D SMLM imaging of microtubules labeled with Alexa 647.",
             "hash": "1cdcc96c6666bede255331b39bbc5a1b",
             "tags": [
-                "Alexa-647",
+                "alexa-647",
                 "microtubules"
             ],
             "license": "CC BY 4.0",
@@ -155,9 +155,9 @@
             "description": "2D dSTORM imaging of microtubules.",
             "hash": "768e0f720f4343daa6781445fb93eea8",
             "tags": [
-                "dSTORM",
+                "dstorm",
                 "microtubules",
-                "2D"
+                "2d"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-01-31T07:57:59.935434",
@@ -198,9 +198,9 @@
             "hash": "94106847488a2e145b5e062ed0addbb2",
             "tags": [
                 "mitochondria",
-                "TOM22",
-                "COS7", 
-                "4%PFA"
+                "tom22",
+                "cos7", 
+                "4%pfa"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:28:12.229980",
@@ -222,7 +222,7 @@
             "hash": "0809c64060133878c89c9285e7525d46",
             "tags": [
                 "mitochondria",
-                "TOM22"
+                "tom22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:48:08.907171",
@@ -244,7 +244,7 @@
             "hash": "5bd2ddd657a6a156debe44cd0e24f25f",
             "tags": [
                 "mitochondria",
-                "TOM22"
+                "tom22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:51:16.969614",
@@ -266,7 +266,7 @@
             "hash": "1962da75758f9ed25128e916d63464e4",
             "tags": [
                 "mitochondria",
-                "TOM22"
+                "tom22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:54:37.585753",
@@ -288,7 +288,7 @@
             "hash": "d8574f7760a25fa979bcaecd5cb24166",
             "tags": [
                 "mitochondria",
-                "TOM22"
+                "tom22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T16:59:29.144987",
@@ -310,7 +310,7 @@
             "hash": "1445ef6401f5c2a907b8c06e27e7e76a",
             "tags": [
                 "mitochondria",
-                "TOM22"
+                "tom22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:00:55.994846",
@@ -332,7 +332,7 @@
             "hash": "5b86dd2fb8dd1a7812706644adcc08ec",
             "tags": [
                 "mitochondria",
-                "TOM22"
+                "tom22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:02:16.793363",
@@ -354,7 +354,7 @@
             "hash": "fa20310565e71a288e2267741e78c075",
             "tags": [
                 "mitochondria",
-                "TOM22"
+                "tom22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:03:04.366268",
@@ -376,7 +376,7 @@
             "hash": "25ac748ac74a6982941f37a80afcc6d3",
             "tags": [
                 "mitochondria",
-                "TOM22"
+                "tom22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-01T17:04:08.671422",
@@ -397,10 +397,10 @@
             "description": "",
             "hash": "f21d95759bbcbe18693520bad1759d4a",
             "tags": [
-                "3D",
+                "3d",
                 "astigmatism",
                 "A647",
-                "ZOLA",
+                "zola-3d",
                 "microtubules"
             ],
             "license": "CC BY 4.0",
@@ -422,10 +422,10 @@
             "description": "",
             "hash": "2d633561d86ad6ee27ba68da5ed30ac6",
             "tags": [
-                "NUP133",
+                "nup133",
                 "3d",
                 "tetrapod",
-                "zola",
+                "zola-3d",
                 "nuclear_pore"
             ],
             "license": "CC BY 4.0",
@@ -512,7 +512,7 @@
             "hash": "8490d963d4296904a0db84c3d5993137",
             "tags": [
                 "mitochondria",
-                "TOM22"
+                "tom22"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-03-08T14:45:34.300701",
@@ -534,7 +534,7 @@
             "hash": "319692307ae80cb58bf9f728f56e32d1",
             "tags": [
                 "alexa647",
-                "STORM",
+                "storm",
                 "microtubules"
             ],
             "license": "CC BY 4.0",
@@ -877,7 +877,7 @@
             "hash": "03dcc4aba58c2d3d3abe225517fa4f48",
             "tags": [
                 "vimentin",
-                "DNA-PAINT"
+                "dna-paint"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-06-27T12:54:00.534164",
@@ -897,7 +897,9 @@
             "name": "2D microtubules U2OS ChW AA",
             "description": "AB staining A647",
             "hash": "6a7852986f8a4c2db38c203d6f09cccc",
-            "tags": [],
+            "tags": [
+                "u2os"
+            ],
             "license": "CC BY 4.0",
             "timestamp": "2018-06-28T15:39:11.943363",
             "uploaded_by": "aaristov@pasteur.fr",
@@ -938,7 +940,8 @@
             "description": "astigmatic PSF scanning z, BFDC, 20180817-FOV1",
             "hash": "8acfa40a28f4c7b9f54aa64bc4dd042e",
             "tags": [
-                "microtubules"
+                "microtubules",
+                "u2os"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-08-22T16:04:01.433913",
@@ -1001,9 +1004,9 @@
             "description": "actin of COS-7 cell",
             "hash": "440f556597098a3d98db38e3f0f21329",
             "tags": [
-                "dSTORM",
+                "dstorm",
                 "actin",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-11-29T15:52:30.203468",
@@ -1024,7 +1027,7 @@
             "description": "actin stained with caged Si-rhodamine phalloidin of a Cos-7 cell",
             "hash": "41080d3e899715bed8ecee58192138c8",
             "tags": [
-                "PALM",
+                "palm",
                 "actin",
                 "caged Si-rhodamine"
             ],
@@ -1050,7 +1053,7 @@
                 "gp210",
                 "A647",
                 "nuclear_complex",
-                "dSTORM"
+                "dstorm"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-11-29T18:03:08.401532",
@@ -1071,10 +1074,10 @@
             "description": "microtubules stained with Alexa647 in Cos-7",
             "hash": "ece852505233a90d991befb4921bc8a6",
             "tags": [
-                "dSTORM",
-                "3D Biplane",
+                "dstorm",
+                "3d Biplane",
                 "microtubules",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-12-03T09:56:07.025655",
@@ -1095,9 +1098,9 @@
             "description": "nuclear pore complex of isolated nuclear envelope of Xenopus laevis oocyte",
             "hash": "ebecd054c0311723d3b43b76a4b01938",
             "tags": [
-                "nuclear pore",
-                "Alexa-647",
-                "dSTORM"
+                "nuclear-pore",
+                "alexa-647",
+                "dstorm"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-12-03T10:02:56.973205",
@@ -1118,10 +1121,10 @@
             "description": "microtubules stained with Alexa532 in a COS-7 cell",
             "hash": "cc4b9e6c6fe27b03a5eb2502b9e094b9",
             "tags": [
-                "dSTORM",
-                "Alexa-532",
+                "dstorm",
+                "alexa-532",
                 "microtubules", 
-                "COS7"
+                "cos7"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-12-03T10:30:37.569958",
@@ -1142,9 +1145,9 @@
             "description": "",
             "hash": "5193a76969b6c745efb8d8bfcf1e7c76",
             "tags": [
-                "dSTORM",
+                "dstorm",
                 "microtubules",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:10:56.491732",
@@ -1165,9 +1168,9 @@
             "description": "",
             "hash": "4f9f5c695b1c1fceb52bfc85f42776a9",
             "tags": [
-                "dSTORM",
+                "dstorm",
                 "microtubules",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:24:15.207736",
@@ -1188,9 +1191,9 @@
             "description": "",
             "hash": "71404f432ee69f41486054a6e471290f",
             "tags": [
-                "dSTORM",
+                "dstorm",
                 "microtubules",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:27:22.310725",
@@ -1211,9 +1214,9 @@
             "description": "",
             "hash": "2ef45b60988e370cf80dfe994524245b",
             "tags": [
-                "dSTORM",
+                "dstorm",
                 "microtubules",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-03T16:30:55.644953",
@@ -1234,10 +1237,10 @@
             "description": "dSTORM of a Cos-7 cell stained with phalloidin Alexa647",
             "hash": "365fce33420e5b790ad80bb7486396f7",
             "tags": [
-                "dSTORM",
+                "dstorm",
                 "actin",
                 "phalloidin",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-05T16:22:37.197370",
@@ -1258,10 +1261,10 @@
             "description": "dSTORM of a COS-7 cell stained with phalloidin Alexa647",
             "hash": "4651e43fdb783181877233d15d84222d",
             "tags": [
-                "dSTORM",
+                "dstorm",
                 "actin",
                 "phalloidin",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2018-12-05T16:26:58.011794",
@@ -1278,12 +1281,12 @@
             "type": "dataset",
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/22d97bd241f21f27b1bee29666a622c5/data.smlm",
             "id": "22d97bd241f21f27b1bee29666a622c5",
-            "name": "1 WGA A647",
+            "name": "1 wga A647",
             "description": "dSTORM of central canal of Xenopus nuclear pore complex",
             "hash": "22d97bd241f21f27b1bee29666a622c5",
             "tags": [
-                "dSTORM",
-                "WGA",
+                "dstorm",
+                "wga",
                 "A647",
                 "nuclear_pore"
             ],
@@ -1348,10 +1351,10 @@
             "description": "3D dSTORM with DAISY of clathrin (AF647), imaged by C. Cabriel at ISMO , S. Leveque-Fort's group, https://www.biorxiv.org/content/early/2018/11/16/385799",
             "hash": "dd865cb8a8ef023113a9c7ae9945777c",
             "tags": [
-                "#dstorm",
+                "dstorm",
                 "#DAISY",
-                "#clathrin",
-                "#AF647"
+                "clathrin",
+                "alexa-647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2019-01-10T18:00:02.681220",
@@ -1373,9 +1376,9 @@
             "hash": "7a0fb27b0e21cadb571648f0dcfd44c6",
             "tags": [
                 "gp210",
-                "nuclear pore",
-                "dSTORM",
-                "Alexa-647"
+                "nuclear-pore",
+                "dstorm",
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T09:49:20.912381",
@@ -1396,10 +1399,10 @@
             "description": "Xenopus laevis nuclear envelope. gp210 proteins of the nuclear pore complex stained with Alexa647",
             "hash": "c641d57200239433eb8238b830aeacd6",
             "tags": [
-                "dSTORM",
-                "nuclear pore",
+                "dstorm",
+                "nuclear-pore",
                 "gp210",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T13:54:39.748577",
@@ -1420,10 +1423,10 @@
             "description": "Xenopus laevis nuclear pore complex; gp210 proteins stained with Alexa647",
             "hash": "c16acf19d44efd5aed7f43973da1536f",
             "tags": [
-                "dSTORM",
-                "nuclear pore",
+                "dstorm",
+                "nuclear-pore",
                 "gp210",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T14:35:48.141079",
@@ -1444,10 +1447,10 @@
             "description": "Xenopus laevis nuclear pore complex stained with WGA-ATTO520",
             "hash": "4eba8e6304b1d686a4d5526d27245344",
             "tags": [
-                "dSTORM",
-                "nuclear pore",
+                "dstorm",
+                "nuclear-pore",
                 "ATTO520",
-                "WGA"
+                "wga"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T14:54:52.546993",
@@ -1468,10 +1471,10 @@
             "description": "Xenopus laevis nuclear pore complex stained with Alexa647 to gp210 ",
             "hash": "b69b8876f2e1a6af969c67eb91d234de",
             "tags": [
-                "dSTORM",
-                "nuclear pore",
+                "dstorm",
+                "nuclear-pore",
                 "gp210",
-                "Alexa-647"
+                "alexa-647"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-11T15:00:09.011918",
@@ -1492,10 +1495,10 @@
             "description": "nuclear pore complex stained with WGA-Alexa532",
             "hash": "a548b3f57002939f6dc24608f81c79bd",
             "tags": [
-                "dSTORM",
+                "dstorm",
                 "WGA",
-                "Alexa-532",
-                "nuclear pore"
+                "alexa-532",
+                "nuclear-pore"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-16T13:09:10.176834",
@@ -1516,9 +1519,9 @@
             "description": "nuclear pore complex of Xenopus laevis: gp210 proteins labeled with Alexa647",
             "hash": "ec8c7f79e2666e3fa6cb1988682d38c8",
             "tags": [
-                "dSTORM",
-                "nuclear pore",
-                "Alexa-647",
+                "dstorm",
+                "nuclear-pore",
+                "alexa-647",
                 "gp210"
             ],
             "license": "CC BY-NC 4.0",
@@ -2132,7 +2135,7 @@
                 "Tubulin",
                 "AF647",
                 "ABBELIGHT",
-                "STORM"
+                "storm"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-07-21T10:09:40.755707",
@@ -2264,7 +2267,7 @@
                 "Tubulin",
                 "AF647",
                 "ABBELIGHT",
-                "U2OS"
+                "u2os"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-07-21T15:37:59.183608",
@@ -2285,7 +2288,7 @@
             "description": "Microtubules from stained REF52 with DMA1 antibody",
             "hash": "059917b48293e1b1597ea258094fe259",
             "tags": [
-                "REF52",
+                "ref52",
                 "alpha-tubulin",
                 "storm",
                 "microtubules",
@@ -2313,7 +2316,7 @@
                 "microtubules",
                 "storm",
                 "alexa-647",
-                "REF52",
+                "ref52",
                 "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
@@ -2360,7 +2363,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa-647",
             "hash": "5a98bfd6f0fe1ec776f41e087215a389",
             "tags": [
-                "REF52",
+                "ref52",
                 "storm",
                 "alexa-647",
                 "alpha-tubulin",
@@ -2389,7 +2392,7 @@
                 "alexa-647",
                 "storm",
                 "alpha-tubulin",
-                "REF52"
+                "ref52"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-05T10:25:54.022173",
@@ -2557,7 +2560,7 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/8048161eba455019f4b3ded6be861551/data.smlm",
             "id": "8048161eba455019f4b3ded6be861551",
             "name": "200730_MDCK_MT_002",
-            "description": "microtubules (DMA1) in REF52 cells labelled with alexa-647",
+            "description": "microtubules (DMA1) in MDCK cells labelled with alexa-647",
             "hash": "8048161eba455019f4b3ded6be861551",
             "tags": [
                 "microtubules",
@@ -2736,9 +2739,9 @@
             "hash": "0a5a7780cac28a5817c50d966807f500",
             "tags": [
                 "microtubules",
-                "STORM",
-                "Alexa-647",
-                "NIH3T3"
+                "storm",
+                "alexa-647",
+                "nih3t3"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-12T07:04:40.075973",
@@ -2761,8 +2764,8 @@
             "tags": [
                 "microtubules",
                 "alexa-647",
-                "NIH3T3",
-                "STORM"
+                "nih3t3",
+                "storm"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-12T07:59:59.140433",
@@ -2785,7 +2788,7 @@
             "tags": [
                 "microtubules",
                 "alexa-647",
-                "NIH3T3"
+                "nih3t3"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-12T08:46:50.331942",
@@ -2808,8 +2811,8 @@
             "tags": [
                 "microtubules",
                 "alexa-647",
-                "NIH3T3",
-                "STORM"
+                "nih3t3",
+                "storm"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-12T09:32:03.174000",
@@ -2831,9 +2834,9 @@
             "hash": "9cafc59c54508af782dcd320d717ea2f",
             "tags": [
                 "microtubules",
-                "NIH3T3",
-                "STORM",
-                "Alexa-647"
+                "nih3t3",
+                "storm",
+                "alexa-647"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2020-08-14T03:39:36.292272",
@@ -2855,8 +2858,8 @@
             "hash": "b92bd7c99d6115fa07373622e0b09be1",
             "tags": [
                 "microtubules",
-                "NIH3T3",
-                "STORM",
+                "nih3t3",
+                "storm",
                 "alexa-647"
             ],
             "license": "CC BY 4.0",
@@ -2880,7 +2883,7 @@
             "tags": [
                 "microtubules",
                 "CF660",
-                "STORM",
+                "storm",
                 "alpha-tubulin"
             ],
             "license": "CC BY 4.0",
