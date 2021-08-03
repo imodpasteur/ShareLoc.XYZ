@@ -415,12 +415,14 @@ export default {
           value: this.rdf.tags,
           placeholder:
             "Add a tag and press ENTER to confirm (lower case, no space, numbers, or any of +*#;./%@)",
-          options: this.allTags,
+          options: this.allTags.map(tag =>
+            tag.toLowerCase().replace(/ /g, "-")
+          ),
           allow_new: true,
           pattern: /^[-0-9a-z+*#;./%@:]*$/,
           icon: "label",
           help:
-            "Tags should contain only lower case letters with no space, numbers, or the following characters: +*#;./%@, please use multiple tags to describe imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. Here are some examples: `dstorm`, `u373`, `microtubule`, `alexa-647`, `secondary-antibody`, `alpha-tubulin`,`2d`,`em-ccd`,`pfa+gluta`, `thunderstorm`. ",
+            "Tags should contain only lower case letters with no space, numbers, or the following characters: +*#;./%@, please use multiple tags to describe imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. Here are some examples: `dstorm`, `u373`, `microtubules`, `alexa-647`, `secondary-antibody`, `alpha-tubulin`,`2d`,`em-ccd`,`pfa+gluta`, `thunderstorm`. ",
           isRequired: true
         },
         {

@@ -19,6 +19,7 @@ let allTags = [];
 for (let cat in tagCates) {
   allTags = allTags.concat(tagCates[cat]);
 }
+allTags = allTags.map(tag => tag.toLowerCase().replace(/ /g, "-"));
 
 const zenodoBaseURL = siteConfig.zenodo_config.use_sandbox
   ? "https://sandbox.zenodo.org"
@@ -66,7 +67,7 @@ function normalizeItem(item) {
     item.allLabels.push(item.uploaded_by);
   }
   if (item.tags) {
-    item.tags = item.tags.map(tag => tag.toLowerCase());
+    item.tags = item.tags.map(tag => tag.toLowerCase().replace(/ /g, "-"));
     item.tags = item.tags.filter(
       tag => typeof tag === "string" && !siteConfig.excluded_tags.includes(tag)
     );
@@ -325,6 +326,7 @@ export const store = new Vuex.Store({
       // index tags
       if (item.tags && item.tags.length > 0)
         item.tags.map(tag => {
+          tag = tag.toLowerCase().replace(/ /g, "-");
           if (!state.allTags.includes(tag)) {
             state.allTags.push(tag);
           }
