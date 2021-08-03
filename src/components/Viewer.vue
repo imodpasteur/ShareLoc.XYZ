@@ -1,10 +1,18 @@
 <template>
-  <div class="control">
+  <div class="viewer">
     <section>
+      <h1
+        v-if="!value || value.length <= 0"
+        style="    text-align: center;
+    color: white;
+    font-size: 2rem;
+    margin-top: 20px;"
+      >
+        SMLM file viewer
+      </h1>
       <b-field
         v-if="!value || value.length <= 0"
-        label="View local SMLM files"
-        style="margin-top: 10%; margin-left: 20px; margin-right: 20px;"
+        style="margin-top: 20px; margin-left: 20px; margin-right: 20px;"
       >
         <b-upload
           v-model="value"
@@ -188,6 +196,7 @@ export default {
         await this.previewFile(files);
       } catch (e) {
         await this.imjoy.api.showMessage(`Failed to preview file: ${e}`);
+        this.value = [];
         console.error(e);
       }
       this.commitValue();
@@ -334,5 +343,10 @@ export default {
 }
 .viewer-container {
   width: 100%;
+}
+.viewer {
+  color: #9e9a9a;
+  background-color: black;
+  height: 100vh;
 }
 </style>
