@@ -486,6 +486,7 @@ export default {
                   file.sampleName = item.name;
                   return file;
                 },
+                size: item.size,
                 sampleName: item.name,
                 name: filename,
                 url: item.download_url

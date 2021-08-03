@@ -88,7 +88,7 @@
                     <span v-else
                       >{{ props.row.files.length }} files ({{
                         totalSize(props.row.files)
-                      }}MB)</span
+                      }})</span
                     >
                   </b-table-column>
                   <b-table-column field="actions" label="Actions">
@@ -210,13 +210,20 @@ function getSampleFiles(sample) {
   for (let ch of sample.channels) {
     for (let fn = 0; fn < ch.files.length; fn++) {
       const file = ch.files[fn];
-      const newFile = new File(
-        [file],
-        (ch.files.length > 1 ? ch.name + "-" + fn : ch.name) +
-          "." +
-          file.name.split(".")[1],
-        { type: file.type, lastModified: file.lastModified }
-      );
+      let newFile;
+      // rename local file
+      if (file instanceof Blob) {
+        newFile = new File(
+          [file],
+          (ch.files.length > 1 ? ch.name + "-" + fn : ch.name) +
+            "." +
+            file.name.split(".")[1],
+          { type: file.type, lastModified: file.lastModified }
+        );
+      } else {
+        // don't change remote file
+        newFile = Object.assign({}, file);
+      }
       newFile.sampleName = sample.name;
       files.push(newFile);
     }
@@ -247,6 +254,21 @@ export default {
   }),
   created() {
     this.samples = this.item.value || [];
+    for (let sample of this.samples) {
+      if (sample.files) {
+        const files = sample.files;
+        sample.channels = [];
+        for (let file of files) {
+          const name = file.name.split("-")[0].split(".")[0];
+          if (!sample.channels.map(ch => ch.name).includes(name)) {
+            sample.channels.push({ name, files: [file] });
+          } else {
+            const channel = sample.channels.find(ch => ch.name === name);
+            channel.files.push(file);
+          }
+        }
+      }
+    }
     this.commitValue();
 
     // const baseUrl = window.location.origin + window.location.pathname;
@@ -292,9 +314,10 @@ export default {
       this.commitValue();
     },
     totalSize(files) {
-      return Math.round(
-        files.reduce((size, file) => size + file.size, 0) / 1024 / 1024
-      ); // unit: MB
+      const size =
+        files.reduce((size, file) => size + file.size, 0) / 1024 / 1024; // unit: MB
+      if (isNaN(size)) return "unkown";
+      else return (size > 1 ? Math.round(size) : size.toFixed(1)) + "MB";
     },
     addNewChannel(name) {
       if (!name) {
@@ -302,6 +325,12 @@ export default {
           "Please give a unique name for the new channel or modality in lower case, e.g. smlm, raw, actin, widefield, alpha-tubulin.",
           "default"
         );
+        if (name && name.includes("-")) {
+          alert(
+            `"Hyphen(-) is not allowed in the name, please remove it or use underscore instead.`
+          );
+          return;
+        }
         if (name && this.sampleChannels.includes(name.toLowerCase())) {
           alert(
             `"${name.toLowerCase()}" already exists, please choose another name.`
