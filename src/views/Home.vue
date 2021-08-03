@@ -559,7 +559,7 @@ function connectApps(self, item) {
     });
   } else if (item.type === "dataset") {
     item.badges.unshift({
-      label: "TO BE REMOVED",
+      label: "MIGRATION REQUIRED",
       label_type: "is-danger",
       run() {
         alert("Please migrate this item to Zenodo!");
