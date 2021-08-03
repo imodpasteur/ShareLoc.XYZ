@@ -85,8 +85,7 @@
           href="https://github.com/imodpasteur/smlm-file-format"
           target="_blank"
           >SMLM(.smlm)</a
-        >, ThunderSTORM(.csv/.xls), RapidSTROM, ZEISS(ELYRA), Nikon NSTORM(txt),
-        .png, .jpg.
+        >, ThunderSTORM(.csv/.xls), RapidSTROM, ZEISS(ELYRA), Nikon NSTORM(txt).
       </p>
       <p>
         If you have other file format which is not supported yet, please
