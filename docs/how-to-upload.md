@@ -87,7 +87,7 @@ For other license options, please visit [here](https://spdx.org/licenses)
  * Tags (mandatory)
 Tags describing imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, Target molecule, dimension, camera, buffer, fixation etc. 
 
-Example: `dSTORM`, `U373`, `microtubules`, `Alexa-647`, `secondary antibody`, `alpha-tubulin`,`2D`,`EM-CCD`,`GluOx`,`PFA+Gluta`, `ThunderSTORM`.
+Example: `dstorm`, `u373`, `microtubules`, `alexa-647`, `secondary antibody`, `alpha-tubulin`,`2d`,`em-ccd`,`gluox`,`pfa+gluta`, `thunderstorm`.
 
 You can also enter your customized tag and press `Enter` to confirm.
 
