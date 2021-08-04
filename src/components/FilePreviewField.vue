@@ -270,9 +270,6 @@ export default {
       }
     }
     this.commitValue();
-
-    // const baseUrl = window.location.origin + window.location.pathname;
-    // api.getPlugin(baseUrl + "SMLM-File-IO.imjoy.html");
   },
   computed: {
     isDatasetValid() {
