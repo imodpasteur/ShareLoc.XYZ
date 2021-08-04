@@ -55,6 +55,26 @@
             ]
         },
         {
+            "id": "shareloc-downloader",
+            "type": "application",
+            "source": "https://shareloc.xyz/ShareLoc-Downloader.imjoy.html",
+            "icon": "download",
+            "name": "ShareLoc Downloader",
+            "version": "0.1.0",
+            "api_version": "0.1.8",
+            "description": "Share dataset downloader",
+            "requirements": [],
+            "dependencies": [],
+            "env": "",
+            "tags": [],
+            "documentation": "",
+            "covers": [],
+            "badges": [],
+            "authors": [
+                "Wei OUYANG"
+            ]
+        },
+        {
             "id": "ImageJ.JS",
             "type": "application",
             "source": "https://raw.githubusercontent.com/imjoy-team/bioimage-io-models/master/src/imagej-js.imjoy.html",
