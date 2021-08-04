@@ -117,8 +117,7 @@
       "description": "List datasets",
       "outline_color": "rgb(138 138 138)",
       "default_links": [
-        "smlm-viewer",
-        "shareloc-downloader"
+        "smlm-viewer"
       ],
       "tag_categories": {
         "1.modality": [
