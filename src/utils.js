@@ -184,7 +184,13 @@ export function resizeImage(settings) {
   });
 }
 
-export async function getFullRdfFromDeposit(deposition) {
+function getAbsoluteUrl(baseUrl, c) {
+  if (!c) return c;
+  if (!baseUrl.endsWith("/")) baseUrl = baseUrl + "/";
+  return c.startsWith("http") ? c : new URL(c, baseUrl).href;
+}
+
+export async function getFullRdfFromDeposit(deposition, resolveUrl) {
   const rdf = depositionToRdf(deposition);
   const response = await fetch(rdf.config._rdf_file);
   if (response.ok) {
@@ -192,6 +198,17 @@ export async function getFullRdfFromDeposit(deposition) {
     const fullRdf = yaml.load(yamlStr);
     // fix id;
     fullRdf.id = deposition.conceptdoi;
+    if (resolveUrl) {
+      fullRdf.documentation = getAbsoluteUrl(
+        deposition.links.bucket,
+        fullRdf.documentation
+      );
+      if (fullRdf.covers) {
+        fullRdf.covers = fullRdf.covers.map(cover =>
+          getAbsoluteUrl(deposition.links.bucket, cover)
+        );
+      }
+    }
     fullRdf.config = fullRdf.config || {};
     Object.assign(fullRdf.config, rdf.config);
     const files = deposition.files.map(item => {
