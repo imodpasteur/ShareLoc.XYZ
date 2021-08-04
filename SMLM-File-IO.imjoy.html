@@ -732,60 +732,61 @@
             const name = file_name.split(".")[0] + "." + (mimeString.split('/')[1] || 'png')
             return new File([blob], name);
         }
-        saveAs(format, update_callback) {
-            let delimiter;
-            if (format === 'csv') delimiter = ','
-            else if (format === 'tsv') delimiter = '\n'
-            else throw new Error("Unsupported format " + format)
-            update_callback({ running: true, running_progress: 0, running_status: "Preparing..." })
-            return new Promise((resolve, reject) => {
-                for (let file_no = 0; file_no < this.files.length; file_no++) {
-                    const file_info = this.files[file_no]
-                    if (file_info.type == "table") {
-                        // TODO: compare with existing format, if the same format already exist, reuse it.
-                        try {
-                            const data = this.files[file_no].data
-                            const tableDict = data.tableDict
-                            const headers = []
-                            for (let i = 0; i < data.headers.length; i++) {
-                                headers.push(data.headers[i])
-                            }
-
-                            var loadWorker;
-                            if (typeof (Worker) !== "undefined") {
-                                loadWorker = new Worker("static/js/AsyncExport.js")
-                            } else {
-                                console.log("Web Worker not available")
-                                reject("Web Worker not available")
-                                return
-                            }
-                            console.log('loading...')
-                            update_callback({ running: true, running_status: 'Running ' })
-
-                            const callback = (data) => {
-                                if (data.error) {
-                                    reject(data.error)
-                                    loadWorker.terminate()
-                                }
-                                else if (data.progress) {
-                                    update_callback({ running: true, running_progress: data.progress, running_status: `Converting format...${data.progress.toFixed(1)}%` })
-                                }
-                                else if (data.file) {
-                                    update_callback({ running: false, running_progress: 100, running_status: "Export" })
-                                    resolve(data.file)
-                                    loadWorker.terminate()
-                                }
-                            }
-
-                            exportToFile({ headers, tableDict, delimiter, format, filename: this.manifest.name }, callback)
-
+        async saveAs(format) {
+            
+            if(!supported_text_formats[format]) throw new Error("Unsupported format: " + format)
+            const format_config = supported_text_formats[format];
+            const  delimiter = format_config.delimiter
+            const header_transform = {}
+            for(let k of Object.keys(format_config.header_transform)){
+                header_transform[format_config.header_transform[k]]=k
+            }
+            await api.showMessage("Preparing...")
+            await api.showProgress(0)
+        
+            for (let file_no = 0; file_no < this.files.length; file_no++) {
+                const file_info = this.files[file_no]
+                if (file_info.type == "table") {
+                    // TODO: compare with existing format, if the same format already exist, reuse it.
+            
+                        const data = this.files[file_no].data
+                        const tableDict = data.tableDict
+                        const headers = []
+                        for (let i = 0; i < data.headers.length; i++) {
+                            headers.push(data.headers[i])
                         }
-                        catch (e) {
-                            reject(e)
+
+                        let content = ""
+                        for(let header of headers){
+                            content = content + (header_transform[header] || header)  + delimiter
                         }
-                    }
+                        content = content.slice(0, content.length-1) + '\n'
+            
+                        const rows = tableDict[headers[0]].length
+                        const columns = headers.length;
+                        for(let i=0;i<rows;i++){
+                            for(let j=0;j<columns;j++){
+                            content = content + tableDict[headers[j]][i] + (j<columns-1?delimiter:'\n')
+                            }
+                        
+                            
+                            if(i%1000 === 0) {
+                                await api.showMessage(`Converting ${i}/${rows}...`)
+                                await api.showProgress(i/rows*100)
+                            }
+                        }
+                        const file = new File([content],file_info.name.split('.')[0] + format_config.extension, {
+                            type: "text/plain",
+                        })
+                        await api.exportFile(file, file.name);
+                        await api.showMessage(`Done, saving...`)
+                        await api.showProgress(100)
+                        
+                  
                 }
-            })
+            }
+
+           
         }
         save(save_file_name, update_callback) {
             if(save_file_name && !save_file_name.endsWith('.smlm')){
@@ -1354,7 +1355,7 @@
                 }
             }
            
-            return {_rintf: true, files: smlm.files, manifest: smlm.manifest, save: smlm.save.bind(smlm) }
+            return {_rintf: true, files: smlm.files, manifest: smlm.manifest, save: smlm.save.bind(smlm), saveAs: smlm.saveAs.bind(smlm) }
 
         }
 
