@@ -54,24 +54,20 @@ function normalizeItem(item) {
     item.covers = [item.covers];
   }
   if (item.icon === "extension") item.icon = "puzzle";
-  item.cover_images = [];
-  for (let cover of item.covers) {
-    // if (cover.includes("(") || cover.includes(")")) {
-    //   console.error("cover image file name cannot contain brackets.");
-    //   continue;
-    // }
+
+  item.covers = item.covers.map(cover => {
     if (!cover.startsWith("http")) {
-      item.cover_images.push(new URL(cover, item.root_url).href);
+      return encodeURI(concatAndResolveUrl(item.root_url, cover));
     } else {
       if (cover.includes(" ")) {
-        item.cover_images.push(encodeURI(cover));
-      } else item.cover_images.push(cover);
+        return encodeURI(cover);
+      } else return cover;
     }
-  }
+  });
 
   // if no cover image added, use the icon image
-  if (item.cover_images.length <= 0 && item?.icon?.startsWith("http")) {
-    item.cover_images.push(item.icon);
+  if (item.covers.length <= 0 && item?.icon?.startsWith("http")) {
+    item.covers.push(item.icon);
   }
 
   item.allLabels = item.labels || [];

@@ -7,15 +7,12 @@
     <section style="text-align:center;">
       <b-carousel
         style="max-width: 512px;"
-        v-if="resourceItem.cover_images && resourceItem.cover_images.length > 0"
-        :indicator="resourceItem.cover_images.length > 1"
-        :arrow="resourceItem.cover_images.length > 1"
+        v-if="resourceItem.covers && resourceItem.covers.length > 0"
+        :indicator="resourceItem.covers.length > 1"
+        :arrow="resourceItem.covers.length > 1"
         :pause-info="false"
       >
-        <b-carousel-item
-          v-for="cover in resourceItem.cover_images"
-          :key="cover"
-        >
+        <b-carousel-item v-for="cover in resourceItem.covers" :key="cover">
           <figure class="image is-16by9">
             <img
               loading="lazy"
