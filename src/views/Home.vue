@@ -838,9 +838,10 @@ export default {
       if (this.initialized)
         this.$router.replace({ query: query }).catch(() => {});
     },
-    showStatsDialog(item) {
+    async showStatsDialog(item) {
       this.infoDialogTitle = "Statistics for " + item.name;
       this.showInfoDialogMode = "markdown";
+      await updateFullRDF(item);
       this.infoCommentBoxTitle = null;
       if (!item.stats) this.infoMarkdownContent = `No stats info available.`;
       else {
