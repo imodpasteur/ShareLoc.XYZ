@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "feb742acf00fa7b088bb",
+    "revision": "9491e48edc67072b410e",
     "url": "/css/app.cf3b38db.css"
   },
   {
@@ -56,12 +56,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/index.ejs"
   },
   {
-    "revision": "79c8d1857d9764690db1cb15e7d6b57a",
+    "revision": "cfd0b8a3b4d491588739a2cd859d5947",
     "url": "/index.html"
   },
   {
-    "revision": "feb742acf00fa7b088bb",
-    "url": "/js/app.869f7a4c.js"
+    "revision": "9491e48edc67072b410e",
+    "url": "/js/app.01d30112.js"
   },
   {
     "revision": "0b824129950bf483f460",
