@@ -57,6 +57,7 @@ export async function setupBioEngine() {
         await app.imjoy.pm.reloadPluginRecursively({
           uri: baseUrl + "SMLM-File-IO.imjoy.html"
         });
+        await app.loadPlugin(baseUrl + "ShareLoc-Downloader.imjoy.html");
         // This will also add an entry to the plugin menu
         await app.loadPlugin(baseUrl + "FairyDust.imjoy.html");
         const queryString = window.location.search;

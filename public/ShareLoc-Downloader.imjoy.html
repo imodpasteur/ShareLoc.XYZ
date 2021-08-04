@@ -1,0 +1,417 @@
+<config lang="json">
+{
+    "name": "ShareLoc-Downloader",
+    "type": "window",
+    "tags": [],
+    "ui": "",
+    "version": "0.3.1",
+    "api_version": "0.1.7",
+    "description": "Batch downloading datasets from ShareLoc.XYZ",
+    "icon": "https://raw.githubusercontent.com/imjoy-team/bioimage-io-models/master/asset/download-icon.png",
+    "inputs": null,
+    "outputs": null,
+    "env": "",
+    "requirements": [
+        "https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.22/vue.min.js",
+        "https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css",
+        "https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js",
+        "https://static.imjoy.io/js/UZIP.js"
+    ],
+    "dependencies": [],
+    "defaults": {"w": 20, "h": 10},
+    "runnable": true
+}
+</config>
+
+<script lang="javascript">
+function isZenodoFileUrl(url){
+    const myRegexp = /https?:\/\/zenodo.org\/record\/([a-zA-Z0-9-]+)\/files\/(.*)/g;
+    const match = myRegexp.exec(url);
+    if (!match || match.length !== 3) {
+    return false
+    }
+    return true
+}
+
+async function convertZenodoFileUrl(url) {
+    const myRegexp = /https?:\/\/zenodo.org\/record\/([a-zA-Z0-9-]+)\/files\/(.*)/g;
+    const match = myRegexp.exec(url);
+    if (!match || match.length !== 3) {
+    throw new Error("Invalid zenodo url");
+    }
+    const [fullUrl, depositId, fileName] = match;
+    const blob = await fetch(
+    `https://zenodo.org/api/records/${depositId}`
+    ).then(r => r.blob());
+    const data = JSON.parse(await new Response(blob).text());
+    const fn = fileName.split("?")[0];
+    const fileObj = data.files.filter(file => {
+    return file.key === fn;
+    })[0];
+    return fileObj && fileObj.links.self;
+}
+
+    
+async function convertZenodoFileUrl(url) {
+    const myRegexp = /zenodo.org\/record\/([a-zA-Z0-9-]+)\/files\/(.*)/g;
+    const match = myRegexp.exec(url);
+    if (!match || match.length !== 3) {
+    return null
+    }
+    const [fullUrl, depositId, fileName] = match;
+    if(url.includes('sandbox.zenodo.org'))
+    url = `https://sandbox.zenodo.org/api/records/${depositId}`;
+    else
+    url = `https://zenodo.org/api/records/${depositId}`;
+    const blob = await fetch(url).then(r => r.blob());
+    const data = JSON.parse(await new Response(blob).text());
+    const fn = fileName.split("?")[0];
+    const fileObj = data.files.filter(file => {
+    return file.key === fn;
+    })[0];
+    return fileObj.links.self;
+}
+
+async function fetchFile(url, showMessage, showProgress){
+    url = await convertZenodoFileUrl(url) || url;
+    const response = await axios({
+    url,
+    method: 'GET',
+    responseType: 'arraybuffer',
+    onDownloadProgress: (progressEvent) => {
+        showMessage(`Downloading weights ${progressEvent.loaded}/${progressEvent.total}`);
+        if(progressEvent.total)
+        showProgress(progressEvent.loaded/progressEvent.total)
+    }
+    })
+    const filename = url.split('/').pop().split('#')[0].split('?')[0];
+    // const blob = new Blob([response.data]);
+    // const file = new File([blob], filename, {type: "application/octet-stream", lastModified: Date.now()});
+    return {name: filename, data: new Uint8Array(response.data)}
+}
+
+
+async function resolveUrl(rootUrl, url){
+    if(!url.startsWith('http')){
+        url = rootUrl + '/' + url.replace('./', '')
+    }
+    if(isZenodoFileUrl(url)) url = await convertZenodoFileUrl(url)
+    return url
+}
+
+function getFileName(url){
+    return './' + url.split('/').pop().split('#')[0].split('?')[0]
+}
+
+async function fileExists(rootUrl, url){
+    const u = await resolveUrl(rootUrl, url)
+    const response = await fetch(u, {method: 'HEAD'})
+    return response.ok
+}
+
+async function downloadSample(rootUrl, spec, showMessage, showProgress, showWarning){
+    const exportSpec = JSON.parse(JSON.stringify(spec, function (key, value) {
+        if (value === Infinity) {
+            return 'inf';
+        }
+        if (value === -Infinity) {
+            return '-inf';
+        }
+        return value;
+    })
+    );
+    // Move id to config for now
+    exportSpec.config = exportSpec.config || {}
+    if(exportSpec.id){
+    exportSpec.config._id = exportSpec.id
+    delete exportSpec.id
+    }
+    await showMessage('Downloading files...')
+    let files = []
+    const weightsURL = spec.weights[weightsFormat].source
+    if(weightsURL){
+    files.push(weightsURL)
+    exportSpec.weights[weightsFormat].source = getFileName(weightsURL)
+    }
+    if(spec.attachments && spec.attachments['files']){
+    const fs = spec.attachments['files']
+    files = files.concat(fs)
+    const exportedFs = exportSpec.attachments['files']
+    for(let i=0;i<fs.length;i++){
+        exportedFs[i] = getFileName(fs[i])
+    }
+    }
+    if(spec.weights[weightsFormat].attachments && spec.weights[weightsFormat].attachments.files){
+    const fs = spec.weights[weightsFormat].attachments.files
+    files = files.concat(fs)
+    const exportedFs = exportSpec.weights[weightsFormat].attachments.files
+    for(let i=0;i<fs.length;i++){
+        exportedFs[i] = getFileName(fs[i])
+    }
+    }
+    // deprecate this after v0.4.0
+    // TODO: Fix the leading ./ in the python library
+    if(spec.source && spec.source.includes(':')){
+    const src = spec.source.split(':')[0] // e.g. ./mynetwork:UNet
+    files.push(src)
+    // exportSpec.source = getFileName(src)
+    // HACK: leave field in exportSpec unchanged, bioimageio.spec currently only
+    // loads it like this
+    exportSpec.source = spec.source
+    }
+    // deprecate this after v0.4.0
+    if(spec.dependencies && spec.dependencies.includes(':')){
+    const dep = spec.dependencies.split(':')[1] // e.g. pip:./requirements.txt
+    files.push(dep)
+    exportSpec.dependencies = spec.dependencies
+    }
+    // after 0.4.0, rename source to architecture
+    if(spec.weights[weightsFormat]){
+    const wformat = spec.weights[weightsFormat];
+    if(wformat.architecture && wformat.architecture.includes(':')){
+        const src = wformat.architecture.split(':')[0] // e.g. ./mynetwork:UNet
+        files.push(src)
+        exportSpec.weights[weightsFormat].architecture = wformat.architecture
+    }
+    if(wformat.dependencies && wformat.dependencies.includes(':')){
+        const dep = wformat.dependencies.split(':')[1] // e.g. pip:./requirements.txt
+        files.push(dep)
+        exportSpec.weights[weightsFormat].dependencies = wformat.dependencies
+    }
+    }
+    if(spec.documentation && !spec.documentation.startsWith('http')){
+    files.push(spec.documentation)
+    exportSpec.documentation = getFileName(spec.documentation)
+    }
+    for(let key of ['test_inputs', 'test_outputs', 'sample_inputs', 'sample_outputs']){
+        if(spec[key] && Array.isArray(spec[key])){
+        for(let i=0;i<spec[key].length;i++){
+            if(await fileExists(rootUrl, spec[key][i])){
+                files.push(spec[key][i])
+                exportSpec[key][i] = getFileName(spec[key][i])
+            }
+            else{
+                showWarning("File not found: " + spec[key][i])
+            }
+        }
+        }
+    }
+
+    if(spec.covers && Array.isArray(spec.covers)){
+    files = files.concat(spec.covers)
+    for(let i=0;i<spec.covers.length;i++){
+        exportSpec.covers[i] = getFileName(spec.covers[i])
+    }
+    }
+    // remove duplicated files
+    files = [...new Set(files)]
+    const files2zip = {}
+    console.time("downloading")
+    for(let url of files){
+    url = await resolveUrl(rootUrl, url)
+    await showMessage(`Downloading ${url}`)
+    try{
+        const file = await fetchFile(url, showMessage, showProgress)
+        files2zip[file.name] = file.data
+        await showMessage(`file downloaded: ${file.name}`)
+    } catch(e){
+        showWarning("Failed to download: " + url);
+    }
+    }
+    console.timeEnd("downloading")
+    // clear other weights format
+    // and only keep the current one
+    const newWeights = {}
+    newWeights[weightsFormat] = exportSpec.weights[weightsFormat]
+    exportSpec.weights = newWeights
+    files2zip["rdf.yaml"] = new TextEncoder("utf-8").encode(jsyaml.dump(exportSpec))
+    files2zip["model.yaml"] = files2zip["rdf.yaml"]
+    
+
+    await showMessage('Making zip package, this may take a while...')
+    console.time("zipping")
+    const zipBlob = new Blob([UZIP.encode(files2zip, true)]);
+    console.timeEnd('zipping')
+    await api.exportFile(zipBlob, spec.name.replace(/\s+/g, '-').toLowerCase() + '.zip')
+    await showMessage('Model package was exported successfully')
+
+}
+
+const app = new Vue({
+    el: '#app',
+    data: {
+    modelInfo: null,
+    format: null,
+    status: "",
+    loading: false,
+    progress: 0,
+    spec: null,
+    samples: [],
+    rootUrl: null,
+    warnings: [],
+    weightsConsumers: [],
+    datasetURL: null,
+    },
+    methods: {
+    async init(){
+        const rawSpecUrl = this.modelInfo.source
+        const tmp = rawSpecUrl.split('/')
+        this.rootUrl = tmp.slice(0, tmp.length-1).join('/')
+        const specUrl = await convertZenodoFileUrl(rawSpecUrl) || rawSpecUrl
+        const response = await fetch(specUrl)
+        const yamlText = await response.text()
+        this.spec = jsyaml.load(yamlText.replaceAll('!<tag:yaml.org,2002:js/undefined>', ''))
+        const zenodoID = this.spec.id.split('/zenodo.')[1]
+        const isSandbox = specUrl.includes('sandbox.zenodo.org')
+        this.datasetURL = rawSpecUrl.split('/files/')[0]
+        this.samples = this.spec.attachments.samples;
+        for(let sample of this.samples){
+            for (let file of sample.files) {
+                file.url = `${this.rootUrl}/${sample.name}/${file.name}`; // <sample name>/ <file name>
+            }
+            for(let view of sample.views){
+                view.image = `${this.rootUrl}/${sample.name}/${
+                Array.isArray(view.image_name)
+                    ? view.image_name[0]
+                    : view.image_name
+                }`;
+            }
+        }
+        
+
+        this.modelInfo.name = this.spec.name
+    },
+    async downloadFile(file){
+    },
+    async downloadSample(sample){
+        this.format = format
+        this.warnings = []
+        try{
+        this.loading = true;
+        if(this.format === 'default')
+            await api.utils.openUrl(spec.download_url)
+        else
+            await downloadSample(this.rootUrl, this.spec, async (msg)=>{
+            this.status = msg
+            this.$forceUpdate()
+            }, async (p)=>{
+            if(p<1) p = parseInt(p*100)
+            this.progress = p
+            this.$forceUpdate()
+            },(warning)=>{
+                this.warnings.push(warning)
+                this.$forceUpdate();
+            })
+        }
+        finally{
+        this.progress = 0
+        this.loading = false
+        }
+
+    },
+    }
+})
+
+class ImJoyPlugin {
+    async setup() {
+    }
+
+    async run(ctx) {
+    if(!ctx.data || (!ctx.data.config && !ctx.data.source)){
+        const rdfUrl = await api.prompt("Please paste the model spec url here", "https://sandbox.zenodo.org/record/884215/files/rdf.yaml")
+        if(!rdfUrl) return
+        app.modelInfo = {
+        name: getFileName(rdfUrl),
+        source: rdfUrl
+        }
+    }
+    else
+        app.modelInfo = ctx.data;
+    await app.init();
+    app.$forceUpdate();
+    }
+}
+
+api.export(new ImJoyPlugin())
+</script>
+
+<window lang="html">
+    <div style="text-align: center;padding:10px" id="app">
+    <h2 v-if="modelInfo" class="font-size: 35px;">{{modelInfo.name}}</h2>
+
+    <div v-if="spec">
+        <ul>
+            <li style="color: orange;" v-for="warning in warnings">{{warning}}</li>
+        </ul>
+        <p v-else-if="!spec">No dataset selected.</p>
+        <div v-if="loading" class="loading loading-lg"></div>
+        <progress v-if="progress" id="progressbar" class="progress" :value="progress" max="100"></progress>
+        <div class="d-block">{{status}}</div>
+        <article class="message">
+            <div class="message-header">
+            <p>Download dataset in Python</p>
+            <button class="delete" aria-label="delete"></button>
+            </div>
+            <div class="message-body" style="text-align: left;">
+                You can also download this dataset using <strong>Python</strong> script.<br>
+                First, install shareloc-utils from PyPI: <br>
+                <code>
+                pip install -U shareloc-utils
+                </code>
+                <br>
+                Then you can run the following command: <br>
+                <code>
+                python -m shareloc_utils.batch_download --datasets={{datasetURL}} --output_dir=./output --conversion
+                </code>
+                <br>
+                For downloading multiple datasets, please use the bookmark feature to mark the datasets, then click the bookmark icon in the navigation bar and click "Download All".
+                <br>
+                <a href="https://github.com/imodpasteur/shareloc-utils#shareloc-utilities" target="_blank">More details on shareloc_utils</a>
+            </div>
+        </article>
+        <article class="message">
+            <div class="message-header">
+            <p>Download links</p>
+            <button class="delete" aria-label="delete"></button>
+            </div>
+            <div class="message-body" style="text-align: left;">
+                <div class="columns is-desktop">
+                <div class="column" v-for="sample in samples">
+                    <div class="card">
+                        <div class="card-content">
+                            <img v-for="view in sample.views" :src="view.image" class="img-responsive">
+                        </div>
+                        <footer class="card-footer">
+                        <p class="card-footer-item" v-if="sample.files.length<4">
+                            <a class="btn btn-primary" v-for="file in sample.files" :key="file.name" :href="file.url" target="_blank">{{file.name}}</a>
+                        </p>
+<!--                         <p class="card-footer-item" v-else>
+                            <button class="btn btn-primary" @click="downloadSample(sample)">Download files</button>
+                        </p> -->
+                        </footer>
+                    </div>           
+                </div>
+                </div>
+            </article>
+        </div>
+    </div>
+    </div>
+</window>
+
+<style lang="css">
+#progressbar {
+    position: absolute;
+    bottom: 6px;
+    left: 0px;  
+}
+.form-group {
+    margin: 20px;
+}
+.chip{
+    cursor: pointer;
+}
+.avatar {
+    background: white;
+}
+</style>
