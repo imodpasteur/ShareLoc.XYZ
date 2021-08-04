@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { randId, ZenodoClient } from "./utils";
+import { concatAndResolveUrl, randId, ZenodoClient } from "./utils";
 import siteConfig from "../site.config.json";
 import spdxLicenseList from "spdx-license-list/full";
 import { setupBioEngine } from "./bioEngine";
