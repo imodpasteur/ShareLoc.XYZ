@@ -1541,7 +1541,27 @@
         scopeParams.fov = camera.fov;
     }
 
-
+    function showExportCSV(smlm){
+        scopeParams['Export']= "Select a format"
+        const formats = [
+            "Select a format",
+            'ThunderSTORM (csv)',
+            'ThunderSTORM (xls)'
+        ]
+        gui.add(scopeParams, 'Export', formats).listen().onChange(async () => {
+            if(scopeParams['Export'] !== 'Select a format'){
+                try{
+                    await smlm.saveAs(scopeParams['Export'])
+                }
+                catch(e){
+                    throw e
+                }
+                finally{
+                    scopeParams['Export']= "Select a format"
+                }
+            }
+        })
+    }
     class ImJoyPlugin {
         async setup() {
         }
@@ -1570,7 +1590,7 @@
             if (ctx.config && ctx.config.samples) {
                 // scopeParams.File = ctx.config.samples[0].files[0].download_url;
                 const initFiles = ctx.config.samples[0].files
-                scopeParams.File = initFiles.filter(
+                scopeParams['File'] = initFiles.filter(
                     file =>
                     (file.name.endsWith('.smlm')||
                     file.name.endsWith('.csv')||
@@ -1590,6 +1610,7 @@
                         for(let file of data.files){
                             await this.show(file)
                         }
+                        showExportCSV(data)
                     }
                     catch (e) {
                         api.showMessage(`Failed to load file: ${e}`)
@@ -1602,6 +1623,7 @@
                     for(let file of data.files){
                         await this.show(file)
                     }
+                    showExportCSV(data)
                 }
                 catch (e) {
                     api.showMessage(`Failed to load file: ${e}`)
@@ -1627,8 +1649,9 @@
                             if (fileElem.files[0]) {
                                 const data = await smlmPlugin.load(fileElem.files[0])
                                 for(let file of data.files){
-                            await this.show(file)
-                        }
+                                    await this.show(file)
+                                }
+                                showExportCSV(data)
                             }
                         }
                         catch (e) {
