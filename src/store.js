@@ -29,12 +29,13 @@ siteConfig.table_view = siteConfig.table_view || {
   columns: ["name", "authors", "badges", "apps"]
 };
 
-const tagCates = siteConfig.resource_categories.filter(
-  c => c.type === "dataset"
-)[0].tag_categories;
 let allTags = [];
-for (let cat in tagCates) {
-  allTags = allTags.concat(tagCates[cat]);
+for (let cat of siteConfig.resource_categories) {
+  const tagCates = cat.tag_categories;
+  if (tagCates)
+    for (let cat in tagCates) {
+      allTags = allTags.concat(tagCates[cat]);
+    }
 }
 allTags = allTags.map(tag => tag.toLowerCase().replace(/ /g, "-"));
 
@@ -202,7 +203,7 @@ export const store = new Vuex.Store({
   state: {
     loadedUrl: null,
     allApps: {},
-    allTags: allTags,
+    allTags: [...allTags],
     imjoy: null,
     resourceItems: [],
     zenodoClient: siteConfig.zenodo_config.enabled
@@ -235,6 +236,10 @@ export const store = new Vuex.Store({
         console.log("manifest already loaded");
         return;
       }
+      // clear items
+      context.state.resourceItems = [];
+      context.state.allApps = {};
+      context.state.allTags = [...allTags];
       const siteConfig = context.state.siteConfig;
       try {
         const items = await context.state.zenodoClient.getResourceItems({
@@ -342,15 +347,15 @@ export const store = new Vuex.Store({
       item.config._rdf_file = item.config._rdf_file || item.source; // TODO: some resources current doesn't have a dedicated rdf_file
       if (item.type === "application" && item?.source?.endsWith(".imjoy.html"))
         state.allApps[item.id] = item;
-      state.resourceItems.push(item);
       // index tags
       if (item.tags && item.tags.length > 0)
-        item.tags.map(tag => {
-          tag = tag.toLowerCase().replace(/ /g, "-");
-          if (!state.allTags.includes(tag)) {
-            state.allTags.push(tag);
-          }
-        });
+        item.tags = item.tags.map(tag => tag.toLowerCase().replace(/ /g, "-"));
+      item.tags.map(tag => {
+        if (!state.allTags.includes(tag)) {
+          state.allTags.push(tag);
+        }
+      });
+      state.resourceItems.push(item);
     },
     removeResourceItem(state, item) {
       if (item.type === "application") delete state.allApps[item.id];

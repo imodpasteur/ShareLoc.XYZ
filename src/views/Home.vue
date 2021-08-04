@@ -708,7 +708,11 @@ export default {
           )[0];
           if (matchedItem) this.$route.query.id = matchedItem.id;
           else {
-            alert("Oops, resource item not found: " + this.resourceId);
+            alert(
+              "Oops, resource item not found: " +
+                this.resourceId +
+                ". Possibly because it has not been approved yet."
+            );
           }
         } else this.$route.query.id = this.resourceId;
       }
@@ -1046,7 +1050,7 @@ export default {
       this.infoDialogTitle = this.selectedResourceItem.name;
       this.infoDialogFullscreen = false;
       this.$modal.show("info-dialog");
-      if (item.id) {
+      if (item.id && !window.location.href.includes("#/r/")) {
         const query = Object.assign({}, this.$route.query);
         query.id = item.id;
         this.$router.replace({ query: query }).catch(() => {});
@@ -1060,6 +1064,7 @@ export default {
       this.selectedResourceItem = null;
       this.showInfoDialogMode = null;
       this.infoMarkdownUrl = null;
+      this.infoMarkdownContent = null;
       this.infoCommentBoxTitle = null;
       this.$modal.hide("info-dialog");
       const query = Object.assign({}, this.$route.query);
@@ -1115,7 +1120,11 @@ export default {
           this.showResourceItemInfo(m);
           hasQuery = true;
         } else {
-          alert("Oops, resource item not found: " + this.$route.query.id);
+          alert(
+            "Oops, resource item not found: " +
+              this.$route.query.id +
+              ". Possibly because it has not been approved yet."
+          );
         }
       }
 
