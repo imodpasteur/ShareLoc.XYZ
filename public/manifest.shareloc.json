@@ -448,7 +448,7 @@
             "hash": "e4eed17380a30927c600db32014c4129",
             "tags": [
                 "microtubules",
-                "#test"
+                "test"
             ],
             "license": "CC BY 4.0",
             "timestamp": "2018-02-08T22:37:38.219090",
@@ -1352,7 +1352,7 @@
             "hash": "dd865cb8a8ef023113a9c7ae9945777c",
             "tags": [
                 "dstorm",
-                "#DAISY",
+                "daisy",
                 "clathrin",
                 "alexa-647"
             ],
@@ -2538,7 +2538,7 @@
             "description": "microtubules (DMA1) in REF52 cells labelled with alexa-647",
             "hash": "1f819f0097eaa9a3916b9c413fb44dad",
             "tags": [
-                "microbtubules",
+                "microtubules",
                 "alexa-647",
                 "storm",
                 "alpha-tubulin",
