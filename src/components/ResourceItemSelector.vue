@@ -212,14 +212,9 @@ export default {
   methods: {
     applySearch(newTags) {
       if (!this.allItems) return;
-      newTags =
-        newTags && newTags.map(tag => tag.toLowerCase().replace(/ /g, "-"));
       this.$emit("tags-updated", newTags);
       this.loading = true;
       debounce(() => {
-        const knownTags = newTags.filter(
-          tag => this.fullLabelList.indexOf(tag.toLowerCase()) >= 0
-        );
         let selectedItems;
         const items = this.type
           ? this.allItems.filter(m => m.type === this.type)
@@ -227,6 +222,9 @@ export default {
         if (newTags.length <= 0) {
           selectedItems = items;
         } else {
+          const knownTags = newTags.filter(
+            tag => this.fullLabelList.indexOf(tag.toLowerCase()) >= 0
+          );
           selectedItems = items.filter(item => {
             let matched;
             if (this.matchingAll)
