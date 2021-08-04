@@ -310,7 +310,10 @@
           class="markdown-container"
           v-else-if="showInfoDialogMode === 'markdown'"
         >
-          <markdown :url="infoMarkdownUrl"></markdown>
+          <markdown
+            :content="infoMarkdownContent"
+            :url="infoMarkdownUrl"
+          ></markdown>
           <!-- <comment-box
           v-if="infoDialogTitle"
           :title="infoDialogTitle"
@@ -369,6 +372,12 @@ const DEFAULT_ICONS = {
 };
 import { runAppForItem, runAppForAllItems } from "../bioEngine";
 import { debounce } from "../utils";
+
+function titleCase(str) {
+  return str.replace(/_/g, " ").replace(/(^|\s)\S/g, function(t) {
+    return t.toUpperCase();
+  });
+}
 
 const isTouchDevice = (function() {
   try {
@@ -527,6 +536,16 @@ function connectApps(self, item) {
     }
   }
 
+  if (item.stats && item.stats.downloads !== undefined)
+    item.badges.unshift({
+      label: "downloads",
+      label_type: "is-dark",
+      ext: item.stats.downloads,
+      run() {
+        self.showStatsDialog(item);
+      }
+    });
+
   if (item.config && item.config._conceptdoi) {
     item.badges.unshift({
       label: item.config._conceptdoi,
@@ -579,6 +598,7 @@ export default {
       viewerUrl: null,
       infoDialogTitle: "",
       infoMarkdownUrl: null,
+      infoMarkdownContent: null,
       infoCommentBoxTitle: null,
       selectedCategory: null,
       displayMode: "card",
@@ -766,6 +786,23 @@ export default {
       query.tags = partner.tags;
       if (this.initialized)
         this.$router.replace({ query: query }).catch(() => {});
+    },
+    showStatsDialog(item) {
+      this.infoDialogTitle = "Stats for " + item.name;
+      this.showInfoDialogMode = "markdown";
+      if (!item.stats) this.infoMarkdownContent = `No stats info available.`;
+      else {
+        let statsText = "";
+        for (let k of Object.keys(item.stats)) {
+          statsText += `\n * ${titleCase(k)}: ${item.stats[k]}`;
+        }
+        this.infoMarkdownContent = `# Stats for ${item.name}` + statsText;
+        this.infoMarkdownContent +=
+          "\n\n[More info on how stats are collected](https://help.zenodo.org/#statistics)";
+      }
+
+      if (this.screenWidth < 700) this.infoDialogFullscreen = true;
+      this.$modal.show("info-dialog");
     },
     async showAttachmentsDialog(item, focus) {
       if (item.config._deposit && !item.config._rdf)

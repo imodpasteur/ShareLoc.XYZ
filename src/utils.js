@@ -448,6 +448,7 @@ export function depositionToRdf(deposition) {
       .filter(k => k !== "shareloc.xyz" || !k.startsWith("shareloc.xyz:"))
       .concat(["zenodo"]),
     description,
+    stats: deposition.stats,
     license:
       typeof metadata.license === "string"
         ? metadata.license

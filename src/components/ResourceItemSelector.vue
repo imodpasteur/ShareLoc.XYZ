@@ -212,7 +212,8 @@ export default {
   methods: {
     applySearch(newTags) {
       if (!this.allItems) return;
-      newTags = newTags && newTags.map(tag => tag.toLowerCase().replace(/ /g, "-"));
+      newTags =
+        newTags && newTags.map(tag => tag.toLowerCase().replace(/ /g, "-"));
       this.$emit("tags-updated", newTags);
       this.loading = true;
       debounce(() => {
