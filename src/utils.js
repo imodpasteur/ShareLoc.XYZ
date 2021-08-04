@@ -477,22 +477,28 @@ export class ZenodoClient {
     this.lastUserId = null;
     this.callbackUrl = encodeURIComponent("https://imjoy.io/login-helper");
     this.credential = null;
+    this.credentialKey = isSandbox
+      ? "sandbox_zenodo_credential"
+      : "production_zenodo_credential";
+    this.userIdKey = isSandbox
+      ? "sandbox_zenodo_user_id"
+      : "production_zenodo_user_id";
     try {
-      this.lastUserId = localStorage.getItem("zenodo_user_id");
+      this.lastUserId = localStorage.getItem(this.userIdKey);
       if (this.lastUserId) this.lastUserId = parseInt(this.lastUserId);
-      let lastCredential = localStorage.getItem("zenodo_credential");
+      let lastCredential = localStorage.getItem(this.credentialKey);
       if (lastCredential) {
         this.credential = JSON.parse(lastCredential);
         // check if it's still valid
         this.getCredential();
         if (this.lastUserId !== this.credential.user_id) {
           this.lastUserId = this.credential.user_id;
-          localStorage.setItem("zenodo_user_id", this.lastUserId);
+          localStorage.setItem(this.userIdKey, this.lastUserId);
         }
       }
     } catch (e) {
-      console.error(`Failed to reset zenodo_credential: ${e}`);
-      localStorage.removeItem("zenodo_credential");
+      console.error(`Failed to reset ${this.credentialKey}: ${e}`);
+      localStorage.removeItem(this.credentialKey);
     }
   }
 
@@ -508,9 +514,9 @@ export class ZenodoClient {
       } else {
         this.credential = null;
         try {
-          localStorage.removeItem("zenodo_credential");
+          localStorage.removeItem(this.credentialKey);
         } catch (e) {
-          console.error(`Failed to reset zenodo_credential: ${e}`);
+          console.error(`Failed to reset ${this.credentialKey}: ${e}`);
         }
       }
     }
@@ -591,9 +597,9 @@ export class ZenodoClient {
     return new Promise((resolve, reject) => {
       this.credential = null;
       try {
-        localStorage.removeItem("zenodo_credential");
+        localStorage.removeItem(this.credentialKey);
       } catch (e) {
-        console.error("Failed to reset zenodo_credential");
+        console.error(`Failed to reset ${this.credentialKey}`);
       }
       const loginWindow = window.open(`${this.baseURL}/logout`, "Logout");
       try {
@@ -703,11 +709,11 @@ export class ZenodoClient {
           this.credential.create_at = Date.now();
           if (this.lastUserId !== this.credential.user_id) {
             this.lastUserId = this.credential.user_id;
-            localStorage.setItem("zenodo_user_id", this.lastUserId);
+            localStorage.setItem(this.userIdKey, this.lastUserId);
           }
           resolve(event.data);
           localStorage.setItem(
-            "zenodo_credential",
+            this.credentialKey,
             JSON.stringify(this.credential)
           );
         }

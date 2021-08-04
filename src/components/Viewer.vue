@@ -1,10 +1,18 @@
 <template>
-  <div class="control">
-    <section>
+  <div class="viewer">
+    <section class="width-limited">
+      <h1
+        v-if="!value || value.length <= 0"
+        style="    text-align: center;
+    color: white;
+    font-size: 2rem;
+    margin-top: 20px;"
+      >
+        SMLM File Viewer
+      </h1>
       <b-field
         v-if="!value || value.length <= 0"
-        label="View local SMLM files"
-        style="margin-top: 10%; margin-left: 20px; margin-right: 20px;"
+        style="margin-top: 20px; margin-left: 20px; margin-right: 20px;"
       >
         <b-upload
           v-model="value"
@@ -18,6 +26,10 @@
               <b-icon icon="upload" size="is-large"></b-icon>
 
               <p>Drag and drop files here</p>
+              <p>
+                Your data will stay locally in your browser, no data will be
+                sent or uploaded to the server.
+              </p>
               <p>
                 For multi-channel image, drag the files for all the channels
                 together.
@@ -61,11 +73,11 @@
           </a>
         </div> -->
     </section>
-    <div v-if="!value || value.length <= 0" style="margin:20px;">
-      <p>
-        NOTE: Your data will stay locally in your browser, no data will be sent
-        or uploaded to a server, unless you use the upload feature explcitly.
-      </p>
+    <div
+      v-if="!value || value.length <= 0"
+      style="margin:20px;padding:20px;"
+      class="width-limited"
+    >
       <br />
       <p>
         You can load files with the following formats:
@@ -73,8 +85,7 @@
           href="https://github.com/imodpasteur/smlm-file-format"
           target="_blank"
           >SMLM(.smlm)</a
-        >, ThunderSTORM(.csv/.xls), RapidSTROM, ZEISS(ELYRA), Nikon NSTORM(txt),
-        .png, .jpg.
+        >, ThunderSTORM(.csv/.xls), RapidSTROM, ZEISS(ELYRA), Nikon NSTORM(txt).
       </p>
       <p>
         If you have other file format which is not supported yet, please
@@ -188,6 +199,7 @@ export default {
         await this.previewFile(files);
       } catch (e) {
         await this.imjoy.api.showMessage(`Failed to preview file: ${e}`);
+        this.value = [];
         console.error(e);
       }
       this.commitValue();
@@ -334,5 +346,16 @@ export default {
 }
 .viewer-container {
   width: 100%;
+}
+.viewer {
+  color: #9e9a9a;
+  background-color: black;
+  height: 100vh;
+}
+.width-limited {
+  max-width: 1080px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
 }
 </style>

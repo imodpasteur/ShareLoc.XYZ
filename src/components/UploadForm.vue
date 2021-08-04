@@ -300,6 +300,7 @@ export default {
     initializeRdfForm(rdf) {
       this.rdf = rdf || {};
       this.rdf.type = "dataset";
+      this.rdf.format_version = this.rdf.format_version || "0.2.0";
       // this.rdf.links = this.rdf.links || [];
       this.rdf.config = this.rdf.config || {};
 

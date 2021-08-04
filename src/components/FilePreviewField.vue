@@ -322,7 +322,7 @@ export default {
     addNewChannel(name) {
       if (!name) {
         name = prompt(
-          "Please give a unique name for the new channel or modality in lower case, e.g. smlm, raw, actin, widefield, alpha-tubulin.",
+          "Please give a unique name for the new channel or modality in lower case, e.g. smlm, raw, widefield, actin, alpha_tubulin.",
           "default"
         );
         if (name && name.includes("-")) {
