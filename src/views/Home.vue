@@ -336,8 +336,8 @@
             :url="infoMarkdownUrl"
           ></markdown>
           <!-- <comment-box
-          v-if="infoDialogTitle"
-          :title="infoDialogTitle"
+          v-if="infoCommentBoxTitle"
+          :title="infoCommentBoxTitle"
         ></comment-box> -->
         </div>
         <div
@@ -831,8 +831,9 @@ export default {
         this.$router.replace({ query: query }).catch(() => {});
     },
     showStatsDialog(item) {
-      this.infoDialogTitle = "Stats for " + item.name;
+      this.infoDialogTitle = "Statistics for " + item.name;
       this.showInfoDialogMode = "markdown";
+      this.infoCommentBoxTitle = null;
       if (!item.stats) this.infoMarkdownContent = `No stats info available.`;
       else {
         let statsText = "";
