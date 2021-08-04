@@ -844,7 +844,7 @@ export default {
         for (let k of Object.keys(item.stats)) {
           statsText += `\n * ${titleCase(k)}: ${item.stats[k]}`;
         }
-        this.infoMarkdownContent = `# Stats for ${item.name}` + statsText;
+        this.infoMarkdownContent = `# Statistics for ${item.name}` + statsText;
         this.infoMarkdownContent +=
           "\n\n[More info on how stats are collected](https://help.zenodo.org/#statistics)";
       }
