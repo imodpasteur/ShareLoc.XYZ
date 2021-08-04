@@ -56,6 +56,18 @@
         <span class="authors">{{ author.name }} </span>
       </b-tooltip>
     </p>
+    <p class="authors" v-if="resourceItem.uploaded_by">
+      Uploaded by: {{ resourceItem.uploaded_by }}
+    </p>
+    <p class="authors" v-if="resourceItem.contact_email">
+      Contact Email:
+      <a
+        :href="
+          `mailto: ${resourceItem.contact_email}?subject=About ${resourceItem.name} (ShareLoc.XYZ)`
+        "
+        >{{ resourceItem.contact_email }}</a
+      >
+    </p>
     <br />
 
     <!-- <attachments
@@ -72,7 +84,7 @@
       ></markdown>
 
       <br />
-      <h3 v-if="formatedCitation" id="citation">Citation</h3>
+      <h3 v-if="formatedCitation" id="citation">How to cite</h3>
       <ul v-if="formatedCitation" class="citation">
         <li v-for="c in formatedCitation" :key="c.text">
           {{ c.text }}
@@ -117,7 +129,7 @@ export default {
   computed: {
     formatedCitation: function() {
       let cites = this.resourceItem.cite;
-      if (!cites) return null;
+      if (!cites || cites.length <= 0) return null;
       if (this.resourceItem.cite && !Array.isArray(this.resourceItem.cite)) {
         cites = [this.resourceItem.cite];
       }
@@ -265,6 +277,6 @@ export default {
   margin: 10px;
 }
 .authors {
-  margin: 10px;
+  margin-left: 10px;
 }
 </style>

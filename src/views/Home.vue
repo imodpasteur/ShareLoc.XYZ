@@ -409,6 +409,18 @@ const isTouchDevice = (function() {
   }
 })();
 
+async function updateFullRDF(item) {
+  if (item.config._deposit) {
+    const newRDF = await getFullRdfFromDeposit(item.config._deposit);
+    debugger;
+    for (let k of Object.keys(newRDF)) {
+      if (k !== "config") {
+        item[k] = newRDF[k];
+      }
+    }
+  }
+}
+
 function connectApps(self, item) {
   if (item.config && item.config._linked) return;
   item.config = item.config || {};
@@ -519,15 +531,8 @@ function connectApps(self, item) {
           icon: lit.icon || DEFAULT_ICONS[lit.type],
           async run() {
             if (self.allApps[link_key]) {
-              if (item.config._deposit && !item.config._rdf)
-                item.config._rdf = await getFullRdfFromDeposit(
-                  item.config._deposit
-                );
-              runAppForItem(
-                self,
-                self.allApps[link_key],
-                item.config._rdf || item
-              );
+              await updateFullRDF(item);
+              runAppForItem(self, self.allApps[link_key], item);
             } else self.showResourceItemInfo(lit);
           }
         });
@@ -853,12 +858,11 @@ export default {
       this.$modal.show("info-dialog");
     },
     async showAttachmentsDialog(item, focus) {
-      if (item.config._deposit && !item.config._rdf)
-        item.config._rdf = await getFullRdfFromDeposit(item.config._deposit);
+      await updateFullRDF(item);
       this.infoDialogTitle = focus
         ? item.name + ": " + focus
         : item.name + ": Attachments";
-      this.selectedResourceItem = item.config._rdf || item;
+      this.selectedResourceItem = item;
       this.selectedResourceItem._focus = focus;
       this.showInfoDialogMode = "attachments";
       if (this.screenWidth < 700) this.infoDialogFullscreen = true;
@@ -1042,11 +1046,10 @@ export default {
         name: "ResourceItemInfo",
         params: { resourceId: item.id }
       });
-      if (item.config._deposit && !item.config._rdf)
-        item.config._rdf = await getFullRdfFromDeposit(item.config._deposit);
+      await updateFullRDF(item);
       this.showInfoDialogMode = "item";
       item._focus = focus;
-      this.selectedResourceItem = item.config._rdf || item;
+      this.selectedResourceItem = item;
       this.infoDialogTitle = this.selectedResourceItem.name;
       this.infoDialogFullscreen = false;
       this.$modal.show("info-dialog");
