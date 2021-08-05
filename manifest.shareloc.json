@@ -1161,7 +1161,7 @@
             "type": "dataset",
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/5193a76969b6c745efb8d8bfcf1e7c76/data.smlm",
             "id": "5193a76969b6c745efb8d8bfcf1e7c76",
-            "name": "2016_01_17_Tubulin-AF647",
+            "name": "2016-01-17-Tubulin-Alexa-647",
             "description": "",
             "hash": "5193a76969b6c745efb8d8bfcf1e7c76",
             "tags": [
@@ -1184,7 +1184,7 @@
             "type": "dataset",
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/4f9f5c695b1c1fceb52bfc85f42776a9/data.smlm",
             "id": "4f9f5c695b1c1fceb52bfc85f42776a9",
-            "name": "Tubulin-AF647",
+            "name": "Tubulin-Alexa-647",
             "description": "",
             "hash": "4f9f5c695b1c1fceb52bfc85f42776a9",
             "tags": [
@@ -1368,7 +1368,7 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/dd865cb8a8ef023113a9c7ae9945777c/data.smlm",
             "id": "dd865cb8a8ef023113a9c7ae9945777c",
             "name": "clathrin_AF647_DAISY_CC_SLF_thunderstomtxt",
-            "description": "3D dSTORM with DAISY of clathrin (AF647), imaged by C. Cabriel at ISMO , S. Leveque-Fort's group, https://www.biorxiv.org/content/early/2018/11/16/385799",
+            "description": "3D dSTORM with DAISY of clathrin (Alexa-647), imaged by C. Cabriel at ISMO , S. Leveque-Fort's group, https://www.biorxiv.org/content/early/2018/11/16/385799",
             "hash": "dd865cb8a8ef023113a9c7ae9945777c",
             "tags": [
                 "dstorm",
@@ -1391,7 +1391,7 @@
             "type": "dataset",
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/7a0fb27b0e21cadb571648f0dcfd44c6/data.smlm",
             "id": "7a0fb27b0e21cadb571648f0dcfd44c6",
-            "name": "NPC_gp210-AF647",
+            "name": "NPC_gp210-Alexa-647",
             "description": "Xenopus laevis nuclear pore complex, gp210 stained with Alexa647",
             "hash": "7a0fb27b0e21cadb571648f0dcfd44c6",
             "tags": [
@@ -2153,7 +2153,7 @@
             "hash": "7a4c2cc8a6e5ecc949510ed68c6a6e6c",
             "tags": [
                 "Tubulin",
-                "AF647",
+                "Alexa-647",
                 "ABBELIGHT",
                 "storm"
             ],
@@ -2215,7 +2215,7 @@
             "hash": "5e3fa8dab523161582c1fa70fa53304e",
             "tags": [
                 "Tubulin",
-                "AF647",
+                "Alexa-647",
                 "ABBELIGHT",
                 "SMLM"
             ],
@@ -2239,7 +2239,7 @@
             "hash": "e3384c43a79dc103b34a85e37eb0dce9",
             "tags": [
                 "Tubulin",
-                "AF647",
+                "Alexa-647",
                 "ABBELIGHT"
             ],
             "license": "CC BY 4.0",
@@ -2262,7 +2262,7 @@
             "hash": "48c83914085cd14390ce365b873e0add",
             "tags": [
                 "Tubulin",
-                "AF647",
+                "Alexa-647",
                 "ABBELIGHT"
             ],
             "license": "CC BY 4.0",
@@ -2285,7 +2285,7 @@
             "hash": "58bfd606bd855e0f32d8a00dc7e1e6a5",
             "tags": [
                 "Tubulin",
-                "AF647",
+                "Alexa-647",
                 "ABBELIGHT",
                 "u2os"
             ],
@@ -2755,7 +2755,7 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/0a5a7780cac28a5817c50d966807f500/data.smlm",
             "id": "0a5a7780cac28a5817c50d966807f500",
             "name": "20150506_MT_2",
-            "description": "Microtubules labelled with AF647 in NIH3T3 cells",
+            "description": "Microtubules labelled with Alexa-647 in NIH3T3 cells",
             "hash": "0a5a7780cac28a5817c50d966807f500",
             "tags": [
                 "microtubules",
@@ -2779,7 +2779,7 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/5a8543143a767fa93e08f31d814cf03c/data.smlm",
             "id": "5a8543143a767fa93e08f31d814cf03c",
             "name": "20150506_MT_3",
-            "description": "Microtubules labelled with AF647 in NIH3T3 cells",
+            "description": "Microtubules labelled with Alexa-647 in NIH3T3 cells",
             "hash": "5a8543143a767fa93e08f31d814cf03c",
             "tags": [
                 "microtubules",
@@ -2803,7 +2803,7 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/ff1c0e1e0169ce2a7e8ab2c146526973/data.smlm",
             "id": "ff1c0e1e0169ce2a7e8ab2c146526973",
             "name": "20150506_MT_4",
-            "description": "Microtubules labelled with AF647 in NIH3T3 cells",
+            "description": "Microtubules labelled with Alexa-647 in NIH3T3 cells",
             "hash": "ff1c0e1e0169ce2a7e8ab2c146526973",
             "tags": [
                 "microtubules",
@@ -2826,7 +2826,7 @@
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/25253a6a297bb96e8e78c21bafa193e5/data.smlm",
             "id": "25253a6a297bb96e8e78c21bafa193e5",
             "name": "20150506_MT_5",
-            "description": "Microtubules labelled with AF647 in NIH3T3 cells",
+            "description": "Microtubules labelled with Alexa-647 in NIH3T3 cells",
             "hash": "25253a6a297bb96e8e78c21bafa193e5",
             "tags": [
                 "microtubules",
