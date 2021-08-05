@@ -338,7 +338,7 @@ export default {
           placeholder: "dataset name",
           value: this.rdf.name,
           help:
-            "A human-readable descriptive name for your dataset to be uploaded. Example: `Xenopus NPC exmperiment-1`."
+            "A human-readable descriptive name for your dataset to be uploaded. You can capitalize and use spaces (instead of underscores) to separate words, for example: `Xenopus NPC exmperiment-1`."
         },
         {
           html: `<p class='label'>Samples<span
