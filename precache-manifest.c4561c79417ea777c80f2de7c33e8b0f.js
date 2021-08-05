@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "986b42086b5a667457d8b5283e49e922",
+    "revision": "05eb6517fcf15f15ca3c929ee3b16a23",
     "url": "/ShareLoc-Downloader.imjoy.html"
   },
   {
