@@ -62,11 +62,7 @@
                 </div>
               </div>
             </b-dropdown-item>
-            <b-dropdown-item
-              :disabled="true"
-              aria-role="listitem"
-              @click="downloadBookmarks()"
-            >
+            <b-dropdown-item aria-role="listitem" @click="downloadBookmarks()">
               <div class="media">
                 <b-icon class="media-left" icon="cloud-download"></b-icon>
                 <div class="media-content">
@@ -117,12 +113,14 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { runAppForAllItems } from "./bioEngine";
 
 export default {
   name: "App",
   data() {
     return {
-      showMenu: false
+      showMenu: false,
+      loadingComponent: null
     };
   },
   computed: {
@@ -140,6 +138,21 @@ export default {
     clearBookmarks() {
       this.$store.commit("clearBookmarks");
     },
+    showLoader(enable, cancelCallback) {
+      if (enable)
+        this.loadingComponent = this.$buefy.loading.open({
+          canCancel: true,
+          onCancel: () => {
+            if (cancelCallback) cancelCallback();
+          }
+        });
+      else {
+        if (this.loadingComponent) {
+          this.loadingComponent.close();
+          this.loadingComponent = null;
+        }
+      }
+    },
     uploadBookmarks() {
       this.$router.push({
         name: "Update",
@@ -147,23 +160,12 @@ export default {
       });
     },
     async downloadBookmarks() {
-      for (let item of this.bookmarks) {
-        try {
-          if (typeof item.download === "function") {
-            await item.download();
-            this.eventBus.$emit(
-              "showMessage",
-              "Successfully downloaded " + item.name
-            );
-          } else this.eventBus.$emit("showMessage", "Skipping " + item.name);
-        } catch (e) {
-          console.error(e);
-          this.eventBus.$emit(
-            "showMessage",
-            `Failed to download ${item.name}: ${e}`
-          );
-        }
-      }
+      const baseUrl = window.location.origin + window.location.pathname;
+      await runAppForAllItems(
+        this,
+        { source: baseUrl + "ShareLoc-Downloader.imjoy.html" },
+        this.bookmarks
+      );
     }
   }
 };

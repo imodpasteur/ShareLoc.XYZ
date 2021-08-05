@@ -241,46 +241,59 @@ async function downloadSample(rootUrl, spec, showMessage, showProgress, showWarn
 const app = new Vue({
     el: '#app',
     data: {
-    modelInfo: null,
+    datasets: null,
+    datasetInfo: null,
     format: null,
     status: "",
     loading: false,
     progress: 0,
     spec: null,
-    samples: [],
+    samples: null,
     rootUrl: null,
     warnings: [],
     weightsConsumers: [],
-    datasetURL: null,
+    datasetIDs: null,
+    isSandbox: false,
+    config: {
+        file_patterns: '*.smlm',
+        conversion: true,
+        delimiter: ',',
+        extension: '.csv',
+        output_dir: 'datasets'
+    },
     },
     methods: {
     async init(){
-        const rawSpecUrl = this.modelInfo.source
-        const tmp = rawSpecUrl.split('/')
-        this.rootUrl = tmp.slice(0, tmp.length-1).join('/')
-        const specUrl = await convertZenodoFileUrl(rawSpecUrl) || rawSpecUrl
-        const response = await fetch(specUrl)
-        const yamlText = await response.text()
-        this.spec = jsyaml.load(yamlText.replaceAll('!<tag:yaml.org,2002:js/undefined>', ''))
-        const zenodoID = this.spec.id.split('/zenodo.')[1]
-        const isSandbox = specUrl.includes('sandbox.zenodo.org')
-        this.datasetURL = rawSpecUrl.split('/files/')[0]
-        this.samples = this.spec.attachments.samples;
-        for(let sample of this.samples){
-            for (let file of sample.files) {
-                file.url = `${this.rootUrl}/${sample.name}/${file.name}`; // <sample name>/ <file name>
+        if(this.datasetInfo){
+            const rawSpecUrl = this.datasetInfo.config._deposit.links.html + '/files/rdf.yaml'
+            const specUrl = await convertZenodoFileUrl(rawSpecUrl) || rawSpecUrl
+            const tmp = specUrl.split('/')
+            this.rootUrl = tmp.slice(0, tmp.length-1).join('/')
+            const response = await fetch(specUrl)
+            const yamlText = await response.text()
+            this.spec = jsyaml.load(yamlText.replaceAll('!<tag:yaml.org,2002:js/undefined>', ''))
+            const zenodoID = this.spec.id.split('/zenodo.')[1]
+            this.isSandbox = specUrl.includes('sandbox.zenodo.org')
+            const datasetURL = rawSpecUrl.split('/files/')[0]
+            this.datasetIDs = datasetURL.split('/record/')[1]
+            this.samples = this.spec.attachments.samples;
+            for(let sample of this.samples){
+                for (let file of sample.files) {
+                    file.url = `${this.rootUrl}/${sample.name}/${file.name}`; // <sample name>/ <file name>
+                }
+                for(let view of sample.views){
+                    view.image = `${this.rootUrl}/${sample.name}/${
+                    Array.isArray(view.image_name)
+                        ? view.image_name[0]
+                        : view.image_name
+                    }`;
+                }
             }
-            for(let view of sample.views){
-                view.image = `${this.rootUrl}/${sample.name}/${
-                Array.isArray(view.image_name)
-                    ? view.image_name[0]
-                    : view.image_name
-                }`;
-            }
-        }
-        
+            
 
-        this.modelInfo.name = this.spec.name
+            this.datasetInfo.name = this.spec.name
+        }
+       
     },
     async downloadFile(file){
     },
@@ -305,8 +318,8 @@ const app = new Vue({
             })
         }
         finally{
-        this.progress = 0
-        this.loading = false
+            this.progress = 0
+            this.loading = false
         }
 
     },
@@ -318,18 +331,33 @@ class ImJoyPlugin {
     }
 
     async run(ctx) {
-    if(!ctx.data || (!ctx.data.config && !ctx.data.source)){
-        const rdfUrl = await api.prompt("Please paste the model spec url here", "https://sandbox.zenodo.org/record/884215/files/rdf.yaml")
-        if(!rdfUrl) return
-        app.modelInfo = {
-        name: getFileName(rdfUrl),
-        source: rdfUrl
+        if(!ctx.config || !ctx.config.mode){
+            const rdfUrl = await api.prompt("Please paste the model spec url here", "https://sandbox.zenodo.org/record/884215/files/rdf.yaml")
+            if(!rdfUrl) return
+            app.datasetInfo = {
+                name: getFileName(rdfUrl),
+                source: rdfUrl
+            }
         }
-    }
-    else
-        app.modelInfo = ctx.data;
-    await app.init();
-    app.$forceUpdate();
+        else if(ctx.config.mode === 'one')
+            app.datasetInfo = ctx.data;
+        else if(ctx.config.mode === 'all'){
+            
+            const datasets = []
+            for(let item of ctx.data){
+                if(!item.config || !item.config._deposit) {
+                    await api.showMessage("Skipping legacy item: " + item.name)
+                    console.error('Skipping item', item)
+                    continue
+                }
+                app.isSandbox = item.config._deposit.links.html.includes('sandbox.zenodo.org')
+                const datasetIDs = item.config._deposit.links.html.split('/record/')[1]
+                datasets.push(datasetIDs)
+            }
+            app.datasetIDs = datasets.join(",")
+        }
+        await app.init();
+        app.$forceUpdate();
     }
 }
 
@@ -338,58 +366,95 @@ api.export(new ImJoyPlugin())
 
 <window lang="html">
     <div style="text-align: center;padding:10px" id="app">
-    <h2 v-if="modelInfo" class="font-size: 35px;">{{modelInfo.name}}</h2>
-
-    <div v-if="spec">
-        <ul>
-            <li style="color: orange;" v-for="warning in warnings">{{warning}}</li>
-        </ul>
-        <p v-else-if="!spec">No dataset selected.</p>
-        <div v-if="loading" class="loading loading-lg"></div>
-        <progress v-if="progress" id="progressbar" class="progress" :value="progress" max="100"></progress>
-        <div class="d-block">{{status}}</div>
+    <h2 v-if="datasetInfo" style="font-size: 25px;">{{datasetInfo.name}}</h2>
+    <h2 v-else-if="datasetIDs" style="font-size: 25px;">Dataset Batch Downloading</h2>
+    <div>
         <article class="message">
             <div class="message-header">
-            <p>Download dataset in Python</p>
-            <button class="delete" aria-label="delete"></button>
+            <p>How to download the dataset</p>
             </div>
             <div class="message-body" style="text-align: left;">
-                You can also download this dataset using <strong>Python</strong> script.<br>
-                First, install shareloc-utils from PyPI: <br>
+                You can click the download links below to download the samples one-by-one.
+                <br>
+                If you want to download the entire dataset, you can use our command line tool in <strong>Python</strong>.
+                To use that, you need to first install shareloc-utils: <br>
                 <code>
                 pip install -U shareloc-utils
                 </code>
-                <br>
-                Then you can run the following command: <br>
+                <br>And then run the download command:<br>
                 <code>
-                python -m shareloc_utils.batch_download --datasets={{datasetURL}} --output_dir=./output --conversion
+                python -m shareloc_utils.batch_download --datasets={{datasetIDs}} {{isSandbox?'--sandbox': ''}} --output_dir="{{config.output_dir?config.output_dir:'datasets'}}"
+                {{config.file_patterns?'--file_patterns="'+config.file_patterns+'"':''}}
+                {{config.conversion?'--conversion':''}}
+                {{config.conversion&&config.delimiter?'--delimiter="'+config.delimiter+'"':''}}
+                {{config.conversion&&config.extension?'--extension="'+config.extension+'"':''}}
                 </code>
                 <br>
-                For downloading multiple datasets, please use the bookmark feature to mark the datasets, then click the bookmark icon in the navigation bar and click "Download All".
+                <div class="dropdown is-hoverable">
+                    <div class="dropdown-trigger">
+                        <span class="tag is-primary is-light" style="cursor: pointer;">Command Options</span>
+                        <span class="icon is-small">
+                          <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="dropdown-menu" style="width: 250px;max-width: 100%;" role="menu">
+                      <div class="dropdown-content">
+               
+                        <div class="dropdown-item">
+                            <label class="checkbox">
+                                File patterns to download:
+                                <input v-model="config.file_patterns" type="text">
+                                Tips: Patterns are separated by comma, if you want to include raw images, include `*.tif`.
+                            </label>
+                        </div>
+
+                        <div class="dropdown-item">
+                            <label class="checkbox">
+                                Dataset folder name:
+                                <input v-model="config.output_dir" type="text">
+                            </label>
+                        </div>
+                       
+                        <div class="dropdown-item">
+                            <label class="checkbox">
+                                <input v-model="config.conversion" type="checkbox">
+                                Conversion to CSV
+                            </label>
+                        </div>
+                        <div class="dropdown-item" v-if="config&&config.conversion">
+                            <label class="checkbox">
+                                Delimiter:
+                                <input v-model="config.delimiter" type="text" placeholder="delimiter">
+                            </label>
+                        </div>
+                        <div class="dropdown-item" v-if="config&&config.conversion">
+                            <label class="checkbox">
+                                Converted file extension:
+                                <input v-model="config.extension" type="text" placeholder="extension">
+                            </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 <br>
-                <a href="https://github.com/imodpasteur/shareloc-utils#shareloc-utilities" target="_blank">More details on shareloc_utils</a>
+                <a href="https://github.com/imodpasteur/shareloc-utils#shareloc-utilities" target="_blank">More details on using the command line tool</a>
             </div>
-        </article>
-        <article class="message">
-            <div class="message-header">
-            <p>Download links</p>
-            <button class="delete" aria-label="delete"></button>
-            </div>
-            <div class="message-body" style="text-align: left;">
+       
+            <div class="message-body" style="text-align: left;" v-if="samples">
                 <div class="columns is-desktop">
                 <div class="column" v-for="sample in samples">
                     <div class="card">
-                        <div class="card-content">
-                            <img v-for="view in sample.views" :src="view.image" class="img-responsive">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                              {{sample.name}}
+                            </p>
+                          
+                        </header>
+                        <div class="card-content" style="text-align: center;">
+                            <a class="is-link tag" style="margin-left:10px;" v-for="file in sample.files" :key="file.name" :href="file.url" target="_blank">{{file.name.slice(0, 20)}}</a>
+                            <br>
+                            <img v-for="view in sample.views" style="max-width: 200px;max-height: 200px;margin:10px;" :src="view.image" class="img-responsive">
                         </div>
-                        <footer class="card-footer">
-                        <p class="card-footer-item" v-if="sample.files.length<4">
-                            <a class="btn btn-primary" v-for="file in sample.files" :key="file.name" :href="file.url" target="_blank">{{file.name}}</a>
-                        </p>
-<!--                         <p class="card-footer-item" v-else>
-                            <button class="btn btn-primary" @click="downloadSample(sample)">Download files</button>
-                        </p> -->
-                        </footer>
                     </div>           
                 </div>
                 </div>
