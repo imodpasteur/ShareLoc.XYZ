@@ -477,14 +477,6 @@ function connectApps(self, item) {
     }
   });
 
-  if (item.attachments.samples)
-    item.apps.unshift({
-      name: "Samples",
-      icon: "download",
-      run() {
-        self.showAttachmentsDialog(item, "samples");
-      }
-    });
   if (item.type === "application") {
     if (self.allApps[item.id]) {
       item.apps.unshift({
@@ -547,19 +539,19 @@ function connectApps(self, item) {
     else item.attachments[it.type] = [it];
   }
 
-  for (let att_name of Object.keys(item.attachments)) {
-    if (Array.isArray(item.attachments[att_name]) && att_name !== "files") {
-      item.badges.unshift({
-        label: att_name,
-        label_type: "is-dark",
-        ext: item.attachments[att_name].length,
-        ext_type: "is-primary",
-        run() {
-          self.showAttachmentsDialog(item, att_name);
-        }
-      });
-    }
-  }
+  // for (let att_name of Object.keys(item.attachments)) {
+  //   if (Array.isArray(item.attachments[att_name]) && att_name !== "files") {
+  //     item.badges.unshift({
+  //       label: att_name,
+  //       label_type: "is-dark",
+  //       ext: item.attachments[att_name].length,
+  //       ext_type: "is-primary",
+  //       run() {
+  //         self.showAttachmentsDialog(item, att_name);
+  //       }
+  //     });
+  //   }
+  // }
 
   if (item.stats && item.stats.downloads !== undefined)
     item.badges.unshift({

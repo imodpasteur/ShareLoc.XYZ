@@ -40,7 +40,7 @@
       >
     </p>
     <p
-      class="authors"
+      class="text-info"
       v-if="resourceItem.authors && resourceItem.authors.length > 0"
     >
       {{ resourceItem.authors.length > 1 ? "Authors: " : "Author: " }}
@@ -50,13 +50,13 @@
         :label="author.affiliation"
         position="is-bottom"
       >
-        <span class="authors">{{ author.name }} </span>
+        <span class="text-info">{{ author.name }} </span>
       </b-tooltip>
     </p>
-    <p class="authors" v-if="resourceItem.uploaded_by">
+    <p class="text-info" v-if="resourceItem.uploaded_by">
       Uploaded by: {{ resourceItem.uploaded_by }}
     </p>
-    <p class="authors" v-if="resourceItem.contact_email">
+    <p class="text-info" v-if="resourceItem.contact_email">
       Contact Email:
       <a
         :href="
@@ -65,15 +65,22 @@
         >{{ resourceItem.contact_email }}</a
       >
     </p>
+    <p class="text-info" v-if="!showAttachments && resourceItem.attachments">
+      <a class="tag is-primary" @click="showAttachments = true"
+        >+ click here to list the samples in the dataset</a
+      >
+    </p>
+
     <br />
 
-    <!-- <attachments
+    <attachments
+      v-if="showAttachments"
       :attachments="resourceItem.attachments"
       :focusTarget="resourceItem._focus"
-    ></attachments> -->
+    ></attachments>
 
     <div class="markdown-body width-limited">
-      <h1 v-if="resourceItem.docs">Documentation</h1>
+      <h1 style="margin-top: 20px;" v-if="resourceItem.docs">Documentation</h1>
       <markdown
         v-if="resourceItem.docs"
         :baseUrl="resourceItem.baseUrl"
@@ -98,7 +105,7 @@
 import { mapState } from "vuex";
 import Badges from "@/components/Badges.vue";
 import AppIcons from "@/components/AppIcons.vue";
-// import Attachments from "@/components/Attachments.vue";
+import Attachments from "@/components/Attachments.vue";
 import Markdown from "@/components/Markdown.vue";
 // import CommentBox from "@/components/CommentBox.vue";
 import { randId } from "../utils";
@@ -109,7 +116,7 @@ export default {
   components: {
     markdown: Markdown,
     badges: Badges,
-    // attachments: Attachments,
+    attachments: Attachments,
     "app-icons": AppIcons
     // "comment-box": CommentBox
   },
@@ -117,7 +124,8 @@ export default {
     return {
       resourceItem: null,
       maxDescriptionLetters: 100,
-      showSource: false
+      showSource: false,
+      showAttachments: false
     };
   },
   mounted() {
@@ -273,7 +281,7 @@ export default {
 .description {
   margin: 10px;
 }
-.authors {
+.text-info {
   margin-left: 10px;
 }
 </style>
