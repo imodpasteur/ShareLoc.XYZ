@@ -371,13 +371,19 @@ api.export(new ImJoyPlugin())
     <div>
         <article class="message">
             <div class="message-header">
-            <p>How to download the dataset</p>
+            <p v-if="samples">How to download the dataset</p>
+            <p v-else>How to download the datasets</p>
             </div>
             <div class="message-body" style="text-align: left;">
-                You can click the download links below to download the samples one-by-one.
-                <br>
-                If you want to download the entire dataset, you can use our command line tool in <strong>Python</strong>.
-                To use that, you need to first install shareloc-utils: <br>
+                <p v-if="samples">You can click the download links below to download the samples one-by-one.
+                    <br>
+                    If you want to download the entire dataset, you can use our command line tool in <strong>Python</strong>.
+                    To use that, you need to first install shareloc-utils: <br>
+                </p>
+                <p v-else>
+                    To download the selected datasets, you need to use our command line tool in <strong>Python</strong>.
+                    To proceed, you need to first install shareloc-utils: <br>
+                </p>
                 <code>
                 pip install -U shareloc-utils
                 </code>
