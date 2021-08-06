@@ -219,13 +219,15 @@ function getSampleFiles(sample) {
           [file],
           (ch.files.length > 1 ? ch.name + "-" + fn : ch.name) +
             "." +
-            file.name.split(".")[1],
+            file.name.split(".").pop(),
           { type: file.type, lastModified: file.lastModified }
         );
       } else {
         // don't change remote file
         newFile = Object.assign({}, file);
       }
+      // backup the original name
+      newFile.originalName = file.name;
       newFile.sampleName = sample.name;
       files.push(newFile);
     }
@@ -501,6 +503,7 @@ export default {
       return file;
     },
     markFileConversion(sample, locFiles) {
+      // We always use data as the converted file name
       let saveFileName = "data";
       if (!saveFileName.endsWith(".smlm"))
         saveFileName = saveFileName + ".smlm";

@@ -283,7 +283,8 @@ export default {
             return {
               name: file.name,
               size: file.size,
-              checksum: file.checksum
+              checksum: file.checksum,
+              originalName: file.originalName
             };
           })
         };

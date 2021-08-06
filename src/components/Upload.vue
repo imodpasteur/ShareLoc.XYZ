@@ -507,6 +507,7 @@ export default {
                       imjoy.api.showMessage(msg);
                     }
                   );
+                  file.originalName = file.name;
                   file.converted = [file];
                   file.sampleName = item.name;
                   return file;
@@ -804,15 +805,16 @@ export default {
               const sample = this.rdf.attachments.samples.filter(
                 sample => sample.name === file.sampleName
               )[0];
-              const generatedNames = file.converted.map(f => f.name);
+              const originalNames = file.converted.map(f => f.originalName);
               // remove the original files, e.g. the csv files
               sample.files = sample.files.filter(
-                f => !generatedNames.includes(f.name)
+                f => !originalNames.includes(f.originalName)
               );
               // replace with converted files
               sample.files.push({
                 name: file.name,
                 size: file.size,
+                originalNames,
                 checksum: file.checksum
               });
             }

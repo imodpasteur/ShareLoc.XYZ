@@ -90,7 +90,6 @@
 
         var delimiter = format.delimiter
         var headers = [];
-        var escapedHeaders = [];
         var transformedHeaders = [];
         var reader = new FileReader();
 
@@ -113,6 +112,7 @@
         // table_data.arrayBuffersList = arrayBuffersList;
         // table_data.file = data.file;
         var isFirstBlock = true;
+        const originalHeaders  = [];
         var reading_callback = function (result) {
             var arrayBuffers = [];
             var float32Arrays = [];
@@ -148,7 +148,7 @@
 
                 for (var header = 0; header < headers.length; header++) {
                     var escapedTitle = headers[header].toString().replace(/'/g, '').replace(/"/g, '');
-                    escapedHeaders[header] = escapedTitle;
+                    originalHeaders[header] = headers[header].toString();
                     if (format.header_transform[escapedTitle]) {
                         transformedHeaders[header] = format.header_transform[escapedTitle].replace(/[^a-zA-Z0-9]+/g, '_').trim()
                     }
@@ -162,8 +162,6 @@
                     max[header] = Number.NEGATIVE_INFINITY;
                     avg[header] = 0;
                 }
-
-                table_data.headers_original = escapedHeaders;
                 isFirstBlock = false;
                 table_data.headers = transformedHeaders;
                 if (transformedHeaders.indexOf('x') < 0 || !transformedHeaders.indexOf('y') < 0) {
@@ -269,8 +267,14 @@
                 table_data.tableUint8Dict[transformedHeaders[i]] = tableUint8Arrays[i]
             }
             table_data.loaded = true
+            table_data.original_config = {
+                headers: originalHeaders,
+                delimiter: delimiter,
+                file_name: data.file.name
+            }
             callback(table_data, transferables);
         }
+        
         parseFile(data.file, reading_callback, finish_callback)
     }
 
