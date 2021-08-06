@@ -92,9 +92,28 @@
                     >
                   </b-table-column>
                   <b-table-column field="actions" label="Actions">
+                    <b-upload
+                      v-model="props.row.files"
+                      multiple
+                      style="display: inline-block;"
+                      class="file-label"
+                      drag-drop
+                      @input="fileSelected(sample, props.row, $event)"
+                    >
+                      <span class="file-cta">
+                        <b-icon class="file-icon" icon="upload"></b-icon>
+                        <span
+                          class="file-label"
+                          v-if="!props.row.files || props.row.files.length <= 0"
+                          >Select or Drag&Drop File(s)</span
+                        >
+                        <span class="file-label" v-else>Add More File(s)</span>
+                      </span>
+                    </b-upload>
                     <span
                       class="file-cta"
-                      style="display: inline-block;width: 50px;"
+                      style="display: inline-block;width: 50px; margin-top: 5px; cursor:pointer;"
+                      v-if="props.row.files && props.row.files.length > 0"
                       @click.stop="props.row.files = []"
                     >
                       <b-icon
@@ -103,23 +122,6 @@
                         icon="close"
                       ></b-icon>
                     </span>
-                    <b-upload
-                      v-model="props.row.files"
-                      multiple
-                      style="display: inline-block;"
-                      class="file-label"
-                      @input="fileSelected(sample, props.row, $event)"
-                    >
-                      <span class="file-cta">
-                        <b-icon class="file-icon" icon="upload"></b-icon>
-                        <span
-                          class="file-label"
-                          v-if="!props.row.files || props.row.files.length <= 0"
-                          >Select File(s)</span
-                        >
-                        <span class="file-label" v-else>Add File(s)</span>
-                      </span>
-                    </b-upload>
                   </b-table-column>
                 </template>
 
@@ -250,7 +252,8 @@ export default {
     currentFile: null,
     enableConversion: true,
     currentSample: null,
-    sampleChannels: []
+    sampleChannels: [],
+    sampleRunningNumber: 0
   }),
   created() {
     this.samples = this.item.value || [];
@@ -355,14 +358,16 @@ export default {
       if (!this.sampleChannels || this.sampleChannels.length <= 0) {
         this.addNewChannel();
       }
+      this.sampleRunningNumber += 1;
       this.samples.push({
-        name: "sample-" + this.samples.length,
+        name: "sample-" + this.sampleRunningNumber,
         channels: this.sampleChannels.map(ch => {
           return { name: ch, files: [] };
         })
       });
       this.activeSample = this.samples.length - 1;
       this.currentSample = this.samples[this.samples.length - 1];
+      this.commitValue();
     },
     commitValue() {
       for (let sample of this.samples) {
@@ -403,6 +408,7 @@ export default {
       //   this.currentSample = null;
       this.samples.splice(index, 1);
       this.activeSample = index - 1;
+      this.commitValue();
       this.$forceUpdate();
     },
     removeFile(files, index) {
@@ -410,6 +416,7 @@ export default {
       if (this.currentFiles && this.currentFiles.includes(file))
         this.currentFiles = null;
       files.splice(index, 1);
+      this.commitValue();
       this.$forceUpdate();
     },
     // async updateFiles(sample) {
