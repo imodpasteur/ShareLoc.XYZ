@@ -194,6 +194,13 @@ export default {
               sampleName: sample.name,
               generate: sample.convert
             });
+            const converted =
+              (sample.converted && sample.converted.map(file => file.name)) ||
+              [];
+            // remove the original files, e.g. the csv files
+            sample.files = sample.files.filter(
+              f => !converted.includes(f.name)
+            );
           }
           // we will also add all the files here
           // note that after conversion, some files will be removed

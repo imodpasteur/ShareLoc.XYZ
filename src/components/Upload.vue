@@ -806,16 +806,11 @@ export default {
                 sample => sample.name === file.sampleName
               )[0];
               const originalNames = file.converted.map(f => f.originalName);
-              // remove the original files, e.g. the csv files
-              sample.files = sample.files.filter(
-                f => !originalNames.includes(f.originalName)
-              );
               // replace with converted files
               sample.files.push({
                 name: file.name,
                 size: file.size,
-                originalNames,
-                checksum: file.checksum
+                originalNames
               });
             }
           }

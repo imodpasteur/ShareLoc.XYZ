@@ -517,6 +517,7 @@ export default {
         zip.converted = locFiles;
         return zip;
       };
+      sample.converted = locFiles;
       sample.convertFileName = saveFileName;
     },
     async previewSample(sample) {

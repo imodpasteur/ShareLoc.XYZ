@@ -516,12 +516,11 @@ export class ZenodoClient {
         // verify whether the credential is valid
         fetch(
           `${this.baseURL}/api/deposit/depositions?access_token=${this.credential.access_token}`
-        ).then((response) => {
-          if(!response.ok){
+        ).then(response => {
+          if (!response.ok) {
             this.credential = null;
           }
-        })
-         
+        });
       }
     } catch (e) {
       console.error(`Failed to reset ${this.credentialKey}: ${e}`);
