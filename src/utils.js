@@ -513,6 +513,15 @@ export class ZenodoClient {
           this.lastUserId = this.credential.user_id;
           localStorage.setItem(this.userIdKey, this.lastUserId);
         }
+        // verify whether the credential is valid
+        fetch(
+          `${this.baseURL}/api/deposit/depositions?access_token=${this.credential.access_token}`
+        ).then((response) => {
+          if(!response.ok){
+            this.credential = null;
+          }
+        })
+         
       }
     } catch (e) {
       console.error(`Failed to reset ${this.credentialKey}: ${e}`);
