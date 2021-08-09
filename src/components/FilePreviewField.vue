@@ -381,6 +381,7 @@ export default {
       );
       samples.enableConversion = this.enableConversion;
       this.$emit("input", samples);
+      this.$forceUpdate();
     },
     removeScreenshot(screenshots, index) {
       screenshots.splice(index, 1);
