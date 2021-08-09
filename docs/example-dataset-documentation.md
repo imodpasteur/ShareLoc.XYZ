@@ -31,7 +31,7 @@ __EMCCD (Andor IXON ULTRA 897)__
 
 Controlled by MicroManager software (Edelstein, A. et al. 2010)
 
-The ffective pixel size was __106 nm__
+The effective pixel size was __106 nm__
  
 - ## Laser power
 642-nm wavelength laser with 500 mW power, an AOTF (AA Opto Electronic) modulates laser excitation.
