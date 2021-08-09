@@ -520,14 +520,15 @@ export class ZenodoClient {
     }
   }
 
-  async getCredential(login) {
+  async getCredential(login, expiryTolerance) {
+    expiryTolerance = (expiryTolerance || 40) * 60 * 1000;
     if (this.credential) {
       if (
         this.credential.create_at +
           parseInt(this.credential.expires_in) * 1000 >
-        Date.now() - 10000
+        Date.now() - expiryTolerance
       ) {
-        // add extra 10s to make sure
+        // add extra time to make sure we can upload a dataset
         return this.credential;
       } else {
         this.credential = null;
@@ -741,18 +742,18 @@ export class ZenodoClient {
   }
 
   async createDeposition() {
-    let response = await fetch(
-      `${this.baseURL}/api/deposit/depositions?access_token=${this.credential.access_token}`
-    );
-    console.log(await response.json());
     const headers = { "Content-Type": "application/json" };
     // create an empty deposition
-    response = await fetch(
+    const response = await fetch(
       `${this.baseURL}/api/deposit/depositions?access_token=${this.credential.access_token}`,
       { method: "POST", body: JSON.stringify({}), headers }
     );
-    const depositionInfo = await response.json();
-    return depositionInfo;
+    if (response.ok) return await response.json();
+    else {
+      throw new Error(
+        "Failed to create deposition, error: " + (await response.text())
+      );
+    }
   }
 
   async getDeposit(depositionInfo) {
@@ -835,7 +836,8 @@ export class ZenodoClient {
     else {
       const details = await response.json();
       throw new Error(
-        "Failed to update metadata, error: " + JSON.stringify(details.errors)
+        "Failed to update metadata, error: " +
+          JSON.stringify(details.errors || details.message)
       );
     }
   }
@@ -844,36 +846,49 @@ export class ZenodoClient {
     const bucketUrl = depositionInfo.links.bucket;
     const fileName = newName || file.name;
     const url = `${bucketUrl}/${fileName}?access_token=${this.credential.access_token}`;
-    if (typeof axios === "undefined") {
-      if (progressCallback) progressCallback(0);
-      const response = await fetch(url, {
-        method: "PUT",
-        body: file
-      });
-      if (progressCallback) progressCallback(file.size);
-      return await response.json();
-    } else {
-      const options = {
-        headers: { "Content-Type": file.type },
-        onUploadProgress: progressEvent => {
-          if (progressCallback) progressCallback(progressEvent.loaded);
-          else {
-            const progress = Math.round(
-              ((1.0 * progressEvent.loaded) / file.size) * 100.0
-            );
-            console.log(
-              "uploading annotation, size: " +
-                Math.round(progressEvent.loaded / 1000000) +
-                "MB, " +
-                progress +
-                "% uploaded."
-            );
-          }
+    const options = {
+      headers: { "Content-Type": file.type },
+      onUploadProgress: progressEvent => {
+        if (progressCallback) progressCallback(progressEvent.loaded);
+        else {
+          const progress = Math.round(
+            ((1.0 * progressEvent.loaded) / file.size) * 100.0
+          );
+          console.log(
+            "uploading annotation, size: " +
+              Math.round(progressEvent.loaded / 1000000) +
+              "MB, " +
+              progress +
+              "% uploaded."
+          );
         }
-      };
-      const response = await axios.put(url, file, options);
-      return response.data;
+      }
+    };
+    let response;
+    try {
+      response = await axios.put(url, file, options);
+    } catch (e) {
+      console.error(e);
+      // check if it's because the credential is expired
+      if (
+        this.credential.create_at +
+          parseInt(this.credential.expires_in) * 1000 >
+        Date.now() + 1000
+      ) {
+        console.error(
+          "Failed to upload, possibly due to access token expired:",
+          e
+        );
+        alert(
+          `Authentication information expired, please login to Zenodo and authorize ShareLoc.XYZ again.`
+        );
+        await this.login();
+        response = await axios.put(url, file, options);
+      } else {
+        throw e;
+      }
     }
+    return response.data;
   }
 
   async publish(depositionInfo) {
@@ -893,7 +908,8 @@ export class ZenodoClient {
     } else {
       const details = await response.json();
       throw new Error(
-        "Failed to publish, error: " + JSON.stringify(details.errors)
+        "Failed to publish, error: " +
+          JSON.stringify(details.errors || details.message)
       );
     }
   }

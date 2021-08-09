@@ -680,7 +680,7 @@ export default {
     },
     async createOrUpdateDeposit(depositId, skipUpload) {
       try {
-        await this.client.getCredential(true);
+        await this.client.getCredential(true, 40); // make sure we have at least 40 minutes
         this.$forceUpdate();
       } catch (e) {
         alert(`Failed to login: ${e}`);
