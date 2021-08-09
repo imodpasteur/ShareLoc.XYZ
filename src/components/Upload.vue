@@ -802,16 +802,12 @@ export default {
             file = await file.generate();
             if (file.sampleName) {
               // fix the converted file name and size in the attachments
-              const sample = this.rdf.attachments.samples.filter(
+              const sample = this.rdf.attachments.samples.find(
                 sample => sample.name === file.sampleName
-              )[0];
-              const originalNames = file.converted.map(f => f.originalName);
-              // replace with converted files
-              sample.files.push({
-                name: file.name,
-                size: file.size,
-                originalNames
-              });
+              );
+              // set the converted size
+              const f = sample.files.find(f => f.name === file.name);
+              if (f) f.size = file.size;
             }
           }
 

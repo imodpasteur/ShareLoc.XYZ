@@ -188,19 +188,23 @@ export default {
         for (let sample of samples) {
           // we add a file generator
           if (samples.enableConversion && sample.convert) {
-            editedFiles.push({
-              type: "generator",
-              name: sample.convertFileName,
-              sampleName: sample.name,
-              generate: sample.convert
-            });
             const converted =
               (sample.converted && sample.converted.map(file => file.name)) ||
               [];
             // remove the original files, e.g. the csv files
             sample.files = sample.files.filter(
-              f => !converted.includes(f.name)
+              f =>
+                !converted.includes(f.name) && f.name !== sample.convertFileName
             );
+            const originalName = sample.converted.map(f => f.originalName);
+            // replace with converted files
+            sample.files.push({
+              type: "generator",
+              name: sample.convertFileName,
+              sampleName: sample.name,
+              generate: sample.convert,
+              originalName
+            });
           }
           // we will also add all the files here
           // note that after conversion, some files will be removed
@@ -289,9 +293,8 @@ export default {
           files: sample.files.map(file => {
             return {
               name: file.name,
-              size: file.size,
-              checksum: file.checksum,
-              originalName: file.originalName
+              size: file.size || null,
+              originalName: file.originalName || null
             };
           })
         };
