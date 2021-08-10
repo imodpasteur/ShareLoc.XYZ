@@ -603,6 +603,8 @@ export default {
           window_id: dialogID
         });
 
+        smlmFiles = null;
+
         // inject take screenshot button
         if (this.viewer.captureImage) {
           const windowContainer = document.getElementById(dialogID);
