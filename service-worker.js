@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.21f0abc179c5e88b6aff5cbd299d6927.js"
+  "/precache-manifest.cc2f50552bd9797574fa0dc78c785ac5.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "shareloc.xyz"});
