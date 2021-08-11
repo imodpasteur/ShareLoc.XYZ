@@ -853,7 +853,7 @@ export class ZenodoClient {
   async uploadFile(depositionInfo, file, newName, progressCallback) {
     const bucketUrl = depositionInfo.links.bucket;
     const fileName = newName || file.name;
-    const url = `${bucketUrl}/${fileName}?access_token=${this.credential.access_token}`;
+
     const options = {
       headers: { "Content-Type": file.type },
       onUploadProgress: progressEvent => {
@@ -874,6 +874,7 @@ export class ZenodoClient {
     };
     let response;
     try {
+      const url = `${bucketUrl}/${fileName}?access_token=${this.credential.access_token}`;
       response = await axios.put(url, file, options);
     } catch (e) {
       console.error(e);
@@ -897,6 +898,7 @@ export class ZenodoClient {
         `Authentication information expired, please login to Zenodo and authorize ShareLoc.XYZ again.`
       );
       await this.login();
+      const url = `${bucketUrl}/${fileName}?access_token=${this.credential.access_token}`;
       response = await axios.put(url, file, options);
       // } else {
       //   throw e;
