@@ -50,25 +50,37 @@
 
 ![NewSample](https://user-images.githubusercontent.com/56833522/125957398-ef3bd589-4f20-4c8f-9934-a757e34d28cb.png)
 
+-----
+## Name the first channel/modality
+* Enter the name of the first channel/modality, for example, smlm
+* Validate by clicking "ok"
+
+![addChannel](https://user-images.githubusercontent.com/56833522/130474383-b7ebb4fa-a6e0-4332-b0c8-0e805467709a.png)
 
 -----
-## Drag and drop the files for one sample
+## Add channels/modalities (optional)
+* Click "+ ADD CHANNEL OR MODALITY"
+* Name the channel/modality and validate by clicking "ok", for example, widefield 
+* You could as many channels/modalities as you want
 
-![DragandDrop](https://user-images.githubusercontent.com/56833522/126210513-ddcc2398-71cc-48bc-8c62-588030fa38bd.png)
+![addChannel2](https://user-images.githubusercontent.com/56833522/130475777-705be58d-4423-459f-8f6c-f89e6d168fb7.png)
 
-Multiple files corresponding to the same fields of view (e.g. **multiple channels or modalities**) should be selected together
+-----
+## Drag and drop the diffent channel/modality files for one sample
+
+![DragandDrop](https://user-images.githubusercontent.com/56833522/130478910-26fc7e2f-9c74-4787-9bbb-7256f3b07545.png)
 
 -----
 ## Take a screenshot
 
 The screenshot will be displayed on shareloc.xyz as the cover of the sample
 
-![Screenshot](https://user-images.githubusercontent.com/56833522/126209019-d950374f-6885-46b3-9814-ab5ac19c7483.png)
+![Screenshot2](https://user-images.githubusercontent.com/56833522/130480654-25495215-f119-4217-8331-4b9dfa313309.png)
 
 -----
 ## Repeat the above steps if you have several samples from the same experiment
 
-![Samples](https://user-images.githubusercontent.com/56833522/125964728-95ace040-6727-48b9-94d9-b1124c2fde74.png)
+![samplesfromsameexpmt](https://user-images.githubusercontent.com/56833522/130482265-2993469f-0590-44e9-942f-60b39b98d0b7.png)
 
 
 -----
