@@ -66,7 +66,7 @@
 ![addChannel2](https://user-images.githubusercontent.com/56833522/130475777-705be58d-4423-459f-8f6c-f89e6d168fb7.png)
 
 -----
-## Drag and drop the diffent channel/modality files for one sample
+## Drag and drop the diffent channel/modality files for the selected sample
 
 ![DragandDrop](https://user-images.githubusercontent.com/56833522/130478910-26fc7e2f-9c74-4787-9bbb-7256f3b07545.png)
 
