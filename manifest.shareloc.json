@@ -36,11 +36,11 @@
         {
             "id": "itk-vtk-viewer",
             "type": "application",
-            "source": "https://shareloc.xyz/ITK-VTK-Viewer.imjoy.html",
+            "source": "https://unpkg.com/itk-vtk-viewer@11.9.1/dist/index.html",
             "icon": "https://kitware.github.io/itk-vtk-viewer/app/favicon-32x32.png",
             "name": "ITK VTK Viewer",
             "git_repo": "https://github.com/Kitware/itk-vtk-viewer",
-            "version": "0.1.0",
+            "version": "11.9.1",
             "api_version": "0.1.8",
             "description": "ITK VTK viewer for displaying point cloud data",
             "requirements": [],
