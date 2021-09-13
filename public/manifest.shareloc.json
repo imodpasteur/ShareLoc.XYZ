@@ -16,7 +16,7 @@
         {
             "id": "smlm-viewer",
             "type": "application",
-            "source": "https://shareloc.xyz/SMLM-Viewer.imjoy.html",
+            "source": "http://localhost:8080/SMLM-Viewer.imjoy.html",
             "icon": "eye-outline",
             "name": "SMLM-Viewer",
             "version": "0.1.0",
@@ -629,54 +629,6 @@
         },
         {
             "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/469f7a3e606f18b68c0a36af08f940da/data.smlm",
-            "id": "469f7a3e606f18b68c0a36af08f940da",
-            "name": "Imagen0",
-            "description": "",
-            "hash": "469f7a3e606f18b68c0a36af08f940da",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-09T22:20:33.503599",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 275769
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/a3a29c0a1e2e13a8ca1b2f55b8109a20/data.smlm",
-            "id": "a3a29c0a1e2e13a8ca1b2f55b8109a20",
-            "name": "STARE_Segm2_im0001-60imagenes",
-            "description": "",
-            "hash": "a3a29c0a1e2e13a8ca1b2f55b8109a20",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-09T23:30:03.777241",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 824448
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/2a603797b1508ad86ddece540f06eebf/data.smlm",
-            "id": "2a603797b1508ad86ddece540f06eebf",
-            "name": "LocalizationTableTubulins",
-            "description": "",
-            "hash": "2a603797b1508ad86ddece540f06eebf",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-16T21:02:41.415375",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 695468
-        },
-        {
-            "type": "dataset",
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/3fdd96ae971f87885af4ab16d62cac7f/data.smlm",
             "id": "3fdd96ae971f87885af4ab16d62cac7f",
             "name": "THP1_1 AF532 STORM 1",
@@ -690,140 +642,6 @@
                 "text": ""
             },
             "size": 3610848
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/8735f4dd87e5b51df0900966d0462de8/data.smlm",
-            "id": "8735f4dd87e5b51df0900966d0462de8",
-            "name": "ImagenesWaveletData",
-            "description": "",
-            "hash": "8735f4dd87e5b51df0900966d0462de8",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-17T22:38:44.749581",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 219304
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/a0f9de75bee1c5fb54f442ecffd86019/data.smlm",
-            "id": "a0f9de75bee1c5fb54f442ecffd86019",
-            "name": "ImagenesWaveletData",
-            "description": "",
-            "hash": "a0f9de75bee1c5fb54f442ecffd86019",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-17T22:43:04.054800",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 98875
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/727f1b2f261943d68ac97cef09d91717/data.smlm",
-            "id": "727f1b2f261943d68ac97cef09d91717",
-            "name": "ImagenesWaveletLineasData",
-            "description": "",
-            "hash": "727f1b2f261943d68ac97cef09d91717",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-17T23:52:06.474979",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 1552651,
-            "covers": [
-                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/727f1b2f261943d68ac97cef09d91717/thumbnail.png"
-            ]
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/a78a83411c4decc6dc6f2c5cebf5e164/data.smlm",
-            "id": "a78a83411c4decc6dc6f2c5cebf5e164",
-            "name": "ImagenesWaveletLineasAlignData",
-            "description": "",
-            "hash": "a78a83411c4decc6dc6f2c5cebf5e164",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-18T17:01:27.479454",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 1067340,
-            "covers": [
-                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/a78a83411c4decc6dc6f2c5cebf5e164/thumbnail.png"
-            ]
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/ce5f40264a54368da5f2a93540f84900/data.smlm",
-            "id": "ce5f40264a54368da5f2a93540f84900",
-            "name": "ImagenesWaveletLineasAlignDataRecorte",
-            "description": "",
-            "hash": "ce5f40264a54368da5f2a93540f84900",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-18T18:03:02.990432",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 1018678
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/0895c9bfd5d2a3414e0e0b5b1f2c22bf/data.smlm",
-            "id": "0895c9bfd5d2a3414e0e0b5b1f2c22bf",
-            "name": "ImagenesWaveletLineasAlignDataCuadr00",
-            "description": "",
-            "hash": "0895c9bfd5d2a3414e0e0b5b1f2c22bf",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-18T18:16:11.785560",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 201743
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/45f44e2ef9ddbbed009300f4dea8b1e7/data.smlm",
-            "id": "45f44e2ef9ddbbed009300f4dea8b1e7",
-            "name": "ImagenesWaveletLineasAlignDataCuadr01",
-            "description": "",
-            "hash": "45f44e2ef9ddbbed009300f4dea8b1e7",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-18T18:18:49.642579",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 325396
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/62fe73fea33fe0e4a108c2b4894a144f/data.smlm",
-            "id": "62fe73fea33fe0e4a108c2b4894a144f",
-            "name": "ImagenesWaveletLineasAlignDataCuadr10",
-            "description": "",
-            "hash": "62fe73fea33fe0e4a108c2b4894a144f",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-05-18T18:20:03.034097",
-            "uploaded_by": "akire_hppmo@ciencias.unam.mx",
-            "cite": {
-                "text": ""
-            },
-            "size": 206371
         },
         {
             "type": "dataset",
@@ -993,27 +811,6 @@
             "size": 22949248,
             "covers": [
                 "https://imjoy-s3.pasteur.fr/imod-data-pasteur/d19b13b5ef7e181492b4b75bc05eb826/thumbnail.png"
-            ]
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/74357d215b5b13be040548004fe36a74/data.smlm",
-            "id": "74357d215b5b13be040548004fe36a74",
-            "name": "3D-STORM",
-            "description": "A reduced version of the SMLM file(500 frame) provided in the pointcloud-loader (https://t.co/jsXs7mBJtz)",
-            "hash": "74357d215b5b13be040548004fe36a74",
-            "tags": [
-                "microtubules"
-            ],
-            "license": "CC BY 4.0",
-            "timestamp": "2018-10-10T12:03:02.411516",
-            "uploaded_by": "wei",
-            "cite": {
-                "text": ""
-            },
-            "size": 451334,
-            "covers": [
-                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/74357d215b5b13be040548004fe36a74/thumbnail.png"
             ]
         },
         {
@@ -2170,25 +1967,6 @@
         },
         {
             "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/015e2deb4d27c612ef356b7c512b0cff/data.smlm",
-            "id": "015e2deb4d27c612ef356b7c512b0cff",
-            "name": "Snap_Snapshot#0_ROI1.zip",
-            "description": "",
-            "hash": "015e2deb4d27c612ef356b7c512b0cff",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2020-07-21T15:17:27.216958",
-            "uploaded_by": "dzou@abbelight.com",
-            "cite": {
-                "text": ""
-            },
-            "size": 98375,
-            "covers": [
-                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/015e2deb4d27c612ef356b7c512b0cff/thumbnail.png"
-            ]
-        },
-        {
-            "type": "dataset",
             "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/18d9f378563de8564b221ca598aeee93/data.smlm",
             "id": "18d9f378563de8564b221ca598aeee93",
             "name": "CoordTable_SAFE360_3D_ASTIGMATISM_cropROI_UncertaintyFiltered",
@@ -2204,30 +1982,6 @@
             "size": 187179452,
             "covers": [
                 "https://imjoy-s3.pasteur.fr/imod-data-pasteur/18d9f378563de8564b221ca598aeee93/thumbnail.png"
-            ]
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/5e3fa8dab523161582c1fa70fa53304e/data.smlm",
-            "id": "5e3fa8dab523161582c1fa70fa53304e",
-            "name": "Snap_Snapshot#4_ROI1.zip",
-            "description": "",
-            "hash": "5e3fa8dab523161582c1fa70fa53304e",
-            "tags": [
-                "Tubulin",
-                "Alexa-647",
-                "ABBELIGHT",
-                "SMLM"
-            ],
-            "license": "CC BY 4.0",
-            "timestamp": "2020-07-21T15:31:20.145563",
-            "uploaded_by": "dzou@abbelight.com",
-            "cite": {
-                "text": ""
-            },
-            "size": 61635,
-            "covers": [
-                "https://imjoy-s3.pasteur.fr/imod-data-pasteur/5e3fa8dab523161582c1fa70fa53304e/thumbnail.png"
             ]
         },
         {
@@ -2916,22 +2670,6 @@
             "covers": [
                 "https://imjoy-s3.pasteur.fr/imod-data-pasteur/d76e1c1facd1576011f7da71dace9567/thumbnail.png"
             ]
-        },
-        {
-            "type": "dataset",
-            "download_url": "https://imjoy-s3.pasteur.fr/imod-data-pasteur/8261e206afb4b3433992e4c54b657229/data.smlm",
-            "id": "8261e206afb4b3433992e4c54b657229",
-            "name": "Training-1",
-            "description": "",
-            "hash": "8261e206afb4b3433992e4c54b657229",
-            "tags": [],
-            "license": "CC BY 4.0",
-            "timestamp": "2020-10-05T14:30:45.340454",
-            "uploaded_by": "maram.abadi@gmail.com",
-            "cite": {
-                "text": ""
-            },
-            "size": 1717618
         }
     ]
 }
