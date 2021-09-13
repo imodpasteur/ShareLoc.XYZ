@@ -28,7 +28,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ShareLoc-Downloader.imjoy.html"
   },
   {
-    "revision": "3475ddba42baa885c934",
+    "revision": "6e01ca57eae2c86792fc",
     "url": "/css/app.389550d1.css"
   },
   {
@@ -60,12 +60,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/index.ejs"
   },
   {
-    "revision": "9ad72d30349ebbd1643cc7085f8dac8d",
+    "revision": "0316d7946e5a2b9e23d96cc08efc0bce",
     "url": "/index.html"
   },
   {
-    "revision": "3475ddba42baa885c934",
-    "url": "/js/app.a9c4b14b.js"
+    "revision": "6e01ca57eae2c86792fc",
+    "url": "/js/app.1258e06e.js"
   },
   {
     "revision": "0b824129950bf483f460",
@@ -76,7 +76,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/manifest.json"
   },
   {
-    "revision": "142b9332ea154b74c51d966ef213b18f",
+    "revision": "fbdd47e71da11d3fa697ee37a842337e",
     "url": "/manifest.shareloc.json"
   },
   {
