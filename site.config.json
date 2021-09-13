@@ -41,7 +41,7 @@
     "sandbox_client_id": "LrUl7gtNg50dciX8wkXHCD7Sy75ZpEytUarkekWp",
     "production_client_id": "hi4F8IWRtlIoZsAg3fJGF5lsHXAFr30NuYz8YHot",
     "community": "shareloc",
-    "use_sandbox": true
+    "use_sandbox": false
   },
   "rdf_root_repo": "imodpasteur/shareLoc.xyz",
   "enable_comment": true,
