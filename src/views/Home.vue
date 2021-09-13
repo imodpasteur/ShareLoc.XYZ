@@ -15,7 +15,7 @@
         <a @click="switchToProduction()">switch to the production mode</a>.
       </b-notification>
       <b-notification
-        v-else
+        v-else-if="siteConfig.zenodo_config.use_sandbox"
         type="is-info"
         has-icon
         aria-close-label="Close notification"
@@ -683,6 +683,20 @@ export default {
         manifest_url,
         transform(item) {
           return connectApps(self, item);
+        },
+        filter(item) {
+          if (self.$route.query.migration) {
+            return true;
+          } else {
+            if (
+              item.type === "dataset" &&
+              !(item.config && item.config._conceptdoi)
+            ) {
+              return false;
+            } else {
+              return true;
+            }
+          }
         }
       });
 

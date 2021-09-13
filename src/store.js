@@ -227,7 +227,10 @@ export const store = new Vuex.Store({
         alert(`Failed to login: ${e}`);
       }
     },
-    async fetchResourceItems(context, { manifest_url, repo, transform }) {
+    async fetchResourceItems(
+      context,
+      { manifest_url, repo, transform, filter }
+    ) {
       if (context.state.loadedUrl === manifest_url) {
         console.log("manifest already loaded");
         return;
@@ -267,7 +270,7 @@ export const store = new Vuex.Store({
         item.repo = repo;
         // if (item.source && !item.source.startsWith("http"))
         //   item.source = concatAndResolveUrl(item.root_url, item.source);
-        context.commit("addResourceItem", item);
+        if (filter(item)) context.commit("addResourceItem", item);
       }
       context.commit("normalizeItems", transform);
       if (transform) {
