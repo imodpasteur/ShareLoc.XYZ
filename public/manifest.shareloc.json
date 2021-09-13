@@ -869,7 +869,7 @@
             "tags": [
                 "gp210",
                 "A647",
-                "nuclear_complex",
+                "nuclear-pore-complex",
                 "dstorm"
             ],
             "license": "CC BY 4.0",
@@ -915,7 +915,7 @@
             "description": "nuclear pore complex of isolated nuclear envelope of Xenopus laevis oocyte",
             "hash": "ebecd054c0311723d3b43b76a4b01938",
             "tags": [
-                "nuclear-pore",
+                "nuclear-pore-complex",
                 "alexa-647",
                 "dstorm"
             ],
@@ -1193,7 +1193,7 @@
             "hash": "7a0fb27b0e21cadb571648f0dcfd44c6",
             "tags": [
                 "gp210",
-                "nuclear-pore",
+                "nuclear-pore-complex",
                 "dstorm",
                 "alexa-647"
             ],
@@ -1217,7 +1217,7 @@
             "hash": "c641d57200239433eb8238b830aeacd6",
             "tags": [
                 "dstorm",
-                "nuclear-pore",
+                "nuclear-pore-complex",
                 "gp210",
                 "alexa-647"
             ],
@@ -1241,7 +1241,7 @@
             "hash": "c16acf19d44efd5aed7f43973da1536f",
             "tags": [
                 "dstorm",
-                "nuclear-pore",
+                "nuclear-pore-complex",
                 "gp210",
                 "alexa-647"
             ],
@@ -1265,7 +1265,7 @@
             "hash": "4eba8e6304b1d686a4d5526d27245344",
             "tags": [
                 "dstorm",
-                "nuclear-pore",
+                "nuclear-pore-complex",
                 "ATTO520",
                 "wga"
             ],
@@ -1289,7 +1289,7 @@
             "hash": "b69b8876f2e1a6af969c67eb91d234de",
             "tags": [
                 "dstorm",
-                "nuclear-pore",
+                "nuclear-pore-complex",
                 "gp210",
                 "alexa-647"
             ],
@@ -1315,7 +1315,7 @@
                 "dstorm",
                 "WGA",
                 "alexa-532",
-                "nuclear-pore"
+                "nuclear-pore-complex"
             ],
             "license": "CC BY-NC 4.0",
             "timestamp": "2019-01-16T13:09:10.176834",
@@ -1337,7 +1337,7 @@
             "hash": "ec8c7f79e2666e3fa6cb1988682d38c8",
             "tags": [
                 "dstorm",
-                "nuclear-pore",
+                "nuclear-pore-complex",
                 "alexa-647",
                 "gp210"
             ],
