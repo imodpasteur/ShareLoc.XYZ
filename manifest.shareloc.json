@@ -16,7 +16,7 @@
         {
             "id": "smlm-viewer",
             "type": "application",
-            "source": "http://localhost:8080/SMLM-Viewer.imjoy.html",
+            "source": "https://shareloc.xyz/SMLM-Viewer.imjoy.html",
             "icon": "eye-outline",
             "name": "SMLM-Viewer",
             "version": "0.1.0",
