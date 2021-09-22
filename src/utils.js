@@ -878,12 +878,6 @@ export class ZenodoClient {
       response = await axios.put(url, file, options);
     } catch (e) {
       console.error(e);
-      console.error(
-        "==============>",
-        this.credential.create_at,
-        parseInt(this.credential.expires_in) * 1000,
-        Date.now()
-      );
       // check if it's because the credential is expired
       // if (
       //   this.credential.create_at +
