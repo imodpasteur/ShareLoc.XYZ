@@ -6,6 +6,7 @@
           v-if="resourceItem.covers && resourceItem.covers.length > 0"
           :indicator="resourceItem.covers.length > 1"
           :arrow="resourceItem.covers.length > 1"
+          :autoplay="false"
           :pause-info="false"
         >
           <b-carousel-item
