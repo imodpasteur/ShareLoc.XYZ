@@ -2,6 +2,9 @@
 node_modules
 dist
 datasets
+output
+robot
+robot.jar
 
 # local env files
 .env.local

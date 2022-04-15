@@ -1,0 +1,97 @@
+ID	Label	Definition	Type	Citation	Parent Class    	Domain	Range
+ID	LABEL	A obo:IAO_0000115	TYPE	A obo:IAO_0000119	SC %            	DOMAIN	RANGE
+shareloc:SHARELOC_000001	modality		class				
+shareloc:SHARELOC_000002	cell line		class				
+shareloc:SHARELOC_000003	fluorophore		class				
+shareloc:SHARELOC_000004	labeling strategy		class				
+shareloc:SHARELOC_000005	structure		class				
+shareloc:SHARELOC_000006	target molecule		class				
+shareloc:SHARELOC_000007	dimension		class				
+shareloc:SHARELOC_000008	reconstruction software		class				
+shareloc:SHARELOC_000009	fixation		class				
+shareloc:SHARELOC_000010	buffer		class				
+shareloc:SHARELOC_000011	palm		class		modality		
+shareloc:SHARELOC_000012	storm		class		modality		
+shareloc:SHARELOC_000013	dstorm		class		modality		
+shareloc:SHARELOC_000014	dna-paint		class		modality		
+shareloc:SHARELOC_000015	paint		class		modality		
+shareloc:SHARELOC_000016	u2os		class		cell line		
+shareloc:SHARELOC_000017	u373		class		cell line		
+shareloc:SHARELOC_000018	cos7		class		cell line		
+shareloc:SHARELOC_000019	ref52		class		cell line		
+shareloc:SHARELOC_000020	mdck		class		cell line		
+shareloc:SHARELOC_000021	hela		class		cell line		
+shareloc:SHARELOC_000022	nih3t3		class		cell line		
+shareloc:SHARELOC_000023	yeast		class		cell line		
+shareloc:SHARELOC_000024	e-coli		class		cell line		
+shareloc:SHARELOC_000025	alexa-647		class		fluorophore		
+shareloc:SHARELOC_000026	alexa-555		class		fluorophore		
+shareloc:SHARELOC_000027	alexa-532		class		fluorophore		
+shareloc:SHARELOC_000028	cy5		class		fluorophore		
+shareloc:SHARELOC_000029	cy3b		class		fluorophore		
+shareloc:SHARELOC_000030	cf680		class		fluorophore		
+shareloc:SHARELOC_000031	cf660		class		fluorophore		
+shareloc:SHARELOC_000032	cf568		class		fluorophore		
+shareloc:SHARELOC_000033	hmsir		class		fluorophore		
+shareloc:SHARELOC_000034	atto-488		class		fluorophore		
+shareloc:SHARELOC_000035	mos2		class		fluorophore		
+shareloc:SHARELOC_000036	mapple		class		fluorophore		
+shareloc:SHARELOC_000037	dendra2		class		fluorophore		
+shareloc:SHARELOC_000038	pa-gfp		class		fluorophore		
+shareloc:SHARELOC_000039	pa-cherry		class		fluorophore		
+shareloc:SHARELOC_000040	dronpa		class		fluorophore		
+shareloc:SHARELOC_000041	phalloidin-647		class		fluorophore		
+shareloc:SHARELOC_000042	nile-red		class		fluorophore		
+shareloc:SHARELOC_000043	jf-646		class		fluorophore		
+shareloc:SHARELOC_000044	jf-568		class		fluorophore		
+shareloc:SHARELOC_000045	pa-jf646		class		fluorophore		
+shareloc:SHARELOC_000046	Pa-jf568		class		fluorophore		
+shareloc:SHARELOC_000047	transient-transfection		class		labeling strategy		
+shareloc:SHARELOC_000048	stable-knock-in		class		labeling strategy		
+shareloc:SHARELOC_000049	endogenous-labeling-crispr		class		labeling strategy		
+shareloc:SHARELOC_000050	direct-immuno-labeling		class		labeling strategy		
+shareloc:SHARELOC_000051	indirect-immuno-labeling		class		labeling strategy		
+shareloc:SHARELOC_000052	halo-tag		class		labeling strategy		
+shareloc:SHARELOC_000053	snap-tag		class		labeling strategy		
+shareloc:SHARELOC_000054	tetracysteine-tag		class		labeling strategy		
+shareloc:SHARELOC_000055	actin		class		structure		
+shareloc:SHARELOC_000056	microtubule		class		structure		
+shareloc:SHARELOC_000057	mitochondria		class		structure		
+shareloc:SHARELOC_000058	Nuclear-pore		class		structure		
+shareloc:SHARELOC_000059	clathrin		class		structure		
+shareloc:SHARELOC_000060	vimentin		class		structure		
+shareloc:SHARELOC_000061	plasma membrane		class		structure		
+shareloc:SHARELOC_000062	intermediate filament		class		structure		
+shareloc:SHARELOC_000063	dna		class		structure		
+shareloc:SHARELOC_000064	nup133		class		structure		
+shareloc:SHARELOC_000065	nup96		class		target molecule		
+shareloc:SHARELOC_000066	tom22		class		target molecule		
+shareloc:SHARELOC_000067	alpha-tubulin		class		target molecule		
+shareloc:SHARELOC_000068	beta-tubulin		class		target molecule		
+shareloc:SHARELOC_000069	actin		class		target molecule		
+shareloc:SHARELOC_000070	vimentin		class		target molecule		
+shareloc:SHARELOC_000071	wga		class		target molecule		
+shareloc:SHARELOC_000072	escrt		class		target molecule		
+shareloc:SHARELOC_000073	ftsz		class		target molecule		
+shareloc:SHARELOC_000074	h1		class		target molecule		
+shareloc:SHARELOC_000075	h2		class		target molecule		
+shareloc:SHARELOC_000076	h3		class		target molecule		
+shareloc:SHARELOC_000077	polye		class		target molecule		
+shareloc:SHARELOC_000078	2d		class		dimension		
+shareloc:SHARELOC_000079	3d		class		dimension		
+shareloc:SHARELOC_000080	thunderstorm		class		reconstruction software		
+shareloc:SHARELOC_000081	smap		class		reconstruction software		
+shareloc:SHARELOC_000082	smoiphot		class		reconstruction software		
+shareloc:SHARELOC_000083	zola-3d		class		reconstruction software		
+shareloc:SHARELOC_000084	picasso		class		reconstruction software		
+shareloc:SHARELOC_000085	quickpalm		class		reconstruction software		
+shareloc:SHARELOC_000086	4% pfa		class		fixation		
+shareloc:SHARELOC_000087	1% pfa		class		fixation		
+shareloc:SHARELOC_000088	pfa+gluta		class		fixation		
+shareloc:SHARELOC_000089	glyoxal		class		fixation		
+shareloc:SHARELOC_000090	methanol		class		fixation		
+shareloc:SHARELOC_000091	gluox		class		buffer		
+shareloc:SHARELOC_000092	catalase		class		buffer		
+shareloc:SHARELOC_000093	mea		class		buffer		
+shareloc:SHARELOC_000094	abbelight-safe-reagent		class		buffer		
+shareloc:SHARELOC_000095	Idylle-everspark		class		buffer		
