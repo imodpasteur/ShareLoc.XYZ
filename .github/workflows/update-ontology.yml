@@ -17,9 +17,9 @@ jobs:
         distribution: 'temurin' # See 'Supported distributions' for available options
         java-version: '17'
     - name: Setup Robot
-      run: sh setup-robot.sh
+      run: sh utils/setup-robot.sh
     - name: Generate OWL file
-      run: sh convert-owl.sh # This will produce an output foldere: Use Node.js ${{ matrix.node-version }}
+      run: sh utils/convert-owl.sh # This will produce an output foldere: Use Node.js ${{ matrix.node-version }}
     - name: Save build output
       uses: actions/upload-artifact@v1
       with:
