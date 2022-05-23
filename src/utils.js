@@ -220,8 +220,15 @@ export async function getFullRdfFromDeposit(rdf, resolveUrl) {
         file.download_url = `${root_url}/${sample.name}/${f.name}`; // <sample name>/ <file name>
         // fix the name
         file.name = f.name;
+        if (file.name.endsWith(".smlm")) {
+          const potreeFile = `https://imjoy-s3.pasteur.fr/public/pointclouds/${
+            rdf.doi
+          }/${sample.name}/${file.name.replace(".smlm", ".potree.zip")}`;
+          file.preview_url = `https://imodpasteur.github.io/shareloc-utils/shareloc-potree-viewer.html?pointShape=circle&pointSizeType=adaptive&name=FFB000&load=${potreeFile}`;
+        }
         Object.assign(f, file);
       }
+
       for (let view of sample.views) {
         if (!view.image) {
           view.image = `${root_url}/${sample.name}/${

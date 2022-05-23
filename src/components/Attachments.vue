@@ -42,6 +42,15 @@
                     >
                       {{ file.name }}
                     </a>
+                    <span v-if="file.preview_url"
+                      >(<a
+                        :class="col.class"
+                        :href="file.preview_url"
+                        target="_blank"
+                      >
+                        Preview </a
+                      >)</span
+                    >
                   </li>
                 </ul>
               </div>
