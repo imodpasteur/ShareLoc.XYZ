@@ -1,14 +1,14 @@
 {
   "name": "shareloc.xyz",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "check-format": "prettier --check \"{src,tests}/**/**\"",
-    "format": "prettier --write \"{src,tests}/**/**\""
+    "check-format": "prettier --check \"{src,tests}/**/*{.js,.html,.css,.vue}\"",
+    "format": "prettier --write \"{src,tests}/**/*{.js,.html,.css,.vue}\""
   },
   "dependencies": {
     "@mdi/font": "^5.3.45",

@@ -34,6 +34,34 @@
   </div>
 </template>
 <script>
+import { debounce } from "../utils";
+
+async function getCompletion(text) {
+  const url = `https://www.ebi.ac.uk/ols/api/suggest?q=${text}`;
+  let response = await fetch(url);
+  if (response.ok) {
+    const ret = await response.json();
+    let results = [];
+    if (ret.response.numFound > 0) {
+      results = ret.response.docs.map(d => d.autosuggest);
+    }
+    const url = `https://www.ebi.ac.uk/ols/api/select?q=${text}`;
+    response = await fetch(url);
+    if (response.ok) {
+      const ret = await response.json();
+      if (ret.response.numFound > 0) {
+        results = results.concat(ret.response.docs.map(d => d.label));
+      }
+    }
+    // results = results.map(r => r.toLowerCase())
+    results = results.filter(function(item, pos) {
+      return results.indexOf(item) == pos;
+    });
+    return results;
+  } else {
+    console.error(`Failed to fetch compeltion from ebi ols: ${url}`, response);
+  }
+}
 export default {
   name: "tags",
   props: {
@@ -59,6 +87,12 @@ export default {
   },
   methods: {
     getFilteredTags(text) {
+      debounce(async () => {
+        this.filteredTags = await getCompletion(text);
+        // this.filteredTags = this.filteredTags.concat(newTags);
+        this.$forceUpdate();
+      }, 500)();
+
       this.filteredTags =
         this.item.options &&
         this.item.options.filter(option => {
