@@ -49,7 +49,13 @@ function normalizeItem(item) {
   item.covers = item.covers || [];
   item.authors = item.authors || [];
   item.description = item.description || "";
-  if (item.config._deposit) item.root_url = item.config._deposit.links.bucket;
+
+  item.root_url =
+    item.rdf_source &&
+    item.rdf_source
+      .split("/")
+      .slice(0, -1)
+      .join("/");
   if (item.covers && !Array.isArray(item.covers)) {
     item.covers = [item.covers];
   }
@@ -241,10 +247,15 @@ export const store = new Vuex.Store({
       context.state.allTags = [...allTags];
       const siteConfig = context.state.siteConfig;
       try {
-        const items = await context.state.zenodoClient.getResourceItems({
-          community: siteConfig.zenodo_config.community,
-          size: 5000
-        });
+        // const items = await context.state.zenodoClient.getResourceItems({
+        //   community: siteConfig.zenodo_config.community,
+        //   size: 5000
+        // });
+        const response = await fetch(
+          "https://raw.githubusercontent.com/imodpasteur/shareloc-collection/gh-pages/collection.json"
+        );
+        const collection = await response.json();
+        const items = collection.collection;
         items.map(item => context.commit("addResourceItem", item));
       } catch (e) {
         console.error(e);

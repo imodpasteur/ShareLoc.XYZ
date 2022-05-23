@@ -563,22 +563,14 @@ function connectApps(self, item) {
       }
     });
 
-  if (item.config && item.config._conceptdoi) {
+  if (item.config && item.config.doi) {
     item.badges.unshift({
-      label: item.config._conceptdoi,
+      label: item.config.doi,
       label_type: "is-dark",
       label_short: self.zenodoClient.isSandbox ? "Zenodo" : "DOI",
       url: self.zenodoClient.isSandbox
         ? `${item.config._deposit.links.html}`
-        : `https://doi.org/${item.config._conceptdoi}`
-    });
-  } else if (item.type === "dataset") {
-    item.badges.unshift({
-      label: "MIGRATION REQUIRED",
-      label_type: "is-danger",
-      run() {
-        alert("Please migrate this item to Zenodo!");
-      }
+        : `https://doi.org/${item.config.doi}`
     });
   }
   item.config._linked = true;
