@@ -355,7 +355,8 @@ import {
   rdfToMetadata,
   resolveDOI,
   getFullRdfFromDeposit,
-  fetchFile
+  fetchFile,
+  depositionToRdf
 } from "../utils";
 import Markdown from "@/components/Markdown.vue";
 import TagInputField from "@/components/TagInputField.vue";
@@ -594,7 +595,8 @@ export default {
             depositionInfo = await this.client.retrieve(this.depositId);
           }
           console.log("orcid matched: " + this.depositId, depositionInfo);
-          this.rdf = await getFullRdfFromDeposit(depositionInfo);
+          const rdf = depositionToRdf(depositionInfo);
+          this.rdf = await getFullRdfFromDeposit(rdf.config._rdf_file);
           console.log("Full RDF:", this.rdf);
           // this.files = depositionInfo.files.map(item => {
           //   return {

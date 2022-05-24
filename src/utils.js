@@ -190,60 +190,48 @@ function getAbsoluteUrl(baseUrl, c) {
   return c.startsWith("http") ? c : new URL(c, baseUrl).href;
 }
 
-export async function getFullRdfFromDeposit(deposition, resolveUrl) {
-  const rdf = depositionToRdf(deposition);
-  const response = await fetch(rdf.config._rdf_file);
+export async function getFullRdfFromDeposit(rdf, resolveUrl) {
+  const response = await fetch(rdf.rdf_source);
   if (response.ok) {
     const yamlStr = await response.text();
     const fullRdf = yaml.load(yamlStr);
     // fix id;
-    fullRdf.id = deposition.conceptdoi;
+    fullRdf.id = rdf.id;
+    const root_url = rdf.rdf_source
+      .split("/")
+      .slice(0, -1)
+      .join("/");
     if (resolveUrl) {
-      fullRdf.documentation = getAbsoluteUrl(
-        deposition.links.bucket,
-        fullRdf.documentation
-      );
+      fullRdf.documentation = getAbsoluteUrl(root_url, fullRdf.documentation);
       if (fullRdf.covers) {
         fullRdf.covers = fullRdf.covers.map(cover =>
-          getAbsoluteUrl(deposition.links.bucket, cover)
+          getAbsoluteUrl(root_url, cover)
         );
       }
     }
     fullRdf.config = fullRdf.config || {};
     Object.assign(fullRdf.config, rdf.config);
-    const files = deposition.files.map(item => {
-      return {
-        type: "remote",
-        name: item.filename || item.key, // depending on what api we use, it may be in two different format
-        size: item.filesize || item.size,
-        url: item.links.self,
-        checksum: item.checksum
-      };
-    });
     // fix samples
     const samples = fullRdf.attachments.samples;
     for (let sample of samples) {
       for (let f of sample.files) {
-        let file = files.filter(
-          file => file.name === `${sample.name}/${f.name}`
-        )[0];
-        if (file) {
-          // make a copy of it
-          file = Object.assign({}, file);
-          file.download_url = `${deposition.links.bucket}/${file.name}`; // <sample name>/ <file name>
-          // fix the name
-          file.name = f.name;
-          Object.assign(f, file);
-        } else {
-          console.error(`Sample file does not exists ${sample.name}/${f.name}`);
-          throw new Error(
-            `Sample file does not exists ${sample.name}/${f.name}`
-          );
+        // make a copy of it
+        const file = {};
+        file.download_url = `${root_url}/${sample.name}/${f.name}`; // <sample name>/ <file name>
+        // fix the name
+        file.name = f.name;
+        if (file.name.endsWith(".smlm")) {
+          const potreeFile = `https://imjoy-s3.pasteur.fr/public/pointclouds/${
+            rdf.doi
+          }/${sample.name}/${file.name.replace(".smlm", ".potree.zip")}`;
+          file.preview_url = `https://imodpasteur.github.io/shareloc-utils/shareloc-potree-viewer.html?pointShape=circle&pointSizeType=adaptive&name=FFB000&load=${potreeFile}`;
         }
+        Object.assign(f, file);
       }
+
       for (let view of sample.views) {
         if (!view.image) {
-          view.image = `${deposition.links.bucket}/${sample.name}/${
+          view.image = `${root_url}/${sample.name}/${
             Array.isArray(view.image_name)
               ? view.image_name[0]
               : view.image_name

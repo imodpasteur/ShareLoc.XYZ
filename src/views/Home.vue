@@ -410,8 +410,8 @@ const isTouchDevice = (function() {
 })();
 
 async function updateFullRDF(item) {
-  if (item.config._deposit) {
-    const newRDF = await getFullRdfFromDeposit(item.config._deposit, true);
+  if (item.rdf_source) {
+    const newRDF = await getFullRdfFromDeposit(item, true);
     for (let k of Object.keys(newRDF)) {
       if (k !== "config") {
         item[k] = newRDF[k];
@@ -563,22 +563,14 @@ function connectApps(self, item) {
       }
     });
 
-  if (item.config && item.config._conceptdoi) {
+  if (item.doi) {
     item.badges.unshift({
-      label: item.config._conceptdoi,
+      label: item.doi,
       label_type: "is-dark",
       label_short: self.zenodoClient.isSandbox ? "Zenodo" : "DOI",
       url: self.zenodoClient.isSandbox
-        ? `${item.config._deposit.links.html}`
-        : `https://doi.org/${item.config._conceptdoi}`
-    });
-  } else if (item.type === "dataset") {
-    item.badges.unshift({
-      label: "MIGRATION REQUIRED",
-      label_type: "is-danger",
-      run() {
-        alert("Please migrate this item to Zenodo!");
-      }
+        ? `https://sandbox.zenodo.org/record/${item.id}`
+        : `https://doi.org/${item.doi}`
     });
   }
   item.config._linked = true;
