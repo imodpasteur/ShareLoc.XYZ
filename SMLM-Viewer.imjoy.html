@@ -50,14 +50,40 @@
                 await this.previewFile(file);
             }
             else if(ctx.data.attachments && ctx.data.attachments.samples){
-                const samples = ctx.data.attachments.samples;
-                this.viewer = await api.createWindow({
-                    name: ctx.data.name.slice(0, 40),
-                    type: "Fairy Dust",
-                    config: {
-                        samples
-                    },
-                })
+                // const samples = ctx.data.attachments.samples;
+                // this.viewer = await api.createWindow({
+                //     name: ctx.data.name.slice(0, 40),
+                //     type: "Fairy Dust",
+                //     config: {
+                //         samples
+                //     },
+                // })
+                for (let sample of ctx.data.attachments.samples) {
+                    for (let f of sample.files) {
+                        // make a copy of it
+                        const file = {};
+                        const root_url = ctx.data.rdf_source
+                        .split("/")
+                        .slice(0, -1)
+                        .join("/");
+                        file.download_url = `${root_url}/${sample.name}/${f.name}`; // <sample name>/ <file name>
+                        // fix the name
+                        file.name = f.name;
+                        if (file.name.endsWith(".smlm")) {
+                            const potreeFile = `https://imjoy-s3.pasteur.fr/public/pointclouds/${
+                                ctx.data.doi
+                            }/${sample.name}/${file.name.replace(".smlm", ".potree.zip")}`;
+                            const preview_url = `https://imodpasteur.github.io/shareloc-utils/shareloc-potree-viewer.html?pointShape=circle&pointSizeType=adaptive&name=FFB000&load=${potreeFile}`;
+                            this.viewer = await api.createWindow({
+                                name: `${sample.name}/${file.name}`,
+                                src: preview_url,
+                                passive: true
+                            })
+                            return
+                        }
+                    }
+              
+                }
             }
             else{
                 this.viewer = await api.createWindow({
