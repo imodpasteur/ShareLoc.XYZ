@@ -48,7 +48,7 @@
                         :href="file.preview_url"
                         target="_blank"
                       >
-                        Preview </a
+                        preview </a
                       >)</span
                     >
                   </li>
