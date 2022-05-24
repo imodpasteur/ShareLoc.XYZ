@@ -245,7 +245,7 @@ export default {
   padding: 20px;
   height: calc(100% - 50px);
   overflow: auto;
-  overscroll-behavior: contain;
+  /* overscroll-behavior: contain; */
 }
 
 .width-limited {
