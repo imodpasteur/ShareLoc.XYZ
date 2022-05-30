@@ -118,10 +118,6 @@ export default {
       type: String,
       default: null
     },
-    fullLabelList: {
-      type: Array,
-      default: null
-    },
     tagCategories: {
       type: Object,
       default: null
@@ -137,6 +133,7 @@ export default {
   },
   data() {
     return {
+      selectedItems: [],
       selectedTags: [],
       filteredTags: [],
       loading: false,
@@ -207,6 +204,27 @@ export default {
         groupKeys: Object.keys(cate).sort(),
         other: other
       };
+    },
+    fullLabelList() {
+      const fullLabelList = [];
+      const allItems = this.selectedItems || this.allItems;
+      if (allItems) {
+        const tp = this.selectedCategory && this.selectedCategory.type;
+        const items = tp ? allItems.filter(m => m.type === tp) : allItems;
+        for (let item of items) {
+          if (item.allLabels) {
+            item.allLabels.forEach(label => {
+              if (fullLabelList.indexOf(label) === -1) {
+                fullLabelList.push(label.toLowerCase().replace(/ /g, "-"));
+              }
+            });
+          }
+        }
+      }
+      fullLabelList.sort((a, b) =>
+        a.toLowerCase() < b.toLowerCase() ? -1 : 1
+      );
+      return Array.from(new Set(fullLabelList));
     }
   },
   methods: {
@@ -271,6 +289,7 @@ export default {
         }
 
         this.$emit("selection-changed", selectedItems);
+        this.selectedItems = selectedItems;
         this.loading = false;
         this.$forceUpdate();
       }, 400)();
