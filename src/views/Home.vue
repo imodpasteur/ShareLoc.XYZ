@@ -135,7 +135,6 @@
     <resource-item-selector
       @selection-changed="updateResourceItemList"
       :allItems="resourceItems"
-      :fullLabelList="fullLabelList"
       :tagCategories="tagCategories"
       :type="selectedCategory && selectedCategory.type"
       :showDisplayMode="screenWidth > 700"
@@ -749,27 +748,7 @@ export default {
         );
       else return this.siteConfig.resource_categories;
     },
-    fullLabelList: function() {
-      const fullLabelList = [];
-      if (this.resourceItems) {
-        const tp = this.selectedCategory && this.selectedCategory.type;
-        const items = tp
-          ? this.resourceItems.filter(m => m.type === tp)
-          : this.resourceItems;
-        for (let item of items) {
-          if (item.allLabels)
-            item.allLabels.forEach(label => {
-              if (fullLabelList.indexOf(label) === -1) {
-                fullLabelList.push(label.toLowerCase().replace(/ /g, "-"));
-              }
-            });
-        }
-      }
-      fullLabelList.sort((a, b) =>
-        a.toLowerCase() < b.toLowerCase() ? -1 : 1
-      );
-      return Array.from(new Set(fullLabelList));
-    },
+
     tagCategories: function() {
       if (this.selectedCategory) {
         return this.selectedCategory && this.selectedCategory.tag_categories;
