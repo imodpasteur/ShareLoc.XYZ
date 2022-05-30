@@ -29,7 +29,8 @@ In the terminal, run:
     mkdir shareloc
     cd shareloc
 ```
-In shareloc folder we have smlm_napari.py, __we can merge with shareloc-utlis if tested OK__
+In shareloc folder we have smlm_napari.py, data stored on Shareloc will be downloaded here too.
+
 ### 4. From [ShareLoc](https://shareloc.xyz) website, chose the Zenodo ID of SMLM to visualize
 
 ![Capture d’écran de 2022-05-25 15-05-32](https://user-images.githubusercontent.com/56833522/170296369-6d71dfad-b056-42b3-8c4c-8cbb89b50927.png)
