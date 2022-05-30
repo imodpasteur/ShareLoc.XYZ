@@ -265,17 +265,16 @@ const app = new Vue({
     methods: {
     async init(){
         if(this.datasetInfo){
-            const rawSpecUrl = this.datasetInfo.config._deposit.links.html + '/files/rdf.yaml'
+            const rawSpecUrl = this.datasetInfo.rdf_source
             const specUrl = await convertZenodoFileUrl(rawSpecUrl) || rawSpecUrl
             const tmp = specUrl.split('/')
             this.rootUrl = tmp.slice(0, tmp.length-1).join('/')
             const response = await fetch(specUrl)
             const yamlText = await response.text()
             this.spec = jsyaml.load(yamlText.replaceAll('!<tag:yaml.org,2002:js/undefined>', ''))
-            const zenodoID = this.spec.id.split('/zenodo.')[1]
             this.isSandbox = specUrl.includes('sandbox.zenodo.org')
             const datasetURL = rawSpecUrl.split('/files/')[0]
-            this.datasetIDs = datasetURL.split('/record/')[1]
+            this.datasetIDs = this.datasetInfo.id;
             this.samples = this.spec.attachments.samples;
             for(let sample of this.samples){
                 for (let file of sample.files) {
@@ -342,7 +341,6 @@ class ImJoyPlugin {
         else if(ctx.config.mode === 'one')
             app.datasetInfo = ctx.data;
         else if(ctx.config.mode === 'all'){
-            
             const datasets = []
             for(let item of ctx.data){
                 if(!item.config || !item.config._deposit) {
@@ -350,9 +348,8 @@ class ImJoyPlugin {
                     console.error('Skipping item', item)
                     continue
                 }
-                app.isSandbox = item.config._deposit.links.html.includes('sandbox.zenodo.org')
-                const datasetIDs = item.config._deposit.links.html.split('/record/')[1]
-                datasets.push(datasetIDs)
+                app.isSandbox = item.rdf_source('sandbox.zenodo.org')
+                datasets.push(item.id)
             }
             app.datasetIDs = datasets.join(",")
         }
