@@ -241,28 +241,38 @@ async function downloadSample(rootUrl, spec, showMessage, showProgress, showWarn
 const app = new Vue({
     el: '#app',
     data: {
-    datasets: null,
-    datasetInfo: null,
-    format: null,
-    status: "",
-    loading: false,
-    progress: 0,
-    spec: null,
-    samples: null,
-    rootUrl: null,
-    warnings: [],
-    weightsConsumers: [],
-    datasetIDs: null,
-    isSandbox: false,
-    config: {
-        file_patterns: '*.smlm',
-        conversion: true,
-        delimiter: ',',
-        extension: '.csv',
-        output_dir: 'datasets'
-    },
+        datasets: null,
+        datasetInfo: null,
+        format: null,
+        status: "",
+        loading: false,
+        progress: 0,
+        spec: null,
+        samples: null,
+        rootUrl: null,
+        warnings: [],
+        weightsConsumers: [],
+        datasetIDs: null,
+        isSandbox: false,
+        config: {
+            file_patterns: '*.smlm',
+            conversion: true,
+            delimiter: ',',
+            extension: '.csv',
+            output_dir: 'datasets'
+        },
+        exportFormats: [
+            'ThunderSTORM (csv)',
+            'ThunderSTORM (xls)'
+        ]
     },
     methods: {
+    bytesToSize(bytes) {
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return '0 Byte';
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    },
     async init(){
         if(this.datasetInfo){
             const rawSpecUrl = this.datasetInfo.rdf_source
@@ -294,7 +304,15 @@ const app = new Vue({
         }
        
     },
-    async downloadFile(file){
+    async exportFile(file, format){
+        const smlmPlugin = await api.getPlugin("SMLM File IO");
+        try {
+            const data = await smlmPlugin.load(file)
+            await data.saveAs(format)
+        }
+        catch(e){
+            await api.alert(`Failed to download file: ${e}` )
+        }
     },
     async downloadSample(sample){
         this.format = format
@@ -454,7 +472,10 @@ api.export(new ImJoyPlugin())
                           
                         </header>
                         <div class="card-content" style="text-align: center;">
-                            <a class="is-link tag" style="margin-left:10px;" v-for="file in sample.files" :key="file.name" :href="file.url" target="_blank">{{file.name.slice(0, 20)}}</a>
+                            <div v-for="file in sample.files" :key="file.name">
+                                <a class="is-link tag" style="margin-left:10px;"  :href="file.url" target="_blank">{{file.name.slice(0, 20)}} ({{bytesToSize(file.size)}})</a>
+                                (<a class="is-link tag" style="margin-left:10px;" v-for="format in exportFormats" :key="format" @click="exportFile(file.url, format)">{{format}}</a>)
+                            </div>
                             <br>
                             <img v-for="view in sample.views" style="max-width: 200px;max-height: 200px;margin:10px;" :src="view.image" class="img-responsive">
                         </div>

@@ -737,7 +737,6 @@
             return new File([blob], name);
         }
         async saveAs(format) {
-            
             if(!supported_text_formats[format]) throw new Error("Unsupported format: " + format)
             const format_config = supported_text_formats[format];
             const  delimiter = format_config.delimiter
@@ -752,41 +751,37 @@
                 const file_info = this.files[file_no]
                 if (file_info.type == "table") {
                     // TODO: compare with existing format, if the same format already exist, reuse it.
-            
-                        const data = this.files[file_no].data
-                        const tableDict = data.tableDict
-                        const headers = []
-                        for (let i = 0; i < data.headers.length; i++) {
-                            headers.push(data.headers[i])
+                    const data = this.files[file_no].data
+                    const tableDict = data.tableDict
+                    const headers = []
+                    for (let i = 0; i < data.headers.length; i++) {
+                        headers.push(data.headers[i])
+                    }
+
+                    let content = ""
+                    for(let header of headers){
+                        content = content + (header_transform[header] || header)  + delimiter
+                    }
+                    content = content.slice(0, content.length-1) + '\n'
+        
+                    const rows = tableDict[headers[0]].length
+                    const columns = headers.length;
+                    for(let i=0;i<rows;i++){
+                        for(let j=0;j<columns;j++){
+                            content = content + tableDict[headers[j]][i] + (j<columns-1?delimiter:'\n')
                         }
 
-                        let content = ""
-                        for(let header of headers){
-                            content = content + (header_transform[header] || header)  + delimiter
+                        if(i%1000 === 0) {
+                            await api.showMessage(`Converting ${i}/${rows}...`)
+                            await api.showProgress(i/rows*100)
                         }
-                        content = content.slice(0, content.length-1) + '\n'
-            
-                        const rows = tableDict[headers[0]].length
-                        const columns = headers.length;
-                        for(let i=0;i<rows;i++){
-                            for(let j=0;j<columns;j++){
-                            content = content + tableDict[headers[j]][i] + (j<columns-1?delimiter:'\n')
-                            }
-                        
-                            
-                            if(i%1000 === 0) {
-                                await api.showMessage(`Converting ${i}/${rows}...`)
-                                await api.showProgress(i/rows*100)
-                            }
-                        }
-                        const file = new File([content],file_info.name.split('.')[0] + format_config.extension, {
-                            type: "text/plain",
-                        })
-                        await api.exportFile(file, file.name);
-                        await api.showMessage(`Done, saving...`)
-                        await api.showProgress(100)
-                        
-                  
+                    }
+                    const file = new File([content],file_info.name.split('.')[0] + format_config.extension, {
+                        type: "text/plain",
+                    })
+                    await api.exportFile(file, file.name);
+                    await api.showMessage(`Done, saving...`)
+                    await api.showProgress(100)
                 }
             }
 
