@@ -596,7 +596,7 @@ export default {
           }
           console.log("orcid matched: " + this.depositId, depositionInfo);
           const rdf = depositionToRdf(depositionInfo);
-          this.rdf = await getFullRdfFromDeposit(rdf.config._rdf_file);
+          this.rdf = await getFullRdfFromDeposit(rdf);
           console.log("Full RDF:", this.rdf);
           // this.files = depositionInfo.files.map(item => {
           //   return {

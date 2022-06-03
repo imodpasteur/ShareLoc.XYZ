@@ -446,7 +446,7 @@ export function depositionToRdf(deposition) {
     );
   }
   return {
-    id: deposition.conceptdoi,
+    id: deposition.conceptrecid,
     name: metadata.title,
     type,
     authors: metadata.creators,
@@ -466,6 +466,7 @@ export function depositionToRdf(deposition) {
     attachments: {
       samples
     },
+    rdf_source: rdfFile,
     config: {
       _doi: deposition.doi,
       _conceptdoi: deposition.conceptdoi,
