@@ -6,6 +6,6 @@ mkdir -p output
 
 ./robot annotate --input output/shareloc_template.owl \
 --ontology-iri "https://raw.githubusercontent.com/imodpasteur/ShareLoc.XYZ/ontology/shareloc.owl" \
---annotation dc:description "ShareLoc defines terms to annotate data sets from single molecule localization microscopy, including but not limited to: imaging technique, biological structures or molecules of interest, cell types, experimental condition, labeling method, fixation protocol, etc." \
---annotation dc:title "ShareLoc" \
+--annotation dc11:description "ShareLoc defines terms to annotate data sets from single molecule localization microscopy, including but not limited to: imaging technique, biological structures or molecules of interest, cell types, experimental condition, labeling method, fixation protocol, etc." \
+--annotation dc11:title "ShareLoc" \
 --output output/shareloc.owl
