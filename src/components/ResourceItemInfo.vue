@@ -134,7 +134,8 @@ export default {
   computed: {
     formatedCitation: function() {
       let cites = this.resourceItem.cite;
-      if (!cites || cites.length <= 0) return null;
+      if (!cites || cites.length <= 0)
+        return [{ text: "DOI: " + this.resourceItem.doi }];
       if (this.resourceItem.cite && !Array.isArray(this.resourceItem.cite)) {
         cites = [this.resourceItem.cite];
       }
