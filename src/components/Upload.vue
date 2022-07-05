@@ -199,7 +199,7 @@
             <br />
             <div class="columns">
               <b-button
-                v-if="userId && item.owners.includes(userId)"
+                v-if="userId && item.owners && item.owners.includes(userId)"
                 @click="createOrUpdateDeposit(item.config._deposit.id, false)"
                 class="column button is-primary is-light is-fullwidth"
                 expanded
