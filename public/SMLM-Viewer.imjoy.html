@@ -73,7 +73,7 @@
                             const potreeFile = `https://imjoy-s3.pasteur.fr/public/pointclouds/${
                                 ctx.data.doi
                             }/${sample.name}/${file.name.replace(".smlm", ".potree.zip")}`;
-                            const preview_url = `https://imodpasteur.github.io/shareloc-utils/shareloc-potree-viewer.html?pointShape=circle&pointSizeType=adaptive&name=data&load=${potreeFile}`;
+                            const preview_url = `https://shareloc.xyz/shareloc-potree-viewer.html?pointShape=circle&pointSizeType=adaptive&name=data&load=${potreeFile}`;
                             this.viewer = await api.createWindow({
                                 name: `${sample.name}/${file.name}`,
                                 src: preview_url,

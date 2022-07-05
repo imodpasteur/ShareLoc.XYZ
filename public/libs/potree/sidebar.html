@@ -2,7 +2,7 @@
 <div id="sidebar_root" 
 	class="perfect_scrollbar navmenu navmenu-default navmenu-fixed-left unselectable" 
 	style="position: absolute; min-height: 100%; height: 100%; width: calc(100% - 1px); border-right: 1px solid black !important; overflow: hidden">
-	<div id="sidebar_header">
+	<!-- <div id="sidebar_header">
 		<span id="potree_branding" class="potree_sidebar_brand" style="display: flex; flex-direction: row">
 			<a href="http://potree.org" target="_blank">potree.org</a> 
 			<span style="margin: 0px 3px; color: #9AA1A4"> - </span> 
@@ -13,11 +13,20 @@
 			<span id="potree_version_number" style="color: #9AA1A4; font-size: 80%; font-weight: 100"></span>
 		</span>
 		<div id="potree_languages" style="font-family:arial;"></div>
-	</div>
+	</div> -->
 	<div>
 	<div id="potree_menu" class="accordion">
 	
 		<!-- APPEARANCE -->
+		<h3 id="menu_pointclouds"><span>Point clouds</span></h3>
+		<div class="pv-menu-list">
+			<li>
+				<label for="selectedPointCloud" class="pv-select-label" data-i18n="appearance.point_size_type">Select</label>
+				<select id="selectedPointCloud" name="selectedPointCloud">
+				</select>
+			</li>
+			<div id="pointcloud_properties"></div>
+		</div>
 		<h3 id="menu_appearance"><span data-i18n="tb.rendering_opt"></span></h3>
 		<div>
 			<ul class="pv-menu-list">

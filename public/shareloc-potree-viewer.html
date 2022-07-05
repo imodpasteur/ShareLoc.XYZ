@@ -48,6 +48,7 @@
 		const dataColor = urlParams.get('color') || "rgb(230, 110, 76)";
 		const dataShape = urlParams.get('pointShape') || 'circle';
 		const dataSizeType = urlParams.get('pointSizeType') || 'adaptive';
+		const unit = urlParams.get('unit') || 'nm';
 		
 		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
 		viewer.setDescription(`ShareLoc Potree Viewer`);
@@ -60,8 +61,16 @@
 		viewer.loadGUI(() => {
 			$("#menu_filters").next().show();
 			// viewer.toggleSidebar();
+			$("#menu_appearance").hide();
+			// $("#menu_tools").hide();
+			$("#menu_scene").hide();
+			$("#menu_classification").hide();
+			$("#menu_about").hide();
+			$("#menu_pointclouds").next().slideDown();
+			viewer.lengthUnit = {code: unit};
 		});
 
+		const pointcloudList = [];
 		Potree.loadPointCloud(dataUrl, dataName, function(e){
 			let pointcloud = e.pointcloud;
 			let material = pointcloud.material;
@@ -79,12 +88,24 @@
 			// material.activeAttributeName = "classification";
 			viewer.fitToScreen();
 			viewer.setTopView();
-		});
 
-		// viewer.setClassifications({
-			// 5:       { visible: true, name: 'trees'        , color: [0.0, 1.0, 0.0, 0.2] },
-		//	DEFAULT: { visible: true, name: 'other' , color: [0.0, 1.0, 0.0, 0.2] },
-		//});
+			const pointCloudSelection = $('#selectedPointCloud');
+			let elOption = $(`<option value="${pointcloudList.length}">${dataName}</option>`);
+			pointCloudSelection.append(elOption);
+			pointcloudList.push(pointcloud);
+			
+			pointCloudSelection.selectmenu({
+				change: (event, ui) => {
+					propertiesPanel.set(pointcloud);
+				}
+			});
+			pointCloudSelection.val(dataName).selectmenu('refresh');
+
+			let propertiesPanel = new Potree.PropertiesPanel($("#pointcloud_properties"), viewer);
+			propertiesPanel.setScene(viewer.scene);
+			propertiesPanel.set(pointcloud);
+			// pointcloud.setScaleX(0.001);
+		});
 	</script>
 	
   </body>
