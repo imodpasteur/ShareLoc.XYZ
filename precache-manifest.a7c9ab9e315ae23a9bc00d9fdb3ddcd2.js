@@ -16,7 +16,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ITK-VTK-Viewer.imjoy.html"
   },
   {
-    "revision": "e8ed6447f9410ff979ec3549a97141a6",
+    "revision": "b33ed8a55be6c84178a6c6e3b33743cb",
     "url": "/SMLM-File-IO.imjoy.html"
   },
   {
@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/SMLM-Viewer.imjoy.html"
   },
   {
-    "revision": "605bfd1fcd5b9f9896ba7d300877c77f",
+    "revision": "49258c9191807162f4c5823bcac00de0",
     "url": "/ShareLoc-Downloader.imjoy.html"
   },
   {
