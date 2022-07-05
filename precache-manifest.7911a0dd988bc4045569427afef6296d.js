@@ -2380,7 +2380,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/libs/potree/resources/textures/skyboxsun25degtest.txt"
   },
   {
-    "revision": "b28d5f8d9115b54a931631cbc8b4e0d6",
+    "revision": "75d0a697c6161525e3dc3953ad5c6048",
     "url": "/libs/potree/sidebar.html"
   },
   {
