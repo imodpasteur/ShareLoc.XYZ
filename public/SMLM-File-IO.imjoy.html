@@ -764,18 +764,22 @@
                     }
                     content = content.slice(0, content.length-1) + '\n'
         
-                    const rows = tableDict[headers[0]].length
+                    const rowCount = tableDict[headers[0]].length
                     const columns = headers.length;
-                    for(let i=0;i<rows;i++){
+                    const rows = [];
+                    
+                    for(let i=0;i<rowCount;i++){
                         for(let j=0;j<columns;j++){
-                            content = content + tableDict[headers[j]][i] + (j<columns-1?delimiter:'\n')
+                            rows.push(tableDict[headers[j]][i] + (j<columns-1?delimiter:'\n'));
+                            // content = content + tableDict[headers[j]][i] + (j<columns-1?delimiter:'\n')
                         }
 
                         if(i%1000 === 0) {
-                            await api.showMessage(`Converting ${i}/${rows}...`)
-                            await api.showProgress(i/rows*100)
+                            await api.showMessage(`Converting ${i}/${rowCount}...`)
+                            await api.showProgress(i/rowCount*100)
                         }
                     }
+                    content = content + rows.join("");
                     const file = new File([content],file_info.name.split('.')[0] + format_config.extension, {
                         type: "text/plain",
                     })
