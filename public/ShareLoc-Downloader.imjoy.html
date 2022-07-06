@@ -474,7 +474,7 @@ api.export(new ImJoyPlugin())
                         <div class="card-content" style="text-align: center;">
                             <div v-for="file in sample.files" :key="file.name">
                                 <a class="is-link tag" style="margin-left:10px;"  :href="file.url" target="_blank">{{file.name.slice(0, 20)}} ({{bytesToSize(file.size)}})</a>
-                                <a class="is-link tag" style="margin-left:10px;" v-for="format in exportFormats" :key="format" @click="exportFile(file.url, format)">{{format}}</a>
+                                <a class="is-link tag" style="margin-left:10px;" v-show="file.name.toLowerCase().endsWith('.smlm')" v-for="format in exportFormats" :key="format" @click="exportFile(file.url, format)">{{format}}</a>
                             </div>
                             <br>
                             <img v-for="view in sample.views" style="max-width: 200px;max-height: 200px;margin:10px;" :src="view.image" class="img-responsive">
