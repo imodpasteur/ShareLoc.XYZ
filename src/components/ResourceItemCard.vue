@@ -1,7 +1,7 @@
 <template>
   <div class="resource-item-card">
     <div class="card is-shady" :style="{ 'box-shadow': boxShadow }">
-      <div class="card-image">
+      <div class="card-image" @click="showResourceItemInfo">
         <b-carousel
           v-if="resourceItem.covers && resourceItem.covers.length > 0"
           :indicator="resourceItem.covers.length > 1"
@@ -98,7 +98,6 @@
 <script>
 import Badges from "./Badges";
 import AppIcons from "./AppIcons";
-import { anonymousAnimals } from "../utils";
 import siteConfig from "../../site.config.json";
 
 const colorMap = {};
@@ -139,28 +138,9 @@ export default {
     },
     icon: function() {
       if (this.resourceItem.icon) {
-        if (this.resourceItem.icon.startsWith("http")) {
-          return { type: "img", src: this.resourceItem.icon };
-        }
-        if (anonymousAnimals.indexOf(this.resourceItem.icon) >= 0) {
-          return {
-            type: "animal",
-            src: this.resourceItem.icon
-          };
-        } else {
-          return { type: "material", src: this.resourceItem.icon };
-        }
+        return { type: "material", src: this.resourceItem.icon };
       } else {
-        let sum = 0;
-        if (this.resourceItem.name)
-          for (let i = 0; i < this.resourceItem.name.length; i++) {
-            sum = sum + this.resourceItem.name.charCodeAt(i);
-          }
-        const selectedIcon = anonymousAnimals[sum % anonymousAnimals.length];
-        return {
-          type: "animal",
-          src: selectedIcon
-        };
+        return {};
       }
     }
   },
