@@ -1,7 +1,7 @@
 <template>
   <div class="resource-item-card">
     <div class="card is-shady" :style="{ 'box-shadow': boxShadow }">
-      <div class="card-image" @click="showResourceItemInfo">
+      <div class="card-image">
         <b-carousel
           v-if="resourceItem.covers && resourceItem.covers.length > 0"
           :indicator="resourceItem.covers.length > 1"
