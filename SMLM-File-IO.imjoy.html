@@ -766,7 +766,7 @@
         
                     const rowCount = tableDict[headers[0]].length
                     const columns = headers.length;
-                    const rows = [];
+                    const rows = [content];
                     
                     for(let i=0;i<rowCount;i++){
                         for(let j=0;j<columns;j++){
@@ -779,10 +779,10 @@
                             await api.showProgress(i/rowCount*100)
                         }
                     }
-                    content = content + rows.join("");
-                    const file = new File([content],file_info.name.split('.')[0] + format_config.extension, {
+                    const file = new File(rows, file_info.name.split('.')[0] + format_config.extension, {
                         type: "text/plain",
                     })
+                    file._transfer = true;
                     await api.exportFile(file, file.name);
                     await api.showMessage(`Done, saving...`)
                     await api.showProgress(100)

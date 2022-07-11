@@ -16,7 +16,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ITK-VTK-Viewer.imjoy.html"
   },
   {
-    "revision": "b33ed8a55be6c84178a6c6e3b33743cb",
+    "revision": "f09a85f103bdb7034aa9db6ff74d73e2",
     "url": "/SMLM-File-IO.imjoy.html"
   },
   {
