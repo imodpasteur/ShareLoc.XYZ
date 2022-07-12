@@ -284,7 +284,9 @@ const app = new Vue({
             this.spec = jsyaml.load(yamlText.replaceAll('!<tag:yaml.org,2002:js/undefined>', ''))
             this.isSandbox = specUrl.includes('sandbox.zenodo.org')
             const datasetURL = rawSpecUrl.split('/files/')[0]
-            this.datasetIDs = this.datasetInfo.id;
+            // we need to use the doi here to extract the version id
+            // .id is the concept id, not the version id
+            this.datasetIDs = this.datasetInfo.doi.replace('10.5281/zenodo.', '') // this.datasetInfo.id;
             this.samples = this.spec.attachments.samples;
             for(let sample of this.samples){
                 for (let file of sample.files) {
