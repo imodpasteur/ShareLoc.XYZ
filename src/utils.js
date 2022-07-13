@@ -197,6 +197,8 @@ export async function getFullRdfFromDeposit(rdf, resolveUrl) {
     const fullRdf = yaml.load(yamlStr);
     // fix id;
     fullRdf.id = rdf.id;
+    // keep conversions
+    fullRdf.conversions = rdf.conversions;
     const root_url = rdf.rdf_source
       .split("/")
       .slice(0, -1)
@@ -220,12 +222,26 @@ export async function getFullRdfFromDeposit(rdf, resolveUrl) {
         file.download_url = `${root_url}/${sample.name}/${f.name}`; // <sample name>/ <file name>
         // fix the name
         file.name = f.name;
-        if (file.name.endsWith(".smlm")) {
-          const potreeFile = `https://imjoy-s3.pasteur.fr/public/pointclouds/${
-            rdf.doi
-          }/${sample.name}/${file.name.replace(".smlm", ".potree.zip")}`;
-          file.preview_url = `https://shareloc.xyz/shareloc-potree-viewer.html?pointShape=circle&pointSizeType=adaptive&unit=nm&name=${sample.name}/${file.name}&load=${potreeFile}`;
+        if (
+          fullRdf.conversions &&
+          fullRdf.conversions[sample.name] &&
+          fullRdf.conversions[sample.name][f.name]
+        ) {
+          const conversions = fullRdf.conversions[sample.name][f.name];
+          if (conversions["potree"]) {
+            const potreeFile = `https://imjoy-s3.pasteur.fr/public/pointclouds/${rdf.doi}/${sample.name}/${conversions["potree"][0]}`;
+            file.preview_url = `https://shareloc.xyz/shareloc-potree-viewer.html?pointShape=circle&pointSizeType=adaptive&unit=nm&name=${sample.name}/${file.name}&load=${potreeFile}`;
+          }
+          if (conversions["csv"]) {
+            file.csv = conversions["csv"].map(c => {
+              return {
+                name: c,
+                url: `https://imjoy-s3.pasteur.fr/public/pointclouds/${rdf.doi}/${sample.name}/${c}`
+              };
+            });
+          }
         }
+
         Object.assign(f, file);
       }
 

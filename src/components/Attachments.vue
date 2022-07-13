@@ -51,6 +51,17 @@
                         preview </a
                       >)</span
                     >
+                    <span v-if="file.csv"
+                      >(<a
+                        v-for="csvFile in file.csv"
+                        :key="csvFile.name"
+                        :class="col.class"
+                        :href="csvFile.url"
+                        target="_blank"
+                      >
+                        {{ csvFile.name }} </a
+                      >)</span
+                    >
                   </li>
                 </ul>
               </div>

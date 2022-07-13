@@ -282,6 +282,8 @@ const app = new Vue({
             const response = await fetch(specUrl)
             const yamlText = await response.text()
             this.spec = jsyaml.load(yamlText.replaceAll('!<tag:yaml.org,2002:js/undefined>', ''))
+            this.spec.doi = this.datasetInfo.doi
+            this.spec.conversions = this.spec.conversions || this.datasetInfo.conversions
             this.isSandbox = specUrl.includes('sandbox.zenodo.org')
             const datasetURL = rawSpecUrl.split('/files/')[0]
             // we need to use the doi here to extract the version id
@@ -291,6 +293,21 @@ const app = new Vue({
             for(let sample of this.samples){
                 for (let file of sample.files) {
                     file.url = `${this.rootUrl}/${sample.name}/${file.name}`; // <sample name>/ <file name>
+                    if(this.spec.conversions && this.spec.conversions[sample.name] && this.spec.conversions[sample.name][file.name]){
+                        file.conversions = this.spec.conversions[sample.name][file.name]
+                        for(let k of Object.keys(file.conversions)){
+                            file.conversions[k] = file.conversions[k].map(c => {
+                                return {
+                                    name: c,
+                                    url: `https://imjoy-s3.pasteur.fr/public/pointclouds/${
+                                    this.spec.doi
+                                    }/${sample.name}/${c}`
+                                };
+                            });
+                        }
+                        
+                        
+                    }
                 }
                 for(let view of sample.views){
                     view.image = `${this.rootUrl}/${sample.name}/${
@@ -476,6 +493,9 @@ api.export(new ImJoyPlugin())
                         <div class="card-content" style="text-align: center;">
                             <div v-for="file in sample.files" :key="file.name">
                                 <a class="is-link tag" style="margin-left:10px;"  :href="file.url" target="_blank">{{file.name.slice(0, 20)}} ({{bytesToSize(file.size)}})</a>
+                                <template v-if="file.conversions && file.conversions.csv">
+                                    <a class="is-link tag" style="margin-left:10px;" v-for="csvFile in file.conversions.csv"  :href="csvFile.url" target="_blank">{{csvFile.name}}</a>
+                                </template>
                                 <a class="is-link tag" style="margin-left:10px;" v-show="file.name.toLowerCase().endsWith('.smlm')" v-for="format in exportFormats" :key="format" @click="exportFile(file.url, format)">{{format}}</a>
                             </div>
                             <br>
