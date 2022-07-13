@@ -96,7 +96,6 @@
         {
             "id": "anna-palm",
             "type": "application",
-            "source": "https://github.com/imjoy-team/imjoy-plugins/blob/master/repository/annaPalm.imjoy.html",
             "icon": "https://imod.pages.pasteur.fr/anna-palm-web/static/icons/apple-icon-152x152.png",
             "name": "ANNA-PALM",
             "version": "0.1.0",
