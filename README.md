@@ -3,6 +3,9 @@
 # ShareLoc.XYZ
 An open platform for sharing single-molecule localization microscopy data and tools.
 
+## New to ShareLoc?
+Watch this quick [tutorial](https://youtu.be/4nXrwGIuuaI) to get you started!
+
 ## Key Features
  * Open repository for single-molecule localization data and tools
  * Storing data on [Zenodo](https://zenodo.org)
