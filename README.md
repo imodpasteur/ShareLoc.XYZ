@@ -4,7 +4,9 @@
 An open platform for sharing single-molecule localization microscopy data and tools.
 
 ## New to ShareLoc?
-Watch this quick [tutorial](https://youtu.be/4nXrwGIuuaI) to get you started!
+Watch this [quick tutorial](https://youtu.be/tTOkqzr74wg) to get you started!
+
+Tutorial on [how to upload SMLM data](https://youtu.be/tFaEXWmv01g)
 
 ## Key Features
  * Open repository for single-molecule localization data and tools
