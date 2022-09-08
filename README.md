@@ -9,8 +9,8 @@ Watch this [quick tutorial](https://youtu.be/tTOkqzr74wg) to get you started!
 Tutorial on [how to upload SMLM data](https://youtu.be/tFaEXWmv01g)
 
 ## Key Features
- * Open repository for single-molecule localization data and tools
- * Storing data on [Zenodo](https://zenodo.org)
+ * Open repository for single-molecule localization microscopy (SMLM) data and tools
+ * Data are stored on [Zenodo](https://zenodo.org), an open repository operated by CERN (European Organization for Nuclear Research) 
  * Open and extendable via [ImJoy](https://imjoy.io) plugins
  * Browser-based SMLM data viewer with 2D/3D, no installation required
  * Easy-to-use upload interface with file preview support
