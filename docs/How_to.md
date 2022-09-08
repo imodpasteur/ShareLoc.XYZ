@@ -51,7 +51,7 @@ __2. Batch downloading through python [shraloc-utils](https://github.com/imodpas
 
 * Copy and run the download command in Python
 
-[More details on using the shareloc-utils package to download dataset(s)](https://github.com/imodpasteur/shareloc-utils#shareloc-utilities)
+  [More details on using the shareloc-utils package to download dataset(s)](https://github.com/imodpasteur/shareloc-utils#shareloc-utilities)
 
 # Share dataset
 
