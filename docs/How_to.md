@@ -1,17 +1,17 @@
 # How to use [ShareLoc.XYZ](shareloc.xyz)
 ## Overview
-* [Upload dataset](#upload-dataset)
-* [View dataset](#view-dataset)
-* [Download dataset](#download-dataset)
-* [Share dataset](#share-dataset)
+* [How to upload data](#how-to-upload-data)
+* [How to view data](#how-to-view-data)
+* [How to download data](#how-to-download-data)
+* [How to share data](#how-to-share-data)
 
-# Upload dataset
+# How to upload data
 
 Check this [tutorial video](https://www.youtube.com/watch?v=tTOkqzr74wg)
 
 Or this [step-by-step guide](https://slides.imjoy.io/?theme=white&slides=https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/docs/how-to-upload-slides.md)
 
-# View dataset
+# How to view data
 ShareLoc online visualization use [potree](https://github.com/potree/potree) format
 
 __1. Quick visualization__
@@ -36,7 +36,7 @@ __4. Crop image__
 
 ![Crop](https://user-images.githubusercontent.com/56833522/189119565-1572b1eb-f383-4111-aebd-76cee82e90be.png)
 
-# Download dataset
+# How to download data
 There are two ways to download dataset
 
 __1. Interactive downloading__
@@ -53,7 +53,7 @@ __2. Batch downloading through python [shraloc-utils](https://github.com/imodpas
 
   [More details on using the shareloc-utils package to download dataset(s)](https://github.com/imodpasteur/shareloc-utils#shareloc-utilities)
 
-# Share dataset
+# How to share data
 
 ![share](https://user-images.githubusercontent.com/56833522/189126670-ead0e419-b871-422b-9692-45134c41b9b7.png)
 
