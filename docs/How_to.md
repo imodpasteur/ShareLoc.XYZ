@@ -12,13 +12,16 @@ Check this [tutorial video](https://www.youtube.com/watch?v=tTOkqzr74wg)
 Or this [step-by-step guide](https://slides.imjoy.io/?theme=white&slides=https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/docs/how-to-upload-slides.md)
 
 # How to view data
-ShareLoc online visualization use [potree](https://github.com/potree/potree) format
+There are two ways to visualize SMLM data on ShareLoc: 
+1. An online viewer that does not require full download of the data
+2. A viewer that requires data download but has additional features.
 
-__1. Quick visualization__
 
-* click on the eye icon
+__1. Online viewer__
+ShareLoc online viewer uses [potree](https://github.com/potree/potree) format
+* Click eye icon
 
-![QuickView](https://user-images.githubusercontent.com/56833522/189102923-9174d487-1309-4587-998e-b6c2bdc51cd2.png)
+![Eye](https://user-images.githubusercontent.com/56833522/189361693-185ab93e-9bfa-43d5-9480-ec149a4d07ca.png)
 
 * Change point size/opacity/color map
 
