@@ -12,45 +12,99 @@ Check this [tutorial video](https://www.youtube.com/watch?v=tTOkqzr74wg)
 Or this [step-by-step guide](https://slides.imjoy.io/?theme=white&slides=https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/docs/how-to-upload-slides.md)
 
 # How to view data
+
 There are two ways to visualize SMLM data on ShareLoc: 
-1. An online viewer that does not require full download of the data
-2. A viewer that requires data download but has additional features.
+1. A first viewer (called [potree](https://github.com/potree/potree)) that allows quick online visualization (i.e. does not require downloading the full dataset).
+2. A second viewer (called FairyDust) that requires access to the localization data but has additional features.
 
 
-__1. Online viewer__
-ShareLoc online viewer uses [potree](https://github.com/potree/potree) format
-* Click eye icon
+__1. Potree viewer__
+
+* Quick visualization
 
 ![Eye](https://user-images.githubusercontent.com/56833522/189361693-185ab93e-9bfa-43d5-9480-ec149a4d07ca.png)
+
+* You can zoom in/out 
+  * using the mouse wheel on the computer 
+  * spread/pinch on the touch-screen of your mobile device
+* You can pan the image 
+  * command + click if you are using macOS
+  * left click if you are using Windows of Linux system
+  * drag with 3 fingers on the touch-screen of your mobile device
 
 * Change point size/opacity/color map
 
 ![QuickTuning](https://user-images.githubusercontent.com/56833522/189104817-9916f7dc-213a-4943-8297-f339c7da99bf.png)
 
-__2. View other FoV in the datasets__
+* Crop image
 
-![DatasetsPreview](https://user-images.githubusercontent.com/56833522/189115452-b422e0a7-1f79-43db-8236-856f005b2436.png)
+![CropPotree1](https://user-images.githubusercontent.com/56833522/191026137-1487ad69-bae3-4a09-879c-d477e716ae0b.png)
+![CropPotree2](https://user-images.githubusercontent.com/56833522/191026159-fc0caf83-382b-4bdf-b360-427b85b5a106.png)
+![CropPotree3](https://user-images.githubusercontent.com/56833522/191026175-d2ebb750-c2b8-459f-9f3f-8c05ef3bb813.png)
+![CropPotree4](https://user-images.githubusercontent.com/56833522/191026184-836ef5e8-1f01-4606-8732-5ea1d2b6bf92.png)
 
-__3. View 3D represnetation__
 
-![Quick3Dcmap](https://user-images.githubusercontent.com/56833522/189109867-a8aa13d5-74c0-4a5d-8ef1-1bbd13c440f0.png)
+* Color-coded 3D view
 
-__4. Crop image__
+![Potree3D1](https://user-images.githubusercontent.com/56833522/191027359-20effa3c-4e68-413f-a60c-8dfb06a49a2c.png)
+![Potree3D2](https://user-images.githubusercontent.com/56833522/191027371-d398dbc0-0ffd-402d-ba02-7a582e2dd3ef.png)
 
-![Crop](https://user-images.githubusercontent.com/56833522/189119565-1572b1eb-f383-4111-aebd-76cee82e90be.png)
+
+* View other fileds of view in the datasets
+
+![ViewMoreData1](https://user-images.githubusercontent.com/56833522/191019747-8d2d8387-4f77-49ce-af94-34ed545a373b.png)
+![ViewMoreData2](https://user-images.githubusercontent.com/56833522/191019761-d49f5c9f-1920-4e1e-bc93-8d665377b89e.png)
+![ViewMoreData3](https://user-images.githubusercontent.com/56833522/191019774-af3a121b-e9c1-4f45-867a-f362e8b406da.png)
+
+__2. Fairy Dust viewer__
+
+![FairyDust1](https://user-images.githubusercontent.com/56833522/191028971-22d513e1-2112-4ec3-bc37-3f1f9736f3c8.png)
+![FairyDust2](https://user-images.githubusercontent.com/56833522/191030361-d3b41a17-f85a-4f26-a8ad-e2d7d801be1d.png)
+
+
+You can load files with the following formats: [SMLM(.smlm)](https://github.com/imodpasteur/smlm-file-format), ThunderSTORM(.csv/.xls), RapidSTROM, ZEISS(ELYRA), Nikon NSTORM(txt).
+
+If you have other file format which is not supported yet, please upload a [sample file](https://www.dropbox.com/request/IyZ7HkzHUpB0t5Mkp46l), and [send us a message](https://oeway.typeform.com/to/rdkPmd?typeform-source=shareloc.xyz) to describe your file format, we will try to support your file format.
+
+* You can zoom in/out 
+  * using the mouse wheel on the computer 
+  * spread/pinch on the touch-screen of your mobile device
+* You can pan the image 
+  * command + click if you are using macOS
+  * left click if you are using Windows of Linux system
+  * drag with 3 fingers on the touch-screen of your mobile device
+
+* Change Scale
+
+![FairyDustChangeScale](https://user-images.githubusercontent.com/56833522/191032636-0ad0b481-4c13-4ef3-9ccb-df2d762fc5e0.png)
+
+* Crop
+
+![FairyDustCrop](https://user-images.githubusercontent.com/56833522/191032709-0e107b6c-eec7-441a-baf9-935cffb5ee45.png)
+
+* Multi-channel view
+
+![FairyDusMultiCh](https://user-images.githubusercontent.com/56833522/191032732-36ccd859-5f85-4aef-8414-57a97844d689.png)
+![FairyDusMultiCh2](https://user-images.githubusercontent.com/56833522/191032741-c0776e2d-f54e-49d5-b679-6b6c2e65e37f.png)
 
 # How to download data
-There are two ways to download dataset
+There are two ways to download datasets: 
+1. interactive download of individual datasets
+2. batch download of multiple data sets with a Python package
 
 __1. Interactive downloading__
 
-![interacticeDown](https://user-images.githubusercontent.com/56833522/189121216-8b574527-9827-48bc-9580-bd88b67dbc3d.png)
+The dataset should be downloaded to your  "Downloads" folder
+
+![DownLoad](https://user-images.githubusercontent.com/56833522/191034255-9915989c-7fcb-4720-bef8-1c5dc67b6f96.png)
+![DownLoad2](https://user-images.githubusercontent.com/56833522/191034266-a0920040-905f-4db7-be1c-edabff700eb6.png)
 
 __2. Batch downloading through python [shraloc-utils](https://github.com/imodpasteur/shareloc-utils) package__
 
-* Add dataset(s) to bookmark
+* Bookmark dataset
 
-![Bookmark](https://user-images.githubusercontent.com/56833522/189123217-d4d8aa0f-406b-49db-a1fd-218581e32ea5.png)
+![DownLoad3](https://user-images.githubusercontent.com/56833522/191036647-ed94ef13-790d-4fe5-84b3-8f8f3723e39c.png)
+![DownLoad4](https://user-images.githubusercontent.com/56833522/191036167-1ab24b9e-0d0c-4b9b-a6d8-3567de1fdfc3.png)
 
 * Copy and run the download command in Python
 
@@ -58,7 +112,10 @@ __2. Batch downloading through python [shraloc-utils](https://github.com/imodpas
 
 # How to share data
 
-![share](https://user-images.githubusercontent.com/56833522/189126670-ead0e419-b871-422b-9692-45134c41b9b7.png)
+![Share1](https://user-images.githubusercontent.com/56833522/191036907-944ca0fa-094b-420e-aa40-d1d3245d80de.png)
+![Share2](https://user-images.githubusercontent.com/56833522/191037526-5f8c1f18-10b6-408c-9582-3b1b769a9955.png)
+
+You can now send the link by e-mail or Twitter or whatever. That's it.
 
 
 
