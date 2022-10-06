@@ -25,16 +25,14 @@ For more details see: [SMLM file format](https://github.com/imodpasteur/smlm-fil
 
 ## Acknowledgements
 
-The SMLM viewer plugin used in ShareLoc.XYZ is adapted from the Fairy Dust viewer developed by [Felix Woitzel](https://twitter.com/flexi23)(in collaboration with [Christophe Leterrier](https://twitter.com/christlet)).
+The SMLM viewers used in ShareLoc.XYZ are adapted from the potree viewer developed by [Markus Schuetz](https://twitter.com/m_schuetz) and the Fairy Dust viewer developed by [Felix Woitzel](https://twitter.com/flexi23) (in collaboration with [Christophe Leterrier](https://twitter.com/christlet)).
 
 ## License
 
-The source code of ShareLoc.XYZ platform is released under MIT license. The content hosted in ShareLoc.XYZ, including data and applications are owned by the original authors and made available according to the corresponding license specified by the authors.
-
-Fairy Dust is released under MIT license, and we apply the same MIT license to the . 
+The source code of the ShareLoc.XYZ platform is released under MIT license. The content hosted in ShareLoc.XYZ, including data and applications are owned by the original authors and made available according to the corresponding license specified by the authors.
 
 ## Citation
-If you find ShareLoc.XYZ helpful for your research please consider citing our paper and ShareLoc.XYZ: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5045319.svg)](https://doi.org/10.5281/zenodo.5045319)
+If you find ShareLoc.XYZ helpful for your research, please consider citing our paper and ShareLoc.XYZ: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5045319.svg)](https://doi.org/10.5281/zenodo.5045319)
 
 ## User Agreement
 
@@ -42,5 +40,5 @@ By using the ShareLoc.XYZ website and/or viewing material on the website, you ag
 
 ## Contact Us
 
-If you have any question, please feel free to [send us a private message](https://oeway.typeform.com/to/rdkPmd) or write a public [Github issues](https://github.com/imodpasteur/ShareLoc.XYZ/issues).
+If you have any question, please feel free to [send us a private message](https://oeway.typeform.com/to/rdkPmd) or write a public [Github issue](https://github.com/imodpasteur/ShareLoc.XYZ/issues).
 
