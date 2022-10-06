@@ -1,20 +1,21 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5045319.svg)](https://doi.org/10.5281/zenodo.5045319)
 
 # ShareLoc.XYZ
-An open platform for sharing single-molecule localization microscopy data and tools.
+An open platform for sharing single-molecule localization microscopy (SMLM) data and tools.
 
 ## New to ShareLoc?
-Watch this [quick tutorial](https://youtu.be/tTOkqzr74wg) to get you started!
+Watch this [quick overview tutorial](https://youtu.be/tTOkqzr74wg) to get you started.
 
-Tutorial on [how to upload SMLM data](https://youtu.be/tFaEXWmv01g)
+Here is a specific tutorial on [how to upload SMLM data](https://youtu.be/tFaEXWmv01g)
 
-## Key Features
- * Open repository for single-molecule localization microscopy (SMLM) data and tools
- * Data are stored on [Zenodo](https://zenodo.org), an open repository operated by CERN (European Organization for Nuclear Research) 
+## Key features of ShareLoc:
+ * Open repository for SMLM data and tools
+ * Data are stored on [Zenodo](https://zenodo.org), an open repository operated by [CERN](https://home.cern/) 
+ * Browser-based SMLM viewer in 2D and 3D, no installation required
+ * Flexible ontology-based data annotation using the ontology lookup service [(OLS)](https://www.ebi.ac.uk/ols/index) run by [EMBL-EBI](https://www.ebi.ac.uk/) 
  * Open and extendable via [ImJoy](https://imjoy.io) plugins
- * Browser-based SMLM data viewer with 2D/3D, no installation required
  * Easy-to-use upload interface with file preview support
- * Import various type of file formats
+ * Import various file formats
 
 ## The SMLM file format
 
@@ -33,7 +34,8 @@ The source code of ShareLoc.XYZ platform is released under MIT license. The cont
 Fairy Dust is released under MIT license, and we apply the same MIT license to the . 
 
 ## Citation
-If you find ShareLoc.XYZ helpful for your research please consider cite ShareLoc.XYZ: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5045319.svg)](https://doi.org/10.5281/zenodo.5045319)
+If you find ShareLoc.XYZ helpful for your research please consider citing our paper and ShareLoc.XYZ: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5045319.svg)](https://doi.org/10.5281/zenodo.5045319)
+
 ## User Agreement
 
 By using the ShareLoc.XYZ website and/or viewing material on the website, you agree to become bound by the terms of this [User Agreement](./user-agreement.md). If you do not agree to the Disclaimer, Terms of Use, and Privacy Statements of this User Agreement, do not use this website or any portion thereof in any form or manner.
