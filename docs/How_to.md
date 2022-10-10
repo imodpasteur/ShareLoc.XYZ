@@ -38,21 +38,19 @@
 
 * ### Crop image
 
-![CropPotree1](https://user-images.githubusercontent.com/56833522/191026137-1487ad69-bae3-4a09-879c-d477e716ae0b.png)
-![CropPotree2](https://user-images.githubusercontent.com/56833522/191026159-fc0caf83-382b-4bdf-b360-427b85b5a106.png)
-![CropPotree3](https://user-images.githubusercontent.com/56833522/191026175-d2ebb750-c2b8-459f-9f3f-8c05ef3bb813.png)
-![CropPotree4](https://user-images.githubusercontent.com/56833522/191026184-836ef5e8-1f01-4606-8732-5ea1d2b6bf92.png)
-
+![CropPotree1](https://user-images.githubusercontent.com/56833522/194925175-6db2907a-5e42-4ad1-8dcd-fea35ad48a77.png)
+![CropPotree2](https://user-images.githubusercontent.com/56833522/194925173-0f04ecda-18ee-43ac-814b-0fa7cf27511a.png)
+![CropPotree3](https://user-images.githubusercontent.com/56833522/194925170-98c6e4fa-6485-4b84-8a2d-b66670ce0e3e.png)
+![CropPotree4](https://user-images.githubusercontent.com/56833522/194925169-77750186-5eef-414e-98d5-a081e74c5352.png)
 
 * ### Color-coded 3D view
 
 ![Potree3D1](https://user-images.githubusercontent.com/56833522/191027359-20effa3c-4e68-413f-a60c-8dfb06a49a2c.png)
 ![Potree3D2](https://user-images.githubusercontent.com/56833522/191027371-d398dbc0-0ffd-402d-ba02-7a582e2dd3ef.png)
 
-
 * ### View datasets containing multiple fields of view or channels
 
-![ViewMoreData1](https://user-images.githubusercontent.com/56833522/191019747-8d2d8387-4f77-49ce-af94-34ed545a373b.png)
+![ViewMoreData1_10_oct](https://user-images.githubusercontent.com/56833522/194923246-031b5080-5829-43fd-ac35-aa594553193f.png)
 ![ViewMoreData2](https://user-images.githubusercontent.com/56833522/191019761-d49f5c9f-1920-4e1e-bc93-8d665377b89e.png)
 ![ViewMoreData3](https://user-images.githubusercontent.com/56833522/191019774-af3a121b-e9c1-4f45-867a-f362e8b406da.png)
 
