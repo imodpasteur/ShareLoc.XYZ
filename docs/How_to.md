@@ -102,7 +102,7 @@ The dataset should be downloaded to your  "Downloads" folder
 
 ### 2. Batch downloading through python [shareloc-utils](https://github.com/imodpasteur/shareloc-utils) package
 
-:warning: __Warning: this feature has a bug, we are currently trying to fix it.__
+:warning: :warning: :warning: __Warning:__ this feature has a bug, we are currently trying to fix it.
 
 * Bookmark dataset
 
