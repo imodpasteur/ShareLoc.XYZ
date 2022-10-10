@@ -66,42 +66,43 @@ You can load files with the following formats: [SMLM(.smlm)](https://github.com/
 
 If your file format is not supported yet, please upload a [sample file](https://www.dropbox.com/request/IyZ7HkzHUpB0t5Mkp46l), and [send us a message](https://oeway.typeform.com/to/rdkPmd?typeform-source=shareloc.xyz) to describe your file format. We will try to support it in the future.
 
-* You can zoom in/out 
+* __You can zoom in/out__ 
   * using the mouse wheel on the computer 
   * spread/pinch on the touch-screen of your mobile device
-* You can pan the image 
+* __You can pan the image__ 
   * command + click if you are using macOS
   * left click if you are using Windows of Linux system
   * drag with 3 fingers on the touch-screen of your mobile device
 
-* Change Scale
+* ### Change Scale
 
 ![FairyDustChangeScale](https://user-images.githubusercontent.com/56833522/191032636-0ad0b481-4c13-4ef3-9ccb-df2d762fc5e0.png)
 
-* Crop
+* ### Crop
 
 ![FairyDustCrop](https://user-images.githubusercontent.com/56833522/191032709-0e107b6c-eec7-441a-baf9-935cffb5ee45.png)
 
-* Multi-channel view
+* ### View multi-channel
 
 ![FairyDusMultiCh](https://user-images.githubusercontent.com/56833522/191032732-36ccd859-5f85-4aef-8414-57a97844d689.png)
 ![FairyDusMultiCh2](https://user-images.githubusercontent.com/56833522/191032741-c0776e2d-f54e-49d5-b679-6b6c2e65e37f.png)
 
 # How to download data
-There are two ways to download datasets: 
+### There are two ways to download datasets: 
 1. interactive download of individual datasets
 2. batch download of multiple data sets with a Python package
 
-__1. Interactive downloading__
-
-The dataset should be downloaded to your  "Downloads" folder
+### 1. Interactive downloading
 
 ![DownLoad](https://user-images.githubusercontent.com/56833522/191034255-9915989c-7fcb-4720-bef8-1c5dc67b6f96.png)
 ![DownLoad2](https://user-images.githubusercontent.com/56833522/191034266-a0920040-905f-4db7-be1c-edabff700eb6.png)
 
-__2. Batch downloading through python [shareloc-utils](https://github.com/imodpasteur/shareloc-utils) package__
+The dataset should be downloaded to your  "Downloads" folder
 
-:warning: __Warning:__ :warning: this feature has a bug, we are currently trying to fix it.
+
+### 2. Batch downloading through python [shareloc-utils](https://github.com/imodpasteur/shareloc-utils) package
+
+:warning: __Warning: this feature has a bug, we are currently trying to fix it.__
 
 * Bookmark dataset
 
