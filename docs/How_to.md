@@ -1,42 +1,42 @@
 # How to use [ShareLoc.XYZ](shareloc.xyz)
 ## Overview
-* [How to upload data](#how-to-upload-data)
-* [How to view data](#how-to-view-data)
-* [How to download data](#how-to-download-data)
-* [How to share data](#how-to-share-data)
+* ### [How to upload data](#how-to-upload-data)
+* ### [How to view data](#how-to-view-data)
+* ### [How to download data](#how-to-download-data)
+* ### [How to share data](#how-to-share-data)
 
 # How to upload data
 
-Check this [tutorial video](https://www.youtube.com/watch?v=tTOkqzr74wg)
+### Check this [tutorial video](https://www.youtube.com/watch?v=tTOkqzr74wg)
 
-Or this [step-by-step guide](https://slides.imjoy.io/?theme=white&slides=https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/docs/how-to-upload-slides.md)
+### Or this [step-by-step guide](https://slides.imjoy.io/?theme=white&slides=https://github.com/imodpasteur/ShareLoc.XYZ/blob/main/docs/how-to-upload-slides.md)
 
 # How to view data
 
-There are two ways to visualize SMLM data on ShareLoc: 
-1. A first viewer (called [potree](https://github.com/potree/potree)) that allows quick online visualization (i.e. does not require downloading the full dataset).
+### There are two ways to visualize SMLM data on ShareLoc: 
+1. A first viewer (called [potree](https://github.com/potree/potree)) that allows quick online visualization (i.e. does not require downloading of the full dataset).
 2. A second viewer (called FairyDust) that requires access to the localization data but has additional features.
 
+### 1. Potree viewer
 
-__1. Potree viewer__
-
-* Quick visualization
+* ### Quick visualization
 
 ![Eye](https://user-images.githubusercontent.com/56833522/189361693-185ab93e-9bfa-43d5-9480-ec149a4d07ca.png)
 
-* You can zoom in/out 
+* __You can zoom in/out__ 
   * using the mouse wheel on the computer 
   * spread/pinch on the touch-screen of your mobile device
-* You can pan the image 
+  
+* __You can pan the image__ 
   * command + click if you are using macOS
   * left click if you are using Windows of Linux system
   * drag with 3 fingers on the touch-screen of your mobile device
 
-* Change point size/opacity/color map
+* ### Change point size/opacity/color map
 
 ![QuickTuning](https://user-images.githubusercontent.com/56833522/189104817-9916f7dc-213a-4943-8297-f339c7da99bf.png)
 
-* Crop image
+* ### Crop image
 
 ![CropPotree1](https://user-images.githubusercontent.com/56833522/191026137-1487ad69-bae3-4a09-879c-d477e716ae0b.png)
 ![CropPotree2](https://user-images.githubusercontent.com/56833522/191026159-fc0caf83-382b-4bdf-b360-427b85b5a106.png)
@@ -44,19 +44,19 @@ __1. Potree viewer__
 ![CropPotree4](https://user-images.githubusercontent.com/56833522/191026184-836ef5e8-1f01-4606-8732-5ea1d2b6bf92.png)
 
 
-* Color-coded 3D view
+* ### Color-coded 3D view
 
 ![Potree3D1](https://user-images.githubusercontent.com/56833522/191027359-20effa3c-4e68-413f-a60c-8dfb06a49a2c.png)
 ![Potree3D2](https://user-images.githubusercontent.com/56833522/191027371-d398dbc0-0ffd-402d-ba02-7a582e2dd3ef.png)
 
 
-* View other fileds of view in the datasets
+* ### View datasets containing multiple fields of view or channels
 
 ![ViewMoreData1](https://user-images.githubusercontent.com/56833522/191019747-8d2d8387-4f77-49ce-af94-34ed545a373b.png)
 ![ViewMoreData2](https://user-images.githubusercontent.com/56833522/191019761-d49f5c9f-1920-4e1e-bc93-8d665377b89e.png)
 ![ViewMoreData3](https://user-images.githubusercontent.com/56833522/191019774-af3a121b-e9c1-4f45-867a-f362e8b406da.png)
 
-__2. Fairy Dust viewer__
+### 2. Fairy Dust viewer
 
 ![FairyDust1](https://user-images.githubusercontent.com/56833522/191028971-22d513e1-2112-4ec3-bc37-3f1f9736f3c8.png)
 ![FairyDust2](https://user-images.githubusercontent.com/56833522/191030361-d3b41a17-f85a-4f26-a8ad-e2d7d801be1d.png)
@@ -64,7 +64,7 @@ __2. Fairy Dust viewer__
 
 You can load files with the following formats: [SMLM(.smlm)](https://github.com/imodpasteur/smlm-file-format), ThunderSTORM(.csv/.xls), RapidSTROM, ZEISS(ELYRA), Nikon NSTORM(txt).
 
-If you have other file format which is not supported yet, please upload a [sample file](https://www.dropbox.com/request/IyZ7HkzHUpB0t5Mkp46l), and [send us a message](https://oeway.typeform.com/to/rdkPmd?typeform-source=shareloc.xyz) to describe your file format, we will try to support your file format.
+If your file format is not supported yet, please upload a [sample file](https://www.dropbox.com/request/IyZ7HkzHUpB0t5Mkp46l), and [send us a message](https://oeway.typeform.com/to/rdkPmd?typeform-source=shareloc.xyz) to describe your file format. We will try to support it in the future.
 
 * You can zoom in/out 
   * using the mouse wheel on the computer 
@@ -99,7 +99,9 @@ The dataset should be downloaded to your  "Downloads" folder
 ![DownLoad](https://user-images.githubusercontent.com/56833522/191034255-9915989c-7fcb-4720-bef8-1c5dc67b6f96.png)
 ![DownLoad2](https://user-images.githubusercontent.com/56833522/191034266-a0920040-905f-4db7-be1c-edabff700eb6.png)
 
-__2. Batch downloading through python [shraloc-utils](https://github.com/imodpasteur/shareloc-utils) package__
+__2. Batch downloading through python [shareloc-utils](https://github.com/imodpasteur/shareloc-utils) package__
+
+:warning: __Warning:__ :warning: this feature has a bug, we are currently trying to fix it.
 
 * Bookmark dataset
 
