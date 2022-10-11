@@ -380,7 +380,7 @@ class ImJoyPlugin {
         else if(ctx.config.mode === 'all'){
             const datasets = []
             for(let item of ctx.data){
-                if(!item.config || !item.config._deposit) {
+                if(!item.config) {
                     await api.showMessage("Skipping legacy item: " + item.name)
                     console.error('Skipping item', item)
                     continue
