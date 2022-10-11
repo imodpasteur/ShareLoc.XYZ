@@ -385,7 +385,7 @@ class ImJoyPlugin {
                     console.error('Skipping item', item)
                     continue
                 }
-                app.isSandbox = item.rdf_source('sandbox.zenodo.org')
+                app.isSandbox = item.rdf_source.includes('sandbox.zenodo.org')
                 datasets.push(item.id)
             }
             app.datasetIDs = datasets.join(",")
