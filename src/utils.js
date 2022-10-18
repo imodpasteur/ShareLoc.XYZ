@@ -482,6 +482,7 @@ export function depositionToRdf(deposition) {
     attachments: {
       samples
     },
+    owners: deposition.owners,
     rdf_source: rdfFile,
     config: {
       _doi: deposition.doi,
