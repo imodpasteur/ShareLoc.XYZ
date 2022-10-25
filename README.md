@@ -1,4 +1,5 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5045319.svg)](https://doi.org/10.5281/zenodo.5045319)
+[![Paper](https://img.shields.io/static/v1?label=Paper&message=10.1038/s41592-022-01659-0&color=green)](https://www.nature.com/articles/s41592-022-01659-0)
 
 # ShareLoc.XYZ
 An open platform for sharing single-molecule localization microscopy (SMLM) data and tools.
@@ -32,7 +33,10 @@ The SMLM viewers used in ShareLoc.XYZ are adapted from the potree viewer develop
 The source code of the ShareLoc.XYZ platform is released under MIT license. The content hosted in ShareLoc.XYZ, including data and applications are owned by the original authors and made available according to the corresponding license specified by the authors.
 
 ## Citation
-If you find ShareLoc.XYZ helpful for your research, please consider citing our paper and ShareLoc.XYZ: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5045319.svg)](https://doi.org/10.5281/zenodo.5045319)
+If you find ShareLoc.XYZ helpful for your research, please consider citing our paper 
+```
+Ouyang, W., Bai, J., Singh, M.K. et al. ShareLoc — an open platform for sharing localization microscopy data. Nat Methods (2022). https://doi.org/10.1038/s41592-022-01659-0
+``` 
 
 ## User Agreement
 
