@@ -2,7 +2,8 @@
 [![Paper](https://img.shields.io/static/v1?label=Paper&message=10.1038/s41592-022-01659-0&color=green)](https://www.nature.com/articles/s41592-022-01659-0)
 
 # ShareLoc.XYZ
-An open platform for sharing single-molecule localization microscopy (SMLM) data and tools.
+ShareLoc is an open platform for sharing single-molecule localization microscopy (SMLM) data and tools, as described in
+[Ouyang, Bai et al. Nat Meth 2022](https://www.nature.com/articles/s41592-022-01659-0).
 
 ## New to ShareLoc?
 Watch this [quick overview tutorial](https://youtu.be/tTOkqzr74wg) to get you started.
