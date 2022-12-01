@@ -78,9 +78,10 @@ The screenshot will be displayed on shareloc.xyz as the cover of the sample
 ![Screenshot2](https://user-images.githubusercontent.com/56833522/130480654-25495215-f119-4217-8331-4b9dfa313309.png)
 
 -----
-## Repeat the above steps if you have several samples from the same experiment
+## Repeat the above steps if you have several fields of view from the same sample
 
-![samplesfromsameexpmt](https://user-images.githubusercontent.com/56833522/130482265-2993469f-0590-44e9-942f-60b39b98d0b7.png)
+![screenshots](https://user-images.githubusercontent.com/56833522/191012153-f54d3a13-aa4d-4964-9c2c-96f1ee45aa5d.png)
+
 
 
 -----
@@ -101,6 +102,7 @@ Now please add information about your data, including:
 ```
 
 Asterisk(*): Mandatory field 
+
 -----
 
 ## Click "OK" to submit the form
@@ -147,19 +149,23 @@ Asterisk(*): Mandatory field
 
 -----
 ## Waiting for approval
-After your publication request, we will receive a notification.
+After your publication request, we (the ShareLoc administrators) will receive a notification.
 
-If the data meet our requirements, we will approve your request. Otherwise, we might contact you via email and ask for modifications.
+If the data meet our requirements, we will approve your request. 
+
+Otherwise, we might contact you via email and ask for modifications.
 
 
 -----
 ## Editing uploaded data
-* Your dataset will be listed in the ShareLoc website (note that this may take a while).
-* You can make modifications to the datasets you uploaded. The easiest way is to click the "Edit" icon, make sure you logged in zenodo.
+* YOnce your dataset is approved, it will be listed on the ShareLoc website.
+* You can still make modifications to the datasets you uploaded. The easiest way is to click the "Edit" icon, making sure that you are logged in to Zenodo
 
 ![Edit](https://user-images.githubusercontent.com/56833522/126275073-1771adb8-f8fe-4741-9caf-b4be877a1039.png)
 -----
 ## Thank you!
+
+Feel free to contact us for questions, issues or comments
 
 <button class="button" onclick=" window.open('https://github.com/imodpasteur/ShareLoc.XYZ/issues','_blank')">Report issues</button>
 <button class="button" onclick=" window.open('https://oeway.typeform.com/to/rdkPmd','_blank')">Contact us</button>
