@@ -25,6 +25,11 @@ To enable faster preview and portable sharing, we developed a binary and lossles
 
 For more details see: [SMLM file format](https://github.com/imodpasteur/smlm-file-format)
 
+## [ANNA PALM](https://github.com/imodpasteur/ANNA-PALM) models trained on ShareLoc.xyz
+
+Here you can find 4 pre-trained models that were trained on SMLM data of microtubules shared on ShareLoc.xyz:
+https://www.dropbox.com/scl/fo/dkmsnshuqofut619nv7rb/h?rlkey=yvbkyythucjkpyrh1g3vlln6y&dl=0
+
 ## Acknowledgements
 
 The SMLM viewers used in ShareLoc.XYZ are adapted from the potree viewer developed by [Markus Schuetz](https://twitter.com/m_schuetz) and the Fairy Dust viewer developed by [Felix Woitzel](https://twitter.com/flexi23) (in collaboration with [Christophe Leterrier](https://twitter.com/christlet)).
