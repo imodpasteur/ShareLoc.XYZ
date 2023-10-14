@@ -50,12 +50,25 @@ function normalizeItem(item) {
   item.authors = item.authors || [];
   item.description = item.description || "";
 
-  item.root_url =
+  if (
     item.rdf_source &&
-    item.rdf_source
-      .split("/")
-      .slice(0, -1)
-      .join("/");
+    item.rdf_source.startsWith("https://zenodo.org/api/records/") &&
+    item.rdf_source.endsWith("/content")
+  ) {
+    item.root_url =
+      item.rdf_source &&
+      item.rdf_source
+        .split("/")
+        .slice(0, -2)
+        .join("/");
+  } else {
+    item.root_url =
+      item.rdf_source &&
+      item.rdf_source
+        .split("/")
+        .slice(0, -1)
+        .join("/");
+  }
   if (item.covers && !Array.isArray(item.covers)) {
     item.covers = [item.covers];
   }

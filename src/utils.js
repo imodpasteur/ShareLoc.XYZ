@@ -990,7 +990,15 @@ export function concatAndResolveUrl(url, concat) {
       url3.push(url2[i]);
     }
   }
-  return url3.join("/");
+
+  const ret = url3.join("/");
+  const regex = /https:\/\/zenodo\.org\/api\/records\/(\d+)\/files\/([\w.]+)/;
+  const match = ret.match(regex);
+  if (match) {
+    return ret + "/content";
+  } else {
+    return ret;
+  }
 }
 
 function rel2abs(url, base_url) {

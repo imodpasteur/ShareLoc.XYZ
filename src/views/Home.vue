@@ -5,6 +5,20 @@
       style="max-height: 1024px!important;min-height:380px;background-image:url(/static/img/bg.jpg)"
     >
       <b-notification
+        type="is-warning"
+        has-icon
+        aria-close-label="close"
+        role="alert"
+        style="margin-bottom: 0px;"
+      >
+        Dear ShareLoc Users, our website is currently undergoing maintenance due
+        to a significant API change in Zenodo (https://zenodo.org), which we
+        used for our storage. This affects downloads and other features. Our
+        developer team is actively working on a fix to restore access as soon as
+        possible. We apologize for any inconvenience and appreciate your
+        patience.
+      </b-notification>
+      <b-notification
         v-if="zenodoClient.isSandbox"
         type="is-warning"
         has-icon
