@@ -3272,7 +3272,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/img/preview-screenshot.png"
   },
   {
-    "revision": "bfaf019d6f7b6a23a75342d97a841ffb",
+    "revision": "8086666aca6742da4ec74c2d196b1939",
     "url": "/static/img/shareloc-banner.png"
   },
   {
