@@ -7,7 +7,7 @@
       <stop offset="1" style="stop-color: rgba(178, 178, 178, 1)"></stop>
     </linearGradient>
   </defs>
-  <text transform="matrix(1, 0, 0, 1, 1.232625, -218.44545)" style="fill: rgb(127, 152, 239); font-family: ABeeZee; font-size: 23px; white-space: pre;" y="239.56199645996094"><tspan x="17.743999481201172" dy="1.4em">​</tspan><tspan>An open plaatform for </tspan><tspan x="17.743999481201172" dy="1.4em">​</tspan><tspan>sharing localization microscopy data</tspan></text>
+  <text transform="matrix(1, 0, 0, 1, 1.232625, -218.44545)" style="fill: rgb(127, 152, 239); font-family: ABeeZee; font-size: 23px; white-space: pre;" y="239.56199645996094"><tspan x="17.743999481201172" dy="1.4em">​</tspan><tspan>An open platform for </tspan><tspan x="17.743999481201172" dy="1.4em">​</tspan><tspan>sharing localization microscopy data</tspan></text>
   <rect x="18.438" y="101.777" width="504.235" height="1.846" style="fill: rgb(193, 207, 249);"></rect>
   <g id="Layer_2" transform="matrix(0.170051, 0, 0, 0.170051, 26.048267, 126.937119)" style="">
     <path d="M406.184,440.532h-30.485l-8.162-28.437c38.799-34.725,59.212-89.603,49.113-146.445
