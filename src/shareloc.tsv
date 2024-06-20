@@ -45,7 +45,7 @@ shareloc:SHARELOC_000042	nile-red		class		fluorophore
 shareloc:SHARELOC_000043	jf-646		class		fluorophore		
 shareloc:SHARELOC_000044	jf-568		class		fluorophore		
 shareloc:SHARELOC_000045	pa-jf646		class		fluorophore		
-shareloc:SHARELOC_000046	Pa-jf568		class		fluorophore		
+shareloc:SHARELOC_000046	pa-jf568		class		fluorophore		
 shareloc:SHARELOC_000047	transient-transfection		class		labeling strategy		
 shareloc:SHARELOC_000048	stable-knock-in		class		labeling strategy		
 shareloc:SHARELOC_000049	endogenous-labeling-crispr		class		labeling strategy		
@@ -57,7 +57,7 @@ shareloc:SHARELOC_000054	tetracysteine-tag		class		labeling strategy
 shareloc:SHARELOC_000055	actin		class		structure		
 shareloc:SHARELOC_000056	microtubule		class		structure		
 shareloc:SHARELOC_000057	mitochondria		class		structure		
-shareloc:SHARELOC_000058	Nuclear-pore		class		structure		
+shareloc:SHARELOC_000058	nuclear-pore		class		structure		
 shareloc:SHARELOC_000059	clathrin		class		structure		
 shareloc:SHARELOC_000060	vimentin		class		structure		
 shareloc:SHARELOC_000061	plasma membrane		class		structure		
@@ -94,4 +94,4 @@ shareloc:SHARELOC_000091	gluox		class		buffer
 shareloc:SHARELOC_000092	catalase		class		buffer		
 shareloc:SHARELOC_000093	mea		class		buffer		
 shareloc:SHARELOC_000094	abbelight-safe-reagent		class		buffer		
-shareloc:SHARELOC_000095	Idylle-everspark		class		buffer		
+shareloc:SHARELOC_000095	idylle-everspark		class		buffer		
