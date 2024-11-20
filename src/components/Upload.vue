@@ -74,7 +74,7 @@
           >
         </b-field>
         <b-field
-          v-if="server"
+          v-if="false"
           label="Option 2: Update an existing deposit"
           message="With this option, you can update an existing dataset or application. A Zenodo DOI or URL should be provided."
         >
@@ -87,7 +87,7 @@
         </b-field>
 
         <b-button
-          v-if="server"
+          v-if="false"
           style="text-transform:none;"
           class="button is-fullwidth"
           @click="loadRdfFromURL(URI4Load)"
@@ -614,15 +614,12 @@ export default {
       });
 
       try {
-        // Define the dataset id in the collection
-        const artifactId = `shareloc-xyz/${this.depositId}`;
-
         // Commit the artifact to finalize it
-        await this.artifactManager.commit(artifactId);
-
+        await this.artifactManager.commit(this.depositId);
+        console.log("Artifact committed!", this.depositId);
         // Update the UI with confirmation details
         this.publishedDOI = this.rdf.id; // Assuming DOI is pre-assigned in `rdf.id`
-        this.publishedUrl = `${this.siteConfig.hypha_server_url}/shareloc-xyz/artifacts/shareloc-collection/${this.depositId}`;
+        this.publishedUrl = `${this.siteConfig.hypha_server_url}/shareloc-xyz/artifacts/shareloc-collection/${this.depositId.split('/')[1]}`;
 
         alert("The deposition has been successfully committed and published!");
       } catch (e) {
@@ -691,18 +688,17 @@ export default {
       try {
         // Step 1: Define the dataset ID
         // randomly generate a depositId using time and random id if not provided
-        depositId =
-          depositId ||
-          Math.floor(Date.now() / 1000) + "-" + Math.floor(Math.random() * 100);
         // Step 2: Create or overwrite the dataset in the artifact manager
         const artifact = await this.artifactManager.create({
           parent_id: "shareloc-xyz/shareloc-collection",
-          alias: `shareloc-xyz/${depositId}`,
+          workspace: "shareloc-xyz",
+          alias: depositId,
           manifest: this.rdf,
           version: "stage",
-          // overwrite: true,
+          overwrite: true,
           _rkwargs: true
         });
+        this.depositId = artifact.id;
 
         // Step 3: Upload each file in editedFiles with a pre-signed URL
         for (let i = 0; i < this.editedFiles.length; i++) {
@@ -737,7 +733,6 @@ export default {
             file.name
           }`;
         }
-        this.depositId = depositId;
         this.uploadProgress = 0;
         this.uploadStatus = "Upload complete!";
         this.uploaded = true;
