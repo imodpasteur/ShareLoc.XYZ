@@ -308,6 +308,7 @@ export const store = new Vuex.Store({
       const artifacts_url = manifest_url.split("/artifacts")[0] + "/artifacts";
       for (let artifact of rawResourceItems) {
         const item = artifact.manifest;
+        item.id = artifact.alias;
         item.repo = repo;
         item.root_url = `${artifacts_url}/${artifact.alias}/files`;
         item.rdf_source = `${artifacts_url}/${artifact.alias}`;

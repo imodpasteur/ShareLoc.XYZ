@@ -619,7 +619,11 @@ export default {
         console.log("Artifact committed!", this.depositId);
         // Update the UI with confirmation details
         this.publishedDOI = this.rdf.id; // Assuming DOI is pre-assigned in `rdf.id`
-        this.publishedUrl = `${this.siteConfig.hypha_server_url}/shareloc-xyz/artifacts/shareloc-collection/${this.depositId.split('/')[1]}`;
+        this.publishedUrl = `${
+          this.siteConfig.hypha_server_url
+        }/shareloc-xyz/artifacts/shareloc-collection/${
+          this.depositId.split("/")[1]
+        }`;
 
         alert("The deposition has been successfully committed and published!");
       } catch (e) {
