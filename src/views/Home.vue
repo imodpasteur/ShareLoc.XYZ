@@ -386,8 +386,7 @@ const isTouchDevice = (function() {
   }
 })();
 
-async function updateFullRDF() {
-}
+async function updateFullRDF() {}
 
 function connectApps(self, item) {
   if (item.config && item.config._linked) return;

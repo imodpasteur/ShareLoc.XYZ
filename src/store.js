@@ -175,7 +175,7 @@ function normalizeItem(item) {
   }
   // fix samples
   const samples = item.attachments?.samples;
-  if(samples){
+  if (samples) {
     for (let sample of samples) {
       for (let f of sample.files) {
         // make a copy of it
@@ -205,7 +205,7 @@ function normalizeItem(item) {
 
         Object.assign(f, file);
       }
-      for (let view of sample.views) { 
+      for (let view of sample.views) {
         if (!view.image) {
           view.image = `${item.root_url}/${sample.name}/${
             Array.isArray(view.image_name)
@@ -271,10 +271,7 @@ export const store = new Vuex.Store({
         alert(`Failed to login: ${e}`);
       }
     },
-    async fetchResourceItems(
-      context,
-      { manifest_url, repo, transform }
-    ) {
+    async fetchResourceItems(context, { manifest_url, repo, transform }) {
       if (context.state.loadedUrl === manifest_url) {
         console.log("manifest already loaded");
         return;
@@ -298,21 +295,19 @@ export const store = new Vuex.Store({
         }
       }
 
-      if (siteConfig.builtin_manifest_url){
+      if (siteConfig.builtin_manifest_url) {
         const builtin_response = await fetch(siteConfig.builtin_manifest_url);
         const builtin_manifest = JSON.parse(await builtin_response.text());
-        for (let item of builtin_manifest.resources){
+        for (let item of builtin_manifest.resources) {
           context.commit("addResourceItem", item);
         }
       }
-      const resources_response = await fetch(
-        manifest_url + "/children"
-      );
+      const resources_response = await fetch(manifest_url + "/children");
       const resourceItems = await resources_response.json();
       const rawResourceItems = JSON.parse(JSON.stringify(resourceItems));
       const artifacts_url = manifest_url.split("/artifacts")[0] + "/artifacts";
       for (let artifact of rawResourceItems) {
-        const item = artifact.manifest
+        const item = artifact.manifest;
         item.repo = repo;
         item.root_url = `${artifacts_url}/${artifact.alias}/files`;
         item.rdf_source = `${artifacts_url}/${artifact.alias}`;

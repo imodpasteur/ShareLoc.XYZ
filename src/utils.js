@@ -216,7 +216,7 @@ export async function getFullRdfFromDeposit(rdf, resolveUrl) {
       for (let f of sample.files) {
         // make a copy of it
         const file = {};
-        debugger
+        debugger;
         file.download_url = `${root_url}/${sample.name}/${f.name}`; // <sample name>/ <file name>
         // fix the name
         file.name = f.name;

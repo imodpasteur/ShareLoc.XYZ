@@ -609,7 +609,9 @@ export default {
         return;
       }
 
-      const loadingComponent = this.$buefy.loading.open({ container: this.$el });
+      const loadingComponent = this.$buefy.loading.open({
+        container: this.$el
+      });
 
       try {
         // Define the dataset id in the collection
@@ -635,11 +637,19 @@ export default {
     },
     async login() {
       try {
-        const token = await hyphaWebsocketClient.login({server_url: this.siteConfig.hypha_server_url, login_callback(context){
-          window.open(context.login_url, '_blank');
-        }});
-        this.server = await hyphaWebsocketClient.connectToServer({server_url: this.siteConfig.hypha_server_url, token});
-        this.artifactManager = await this.server.getService("public/artifact-manager");
+        const token = await hyphaWebsocketClient.login({
+          server_url: this.siteConfig.hypha_server_url,
+          login_callback(context) {
+            window.open(context.login_url, "_blank");
+          }
+        });
+        this.server = await hyphaWebsocketClient.connectToServer({
+          server_url: this.siteConfig.hypha_server_url,
+          token
+        });
+        this.artifactManager = await this.server.getService(
+          "public/artifact-manager"
+        );
         this.$forceUpdate();
       } catch (e) {
         alert(`Failed to login: ${e}`);
@@ -672,14 +682,18 @@ export default {
         return;
       }
 
-      const loadingComponent = this.$buefy.loading.open({ container: this.$el });
+      const loadingComponent = this.$buefy.loading.open({
+        container: this.$el
+      });
       this.similarDeposits = null;
       this.uploadProgress = 1;
 
       try {
         // Step 1: Define the dataset ID
         // randomly generate a depositId using time and random id if not provided
-        depositId = depositId || Math.floor(Date.now() / 1000) + "-" + Math.floor(Math.random() * 100);
+        depositId =
+          depositId ||
+          Math.floor(Date.now() / 1000) + "-" + Math.floor(Math.random() * 100);
         // Step 2: Create or overwrite the dataset in the artifact manager
         const artifact = await this.artifactManager.create({
           parent_id: "shareloc-xyz/shareloc-collection",
@@ -687,7 +701,7 @@ export default {
           manifest: this.rdf,
           version: "stage",
           // overwrite: true,
-          _rkwargs: true,
+          _rkwargs: true
         });
 
         // Step 3: Upload each file in editedFiles with a pre-signed URL
@@ -697,21 +711,31 @@ export default {
             file = await file.generate();
           }
 
-          const filePath = file.sampleName ? `${file.sampleName}/${file.name}` : file.name;
-          const putUrl = await this.artifactManager.put_file({ artifact_id: artifact.id, file_path: filePath, _rkwargs: true });
+          const filePath = file.sampleName
+            ? `${file.sampleName}/${file.name}`
+            : file.name;
+          const putUrl = await this.artifactManager.put_file({
+            artifact_id: artifact.id,
+            file_path: filePath,
+            _rkwargs: true
+          });
 
           // Upload file via PUT request
           const response = await fetch(putUrl, {
             method: "PUT",
-            body: file,
+            body: file
           });
 
           if (!response.ok) {
             throw new Error(`Failed to upload file: ${file.name}`);
           }
 
-          this.uploadProgress = Math.round(((i + 1) / this.editedFiles.length) * 100);
-          this.uploadStatus = `Uploaded ${i + 1}/${this.editedFiles.length}: ${file.name}`;
+          this.uploadProgress = Math.round(
+            ((i + 1) / this.editedFiles.length) * 100
+          );
+          this.uploadStatus = `Uploaded ${i + 1}/${this.editedFiles.length}: ${
+            file.name
+          }`;
         }
         this.depositId = depositId;
         this.uploadProgress = 0;
@@ -726,7 +750,6 @@ export default {
         loadingComponent.close();
       }
     }
-
   }
 };
 </script>
