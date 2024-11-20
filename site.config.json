@@ -13,10 +13,12 @@
   "og_image": "https://shareloc.xyz/static/img/shareloc-banner.png",
   "og_description": "An open platform for sharing single-molecule localization microscopy data and tools",
   "background_image": "",
-  "manifest_url": "/manifest.shareloc.json",
+  "builtin_manifest_url": "./shareloc.manifest.json",
+  "manifest_url": "https://hypha.aicell.io/shareloc-xyz/artifacts/shareloc-collection",
   "explore_button_text": "🚀 Explore",
   "subscribe_url": "https://docs.google.com/forms/d/e/1FAIpQLSfQhTjXOuTXZNtalprbsXMPd4ct2ydiMhlPc2lhcs6WY4yo0w/viewform?embedded=true",
   "contribute_url": "/docs/contribute.md",
+  "hypha_server_url": "https://hypha.aicell.io",
   "join_partners_url": "",
   "footer": [
     { "label": "User Agreement",

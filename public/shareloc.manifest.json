@@ -1,0 +1,120 @@
+{
+    "id": "shareloc",
+    "name": "ShareLoc.XYZ",
+    "tags": [],
+    "logo": "\ud83d\udd2c",
+    "icon": "\ud83d\udd2c",
+    "splash_title": "ShareLoc.XYZ",
+    "splash_subtitle": "An open platform for sharing single molecule localization microscopy data",
+    "splash_feature_list": [],
+    "resource_types": [
+        "dataset"
+    ],
+    "default_type": "dataset",
+    "url_root": "https://raw.githubusercontent.com/imodpasteur/shareLoc.xyz/master",
+    "resources": [
+        {
+            "id": "smlm-viewer",
+            "type": "application",
+            "source": "https://shareloc.xyz/SMLM-Viewer.imjoy.html",
+            "icon": "eye-outline",
+            "name": "SMLM-Viewer",
+            "version": "0.1.0",
+            "api_version": "0.1.8",
+            "description": "A web-based point cloud viewer adapted from Fairy Dust by Felix Woitzel",
+            "requirements": [],
+            "dependencies": [],
+            "env": "",
+            "tags": [],
+            "documentation": "",
+            "covers": [],
+            "badges": [],
+            "authors": [
+                "Wei OUYANG"
+            ]
+        },
+        {
+            "id": "itk-vtk-viewer",
+            "type": "application",
+            "source": "https://unpkg.com/itk-vtk-viewer@11.9.1/dist/index.html",
+            "icon": "https://kitware.github.io/itk-vtk-viewer/app/favicon-32x32.png",
+            "name": "ITK VTK Viewer",
+            "git_repo": "https://github.com/Kitware/itk-vtk-viewer",
+            "version": "11.9.1",
+            "api_version": "0.1.8",
+            "description": "ITK VTK viewer for displaying point cloud data",
+            "requirements": [],
+            "dependencies": [],
+            "env": "",
+            "tags": [],
+            "documentation": "",
+            "covers": [],
+            "badges": [],
+            "authors": [
+                "Wei OUYANG"
+            ]
+        },
+        {
+            "id": "shareloc-downloader",
+            "type": "application",
+            "source": "https://shareloc.xyz/ShareLoc-Downloader.imjoy.html",
+            "icon": "download",
+            "name": "ShareLoc Downloader",
+            "version": "0.1.0",
+            "api_version": "0.1.8",
+            "description": "Share dataset downloader",
+            "requirements": [],
+            "dependencies": [],
+            "env": "",
+            "tags": [],
+            "documentation": "",
+            "covers": [],
+            "badges": [],
+            "authors": [
+                "Wei OUYANG"
+            ]
+        },
+        {
+            "id": "ImageJ.JS",
+            "type": "application",
+            "source": "https://raw.githubusercontent.com/imjoy-team/bioimage-io-models/master/src/imagej-js.imjoy.html",
+            "passive": false,
+            "icon": "https://raw.githubusercontent.com/imjoy-team/imagej.js/master/src/assets/icons/chrome/chrome-installprocess-128-128.png",
+            "name": "ImageJ.JS",
+            "version": "0.1.6",
+            "api_version": "0.2.3",
+            "description": "ImageJ running in the browser",
+            "tags": [
+              "software",
+              "bioengine"
+            ],
+            "documentation": "https://raw.githubusercontent.com/imjoy-team/imagej.js/master/README.md",
+            "covers": [],
+            "badges": [],
+            "authors": []
+        },
+        {
+            "id": "anna-palm",
+            "type": "application",
+            "icon": "https://imod.pages.pasteur.fr/anna-palm-web/static/icons/apple-icon-152x152.png",
+            "name": "ANNA-PALM",
+            "version": "0.1.0",
+            "api_version": "0.1.8",
+            "description": "ANNA-PALM: Accelerating Single Molecule Localization Microscopy with Deep Learning",
+            "requirements": [],
+            "dependencies": [],
+            "env": "",
+            "tags": [],
+            "documentation": "",
+            "covers": [
+                "http://imod.pages.pasteur.fr/anna-palm-web/static/img/ANNA-PALM-sr-arrow.png",
+                "http://imod.pages.pasteur.fr/anna-palm-web/static/img/ANNA-PALM-wf-arrow.png",
+                "http://imod.pages.pasteur.fr/anna-palm-web/static/img/tub-anna-palm-zoom-in_combined_1.gif"
+            ],
+            "badges": [],
+            "authors": [
+                "Ouyang et al."
+            ]
+        }
+    ]
+}

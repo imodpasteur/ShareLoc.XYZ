@@ -4,41 +4,6 @@
       class="hero is-link is-fullheight is-fullheight-with-navbar"
       style="max-height: 1024px!important;min-height:380px;background-image:url(/static/img/bg.jpg)"
     >
-      <b-notification
-        type="is-warning"
-        has-icon
-        aria-close-label="close"
-        role="alert"
-        style="margin-bottom: 0px;"
-      >
-        Dear ShareLoc Users, our website is currently undergoing maintenance due
-        to a significant API change in Zenodo (https://zenodo.org), which we
-        used for our storage. This affects downloads and other features. Our
-        developer team is actively working on a fix to restore access as soon as
-        possible. We apologize for any inconvenience and appreciate your
-        patience.
-      </b-notification>
-      <b-notification
-        v-if="zenodoClient.isSandbox"
-        type="is-warning"
-        has-icon
-        aria-close-label="Close notification"
-        role="alert"
-      >
-        You are using the SANDBOX mode for testing purposes. You can also
-        <a @click="switchToProduction()">switch to the production mode</a>.
-      </b-notification>
-      <b-notification
-        v-else-if="siteConfig.zenodo_config.use_sandbox"
-        type="is-info"
-        has-icon
-        aria-close-label="Close notification"
-        role="alert"
-      >
-        You are using the PRODUCTION mode, if you want to test the website
-        features, please
-        <a @click="switchToSandbox()">switch to the sanbox mode</a>.
-      </b-notification>
       <div class="hero-body" style="position: relative;">
         <img
           class="background-img"
@@ -396,7 +361,6 @@ import Attachments from "@/components/Attachments.vue";
 // import CommentBox from "@/components/CommentBox.vue";
 import About from "@/views/About.vue";
 import Markdown from "@/components/Markdown.vue";
-import { getFullRdfFromDeposit } from "../utils";
 
 const DEFAULT_ICONS = {
   notebook: "notebook-outline",
@@ -422,15 +386,7 @@ const isTouchDevice = (function() {
   }
 })();
 
-async function updateFullRDF(item) {
-  if (item.rdf_source) {
-    const newRDF = await getFullRdfFromDeposit(item, true);
-    for (let k of Object.keys(newRDF)) {
-      if (k !== "config") {
-        item[k] = newRDF[k];
-      }
-    }
-  }
+async function updateFullRDF() {
 }
 
 function connectApps(self, item) {

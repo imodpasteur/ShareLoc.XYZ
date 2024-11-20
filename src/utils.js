@@ -199,10 +199,7 @@ export async function getFullRdfFromDeposit(rdf, resolveUrl) {
     fullRdf.id = rdf.id;
     // keep conversions
     fullRdf.conversions = rdf.conversions;
-    const root_url = rdf.rdf_source
-      .split("/")
-      .slice(0, -1)
-      .join("/");
+    const root_url = rdf.rdf_source + "/__files__";
     if (resolveUrl) {
       fullRdf.documentation = getAbsoluteUrl(root_url, fullRdf.documentation);
       if (fullRdf.covers) {
@@ -219,6 +216,7 @@ export async function getFullRdfFromDeposit(rdf, resolveUrl) {
       for (let f of sample.files) {
         // make a copy of it
         const file = {};
+        debugger
         file.download_url = `${root_url}/${sample.name}/${f.name}`; // <sample name>/ <file name>
         // fix the name
         file.name = f.name;

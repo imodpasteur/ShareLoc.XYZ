@@ -50,25 +50,6 @@ function normalizeItem(item) {
   item.authors = item.authors || [];
   item.description = item.description || "";
 
-  if (
-    item.rdf_source &&
-    item.rdf_source.startsWith("https://zenodo.org/api/records/") &&
-    item.rdf_source.endsWith("/content")
-  ) {
-    item.root_url =
-      item.rdf_source &&
-      item.rdf_source
-        .split("/")
-        .slice(0, -2)
-        .join("/");
-  } else {
-    item.root_url =
-      item.rdf_source &&
-      item.rdf_source
-        .split("/")
-        .slice(0, -1)
-        .join("/");
-  }
   if (item.covers && !Array.isArray(item.covers)) {
     item.covers = [item.covers];
   }
@@ -192,6 +173,50 @@ function normalizeItem(item) {
       });
     }
   }
+  // fix samples
+  const samples = item.attachments?.samples;
+  if(samples){
+    for (let sample of samples) {
+      for (let f of sample.files) {
+        // make a copy of it
+        const file = {};
+        file.download_url = `${item.root_url}/${sample.name}/${f.name}`; // <sample name>/ <file name>
+        // fix the name
+        file.name = f.name;
+        if (
+          item.conversions &&
+          item.conversions[sample.name] &&
+          item.conversions[sample.name][f.name]
+        ) {
+          const conversions = item.conversions[sample.name][f.name];
+          if (conversions["potree"]) {
+            const potreeFile = `https://imjoy-s3.pasteur.fr/public/pointclouds/${item.doi}/${sample.name}/${conversions["potree"][0]}`;
+            file.preview_url = `https://shareloc.xyz/shareloc-potree-viewer.html?pointShape=circle&pointSizeType=adaptive&unit=nm&name=${sample.name}/${file.name}&load=${potreeFile}`;
+          }
+          if (conversions["csv"]) {
+            file.csv = conversions["csv"].map(c => {
+              return {
+                name: c,
+                url: `https://imjoy-s3.pasteur.fr/public/pointclouds/${item.doi}/${sample.name}/${c}`
+              };
+            });
+          }
+        }
+
+        Object.assign(f, file);
+      }
+      for (let view of sample.views) { 
+        if (!view.image) {
+          view.image = `${item.root_url}/${sample.name}/${
+            Array.isArray(view.image_name)
+              ? view.image_name[0].replace(".png", "_thumbnail.png")
+              : view.image_name.replace(".png", "_thumbnail.png")
+          }`;
+        }
+      }
+    }
+  }
+
   item.config._normalized = true;
 }
 
@@ -248,7 +273,7 @@ export const store = new Vuex.Store({
     },
     async fetchResourceItems(
       context,
-      { manifest_url, repo, transform, filter }
+      { manifest_url, repo, transform }
     ) {
       if (context.state.loadedUrl === manifest_url) {
         console.log("manifest already loaded");
@@ -259,27 +284,11 @@ export const store = new Vuex.Store({
       context.state.allApps = {};
       context.state.allTags = [...allTags];
       const siteConfig = context.state.siteConfig;
-      try {
-        // const items = await context.state.zenodoClient.getResourceItems({
-        //   community: siteConfig.zenodo_config.community,
-        //   size: 5000
-        // });
-        const response = await fetch(
-          "https://raw.githubusercontent.com/imodpasteur/shareloc-collection/gh-pages/collection.json"
-        );
-        const collection = await response.json();
-        const items = collection.collection;
-        items.map(item => context.commit("addResourceItem", item));
-      } catch (e) {
-        console.error(e);
-        throw new Error(
-          "It appears that we cannot reach to the Zenodo server (https://zenodo.org), please check whether you are connected to the internet, otherwise it might be because the Zenodo server is currently down."
-        );
-      }
 
       const response = await fetch(manifest_url + "?" + randId());
       const repo_manifest = JSON.parse(await response.text());
-      if (repo_manifest.collections && siteConfig.partners) {
+
+      if (siteConfig.partners && repo_manifest.collections) {
         for (let c of repo_manifest.collections) {
           const duplicates = siteConfig.partners.filter(p => p.id === c.id);
           duplicates.forEach(p => {
@@ -289,13 +298,25 @@ export const store = new Vuex.Store({
         }
       }
 
-      const resourceItems = repo_manifest.resources;
+      if (siteConfig.builtin_manifest_url){
+        const builtin_response = await fetch(siteConfig.builtin_manifest_url);
+        const builtin_manifest = JSON.parse(await builtin_response.text());
+        for (let item of builtin_manifest.resources){
+          context.commit("addResourceItem", item);
+        }
+      }
+      const resources_response = await fetch(
+        manifest_url + "/children"
+      );
+      const resourceItems = await resources_response.json();
       const rawResourceItems = JSON.parse(JSON.stringify(resourceItems));
-      for (let item of rawResourceItems) {
+      const artifacts_url = manifest_url.split("/artifacts")[0] + "/artifacts";
+      for (let artifact of rawResourceItems) {
+        const item = artifact.manifest
         item.repo = repo;
-        // if (item.source && !item.source.startsWith("http"))
-        //   item.source = concatAndResolveUrl(item.root_url, item.source);
-        if (filter(item)) context.commit("addResourceItem", item);
+        item.root_url = `${artifacts_url}/${artifact.alias}/files`;
+        item.rdf_source = `${artifacts_url}/${artifact.alias}`;
+        context.commit("addResourceItem", item);
       }
       context.commit("normalizeItems", transform);
       if (transform) {
@@ -353,7 +374,7 @@ export const store = new Vuex.Store({
       }
     },
     addResourceItem(state, item) {
-      item.id = item.id || randId();
+      item.id = item.id || item[".prefix"] || randId();
       item.id = item.id.toLowerCase();
       item.links = item.links || [];
       item.links = item.links.map(link => link.toLowerCase());
@@ -374,6 +395,7 @@ export const store = new Vuex.Store({
       // index tags
       if (item.tags && item.tags.length > 0)
         item.tags = item.tags.map(tag => tag.toLowerCase().replace(/ /g, "-"));
+      else item.tags = [];
       item.tags.map(tag => {
         if (!state.allTags.includes(tag)) {
           state.allTags.push(tag);

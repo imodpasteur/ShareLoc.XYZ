@@ -1,20 +1,6 @@
 <template>
   <div class="upload">
     <b-notification
-      v-if="client.isSandbox"
-      type="is-warning"
-      has-icon
-      aria-close-label="Close notification"
-      role="alert"
-    >
-      You are using the SANDBOX mode for testing purposes. This means files will
-      be uploaded to the sandbox version of Zenodo (https://sandbox.zenodo.org)
-      and the uploaded files can be removed from Zenodo at any time without
-      notice. If you are ready to publish your dataset, please
-      <a @click="switchToProduction()">switch to the production mode</a>.
-    </b-notification>
-    <b-notification
-      v-else
       type="is-info"
       has-icon
       aria-close-label="Close notification"
@@ -44,9 +30,9 @@
         >
         <br />
         <b-field
-          v-if="!client.credential"
-          label="Please login or sign up to Zenodo.org"
-          message="ShareLoc.XYZ uses https://zenodo.org as storage service, you will need to sign up or login to Zenodo, and allow ShareLoc.XYZ to upload files to zenodo on your behalf."
+          v-if="!server"
+          label="Please login or sign to upload"
+          message="ShareLoc.XYZ uses hypha as storage service, you will need to sign up or login to hypha, and allow ShareLoc.XYZ to upload files to hypha on your behalf."
           expanded
         >
           <b-button
@@ -55,25 +41,25 @@
             @click="login()"
             expanded
             icon-left="login"
-            >Login to Zenodo</b-button
+            >Login to Upload</b-button
           >
         </b-field>
         <b-field
           v-else
-          label="You have already logged in via Zenodo"
-          message="ShareLoc.XYZ uses https://zenodo.org as storage service, you will need to sign up or login to Zenodo, and allow ShareLoc.XYZ to upload files to zenodo on your behalf."
+          label="You have already logged in via hypha"
+          message="ShareLoc.XYZ uses hypha as storage service, you can now upload files to hypha on your behalf."
           expanded
         >
           <b-button
             style="text-transform:none;"
             class="button is-small"
-            @click="client.logout()"
+            @click="logout()"
             icon-left="logout"
             >Logout</b-button
           >
         </b-field>
         <b-field
-          v-if="client.credential"
+          v-if="server"
           label="Option 1: Create a new deposit"
           expanded
           message="With this option, you can upload a dataset or application to ShareLoc (via Zenodo), please make sure you have prepared a set of files. Also note that each dataset can contain files with the total size up to 50GB, if you have more than that, you should either split the files into several deposits or contact Zenodo to increase the quota."
@@ -83,12 +69,12 @@
             class="button is-fullwidth"
             @click="startUpload"
             expanded
-            :disabled="!client.credential"
+            :disabled="!server"
             >Start Upload</b-button
           >
         </b-field>
         <b-field
-          v-if="client.credential"
+          v-if="server"
           label="Option 2: Update an existing deposit"
           message="With this option, you can update an existing dataset or application. A Zenodo DOI or URL should be provided."
         >
@@ -101,12 +87,12 @@
         </b-field>
 
         <b-button
-          v-if="client.credential"
+          v-if="server"
           style="text-transform:none;"
           class="button is-fullwidth"
           @click="loadRdfFromURL(URI4Load)"
           expanded
-          :disabled="!client.credential"
+          :disabled="!server"
           >Load</b-button
         >
         <br />
@@ -222,20 +208,6 @@
           >
         </div>
         <br />
-        <b-field>
-          <b-switch v-model="requestedJoinCommunity">
-            Apply for listing in the
-            <a
-              :href="
-                client.baseURL +
-                  '/communities/' +
-                  siteConfig.zenodo_config.community
-              "
-              target="_blank"
-              >ShareLoc.XYZ community list</a
-            >
-          </b-switch>
-        </b-field>
         <p v-if="uploadStatus">{{ uploadStatus }}</p>
         <b-progress
           v-if="uploadProgress"
@@ -328,7 +300,7 @@
         </b-notification>
 
         <b-button
-          v-if="client && client.credential && uploaded && !publishedUrl"
+          v-if="server && uploaded && !publishedUrl"
           @click="publishDeposition()"
           class="button is-primary is-fullwidth"
           expanded
@@ -348,7 +320,6 @@ import { mapState } from "vuex";
 import yaml from "js-yaml";
 
 import {
-  rdfToMetadata,
   resolveDOI,
   getFullRdfFromDeposit,
   fetchFile,
@@ -359,8 +330,7 @@ import TagInputField from "@/components/TagInputField.vue";
 import DropFilesField from "@/components/DropFilesField.vue";
 import UploadForm from "./UploadForm.vue";
 import doiRegex from "doi-regex";
-import marked from "marked";
-import DOMPurify from "dompurify";
+import { hyphaWebsocketClient } from "hypha-rpc";
 
 export default {
   name: "upload",
@@ -431,6 +401,8 @@ export default {
   data() {
     return {
       // rdfFiles: null,
+      server: null,
+      artifactManager: null,
       dropFiles: null,
       uploadProgress: 0,
       uploadStatus: "",
@@ -536,7 +508,7 @@ export default {
         container: this.$el
       });
       try {
-        if (!this.client.credential) await this.login();
+        if (!this.server) await this.login();
         this.URI4Load = `${this.zenodoBaseURL}/record/${this.updateDepositId}`;
         await this.loadRdfFromURL(this.URI4Load);
       } catch (e) {
@@ -557,15 +529,15 @@ export default {
         delete rdf.config._files;
         this.rdf = rdf;
 
-        this.similarDeposits = await this.client.getResourceItems({
-          community: this.siteConfig.zenodo_config.community,
-          sort: "bestmatch",
-          query: rdf.name
-        });
-        console.log("Similar deposits:", this.similarDeposits);
-        // if there is any similar items, we can try to login first
-        if (this.similarDeposits.length > 0)
-          await this.client.getCredential(true);
+        // this.similarDeposits = await this.client.getResourceItems({
+        //   community: this.siteConfig.zenodo_config.community,
+        //   sort: "bestmatch",
+        //   query: rdf.name
+        // });
+        // console.log("Similar deposits:", this.similarDeposits);
+        // // if there is any similar items, we can try to login first
+        // if (this.similarDeposits.length > 0)
+        //   await this.client.getCredential(true);
 
         this.stepIndex = 2;
         this.$forceUpdate();
@@ -632,24 +604,42 @@ export default {
     },
 
     async publishDeposition() {
-      const loadingComponent = this.$buefy.loading.open({
-        container: this.$el
-      });
+      if (!this.artifactManager || !this.depositId) {
+        alert("Artifact Manager not connected or deposit ID missing.");
+        return;
+      }
+
+      const loadingComponent = this.$buefy.loading.open({ container: this.$el });
+
       try {
-        const result = await this.client.publish(this.depositId);
-        console.log("Published", result);
-        this.publishedDOI = result.doi;
-        this.publishedUrl = `${this.$store.state.zenodoBaseURL}/record/${this.depositId}`;
+        // Define the dataset id in the collection
+        const artifactId = `shareloc-xyz/${this.depositId}`;
+
+        // Commit the artifact to finalize it
+        await this.artifactManager.commit(artifactId);
+
+        // Update the UI with confirmation details
+        this.publishedDOI = this.rdf.id; // Assuming DOI is pre-assigned in `rdf.id`
+        this.publishedUrl = `${this.siteConfig.hypha_server_url}/shareloc-xyz/artifacts/shareloc-collection/${this.depositId}`;
+
+        alert("The deposition has been successfully committed and published!");
       } catch (e) {
-        console.error(e);
-        alert(`Failed to publish: ${e}`);
+        console.error("Failed to commit the artifact:", e);
+        alert(`Failed to publish the deposition: ${e.message}`);
       } finally {
         loadingComponent.close();
       }
     },
+    async logout() {
+      window.open(this.siteConfig.hypha_server_url + "/login", "_blank");
+    },
     async login() {
       try {
-        await this.client.getCredential(true);
+        const token = await hyphaWebsocketClient.login({server_url: this.siteConfig.hypha_server_url, login_callback(context){
+          window.open(context.login_url, '_blank');
+        }});
+        this.server = await hyphaWebsocketClient.connectToServer({server_url: this.siteConfig.hypha_server_url, token});
+        this.artifactManager = await this.server.getService("public/artifact-manager");
         this.$forceUpdate();
       } catch (e) {
         alert(`Failed to login: ${e}`);
@@ -676,168 +666,67 @@ export default {
       file.rdf = rdfCopy;
       return file;
     },
-    async createOrUpdateDeposit(depositId, skipUpload) {
-      try {
-        await this.client.getCredential(true, 40); // make sure we have at least 40 minutes
-        this.$forceUpdate();
-      } catch (e) {
-        alert(`Failed to login: ${e}`);
+    async createOrUpdateDeposit(depositId) {
+      if (!this.artifactManager) {
+        alert("Artifact Manager not connected.");
         return;
       }
-      const loadingComponent = this.$buefy.loading.open({
-        container: this.$el
-      });
+
+      const loadingComponent = this.$buefy.loading.open({ container: this.$el });
       this.similarDeposits = null;
+      this.uploadProgress = 1;
+
       try {
-        this.uploadProgress = 1;
-        let depositionInfo;
-        this.uploadMode = "new";
-        if (depositId) {
-          try {
-            depositionInfo = await this.client.retrieve(depositId);
+        // Step 1: Define the dataset ID
+        // randomly generate a depositId using time and random id if not provided
+        depositId = depositId || Math.floor(Date.now() / 1000) + "-" + Math.floor(Math.random() * 100);
+        // Step 2: Create or overwrite the dataset in the artifact manager
+        const artifact = await this.artifactManager.create({
+          parent_id: "shareloc-xyz/shareloc-collection",
+          alias: `shareloc-xyz/${depositId}`,
+          manifest: this.rdf,
+          version: "stage",
+          // overwrite: true,
+          _rkwargs: true,
+        });
 
-            // enter edit mode if submitted
-            // if deposit.state == 'inprogress', the metadata can be updated
-            // if deposit.submitted == false files can be updated as well.
-            if (!skipUpload) {
-              // The response body of this action is NOT the new version deposit, but the original resource.
-              // The new version deposition can be accessed through the "latest_draft" under "links" in the response body.
-              const deposit = await this.client.createNewVersion(
-                depositionInfo
-              );
-              // e.g. https://sandbox.zenodo.org/api/deposit/depositions/868929
-              const tmp = deposit.links.latest_draft.split("/");
-              depositId = parseInt(tmp[tmp.length - 1]);
-              depositionInfo = await this.client.retrieve(depositId);
-            }
-            if (
-              depositionInfo.state !== "inprogress" &&
-              depositionInfo.state !== "unsubmitted"
-            )
-              await this.client.edit(depositId);
-            this.uploadMode = "new";
-          } catch (e) {
-            console.error(e);
-            if (
-              !confirm(
-                `Failed to retrieve existing deposit (id: ${depositId}), would you like to create a new deposit instead?`
-              )
-            ) {
-              return;
-            }
-          }
-        } else depositionInfo = await this.client.createDeposition();
-
-        this.depositId = depositionInfo.id;
-        const baseUrl = `${this.client.baseURL}/record/${this.depositId}/files/`; //"file:///"; //depositionInfo.links.bucket + "/";
-
-        let docstring = null;
-        if (
-          this.rdf.documentation &&
-          !this.rdf.documentation.startsWith("http") &&
-          this.rdf.documentation.endsWith(".md")
-        ) {
-          const file = this.editedFiles.filter(
-            fn => fn === this.rdf.documentation.replace("./", "")
-          )[0];
-          if (file) {
-            docstring = await file.async("string"); // get markdown
-            docstring = DOMPurify.sanitize(marked(docstring));
-          }
-        }
-        this.rdf.config = this.rdf.config || {};
-        this.rdf.config._deposit = depositionInfo;
-
-        const metadata = rdfToMetadata(this.rdf, baseUrl, docstring);
-        // this will send a email request to the admin of bioimgae-io team
-        if (this.requestedJoinCommunity) {
-          metadata.communities.push({
-            identifier: this.siteConfig.zenodo_config.community
-          });
-        }
-        metadata.prereserve_doi = true; // we will generate the doi and store it in the model yaml file
-        depositionInfo = await this.client.updateMetadata(
-          depositionInfo,
-          metadata
-        );
-
-        // transform the RDF here
-        this.prereserveDOI = depositionInfo.metadata.prereserve_doi;
-        this.rdf.id = this.prereserveDOI.doi; //doi and recid
-        this.rdf.config._doi = depositionInfo.metadata.prereserve_doi.doi;
-        // concept doi can be undefined for new deposition
-        this.rdf.config._conceptdoi = depositionInfo.conceptdoi;
-        if (skipUpload) {
-          this.stepIndex = 3;
-          return depositionInfo;
-        }
-        console.log("Edited files", this.editedFiles);
-        const uploadFiles = this.editedFiles.filter(
-          file => file.type !== "remote"
-        );
-        // sort the files so we will upload the covers in the end
-        // this allows zenodo to display it as preview
-        if (this.rdf.covers && this.rdf.covers.length > 0) {
-          const covers = this.rdf.covers;
-          uploadFiles.sort((a, b) => {
-            if (
-              covers.includes("./" + a.name) &&
-              !covers.includes("./" + b.name)
-            )
-              return 1;
-            else if (
-              !covers.includes("./" + a.name) &&
-              covers.includes("./" + b.name)
-            )
-              return -1;
-            else return 0;
-          });
-        }
-        for (let i = 0; i < uploadFiles.length; i++) {
-          let file = uploadFiles[i];
+        // Step 3: Upload each file in editedFiles with a pre-signed URL
+        for (let i = 0; i < this.editedFiles.length; i++) {
+          let file = this.editedFiles[i];
           if (file.type === "generator") {
-            // assuming we already have the generated name fixed
             file = await file.generate();
-            if (file.sampleName) {
-              // fix the converted file name and size in the attachments
-              const sample = this.rdf.attachments.samples.find(
-                sample => sample.name === file.sampleName
-              );
-              // set the converted size
-              const f = sample.files.find(f => f.name === file.name);
-              if (f) f.size = file.size;
-            }
           }
 
-          const newName = file.sampleName
-            ? file.sampleName + "/" + file.name
-            : file.name;
-          await this.client.uploadFile(depositionInfo, file, newName, size => {
-            this.uploadProgress = Math.round((size / file.size) * 100);
-            this.uploadStatus = `Uploading ${i + 1}/${uploadFiles.length}(${
-              this.uploadProgress
-            }%): ${file.name.slice(0, 40)}... `;
-            this.$forceUpdate();
+          const filePath = file.sampleName ? `${file.sampleName}/${file.name}` : file.name;
+          const putUrl = await this.artifactManager.put_file({ artifact_id: artifact.id, file_path: filePath, _rkwargs: true });
+
+          // Upload file via PUT request
+          const response = await fetch(putUrl, {
+            method: "PUT",
+            body: file,
           });
+
+          if (!response.ok) {
+            throw new Error(`Failed to upload file: ${file.name}`);
+          }
+
+          this.uploadProgress = Math.round(((i + 1) / this.editedFiles.length) * 100);
+          this.uploadStatus = `Uploaded ${i + 1}/${this.editedFiles.length}: ${file.name}`;
         }
-
-        // upload RDF file
-        const rdfFile = await this.generateYamlFile(this.rdf);
-        await this.client.uploadFile(depositionInfo, rdfFile);
-        this.rdfYaml = rdfFile.text;
-
+        this.depositId = depositId;
         this.uploadProgress = 0;
-        this.uploadStatus = `Successfully uploaded ${uploadFiles.length} files.`;
+        this.uploadStatus = "Upload complete!";
         this.uploaded = true;
         this.stepIndex = 3;
       } catch (e) {
         console.error(e);
-        alert(`Oops, failed to upload file: ${e}`);
+        alert(`Failed to create or update the deposit: ${e.message}`);
       } finally {
         this.uploadProgress = 0;
         loadingComponent.close();
       }
     }
+
   }
 };
 </script>
