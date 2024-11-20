@@ -21,7 +21,7 @@ jobs:
     - name: Generate OWL file
       run: sh utils/convert-owl.sh # This will produce an output foldere: Use Node.js ${{ matrix.node-version }}
     - name: Save build output
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: built-output
         path: ./output
