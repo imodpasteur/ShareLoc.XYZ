@@ -199,7 +199,7 @@ export async function getFullRdfFromDeposit(rdf, resolveUrl) {
     fullRdf.id = rdf.id;
     // keep conversions
     fullRdf.conversions = rdf.conversions;
-    const root_url = rdf.rdf_source + "/__files__";
+    const root_url = rdf.rdf_source + "/files";
     if (resolveUrl) {
       fullRdf.documentation = getAbsoluteUrl(root_url, fullRdf.documentation);
       if (fullRdf.covers) {
