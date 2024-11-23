@@ -606,7 +606,7 @@ export default {
         // Commit the artifact to finalize it
         await this.artifactManager.commit(this.depositId);
         const tags = this.rdf.tags || [];
-        tags.push("shareloc-xyz"); // add a new keywords for the CI to discover this item on zenodo
+        tags.push("shareloc.xyz"); // add a new keywords for the CI to discover this item on zenodo
         await this.artifactManager.publish(this.depositId, "sandbox_zenodo", {
           keywords: tags
         });
