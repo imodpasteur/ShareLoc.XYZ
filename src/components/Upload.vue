@@ -605,7 +605,11 @@ export default {
       try {
         // Commit the artifact to finalize it
         await this.artifactManager.commit(this.depositId);
-        await this.artifactManager.publish(this.depositId, "sandbox_zenodo");
+        const tags = this.rdf.tags || [];
+        tags.push("shareloc-xyz"); // add a new keywords for the CI to discover this item on zenodo
+        await this.artifactManager.publish(this.depositId, "sandbox_zenodo", {
+          keywords: tags
+        });
         console.log("Artifact committed!", this.depositId);
         // Update the UI with confirmation details
         this.publishedDOI = this.rdf.id; // Assuming DOI is pre-assigned in `rdf.id`
