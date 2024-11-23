@@ -319,12 +319,7 @@
 import { mapState } from "vuex";
 import yaml from "js-yaml";
 
-import {
-  resolveDOI,
-  getFullRdfFromDeposit,
-  fetchFile,
-  depositionToRdf
-} from "../utils";
+import { resolveDOI, fetchFile } from "../utils";
 import Markdown from "@/components/Markdown.vue";
 import TagInputField from "@/components/TagInputField.vue";
 import DropFilesField from "@/components/DropFilesField.vue";
@@ -385,7 +380,7 @@ export default {
       }
     },
     userId() {
-      return this.client && this.client.getUserId();
+      return localStorage.getItem("userId");
     },
     ...mapState({
       imjoyReady: state => state.imjoyReady,
@@ -554,17 +549,11 @@ export default {
         const zenodoRegex = /zenodo.org\/(record|deposit)\/([0-9]+)/;
         const m = zenodoRegex.exec(url);
         if (m) {
-          this.depositId = parseInt(m[2]);
-          let depositionInfo;
-          if (url.includes("/record/"))
-            depositionInfo = await this.client.getDeposit(this.depositId);
-          else {
-            await this.client.getCredential(true);
-            depositionInfo = await this.client.retrieve(this.depositId);
-          }
-          console.log("orcid matched: " + this.depositId, depositionInfo);
-          const rdf = depositionToRdf(depositionInfo);
-          this.rdf = await getFullRdfFromDeposit(rdf);
+          this.depositId = m[2];
+          const artifact = await this.artifactManager.read(
+            "shareloc-xyz/" + this.depositId
+          );
+          this.rdf = artifact.manifest;
           console.log("Full RDF:", this.rdf);
           // this.files = depositionInfo.files.map(item => {
           //   return {
@@ -585,14 +574,14 @@ export default {
           //     checksum: item.checksum
           //   };
           // });
-          if (this.rdf.documentation) {
-            const baseUrl = depositionInfo.links.bucket + "/";
-            const docsUrl = this.rdf.documentation.startsWith("http")
-              ? this.rdf.documentation
-              : new URL(this.rdf.documentation, baseUrl).href;
-            const response = await fetch(docsUrl);
-            this.rdf.config._docstring = await response.text();
-          }
+          // if (this.rdf.documentation) {
+          //   const baseUrl = depositionInfo.links.bucket + "/";
+          //   const docsUrl = this.rdf.documentation.startsWith("http")
+          //     ? this.rdf.documentation
+          //     : new URL(this.rdf.documentation, baseUrl).href;
+          //   const response = await fetch(docsUrl);
+          //   this.rdf.config._docstring = await response.text();
+          // }
           this.stepIndex = 1;
         } else {
           alert(`Failed to parse RDF URL: ${url}`);
@@ -616,14 +605,11 @@ export default {
       try {
         // Commit the artifact to finalize it
         await this.artifactManager.commit(this.depositId);
+        await this.artifactManager.publish(this.depositId, "sandbox_zenodo");
         console.log("Artifact committed!", this.depositId);
         // Update the UI with confirmation details
         this.publishedDOI = this.rdf.id; // Assuming DOI is pre-assigned in `rdf.id`
-        this.publishedUrl = `${
-          this.siteConfig.hypha_server_url
-        }/shareloc-xyz/artifacts/shareloc-collection/${
-          this.depositId.split("/")[1]
-        }`;
+        this.publishedUrl = `https://sandbox.zenodo.org/records/${this.depositId}`;
 
         alert("The deposition has been successfully committed and published!");
       } catch (e) {
@@ -648,6 +634,7 @@ export default {
           server_url: this.siteConfig.hypha_server_url,
           token
         });
+        localStorage.setItem("userId", this.server.config.user.id);
         this.artifactManager = await this.server.getService(
           "public/artifact-manager"
         );
@@ -695,15 +682,15 @@ export default {
         // Step 2: Create or overwrite the dataset in the artifact manager
         const artifact = await this.artifactManager.create({
           parent_id: "shareloc-xyz/shareloc-collection",
-          workspace: "shareloc-xyz",
-          alias: depositId,
+          alias: depositId || "{zenodo_conceptrecid}",
           manifest: this.rdf,
           version: "stage",
+          publish_to: "sandbox_zenodo",
           overwrite: true,
           _rkwargs: true
         });
+        console.log("Artifact created!", artifact);
         this.depositId = artifact.id;
-
         // Step 3: Upload each file in editedFiles with a pre-signed URL
         for (let i = 0; i < this.editedFiles.length; i++) {
           let file = this.editedFiles[i];
@@ -723,7 +710,10 @@ export default {
           // Upload file via PUT request
           const response = await fetch(putUrl, {
             method: "PUT",
-            body: file
+            body: file,
+            headers: {
+              "Content-Type": "" // Ensure the Content-Type header is empty if not expected
+            }
           });
 
           if (!response.ok) {

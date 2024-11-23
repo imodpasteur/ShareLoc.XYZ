@@ -243,6 +243,7 @@ export const store = new Vuex.Store({
   state: {
     loadedUrl: null,
     allApps: {},
+    totalItems: 0,
     allTags: [...allTags],
     imjoy: null,
     resourceItems: [],
@@ -271,11 +272,10 @@ export const store = new Vuex.Store({
         alert(`Failed to login: ${e}`);
       }
     },
-    async fetchResourceItems(context, { manifest_url, repo, transform }) {
-      if (context.state.loadedUrl === manifest_url) {
-        console.log("manifest already loaded");
-        return;
-      }
+    async fetchResourceItems(
+      context,
+      { manifest_url, repo, transform, page = 0, page_size = 20 }
+    ) {
       // clear items
       context.state.resourceItems = [];
       context.state.allApps = {};
@@ -302,12 +302,30 @@ export const store = new Vuex.Store({
           context.commit("addResourceItem", item);
         }
       }
-      const resources_response = await fetch(manifest_url + "/children");
-      const resourceItems = await resources_response.json();
+      const resources_response = await fetch(
+        manifest_url +
+          "/children?pagination=true&offset=" +
+          page * page_size +
+          "&limit=" +
+          page_size
+      );
+      const results = await resources_response.json();
+      console.log("Resources", results);
+      const resourceItems = results.items;
+      context.state.totalItems = results.total;
       const rawResourceItems = JSON.parse(JSON.stringify(resourceItems));
       const artifacts_url = manifest_url.split("/artifacts")[0] + "/artifacts";
       for (let artifact of rawResourceItems) {
         const item = artifact.manifest;
+        item.owners = [];
+        if (artifact.config && artifact.config.permissions) {
+          for (let key of Object.keys(artifact.config.permissions)) {
+            if (artifact.config.permissions[key] === "*") {
+              item.owners.push(key);
+            }
+          }
+        }
+        console.log("artifact owners: ", artifact.id, item.owners);
         item.id = artifact.alias;
         item.repo = repo;
         item.root_url = `${artifacts_url}/${artifact.alias}/files`;

@@ -122,7 +122,6 @@
       @tags-updated="updateQueryTags"
       @input-change="removePartner"
     ></resource-item-selector>
-
     <br />
     <resource-item-list
       @show-resource-item-info="showResourceItemInfo"
@@ -131,6 +130,22 @@
       :allItems="selectedItems"
       :displayMode="screenWidth > 700 ? displayMode : 'card'"
     />
+    <b-pagination
+      id="resource-pagination"
+      :total="totalItems"
+      :current.sync="currentPage"
+      :range-before="5"
+      :range-after="3"
+      :per-page="pageSize"
+      @change="loadItems"
+      icon-prev="arrow-left"
+      icon-next="arrow-right"
+      aria-next-label="Next page"
+      aria-previous-label="Previous page"
+      aria-page-label="Page"
+      aria-current-label="Current page"
+    >
+    </b-pagination>
     <br />
 
     <footer class="footer">
@@ -560,6 +575,8 @@ export default {
   },
   data() {
     return {
+      currentPage: 1,
+      pageSize: 16,
       initialized: false,
       progress: 100,
       searchTags: null,
@@ -620,76 +637,7 @@ export default {
       const originalUrl =
         window.location.pathname + "#" + window.location.hash.substr(1);
       window.history.replaceState(null, "", originalUrl);
-
-      let repo = this.siteConfig.rdf_root_repo;
-      const query_repo = this.$route.query.repo;
-      let manifest_url = this.siteConfig.manifest_url;
-      if (query_repo) {
-        if (query_repo.startsWith("http") || query_repo.startsWith("/")) {
-          manifest_url = query_repo;
-        } else if (query_repo.split("/").length === 2) {
-          manifest_url = `https://raw.githubusercontent.com/${query_repo}/master/manifest.bioimage.io.json`;
-        } else if (query_repo.split("/").length === 3) {
-          manifest_url = `https://raw.githubusercontent.com/${query_repo}/manifest.bioimage.io.json`;
-        } else {
-          alert("Unsupported repo format.");
-          throw "Unsupported repo format.";
-        }
-
-        repo = query_repo;
-      }
-      const self = this;
-      await this.$store.dispatch("fetchResourceItems", {
-        repo,
-        manifest_url,
-        transform(item) {
-          return connectApps(self, item);
-        },
-        filter(item) {
-          if (self.$route.query.migration) {
-            return true;
-          } else {
-            if (
-              item.type === "dataset" &&
-              !(item.config && item.config._conceptdoi)
-            ) {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        }
-      });
-
-      const tp = this.selectedCategory && this.selectedCategory.type;
-      this.selectedItems = tp
-        ? this.resourceItems.filter(m => m.type === tp)
-        : this.resourceItems;
-
-      // get id from component props
-      if (this.resourceId) {
-        if (this.resourceId.startsWith("zenodo:")) {
-          const zenodoId = parseInt(this.resourceId.split(":")[1]);
-          const matchedItem = this.resourceItems.filter(
-            item =>
-              item.config &&
-              item.config._deposit &&
-              (item.config._deposit.id === zenodoId ||
-                item.config._deposit.conceptrecid === zenodoId)
-          )[0];
-          if (matchedItem) this.$route.query.id = matchedItem.id;
-          else {
-            alert(
-              "Oops, resource item not found: " +
-                this.resourceId +
-                ". Possibly because it has not been approved yet."
-            );
-          }
-        } else this.$route.query.id = this.resourceId;
-      }
-
-      this.updateViewByUrlQuery();
-      this.$forceUpdate();
+      await this.loadItems();
     } catch (e) {
       console.error(e);
       alert(`Oops! Failed to fetch manifest data. Details: ${e}.`);
@@ -697,7 +645,7 @@ export default {
   },
   computed: {
     userId() {
-      return this.zenodoClient && this.zenodoClient.getUserId();
+      return localStorage.getItem("userId");
     },
     partners: function() {
       return (
@@ -731,6 +679,7 @@ export default {
       }
     },
     ...mapState({
+      totalItems: state => state.totalItems,
       eventBus: state => state.eventBus,
       allApps: state => state.allApps,
       zenodoClient: state => state.zenodoClient,
@@ -743,6 +692,77 @@ export default {
     window.removeEventListener("resize", this.updateSize);
   },
   methods: {
+    async loadItems() {
+      let repo = this.siteConfig.rdf_root_repo;
+      const query_repo = this.$route.query.repo;
+      let manifest_url = this.siteConfig.manifest_url;
+      if (query_repo) {
+        if (query_repo.startsWith("http") || query_repo.startsWith("/")) {
+          manifest_url = query_repo;
+        } else if (query_repo.split("/").length === 2) {
+          manifest_url = `https://raw.githubusercontent.com/${query_repo}/master/manifest.bioimage.io.json`;
+        } else if (query_repo.split("/").length === 3) {
+          manifest_url = `https://raw.githubusercontent.com/${query_repo}/manifest.bioimage.io.json`;
+        } else {
+          alert("Unsupported repo format.");
+          throw "Unsupported repo format.";
+        }
+
+        repo = query_repo;
+      }
+
+      this.$router.push({
+        name: "Home"
+      });
+      const self = this;
+      let loadingComponent;
+      try {
+        loadingComponent = this.$buefy.loading.open({
+          container: null
+        });
+        await this.$store.dispatch("fetchResourceItems", {
+          repo,
+          manifest_url,
+          page: self.currentPage - 1,
+          page_size: self.pageSize,
+          transform(item) {
+            return connectApps(self, item);
+          }
+        });
+      } finally {
+        loadingComponent && loadingComponent.close();
+      }
+
+      const tp = this.selectedCategory && this.selectedCategory.type;
+      this.selectedItems = tp
+        ? this.resourceItems.filter(m => m.type === tp)
+        : this.resourceItems;
+
+      // get id from component props
+      if (this.resourceId) {
+        if (this.resourceId.startsWith("zenodo:")) {
+          const zenodoId = parseInt(this.resourceId.split(":")[1]);
+          const matchedItem = this.resourceItems.filter(
+            item =>
+              item.config &&
+              item.config._deposit &&
+              (item.config._deposit.id === zenodoId ||
+                item.config._deposit.conceptrecid === zenodoId)
+          )[0];
+          if (matchedItem) this.$route.query.id = matchedItem.id;
+          else {
+            alert(
+              "Oops, resource item not found: " +
+                this.resourceId +
+                ". Possibly because it has not been approved yet."
+            );
+          }
+        } else this.$route.query.id = this.resourceId;
+      }
+
+      this.updateViewByUrlQuery();
+      this.$forceUpdate();
+    },
     switchToSandbox() {
       const query = Object.assign({}, this.$route.query);
       query.sandbox = 1;
@@ -1154,6 +1174,11 @@ export default {
 </script>
 
 <style>
+#resource-pagination {
+  margin-top: 10px;
+  margin-left: 20px;
+  width: calc(100% - 40px);
+}
 .modal-dialog-content {
   max-height: calc(100vh - 40px);
   overflow: auto;
