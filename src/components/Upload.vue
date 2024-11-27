@@ -688,8 +688,10 @@ export default {
           parent_id: "shareloc-xyz/shareloc-collection",
           alias: depositId || "{zenodo_conceptrecid}",
           manifest: this.rdf,
+          config: {
+            publish_to: "sandbox_zenodo",
+          },
           version: "stage",
-          publish_to: "sandbox_zenodo",
           overwrite: true,
           _rkwargs: true
         });
