@@ -1,0 +1,871 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.w3.org/2002/07/owl"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <Ontology/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000001 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000001">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">modality</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cell line</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fluorophore</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">labeling strategy</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">structure</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">target molecule</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000007 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000007">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dimension</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000008 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000008">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">reconstruction software</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000009 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000009">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fixation</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000010 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000010">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">buffer</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000011 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000011">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000001"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">palm</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000012 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000012">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000001"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">storm</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000013 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000013">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000001"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dstorm</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000014 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000014">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000001"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dna-paint</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000015 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000015">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000001"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">paint</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000016 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000016">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">u2os</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000017 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000017">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">u373</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000018 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000018">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cos7</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000019 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000019">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ref52</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000020 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000020">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mdck</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000021 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000021">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hela</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000022 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000022">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">nih3t3</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000023 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000023">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">yeast</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000024 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000024">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000002"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">e-coli</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000025 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000025">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">alexa-647</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000026 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000026">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">alexa-555</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000027 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000027">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">alexa-532</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000028 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000028">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cy5</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000029 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000029">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cy3b</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000030 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000030">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cf680</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000031 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000031">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cf660</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000032 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000032">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cf568</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000033 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000033">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hmsir</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000034 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000034">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">atto-488</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000035 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000035">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mos2</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000036 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000036">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mapple</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000037 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000037">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dendra2</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000038 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000038">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pa-gfp</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000039 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000039">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pa-cherry</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000040 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000040">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dronpa</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000041 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000041">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">phalloidin-647</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000042 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000042">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">nile-red</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000043 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000043">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">jf-646</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000044 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000044">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">jf-568</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000045 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000045">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pa-jf646</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000046 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000046">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000003"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pa-jf568</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000047 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000047">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">transient-transfection</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000048 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000048">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stable-knock-in</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000049 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000049">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endogenous-labeling-crispr</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000050 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000050">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">direct-immuno-labeling</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000051 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000051">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">indirect-immuno-labeling</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000052 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000052">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">halo-tag</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000053 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000053">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">snap-tag</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000054 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000054">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000004"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tetracysteine-tag</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000055 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000055">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">actin</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000056 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000056">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">microtubule</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000057 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000057">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mitochondria</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000058 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000058">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nuclear-pore</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000059 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000059">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">clathrin</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000060 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000060">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vimentin</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000061 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000061">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">plasma membrane</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000062 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000062">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">intermediate filament</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000063 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000063">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dna</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000064 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000064">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000005"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">nup133</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000065 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000065">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">nup96</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000066 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000066">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">tom22</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000067 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000067">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">alpha-tubulin</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000068 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000068">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">beta-tubulin</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000069 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000069">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">actin</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000070 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000070">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vimentin</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000071 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000071">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">wga</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000072 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000072">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">escrt</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000073 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000073">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ftsz</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000074 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000074">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">h1</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000075 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000075">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">h2</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000076 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000076">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">h3</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000077 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000077">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000006"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">polye</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000078 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000078">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000007"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2d</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000079 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000079">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000007"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3d</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000080 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000080">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000008"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">thunderstorm</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000081 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000081">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000008"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">smap</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000082 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000082">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000008"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">smoiphot</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000083 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000083">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000008"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">zola-3d</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000084 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000084">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000008"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">picasso</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000085 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000085">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000008"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">quickpalm</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000086 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000086">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000009"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4% pfa</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000087 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000087">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000009"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1% pfa</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000088 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000088">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000009"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pfa+gluta</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000089 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000089">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000009"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">glyoxal</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000090 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000090">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000009"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">methanol</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000091 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000091">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000010"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">gluox</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000092 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000092">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000010"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">catalase</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000093 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000093">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000010"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mea</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000094 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000094">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000010"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">abbelight-safe-reagent</rdfs:label>
+    </Class>
+    
+
+
+    <!-- https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000095 -->
+
+    <Class rdf:about="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000095">
+        <rdfs:subClassOf rdf:resource="https://shareloc.xyz/#/ontology/vocabulary/SHARELOC_000010"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Idylle-everspark</rdfs:label>
+    </Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.6) https://github.com/owlcs/owlapi -->
+
