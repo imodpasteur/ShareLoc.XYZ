@@ -22,7 +22,7 @@
     "highlight.js": "^10.1.1",
     "hypha-rpc": "^0.20.38",
     "json-stringify-safe": "^5.0.1",
-    "jszip": "^3.6.0",
+    "jszip": "^3.8.0",
     "marked": "^2.0.0",
     "mathjs": "^7.0.1",
     "ol": "^6.3.1",
