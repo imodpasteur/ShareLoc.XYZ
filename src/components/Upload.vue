@@ -689,7 +689,7 @@ export default {
           alias: depositId || "{zenodo_conceptrecid}",
           manifest: this.rdf,
           config: {
-            publish_to: "sandbox_zenodo",
+            publish_to: "sandbox_zenodo"
           },
           version: "stage",
           overwrite: true,
