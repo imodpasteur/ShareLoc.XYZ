@@ -431,7 +431,7 @@ export default {
           // pattern: /^[-0-9a-z+*#;./%@:]*$/,
           icon: "label",
           help:
-            "Please use multiple tags to describe imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. Here are some examples: `dstorm`, `u373`, `microtubules`, `alexa-647`, `secondary-antibody`, `alpha-tubulin`,`2d`,`em-ccd`,`pfa+gluta`, `thunderstorm`. Tag suggestions are obtained from the EBI ontology service (https://www.ebi.ac.uk/ols/), please try to reuse existing ontology terms, and only add new tags if necessary.",
+            "Please use multiple tags to describe imaging modality, cell line, imaged structure(s), fluorophore, labeling strategy, target protein, dimension, camera, buffer, fixation etc. Here are some examples: `dstorm`, `u373`, `microtubules`, `alexa-647`, `secondary-antibody`, `alpha-tubulin`,`2d`,`em-ccd`,`pfa+gluta`, `thunderstorm`. Tag suggestions are obtained from the EBI ontology service (https://www.ebi.ac.uk/ols4/), please try to reuse existing ontology terms, and only add new tags if necessary.",
           isRequired: true
         },
         {

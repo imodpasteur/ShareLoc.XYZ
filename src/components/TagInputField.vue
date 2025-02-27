@@ -37,7 +37,7 @@
 import { debounce } from "../utils";
 
 async function getCompletion(text) {
-  const url = `https://www.ebi.ac.uk/ols/api/suggest?q=${text}`;
+  const url = `https://www.ebi.ac.uk/ols4/api/suggest?q=${text}`;
   let response = await fetch(url);
   if (response.ok) {
     const ret = await response.json();
@@ -45,7 +45,7 @@ async function getCompletion(text) {
     if (ret.response.numFound > 0) {
       results = ret.response.docs.map(d => d.autosuggest);
     }
-    const url = `https://www.ebi.ac.uk/ols/api/select?q=${text}`;
+    const url = `https://www.ebi.ac.uk/ols4/api/select?q=${text}`;
     response = await fetch(url);
     if (response.ok) {
       const ret = await response.json();
